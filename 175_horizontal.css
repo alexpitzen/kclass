@@ -1,0 +1,68 @@
+@media screen and (max-width:1098px) and (max-height:686px) and (min-width:1097px) and (min-height:685px)  {
+    .btn-subject {
+        border: none !important;
+        height: unset !important;
+        line-height: 20px !important;
+        min-width: unset !important;
+        padding: 0px 10px !important;
+    }
+    .grading-header {
+        min-height: unset !important;
+    }
+    .backBtnWrap {
+        height: unset !important;
+    }
+    .container {
+        min-width: unset !important;
+    }
+    .content-bg {
+        padding: 0px !important;
+    }
+    .full-name {
+        line-height: 20px !important;
+    }
+    .grading-header {
+        padding: 0px !important;
+    }
+    .grading-header-icon {
+        display: none;
+    }
+    .grading-header-title {
+        display: none;
+    }
+    .header-left {
+        line-height: 10px;
+    }
+    .name-kana {
+        display: none;
+    }
+    .scroll-content {
+        overflow-x: auto !important;
+    }
+    .student-info-btn::before {
+        top: 8px !important;
+    }
+    .student-info-right .num {
+        height: 20px !important;
+        line-height: 20px !important;
+        min-width: 20px !important;
+    }
+    .student-pulldown-root {
+        min-height: unset !important;
+        margin-left: 0px !important;
+    }
+    #studentInfoPullDown {
+        min-height: unset;
+        border: 0px !important;
+    }
+    .worksheet-tool {
+        margin-left: 0px !important;
+    }
+}
+
+.studentRow .gradeColumn {
+    flex: none !important;
+}
+* {
+    touch-action: auto !important;
+}
