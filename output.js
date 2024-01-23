@@ -284,7 +284,7 @@
         z-index: 300 !important;
     }
 }
-@media screen and (max-width:1241px) and (max-height:699px) and (min-width:1240px) and (min-height:698px)  {
+@media screen and (max-width:1242px) and (max-height:699px) and (min-width:1241px) and (min-height:698px)  {
     .btn-subject {
         border: none !important;
         height: unset !important;
@@ -346,7 +346,7 @@
     }
 
 }
-@media screen and (max-width:938px) and (max-height:553px) and (min-width:936px) and (min-height:551px)  {
+@media screen and (max-width:1093px) and (max-height:615px) and (min-width:1092px) and (min-height:614px)  {
     .btn-subject {
         border: none !important;
         height: unset !important;
@@ -462,29 +462,6 @@
         padding: 10px 0px !important;
         word-break: break-word !important;
     }
-    body:has(.worksheet-tool):not(:has(.content-answer-content)) .shiftbtn {
-        display: unset !important;
-        position: fixed;
-        top: 140px;
-        height: 30px;
-        width: 30px;
-        left: 376px;
-        z-index: 252;
-        padding: 0;
-    }
-    body:has(.worksheet-tool):not(:has(.content-answer-content)):has(div.worksheet-group.landscape) .shiftbtn {
-        left: 656px;
-    }
-    body:has(.worksheet-tool):has(.content-answer-content) .shiftbtn {
-        display: unset !important;
-        position: fixed;
-        top: 140px;
-        height: 30px;
-        width: 30px;
-        left: 751px;
-        z-index: 252;
-        padding: 0;
-    }
     body:not(:has(.content-answer-content)) #studentInfoPullDown {
         min-width: 372px !important;
     }
@@ -494,12 +471,6 @@
     }
     .worksheet-container > .worksheet-group.single:last-child .worksheet-group-page:last-child .worksheet-container > div {
         margin-top: -1px;
-    }
-    .worksheet-container.shiftup > .worksheet-group .worksheet-container > div {
-        margin-top: -63px;
-    }
-    .worksheet-container.shiftup > .worksheet-group.single:last-child .worksheet-group-page:last-child .worksheet-container > div {
-        margin-top: -65px;
     }
     .worksheet-group {
         margin: 0px -19px !important;
