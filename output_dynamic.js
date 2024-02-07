@@ -50,6 +50,9 @@
 * {
     touch-action: auto !important;
 }
+div.root {
+    min-width: unset !important;
+}
 div.root > div.logo {
     margin-top: 0 !important;
 }
