@@ -59,10 +59,3 @@
         margin-left: 0px !important;
     }
 }
-
-.studentRow .gradeColumn {
-    flex: none !important;
-}
-* {
-    touch-action: auto !important;
-}
