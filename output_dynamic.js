@@ -65,6 +65,10 @@ button.login-btn {
 button.btn-pulldown-language {
     margin-top: 0 !important;
 }
+
+app-scroll-to-top-button {
+    display: none;
+}
 @media screen and (orientation:landscape) {
     .btn-subject {
         border: none !important;
