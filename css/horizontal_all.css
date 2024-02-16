@@ -1,0 +1,20 @@
+* {
+  touch-action: auto !important;
+}
+
+app-scroll-to-top-button {
+  display: none;
+}
+
+.dashboard-progress-chart .container.plan.isFloating {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: unset !important;
+  max-height: unset !important;
+}
+
+body:has(.dashboard-progress-chart .container.plan.isFloating) {
+  scrollbar-width: none;
+}
+
+/*# sourceMappingURL=horizontal_all.css.map */
