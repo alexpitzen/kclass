@@ -1,25 +1,18 @@
-.studentRow .gradeColumn {
-    flex: none !important;
-}
 * {
     touch-action: auto !important;
-}
-div.root {
-    min-width: unset !important;
-}
-div.root > div.logo {
-    margin-top: 0 !important;
-}
-div.root > div.sub-logo {
-    margin: 0 !important;
-}
-button.login-btn {
-    margin-top: 0 !important;
-}
-button.btn-pulldown-language {
-    margin-top: 0 !important;
 }
 
 app-scroll-to-top-button {
     display: none;
+}
+
+
+.dashboard-progress-chart .container.plan.isFloating {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: unset !important;
+    max-height: unset !important;
+}
+body:has(.dashboard-progress-chart .container.plan.isFloating) {
+    scrollbar-width: none;
 }

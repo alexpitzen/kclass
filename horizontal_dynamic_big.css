@@ -1,61 +1,62 @@
-@media screen and (orientation:landscape) {
-    .btn-subject {
-        border: none !important;
-        height: unset !important;
-        line-height: 20px !important;
-        min-width: unset !important;
-        padding: 0px 10px !important;
-    }
-    .grading-header {
-        min-height: unset !important;
-    }
-    .backBtnWrap {
-        height: unset !important;
-    }
+@media screen and (orientation:landscape) and (max-height:733px) {
     .container {
         min-width: unset !important;
     }
     .content-bg {
         padding: 0px !important;
     }
-    .full-name {
-        line-height: 20px !important;
+    .scroll-content {
+        overflow-x: auto !important;
     }
-    .grading-header {
-        padding: 0px !important;
-    }
+
     .grading-header-icon {
         display: none;
     }
     .grading-header-title {
         display: none;
     }
-    .header-left {
+    .grading-header {
+        min-height: unset !important;
+        padding: 0px !important;
+    }
+    .grading-header .backBtnWrap {
+        height: unset !important;
+    }
+    .grading-header .btn-subject {
+        border: none !important;
+        height: unset !important;
+        line-height: 20px !important;
+        min-width: unset !important;
+        padding: 0px 10px !important;
+    }
+    .grading-header .full-name {
+        line-height: 20px !important;
+    }
+    .grading-header .header-left {
         line-height: 10px;
     }
-    .name-kana {
+    .grading-header .name-kana {
         display: none;
     }
-    .scroll-content {
-        overflow-x: auto !important;
-    }
-    .student-info-btn::before {
+    .grading-header .student-info-btn::before {
         top: 8px !important;
     }
-    .student-info-right .num {
+    .grading-header .student-info-right .num {
         height: 20px !important;
         line-height: 20px !important;
         min-width: 20px !important;
     }
-    .student-pulldown-root {
+    .grading-header .student-pulldown-root {
         min-height: unset !important;
         margin-left: 0px !important;
     }
-    #studentInfoPullDown {
+    .grading-header #studentInfoPullDown {
         min-height: unset;
         border: 0px !important;
     }
+
     .worksheet-tool {
         margin-left: 0px !important;
     }
+
 }

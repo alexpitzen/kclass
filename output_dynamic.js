@@ -44,90 +44,91 @@
     // TODO up/down "scroll" buttons on 200+% or slightly reduce height
     let z = document.createElement("style");
     z.innerHTML = `
-.studentRow .gradeColumn {
-    flex: none !important;
-}
 * {
     touch-action: auto !important;
-}
-div.root {
-    min-width: unset !important;
-}
-div.root > div.logo {
-    margin-top: 0 !important;
-}
-div.root > div.sub-logo {
-    margin: 0 !important;
-}
-button.login-btn {
-    margin-top: 0 !important;
-}
-button.btn-pulldown-language {
-    margin-top: 0 !important;
 }
 
 app-scroll-to-top-button {
     display: none;
 }
-@media screen and (orientation:landscape) {
-    .btn-subject {
-        border: none !important;
-        height: unset !important;
-        line-height: 20px !important;
-        min-width: unset !important;
-        padding: 0px 10px !important;
-    }
-    .grading-header {
-        min-height: unset !important;
-    }
-    .backBtnWrap {
-        height: unset !important;
-    }
+
+
+.dashboard-progress-chart .container.plan.isFloating {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: unset !important;
+    max-height: unset !important;
+}
+body:has(.dashboard-progress-chart .container.plan.isFloating) {
+    scrollbar-width: none;
+}
+@media screen and (orientation:landscape) and (max-height:733px) {
     .container {
         min-width: unset !important;
     }
     .content-bg {
         padding: 0px !important;
     }
-    .full-name {
-        line-height: 20px !important;
+    .scroll-content {
+        overflow-x: auto !important;
     }
-    .grading-header {
-        padding: 0px !important;
-    }
+
     .grading-header-icon {
         display: none;
     }
     .grading-header-title {
         display: none;
     }
-    .header-left {
+    .grading-header {
+        min-height: unset !important;
+        padding: 0px !important;
+    }
+    .grading-header .backBtnWrap {
+        height: unset !important;
+    }
+    .grading-header .btn-subject {
+        border: none !important;
+        height: unset !important;
+        line-height: 20px !important;
+        min-width: unset !important;
+        padding: 0px 10px !important;
+    }
+    .grading-header .full-name {
+        line-height: 20px !important;
+    }
+    .grading-header .header-left {
         line-height: 10px;
     }
-    .name-kana {
+    .grading-header .name-kana {
         display: none;
     }
-    .scroll-content {
-        overflow-x: auto !important;
-    }
-    .student-info-btn::before {
+    .grading-header .student-info-btn::before {
         top: 8px !important;
     }
-    .student-info-right .num {
+    .grading-header .student-info-right .num {
         height: 20px !important;
         line-height: 20px !important;
         min-width: 20px !important;
     }
-    .student-pulldown-root {
+    .grading-header .student-pulldown-root {
         min-height: unset !important;
         margin-left: 0px !important;
     }
-    #studentInfoPullDown {
+    .grading-header #studentInfoPullDown {
         min-height: unset;
         border: 0px !important;
     }
+
     .worksheet-tool {
         margin-left: 0px !important;
+    }
+
+    .container.isFloating {
+        width: 100% !important;
+        height: 100% !important;
+    }
+    body:has(.container.isFloating) {
+        scrollbar-width: none;
     }
 }
 @media screen and (orientation:landscape) and (max-height:633px) {
@@ -234,6 +235,33 @@ app-scroll-to-top-button {
     }
     body:not(:has(.content-answer-content)) .z300 {
         z-index: 300 !important;
+    }
+
+    /* Less space on grade column */
+    .studentRowHeader .gradeColumn {
+        width: unset !important;
+        min-width: unset !important;
+        padding-left: 0px !important;
+    }
+    .studentRow .gradeColumn {
+        flex: none !important;
+    }
+
+    /* login page */
+    div.root {
+        min-width: unset !important;
+    }
+    div.root > div.logo {
+        margin-top: 0 !important;
+    }
+    div.root > div.sub-logo {
+        margin: 0 !important;
+    }
+    button.login-btn {
+        margin-top: 0 !important;
+    }
+    button.btn-pulldown-language {
+        margin-top: 0 !important;
     }
 }
 @media screen and (orientation:landscape) and (max-height:613px) {

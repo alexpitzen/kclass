@@ -103,4 +103,31 @@
     body:not(:has(.content-answer-content)) .z300 {
         z-index: 300 !important;
     }
+
+    /* Less space on grade column */
+    .studentRowHeader .gradeColumn {
+        width: unset !important;
+        min-width: unset !important;
+        padding-left: 0px !important;
+    }
+    .studentRow .gradeColumn {
+        flex: none !important;
+    }
+
+    /* login page */
+    div.root {
+        min-width: unset !important;
+    }
+    div.root > div.logo {
+        margin-top: 0 !important;
+    }
+    div.root > div.sub-logo {
+        margin: 0 !important;
+    }
+    button.login-btn {
+        margin-top: 0 !important;
+    }
+    button.btn-pulldown-language {
+        margin-top: 0 !important;
+    }
 }
