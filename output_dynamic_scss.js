@@ -63,7 +63,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   scrollbar-width: none;
 }
 
-/*# sourceMappingURL=horizontal_all.css.map */
+/*# sourceMappingURL=all.css.map */
 @media screen and (orientation: landscape) and (max-height: 733px) {
   .container {
     min-width: unset !important;
@@ -286,6 +286,120 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 }
 
 /*# sourceMappingURL=horizontal_dynamic_small.css.map */
+@media screen and (orientation: portrait) and (max-width: 977px) {
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
+    /* Show worksheet tool */
+    /* Show H button */
+    /* Move worksheet above header */
+    /* Answers */
+    /* Grading header */
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .container {
+    min-width: unset !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-bg {
+    padding: 0px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .scroll-content {
+    overflow-x: auto !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-tool {
+    margin-left: 371px !important;
+    z-index: 252 !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-container {
+    outline-width: 1px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .headerZindexBtn {
+    left: 376px;
+    display: unset !important;
+    position: fixed;
+    top: 80px;
+    height: 30px;
+    width: 30px;
+    z-index: 252;
+    padding: 0;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .z300 {
+    z-index: 300 !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-detail {
+    position: fixed;
+    top: -1px;
+    left: -1px;
+    z-index: 251;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-answer-content {
+    position: fixed !important;
+    left: 0;
+    bottom: 0;
+    height: calc(100% - 614px);
+    width: 100% !important;
+    z-index: 1;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .answersheetToolbarContener {
+    right: 14px;
+    bottom: calc(100% - 614px - 40px);
+    left: unset !important;
+    top: unset !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header-icon {
+    display: none;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header-title {
+    display: none;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header {
+    min-height: unset !important;
+    padding: 0px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .backBtnWrap {
+    height: unset !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .btn-subject {
+    border: none !important;
+    height: unset !important;
+    line-height: 20px !important;
+    min-width: unset !important;
+    padding: 0px 10px !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .full-name {
+    line-height: 20px !important;
+    width: unset !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .header-left {
+    line-height: 10px;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .name-kana {
+    display: none;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .student-info-btn::before {
+    top: 8px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .student-info-right .num {
+    height: 20px !important;
+    line-height: 20px !important;
+    min-width: 20px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .student-pulldown-root {
+    min-height: unset !important;
+    min-width: unset !important;
+    margin-left: 0px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header #studentInfoPullDown {
+    min-height: unset;
+    min-width: unset !important;
+    border: 0px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .student-info-left {
+    min-width: unset !important;
+  }
+}
+
+/*# sourceMappingURL=vertical_big.css.map */
 `; //`
 
     document.body.appendChild(z);
