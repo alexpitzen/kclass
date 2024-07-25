@@ -2,6 +2,7 @@
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
     /* Show worksheet tool */
     /* Show H button */
+    /* Show x all button */
     /* Move worksheet above header */
     /* Answers */
     /* Grading header */
@@ -27,6 +28,16 @@
     display: unset !important;
     position: fixed;
     top: 80px;
+    height: 30px;
+    width: 30px;
+    z-index: 252;
+    padding: 0;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .xallbtn {
+    left: 376px;
+    display: unset !important;
+    position: fixed;
+    top: 130px;
     height: 30px;
     width: 30px;
     z-index: 252;

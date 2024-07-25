@@ -56,6 +56,34 @@
   .worksheet-tool {
     margin-left: 0px !important;
   }
+  /* Grading */
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):has(.content-answer-content) .xallbtn {
+    /* account for dynamic width answer content */
+    left: calc((100vw - 410px) * 2 / 3 + 385px + 6px) !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-answer-content {
+    /* dynamic width answer content so our xallbtn can have "fixed" position relative to the other buttons */
+    width: calc((100vw - 410px) * 2 / 3) !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)):has(.worksheet-group.single) .xallbtn {
+    left: 391px;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-group.single) .xallbtn {
+    /* for this size, only show if in single page mode */
+    display: unset !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .xallbtn {
+    position: fixed;
+    top: 180px;
+    height: 30px;
+    width: 30px;
+    z-index: 252;
+    padding: 0;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
+  div.worksheet-group.landscape.selected) .xallbtn {
+    left: 676px;
+  }
 }
 
 /*# sourceMappingURL=horizontal_dynamic_big.css.map */

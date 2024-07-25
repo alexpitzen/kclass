@@ -41,6 +41,15 @@
         }
     };
 
+    let xallbtn = document.createElement("button");
+    xallbtn.className = "xallbtn";
+    xallbtn.innerText = "x all";
+    xallbtn.style.display = "none";
+    document.body.appendChild(xallbtn);
+    xallbtn.onclick = () => {
+        document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
+    }
+
     // TODO up/down "scroll" buttons on 200+% or slightly reduce height
     let z = document.createElement("style");
     z.innerHTML = `
@@ -122,6 +131,34 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   .worksheet-tool {
     margin-left: 0px !important;
   }
+  /* Grading */
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):has(.content-answer-content) .xallbtn {
+    /* account for dynamic width answer content */
+    left: calc((100vw - 410px) * 2 / 3 + 385px + 6px) !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-answer-content {
+    /* dynamic width answer content so our xallbtn can have "fixed" position relative to the other buttons */
+    width: calc((100vw - 410px) * 2 / 3) !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)):has(.worksheet-group.single) .xallbtn {
+    left: 391px;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-group.single) .xallbtn {
+    /* for this size, only show if in single page mode */
+    display: unset !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .xallbtn {
+    position: fixed;
+    top: 180px;
+    height: 30px;
+    width: 30px;
+    z-index: 252;
+    padding: 0;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
+  div.worksheet-group.landscape.selected) .xallbtn {
+    left: 676px;
+  }
 }
 
 /*# sourceMappingURL=horizontal_dynamic_big.css.map */
@@ -182,7 +219,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     /*width: 162px !important;*/
     width: calc((100vw - 410px) / 3 + 8px) !important;
   }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):has(.content-answer-content) .headerZindexBtn {
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):has(.content-answer-content) .headerZindexBtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):has(.content-answer-content) .xallbtn {
     left: calc((100vw - 410px) * 2 / 3 + 370px + 6px) !important;
     /*left: 771px;*/
   }
@@ -193,8 +230,8 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)) .content-menu-scroll:not(.close) {
     width: 162px !important;
   }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)) .headerZindexBtn {
-    left: 376px;
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)) .headerZindexBtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)) .xallbtn {
+    left: 376px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)) .z300 {
     z-index: 300 !important;
@@ -211,6 +248,9 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     top: 0px !important;
     z-index: 252 !important;
   }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .xallbtn {
+    display: unset !important;
+  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .headerZindexBtn {
     display: unset !important;
     position: fixed;
@@ -221,7 +261,8 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     padding: 0;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
-  div.worksheet-group.landscape.selected) .headerZindexBtn {
+  div.worksheet-group.landscape.selected) .headerZindexBtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
+  div.worksheet-group.landscape.selected) .xallbtn {
     left: 676px;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
@@ -271,7 +312,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .shiftbtn {
     display: unset !important;
     position: fixed;
-    top: 140px;
+    top: 130px;
     height: 30px;
     width: 30px;
     z-index: 252;
@@ -290,6 +331,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
     /* Show worksheet tool */
     /* Show H button */
+    /* Show x all button */
     /* Move worksheet above header */
     /* Answers */
     /* Grading header */
@@ -315,6 +357,16 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     display: unset !important;
     position: fixed;
     top: 80px;
+    height: 30px;
+    width: 30px;
+    z-index: 252;
+    padding: 0;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .xallbtn {
+    left: 376px;
+    display: unset !important;
+    position: fixed;
+    top: 130px;
     height: 30px;
     width: 30px;
     z-index: 252;

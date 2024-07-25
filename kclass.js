@@ -41,6 +41,15 @@
         }
     };
 
+    let xallbtn = document.createElement("button");
+    xallbtn.className = "xallbtn";
+    xallbtn.innerText = "x all";
+    xallbtn.style.display = "none";
+    document.body.appendChild(xallbtn);
+    xallbtn.onclick = () => {
+        document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
+    }
+
     // TODO up/down "scroll" buttons on 200+% or slightly reduce height
     let z = document.createElement("style");
     z.innerHTML = `

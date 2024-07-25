@@ -55,7 +55,7 @@
     /*width: 162px !important;*/
     width: calc((100vw - 410px) / 3 + 8px) !important;
   }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):has(.content-answer-content) .headerZindexBtn {
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):has(.content-answer-content) .headerZindexBtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):has(.content-answer-content) .xallbtn {
     left: calc((100vw - 410px) * 2 / 3 + 370px + 6px) !important;
     /*left: 771px;*/
   }
@@ -66,8 +66,8 @@
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)) .content-menu-scroll:not(.close) {
     width: 162px !important;
   }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)) .headerZindexBtn {
-    left: 376px;
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)) .headerZindexBtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)) .xallbtn {
+    left: 376px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)) .z300 {
     z-index: 300 !important;
@@ -84,6 +84,9 @@
     top: 0px !important;
     z-index: 252 !important;
   }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .xallbtn {
+    display: unset !important;
+  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .headerZindexBtn {
     display: unset !important;
     position: fixed;
@@ -94,7 +97,8 @@
     padding: 0;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
-  div.worksheet-group.landscape.selected) .headerZindexBtn {
+  div.worksheet-group.landscape.selected) .headerZindexBtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
+  div.worksheet-group.landscape.selected) .xallbtn {
     left: 676px;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,

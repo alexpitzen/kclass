@@ -14,7 +14,7 @@
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .shiftbtn {
     display: unset !important;
     position: fixed;
-    top: 140px;
+    top: 130px;
     height: 30px;
     width: 30px;
     z-index: 252;

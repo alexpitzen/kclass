@@ -59,7 +59,7 @@
                 /*width: 162px !important;*/
                 width: calc((100vw - 410px) / 3 + 8px) !important;
             }
-            .headerZindexBtn {
+            .headerZindexBtn, .xallbtn {
                 left: calc((100vw - 410px) * 2 / 3 + 370px + 6px) !important;
                 /*left: 771px;*/
             }
@@ -72,8 +72,8 @@
             .content-menu-scroll:not(.close) {
                 width: 162px !important;
             }
-            .headerZindexBtn {
-                left: 376px;
+            .headerZindexBtn, .xallbtn {
+                left: 376px !important;
             }
             .z300 {
                 z-index: 300 !important;
@@ -91,6 +91,9 @@
             top: 0px !important;
             z-index: 252 !important;
         }
+        &:has(.worksheet-tool) .xallbtn {
+            display: unset !important;
+        }
         &:has(.worksheet-tool) .headerZindexBtn {
             display: unset !important;
             position: fixed;
@@ -104,7 +107,7 @@
             div.worksheet-container.landscape.selected,
             div.worksheet-group.landscape.selected
         ) {
-            .headerZindexBtn {
+            .headerZindexBtn, .xallbtn {
                 left: 676px;
             }
             .worksheet-tool {

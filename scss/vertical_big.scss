@@ -29,6 +29,17 @@
         z-index: 252;
         padding: 0;
     }
+    /* Show x all button */
+    .xallbtn {
+        left: 376px;
+        display: unset !important;
+        position: fixed;
+        top: 130px;
+        height: 30px;
+        width: 30px;
+        z-index: 252;
+        padding: 0;
+    }
     .z300 {
         z-index: 300 !important;
     }
