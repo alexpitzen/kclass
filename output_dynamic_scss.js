@@ -2,7 +2,7 @@
 // @name         kclass
 // @namespace    http://tampermonkey.net/
 // @version      2024-01-08
-// @description  try to take over the world!
+// @description  improvements to class-navi grading layout when zoomed in
 // @author       You
 // @match        https://class-navi.digital.kumon.com/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
@@ -12,47 +12,40 @@
 (function() {
     'use strict';
 
-    // Your code here...
-    let headerbtn = document.createElement("button");
-    headerbtn.className = "headerZindexBtn";
-    headerbtn.innerText = "H";
-    headerbtn.style.display = "none";
-    document.body.appendChild(headerbtn);
-    headerbtn.onclick = () => {
-        let header = document.getElementsByClassName("grading-header")[0];
-        if (header.classList.contains("z300")) {
-            header.classList.remove("z300");
-        } else {
-            header.classList.add("z300");
-        }
-    };
+function makebtn(className, innerText, fn) {
+    let btn = document.createElement("button");
+    btn.className = className;
+    btn.innerText = innerText;
+    btn.style.display = "none";
+    document.body.appendChild(btn);
+    btn.onclick = fn;
+}
 
-    let shiftbtn = document.createElement("button");
-    shiftbtn.className = "shiftbtn";
-    shiftbtn.innerText = "↕";
-    shiftbtn.style.display = "none";
-    document.body.appendChild(shiftbtn);
-    shiftbtn.onclick = () => {
-        let container = document.getElementsByClassName("worksheet-container")[0];
-        if (container.classList.contains("shiftup")) {
-            container.classList.remove("shiftup");
-        } else {
-            container.classList.add("shiftup");
-        }
-    };
-
-    let xallbtn = document.createElement("button");
-    xallbtn.className = "xallbtn";
-    xallbtn.innerText = "x all";
-    xallbtn.style.display = "none";
-    document.body.appendChild(xallbtn);
-    xallbtn.onclick = () => {
-        document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
+// Your code here...
+makebtn("headerZindexBtn", "H", () => {
+    let header = document.getElementsByClassName("grading-header")[0];
+    if (header.classList.contains("z300")) {
+        header.classList.remove("z300");
+    } else {
+        header.classList.add("z300");
     }
+});
 
-    // TODO up/down "scroll" buttons on 200+% or slightly reduce height
-    let z = document.createElement("style");
-    z.innerHTML = `
+makebtn("shiftbtn", "↕", () => {
+    let container = document.getElementsByClassName("worksheet-container")[0];
+    if (container.classList.contains("shiftup")) {
+        container.classList.remove("shiftup");
+    } else {
+        container.classList.add("shiftup");
+    }
+});
+
+makebtn("xallbtn", "x all", () => {
+    document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
+});
+// TODO up/down "scroll" buttons on 200+% or slightly reduce height
+let z = document.createElement("style");
+z.innerHTML = `
 * {
   touch-action: auto !important;
 }
@@ -454,6 +447,6 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 /*# sourceMappingURL=vertical_big.css.map */
 `; //`
 
-    document.body.appendChild(z);
+document.body.appendChild(z);
 
 })();
