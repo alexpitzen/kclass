@@ -670,6 +670,17 @@ LETTERS = {
             new Linear({x:10, y:15}, {x:0, y:30}),
         ]),
     ], 10),
+    ",": new DrawLetter(",", [
+        new Stroke([
+            new Linear({x:10, y:92.5}, {x:0, y:107.5}),
+        ]),
+    ], 10),
+    ".": new DrawLetter(".", [
+        new Stroke([
+            new Circular({x:5, y:90}, {x:5, y:100}, 5, true, true),
+            new Circular({x:5, y:100}, {x:5, y:90}, 5, true, true),
+        ]),
+    ], 10),
     "(": new DrawLetter("(", [
         new Stroke([
             /*
