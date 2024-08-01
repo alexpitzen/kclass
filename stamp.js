@@ -372,13 +372,13 @@ LETTERS = {
     " ": new DrawLetter(" ", [], 20),
     a: new DrawLetter("a", [
         new Stroke([
-            new Circular({x:50, y:75}, {x:0, y:75}, 25, false, true),
-            new Circular({x:0, y:75}, {x:50, y:75}, 25, false, true),
+            new Linear({x:45, y:50}, {x:45, y:100}),
         ]),
         new Stroke([
-            new Linear({x:50, y:62.5}, {x:50, y:100}),
+            // center at 25, 75
+            new Circular({x:45, y:60}, {x:45, y:90}, 25, false, true),
         ]),
-    ], 50),
+    ], 45),
     b: new DrawLetter("b", [
         new Stroke([
             new Linear({x:0, y:0}, {x:0, y:100}),
@@ -647,12 +647,12 @@ LETTERS = {
     ], 10),
     "?": new DrawLetter("?",[
         new Stroke([
-            new Circular({x:0, y:35}, {x:15, y:50}, 15, true, true),
-            new Linear({x:15, y:50}, {x:15, y:70}),
+            new Circular({x:0, y:25}, {x:25, y:50}, 25, true, true),
+            new Linear({x:25, y:50}, {x:25, y:70}),
         ]),
         new Stroke([
-            new Circular({x:15, y:90}, {x:15, y:100}, 5, true, true),
-            new Circular({x:15, y:100}, {x:15, y:90}, 5, true, true),
+            new Circular({x:25, y:90}, {x:25, y:100}, 5, true, true),
+            new Circular({x:25, y:100}, {x:25, y:90}, 5, true, true),
         ]),
     ], 30),
     "'": new DrawLetter("'", [
@@ -770,9 +770,8 @@ function getAtd() {
 
 function writeAllAt(text, pos, scale) {
     // copy
-    console.log(pos);
-    pos = {x: pos.x, y: pos.y};
-    console.log(pos);
+    original_pos = {x: pos.x, y: pos.y};
+    current_pos = {x: pos.x, y: pos.y};
 
     selectPen();
     atd = getAtd();
@@ -783,12 +782,16 @@ function writeAllAt(text, pos, scale) {
     // atd.pen.tp = 150;
     atd.pen.w = 2;
     for (c of text) {
+        if (c == "\n") {
+            current_pos.x = original_pos.x;
+            current_pos.y = current_pos.y + 140 * scale;
+        }
         letter = LETTERS[c];
         if (typeof letter === "undefined") {
             continue;
         }
-        writeAt(letter, pos, scale, atd, pointer);
-        pos.x += (letter.width + 15) * scale;
+        writeAt(letter, current_pos, scale, atd, pointer);
+        current_pos.x += (letter.width + 10) * scale + 3;
     }
     saveDrawing(atd, pointer);
 }
@@ -807,22 +810,13 @@ function saveDrawing(atd, pointer) {
     atd.pen.strokeDispatch(atd.drawingContext, cell, 1);
     atd.pen.drawEnd(atd.drawingContext);
     atd.arrayCopy.push(cell);
-    // also push cell to atd.currentStroke.arrayCell or .arrayCopy ?
-    // atd.pen.strokeDispatch ? if arrayCopy or ___?
-    // penUp creates last cell with mode 2
-    // atd.pen.strokeDispatch ? if arrayCopy or ___?
-    // atd.pen.drawEnd ? if arrayCopy or ___?
-    // ????
     atd.currentLayer.Drawing.is.push(atd.currentStroke);
-    // might need to manually draw something to update angular
 
     // Doesn't look important
     atd.drawingBuffer = atd.currentLayer.Drawing.clone();
 
     // adding an extra stroke and undoing it makes the image persist on the canvas
-    expandToolbar();
-    $(".grading-toolbar .toolbar-item.undo").click();
-    $(".grading-toolbar-box").classList.add("close");
+    atd.undoInk();
 
     atd.penUpFunc(atd); // updates the models in angular
 }
