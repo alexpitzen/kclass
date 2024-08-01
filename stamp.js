@@ -407,7 +407,8 @@ LETTERS = {
         new Stroke([
             new Linear({x:0, y:75}, {x:50, y:75}),
             // center at 25, 75
-            new Circular({x:50, y:75}, {x:25 + 25 / Math.sqrt(2), y:75 + 25 / Math.sqrt(2)}, 25, false, true),
+            new Circular({x:50, y:75}, {x:25, y:100}, 25, false, true),
+            new Linear({x:25, y:100}, {x:37.5, y:100}),
         ]),
     ], 50),
     f: new DrawLetter("f", [
@@ -862,6 +863,7 @@ function writeAt(letter, pos, scale, atd, pointer) {
 }
 
 function drawCell(startPos, point, m, atd, pointer) {
+    if (point == null) return;
     cell = new InkTool.InkCell(m, startPos.x + point[0], startPos.y + point[1], atd.pen.w, 0, ++pointer.lastTime);
     atd.currentStroke.addCell(cell);
     if (m == 0) {
