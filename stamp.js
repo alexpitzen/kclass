@@ -655,7 +655,16 @@ LETTERS = {
             new Circular({x:25, y:90}, {x:25, y:100}, 5, true, true),
             new Circular({x:25, y:100}, {x:25, y:90}, 5, true, true),
         ]),
-    ], 30),
+    ], 50),
+    "!": new DrawLetter("!",[
+        new Stroke([
+            new Linear({x:5, y:0}, {x:5, y:70}),
+        ]),
+        new Stroke([
+            new Circular({x:5, y:90}, {x:5, y:100}, 5, true, true),
+            new Circular({x:5, y:100}, {x:5, y:90}, 5, true, true),
+        ]),
+    ], 10),
     "'": new DrawLetter("'", [
         new Stroke([
             new Linear({x:10, y:15}, {x:0, y:30}),
