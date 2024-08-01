@@ -146,28 +146,35 @@ LETTERS = {
             new Linear({x:35, y:0}, {x:70, y:100}),
         ]),
         new Stroke([
-            new Linear({x:17.5, y:50}, {x:52.5, y:50}),
+            new Linear({x:15, y:60}, {x:50, y:60}),
         ])
     ], 70),
     B: new DrawLetter("B", [
         new Stroke([
             new Linear({x:0, y:100}, {x:0, y:0}),
-            new Circular({x:0, y:0}, {x:0, y:50}, 26, true, true),
-            new Circular({x:0, y:50}, {x:0, y:100}, 26, true, true),
-        ])
+        ]),
+        new Stroke([
+            // center at 15, 25?
+            new Circular({x:0, y:5}, {x:0, y:45}, 25, true, true),
+        ]),
+        new Stroke([
+            // center at 15, 75?
+            new Circular({x:0, y:55}, {x:0, y:95}, 25, true, true),
+        ]),
     ], 35),
     C: new DrawLetter("C", [
         new Stroke([
             new Circular({x:70, y:50-Math.sqrt(50**2 - 20**2)}, {x:70, y:50+Math.sqrt(50**2 - 20**2)}, 50, false, true),
-            // new Circular({x:50, y:0}, {x:100, y:50}, 50, false, true),
-        ])
+        ]),
     ], 70),
     D: new DrawLetter("D", [
         new Stroke([
             new Linear({x:0, y:100}, {x:0, y:0}),
-            new Circular({x:0, y:0}, {x:0, y:100}, 50, true, false),
-        ])
-    ], 50),
+        ]),
+        new Stroke([
+            new Circular({x:0, y:50-Math.sqrt(50**2 - 20**2)}, {x:0, y:50+Math.sqrt(50**2 - 20**2)}, 50, true, true),
+        ]),
+    ], 70),
     E: new DrawLetter("E", [
         new Stroke([
             new Linear({x:50, y:0}, {x:0, y:0}),
@@ -190,7 +197,6 @@ LETTERS = {
     G: new DrawLetter("G", [
         new Stroke([
             new Circular({x:70, y:50-Math.sqrt(2100)}, {x:70, y:50+Math.sqrt(2100)}, 50, false, true),
-            // new Linear({x:70, y:50+Math.sqrt(2100)}, {x:40, y:50+Math.sqrt(2100)}),
             new Linear({x:70, y:50+Math.sqrt(2100)}, {x:70, y:60}),
             new Linear({x:70, y:60}, {x:40, y:60}),
         ])
@@ -231,10 +237,12 @@ LETTERS = {
             new Linear({x:0, y:0}, {x:0, y:100}),
         ]),
         new Stroke([
-            new Linear({x:40, y:0}, {x:0, y:50}),
-            new Linear({x:0, y:50}, {x:40, y:100}),
+            new Linear({x:50, y:0}, {x:0, y:50}),
         ]),
-    ], 40),
+        new Stroke([
+            new Linear({x:0, y:50}, {x:50, y:100}),
+        ]),
+    ], 50),
     L: new DrawLetter("L", [
         new Stroke([
             new Linear({x:0, y:0}, {x:0, y:100}),
@@ -258,12 +266,12 @@ LETTERS = {
             new Linear({x:0, y:100}, {x:0, y:0}),
         ]),
         new Stroke([
-            new Linear({x:0, y:0}, {x:40, y:100}),
+            new Linear({x:0, y:0}, {x:50, y:100}),
         ]),
         new Stroke([
-            new Linear({x:40, y:100}, {x:40, y:0}),
+            new Linear({x:50, y:100}, {x:50, y:0}),
         ]),
-    ], 40),
+    ], 50),
     O: new DrawLetter("O", [
         new Stroke([
             new Circular({x:40, y:20}, {x:40, y:100}, 40, false, true),
@@ -273,9 +281,12 @@ LETTERS = {
     P: new DrawLetter("P", [
         new Stroke([
             new Linear({x:0, y:100}, {x:0, y:0}),
-            new Circular({x:0, y:0}, {x:0, y:50}, 25, true, true),
         ]),
-    ], 25),
+        new Stroke([
+            // center at 15, 25?
+            new Circular({x:0, y:5}, {x:0, y:45}, 25, true, true),
+        ]),
+    ], 40),
     Q: new DrawLetter("Q", [
         new Stroke([
             new Circular({x:40, y:20}, {x:40, y:100}, 40, false, true),
@@ -288,16 +299,19 @@ LETTERS = {
     R: new DrawLetter("R", [
         new Stroke([
             new Linear({x:0, y:100}, {x:0, y:0}),
-            new Circular({x:0, y:0}, {x:0, y:50}, 25, true, true),
-            new Linear({x:0, y:50}, {x:25, y:100}),
         ]),
-    ], 25),
-    S: new DrawLetter("S", [
         new Stroke([
-            new Circular({x:40, y:40}, {x:20, y:60}, 20, false, true),
-            new Circular({x:20, y:60}, {x:0, y:80}, 20, true, true),
+            // center at 15, 25?
+            new Circular({x:0, y:5}, {x:0, y:45}, 25, true, true),
+            new Linear({x:0, y:45}, {x:40, y:100}),
         ]),
     ], 40),
+    S: new DrawLetter("S", [
+        new Stroke([
+            new Circular({x:50, y:25}, {x:25, y:50}, 25, false, true),
+            new Circular({x:25, y:50}, {x:0, y:75}, 25, true, true),
+        ]),
+    ], 50),
     T: new DrawLetter("T", [
         new Stroke([
             new Linear({x:0, y:0}, {x:60, y:0}),
@@ -308,22 +322,22 @@ LETTERS = {
     ], 60),
     U: new DrawLetter("U", [
         new Stroke([
-            new Linear({x:0, y:0}, {x:0, y:80}),
-            new Circular({x:0, y:80}, {x:40, y:80}, 20, false, true),
-            new Linear({x:40, y:80}, {x:40, y:0}),
+            new Linear({x:0, y:0}, {x:0, y:75}),
+            new Circular({x:0, y:75}, {x:50, y:75}, 25, false, true),
+            new Linear({x:50, y:75}, {x:50, y:0}),
         ]),
         new Stroke([
-            new Linear({x:40, y:0}, {x:40, y:100}),
+            new Linear({x:50, y:0}, {x:50, y:100}),
         ]),
-    ], 40),
+    ], 50),
     V: new DrawLetter("V", [
         new Stroke([
-            new Linear({x:0, y:0}, {x:20, y:100}),
+            new Linear({x:0, y:0}, {x:25, y:100}),
         ]),
         new Stroke([
-            new Linear({x:20, y:100}, {x:40, y:0}),
+            new Linear({x:25, y:100}, {x:50, y:0}),
         ]),
-    ], 40),
+    ], 50),
     W: new DrawLetter("W", [
         new Stroke([
             new Linear({x:0, y:0}, {x:20, y:100}),
@@ -334,27 +348,27 @@ LETTERS = {
     ], 80),
     X: new DrawLetter("X", [
         new Stroke([
-            new Linear({x:0, y:0}, {x:40, y:100}),
+            new Linear({x:0, y:0}, {x:50, y:100}),
         ]),
         new Stroke([
-            new Linear({x:40, y:0}, {x:0, y:100}),
+            new Linear({x:50, y:0}, {x:0, y:100}),
         ]),
-    ], 40),
+    ], 50),
     Y: new DrawLetter("Y", [
         new Stroke([
             new Linear({x:0, y:0}, {x:20, y:50}),
         ]),
         new Stroke([
-            new Linear({x:40, y:0}, {x:0, y:100}),
+            new Linear({x:50, y:0}, {x:0, y:100}),
         ]),
-    ], 40),
+    ], 50),
     Z: new DrawLetter("Z", [
         new Stroke([
-            new Linear({x:0, y:0}, {x:40, y:0}),
-            new Linear({x:40, y:0}, {x:0, y:100}),
-            new Linear({x:0, y:100}, {x:40, y:100}),
+            new Linear({x:0, y:0}, {x:50, y:0}),
+            new Linear({x:50, y:0}, {x:0, y:100}),
+            new Linear({x:0, y:100}, {x:50, y:100}),
         ]),
-    ], 40),
+    ], 50),
     " ": new DrawLetter(" ", [], 20),
     a: new DrawLetter("a", [
         new Stroke([
@@ -447,7 +461,7 @@ LETTERS = {
     ], 45),
     k: new DrawLetter("k", [
         new Stroke([
-            new Linear({x:0, y:20}, {x:0, y:100}),
+            new Linear({x:0, y:0}, {x:0, y:100}),
         ]),
         new Stroke([
             new Linear({x:30, y:50}, {x:0, y:75}),
@@ -456,7 +470,7 @@ LETTERS = {
     ], 30),
     l: new DrawLetter("l", [
         new Stroke([
-            new Linear({x:0, y:20}, {x:0, y:90}),
+            new Linear({x:0, y:0}, {x:0, y:90}),
             new Circular({x:0, y:90}, {x:10, y:100}, 10, false, false),
         ]),
     ], 10),
@@ -526,13 +540,12 @@ LETTERS = {
     ], 25),
     t: new DrawLetter("t", [
         new Stroke([
-            new Linear({x:10, y:20}, {x:10, y:90}),
-            new Circular({x:10, y:90}, {x:20, y:100}, 10, false, false),
+            new Linear({x:20, y:0}, {x:20, y:100}),
         ]),
         new Stroke([
-            new Linear({x:0, y:50}, {x:20, y:50}),
+            new Linear({x:0, y:50}, {x:40, y:50}),
         ])
-    ], 20),
+    ], 40),
     u: new DrawLetter("u", [
         new Stroke([
             new Linear({x:0, y:50}, {x:0, y:85}),
