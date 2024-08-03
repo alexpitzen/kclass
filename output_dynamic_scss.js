@@ -150,7 +150,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
   div.worksheet-group.landscape.selected) .xallbtn {
-    left: 676px;
+    left: 676px !important;
   }
 }
 
@@ -256,7 +256,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
   div.worksheet-group.landscape.selected) .headerZindexBtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
   div.worksheet-group.landscape.selected) .xallbtn {
-    left: 676px;
+    left: 676px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
   div.worksheet-group.landscape.selected) .worksheet-tool {

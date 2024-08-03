@@ -343,8 +343,14 @@ LETTERS = {
     W: new DrawLetter("W", [
         new Stroke([
             new Linear({x:0, y:0}, {x:20, y:100}),
-            new Linear({x:20, y:100}, {x:40, y:60}),
-            new Linear({x:40, y:60}, {x:60, y:100}),
+        ]),
+        new Stroke([
+            new Linear({x:20, y:100}, {x:40, y:50}),
+        ]),
+        new Stroke([
+            new Linear({x:40, y:50}, {x:60, y:100}),
+        ]),
+        new Stroke([
             new Linear({x:60, y:100}, {x:80, y:0}),
         ]),
     ], 80),
@@ -367,7 +373,11 @@ LETTERS = {
     Z: new DrawLetter("Z", [
         new Stroke([
             new Linear({x:0, y:0}, {x:60, y:0}),
+        ]),
+        new Stroke([
             new Linear({x:60, y:0}, {x:0, y:100}),
+        ]),
+        new Stroke([
             new Linear({x:0, y:100}, {x:60, y:100}),
         ]),
     ], 60),
@@ -797,7 +807,7 @@ function getAtd() {
 }
 
 // TODO this should be a map<atd:[]>
-// can't really make this usable
+// can't really make this usable because it doesn't account for other draw/undo
 // maybe implement an undo all & redo all instead
 writeStrokes = [];
 currentDrawCounter = 0;
