@@ -1441,6 +1441,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 }
 .texttab .textclearbtn {
   float: right;
+  margin-right: 6px;
 }
 
 .printoverlay {
