@@ -36,7 +36,6 @@ makebtn("xallbtn", "x all", customToolbar, () => {
 
 const drawtab = document.createElement("div");
 drawtab.className = "drawtab";
-
 customToolbar.appendChild(drawtab);
 
 drawtab.addEventListener("mouseleave", () => {
@@ -50,10 +49,83 @@ const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
 });
 
 makebtn("textbtn squarebtn", "abc", drawtab, () => {
-    // console.log("text btn");
+    texttab.style.display = "unset !important";
+    texttab.focus();
 });
 
 makebtn("undoLast squarebtn", "&#11148;", drawtab, () => {
     CustomDrawLib.undoLastWriteAll();
 });
 
+const texttab = document.createElement("div");
+texttab.className = "texttab";
+drawtab.appendChild(texttab);
+
+texttab.addEventListener("mouseleave", () => {
+    texttab.style.display = "none";
+});
+
+/* scale = font size / 75 */
+const fontScaleConversion = 75;
+
+const sizeslider = document.createElement("input");
+sizeslider.className = "sizeslider";
+sizeslider.type = "range";
+sizeslider.value = 20;
+sizeslider.min = fontScaleConversion * 0.15; // 0.15 scale
+sizeslider.max = fontScaleConversion * 1.0; // 1.0 scale
+texttab.appendChild(sizeslider);
+sizeslider.addEventListener("input", (e) => {
+    textarea.style["font-size"] = `${e.target.value}px`;
+    updateTextAreaSize();
+});
+
+makebtn("textprintbtn", "print", texttab, () => {
+    console.log("print text");
+    let printclickhandler = (e) => {
+        try {
+            drawtab.style.display = "none";
+            let atd = CustomDrawLib.getAtd();
+            let canvasRect = atd.bcanvas.getBoundingClientRect();
+            let zoomRatio = atd.drawingContext.zoomRatio;
+
+            let position = {
+                x: (e.clientX - canvasRect.left) / zoomRatio,
+                y: (e.clientY - canvasRect.top) / zoomRatio,
+            }
+            if (position.x < 0 || position.y < 0) {
+                return;
+            }
+            let scale = sizeslider.value / fontScaleConversion;
+
+            CustomDrawLib.writeAllAt(textarea.value, position, scale);
+        } finally {
+            printoverlay.style.display = "none";
+            printoverlay.removeEventListener("click", printclickhandler);
+        }
+    };
+    printoverlay.addEventListener("click", printclickhandler);
+    printoverlay.style.display = "unset";
+});
+
+makebtn("textclearbtn", "clear", texttab, () => {
+    textarea.value = "";
+    updateTextAreaSize();
+});
+
+const textarea = document.createElement("textarea");
+texttab.appendChild(textarea);
+textarea.style["font-size"] = "20px";
+function updateTextAreaSize() {
+    textarea.style.height = "";
+    textarea.style.height = `${textarea.scrollHeight}px`;
+}
+textarea.addEventListener("input", updateTextAreaSize);
+
+
+const printoverlay = document.createElement("div");
+printoverlay.className = "printoverlay";
+document.body.appendChild(printoverlay);
+
+
+;

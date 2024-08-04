@@ -34,7 +34,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   padding: 0;
 }
 
-.customToolbar, .headerZindexBtn, .shiftbtn, .xallbtn, .drawtab {
+.customToolbar, .headerZindexBtn, .shiftbtn, .xallbtn, .drawtab, .texttab {
   display: none;
 }
 
@@ -66,9 +66,12 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   right: 0px;
   background: white;
 }
+.drawtab button {
+  height: 30px;
+}
 .drawtab .squarebtn {
   width: 30px;
-  height: 30px;
+  margin: 2px;
 }
 
 .textbtn {
@@ -77,6 +80,47 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 
 .undoLast {
   padding-top: 3px;
+}
+
+.texttab {
+  width: 404px;
+  border: 1px solid;
+  position: absolute;
+  z-index: 254;
+  right: 0;
+  top: 0;
+  background: white;
+}
+.texttab textarea {
+  max-width: 100%;
+  width: calc(100% - 5px);
+  margin-bottom: -6px;
+}
+
+.sizeslider {
+  margin: 10px 20px;
+}
+
+.texttab .textclearbtn, .texttab .textprintbtn {
+  margin-bottom: 10px;
+  margin-top: 6px;
+}
+.texttab .textprintbtn {
+  margin-left: 55px;
+}
+.texttab .textclearbtn {
+  float: right;
+}
+
+.printoverlay {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0;
+  z-index: 998;
+  display: none;
+  border: 0px;
 }
 
 /*# sourceMappingURL=all.css.map */

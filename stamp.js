@@ -1,17 +1,17 @@
 (function(global) {
     function expandToolbar() {
-        if ($(".grading-toolbar-box.close")) {
-            $(".grading-toolbar .toolbar-item").click();
+        if (document.querySelector(".grading-toolbar-box.close")) {
+            document.querySelector(".grading-toolbar .toolbar-item").click();
         }
     }
 
     function selectPen() {
-        if ($(".grading-toolbar .active.pen")) {
+        if (document.querySelector(".grading-toolbar .active.pen")) {
             return;
         }
         expandToolbar();
-        $(".grading-toolbar-box .grading-toolbar .pen").click();
-        $(".grading-toolbar-box").classList.add("close");
+        document.querySelector(".grading-toolbar-box .grading-toolbar .pen").click();
+        document.querySelector(".grading-toolbar-box").classList.add("close");
     }
 
     class DrawLetter {
@@ -1146,8 +1146,8 @@
 
         // adding an extra stroke and undoing it makes the image persist on the canvas, but it still doesn't get saved unless manually adding another stroke
         expandToolbar();
-        $(".grading-toolbar .toolbar-item.undo").click();
-        $(".grading-toolbar-box").classList.add("close");
+        document.querySelector(".grading-toolbar .toolbar-item.undo").click();
+        document.querySelector(".grading-toolbar-box").classList.add("close");
 
         // atd.undoInk();
         // atd.redoInk();

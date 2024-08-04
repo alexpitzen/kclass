@@ -50,7 +50,6 @@ makebtn("xallbtn", "x all", customToolbar, () => {
 
 const drawtab = document.createElement("div");
 drawtab.className = "drawtab";
-
 customToolbar.appendChild(drawtab);
 
 drawtab.addEventListener("mouseleave", () => {
@@ -64,27 +63,100 @@ const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
 });
 
 makebtn("textbtn squarebtn", "abc", drawtab, () => {
-    // console.log("text btn");
+    texttab.style.display = "unset !important";
+    texttab.focus();
 });
 
 makebtn("undoLast squarebtn", "&#11148;", drawtab, () => {
     CustomDrawLib.undoLastWriteAll();
 });
 
+const texttab = document.createElement("div");
+texttab.className = "texttab";
+drawtab.appendChild(texttab);
+
+texttab.addEventListener("mouseleave", () => {
+    texttab.style.display = "none";
+});
+
+/* scale = font size / 75 */
+const fontScaleConversion = 75;
+
+const sizeslider = document.createElement("input");
+sizeslider.className = "sizeslider";
+sizeslider.type = "range";
+sizeslider.value = 20;
+sizeslider.min = fontScaleConversion * 0.15; // 0.15 scale
+sizeslider.max = fontScaleConversion * 1.0; // 1.0 scale
+texttab.appendChild(sizeslider);
+sizeslider.addEventListener("input", (e) => {
+    textarea.style["font-size"] = `${e.target.value}px`;
+    updateTextAreaSize();
+});
+
+makebtn("textprintbtn", "print", texttab, () => {
+    console.log("print text");
+    let printclickhandler = (e) => {
+        try {
+            drawtab.style.display = "none";
+            let atd = CustomDrawLib.getAtd();
+            let canvasRect = atd.bcanvas.getBoundingClientRect();
+            let zoomRatio = atd.drawingContext.zoomRatio;
+
+            let position = {
+                x: (e.clientX - canvasRect.left) / zoomRatio,
+                y: (e.clientY - canvasRect.top) / zoomRatio,
+            }
+            if (position.x < 0 || position.y < 0) {
+                return;
+            }
+            let scale = sizeslider.value / fontScaleConversion;
+
+            CustomDrawLib.writeAllAt(textarea.value, position, scale);
+        } finally {
+            printoverlay.style.display = "none";
+            printoverlay.removeEventListener("click", printclickhandler);
+        }
+    };
+    printoverlay.addEventListener("click", printclickhandler);
+    printoverlay.style.display = "unset";
+});
+
+makebtn("textclearbtn", "clear", texttab, () => {
+    textarea.value = "";
+    updateTextAreaSize();
+});
+
+const textarea = document.createElement("textarea");
+texttab.appendChild(textarea);
+textarea.style["font-size"] = "20px";
+function updateTextAreaSize() {
+    textarea.style.height = "";
+    textarea.style.height = `${textarea.scrollHeight}px`;
+}
+textarea.addEventListener("input", updateTextAreaSize);
+
+
+const printoverlay = document.createElement("div");
+printoverlay.className = "printoverlay";
+document.body.appendChild(printoverlay);
+
+
+;
 (function(global) {
     function expandToolbar() {
-        if ($(".grading-toolbar-box.close")) {
-            $(".grading-toolbar .toolbar-item").click();
+        if (document.querySelector(".grading-toolbar-box.close")) {
+            document.querySelector(".grading-toolbar .toolbar-item").click();
         }
     }
 
     function selectPen() {
-        if ($(".grading-toolbar .active.pen")) {
+        if (document.querySelector(".grading-toolbar .active.pen")) {
             return;
         }
         expandToolbar();
-        $(".grading-toolbar-box .grading-toolbar .pen").click();
-        $(".grading-toolbar-box").classList.add("close");
+        document.querySelector(".grading-toolbar-box .grading-toolbar .pen").click();
+        document.querySelector(".grading-toolbar-box").classList.add("close");
     }
 
     class DrawLetter {
@@ -1219,8 +1291,8 @@ makebtn("undoLast squarebtn", "&#11148;", drawtab, () => {
 
         // adding an extra stroke and undoing it makes the image persist on the canvas, but it still doesn't get saved unless manually adding another stroke
         expandToolbar();
-        $(".grading-toolbar .toolbar-item.undo").click();
-        $(".grading-toolbar-box").classList.add("close");
+        document.querySelector(".grading-toolbar .toolbar-item.undo").click();
+        document.querySelector(".grading-toolbar-box").classList.add("close");
 
         // atd.undoInk();
         // atd.redoInk();
@@ -1293,7 +1365,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   padding: 0;
 }
 
-.customToolbar, .headerZindexBtn, .shiftbtn, .xallbtn, .drawtab {
+.customToolbar, .headerZindexBtn, .shiftbtn, .xallbtn, .drawtab, .texttab {
   display: none;
 }
 
@@ -1325,9 +1397,12 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   right: 0px;
   background: white;
 }
+.drawtab button {
+  height: 30px;
+}
 .drawtab .squarebtn {
   width: 30px;
-  height: 30px;
+  margin: 2px;
 }
 
 .textbtn {
@@ -1336,6 +1411,47 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 
 .undoLast {
   padding-top: 3px;
+}
+
+.texttab {
+  width: 404px;
+  border: 1px solid;
+  position: absolute;
+  z-index: 254;
+  right: 0;
+  top: 0;
+  background: white;
+}
+.texttab textarea {
+  max-width: 100%;
+  width: calc(100% - 5px);
+  margin-bottom: -6px;
+}
+
+.sizeslider {
+  margin: 10px 20px;
+}
+
+.texttab .textclearbtn, .texttab .textprintbtn {
+  margin-bottom: 10px;
+  margin-top: 6px;
+}
+.texttab .textprintbtn {
+  margin-left: 55px;
+}
+.texttab .textclearbtn {
+  float: right;
+}
+
+.printoverlay {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0;
+  z-index: 998;
+  display: none;
+  border: 0px;
 }
 
 /*# sourceMappingURL=all.css.map */
