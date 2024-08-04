@@ -753,15 +753,15 @@ document.body.appendChild(printoverlay);
         ], 40),
         y: new DrawLetter("y", [
             new Stroke([
-                new Linear({x:0, y:50}, {x:0, y:85}),
-                // center at 15, 85
-                new Circular({x:0, y:85}, {x:30, y:85}, 15, false, true),
+                new Linear({x:0, y:50}, {x:0, y:80}),
+                // center at 20, 80
+                new Circular({x:0, y:80}, {x:40, y:80}, 20, false, true),
             ]),
             new Stroke([
-                new Linear({x:30, y:50}, {x:30, y:120}),
-                new Circular({x:30, y:120}, {x:0, y:120}, 15, true, true),
+                new Linear({x:40, y:50}, {x:40, y:120}),
+                new Circular({x:40, y:120}, {x:0, y:120}, 20, true, true),
             ]),
-        ], 30),
+        ], 40),
         z: new DrawLetter("z", [
             new Stroke([
                 new Linear({x:0, y:50}, {x:40, y:50}),
