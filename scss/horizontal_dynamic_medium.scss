@@ -59,7 +59,7 @@
                 /*width: 162px !important;*/
                 width: calc((100vw - 410px) / 3 + 8px) !important;
             }
-            .headerZindexBtn, .xallbtn {
+            .customToolbar {
                 left: calc((100vw - 410px) * 2 / 3 + 370px + 6px) !important;
                 /*left: 771px;*/
             }
@@ -72,7 +72,7 @@
             .content-menu-scroll:not(.close) {
                 width: 162px !important;
             }
-            .headerZindexBtn, .xallbtn {
+            .customToolbar {
                 left: 376px !important;
             }
             .z300 {
@@ -91,29 +91,22 @@
             top: 0px !important;
             z-index: 252 !important;
         }
-        &:has(.worksheet-tool) .xallbtn {
-            display: unset !important;
-        }
-        &:has(.worksheet-tool) .headerZindexBtn {
-            display: unset !important;
-            position: fixed;
-            top: 80px;
-            height: 30px;
-            width: 30px;
-            z-index: 252;
-            padding: 0;
-        }
-        &:has(
-            div.worksheet-container.landscape.selected,
-            div.worksheet-group.landscape.selected
-        ) {
-            .headerZindexBtn, .xallbtn {
-                left: 676px !important;
-            }
-            .worksheet-tool {
-                margin-left: 671px !important;
+        &:has(.worksheet-tool) {
+            .xallbtn, .customToolbar, .headerZindexBtn {
+                display: unset !important;
             }
         }
+        /* &:has( */
+        /*     div.worksheet-container.landscape.selected, */
+        /*     div.worksheet-group.landscape.selected */
+        /* ) { */
+        /*     .customToolbar { */
+        /*         left: 676px !important; */
+        /*     } */
+        /*     .worksheet-tool { */
+        /*         margin-left: 671px !important; */
+        /*     } */
+        /* } */
         .navigator-header-top button {
             padding: 10px 0px !important;
             word-break: break-word !important;

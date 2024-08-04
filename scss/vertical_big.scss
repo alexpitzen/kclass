@@ -18,27 +18,12 @@
     .worksheet-container {
         outline-width: 1px !important;
     }
-    /* Show H button */
-    .headerZindexBtn {
-        left: 376px;
-        display: unset !important;
-        position: fixed;
-        top: 80px;
-        height: 30px;
-        width: 30px;
-        z-index: 252;
-        padding: 0;
+    .customToolbar {
+      left: 376px;
     }
-    /* Show x all button */
-    .xallbtn {
-        left: 376px;
+    /* Show H button, x all button, and toolbar */
+    .headerZindexBtn, .xallbtn, .customToolbar {
         display: unset !important;
-        position: fixed;
-        top: 130px;
-        height: 30px;
-        width: 30px;
-        z-index: 252;
-        padding: 0;
     }
     .z300 {
         z-index: 300 !important;

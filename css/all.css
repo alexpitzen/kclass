@@ -17,4 +17,66 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   scrollbar-width: none;
 }
 
+.customToolbar {
+  position: fixed;
+  top: 80px;
+  width: 30px;
+  height: 150px;
+  z-index: 252;
+}
+.customToolbar > button {
+  display: none;
+  position: absolute;
+  left: 0px;
+  height: 30px;
+  width: 30px;
+  z-index: 252;
+  padding: 0;
+}
+
+.customToolbar, .headerZindexBtn, .shiftbtn, .xallbtn, .drawtab {
+  display: none;
+}
+
+.headerZindexBtn {
+  top: 0px;
+}
+
+.shiftbtn {
+  top: 40px;
+}
+
+.xallbtn {
+  top: 80px;
+}
+
+.drawbtn {
+  top: 120px;
+  padding-top: 4px !important;
+  display: unset !important;
+}
+
+.drawtab {
+  position: absolute;
+  top: 80px;
+  border: 1px solid;
+  width: 100px;
+  height: 100px;
+  z-index: 253;
+  right: 0px;
+  background: white;
+}
+.drawtab .squarebtn {
+  width: 30px;
+  height: 30px;
+}
+
+.textbtn {
+  padding: 0px;
+}
+
+.undoLast {
+  padding-top: 3px;
+}
+
 /*# sourceMappingURL=all.css.map */

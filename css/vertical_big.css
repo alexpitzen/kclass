@@ -1,8 +1,7 @@
 @media screen and (orientation: portrait) and (max-width: 977px) {
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
     /* Show worksheet tool */
-    /* Show H button */
-    /* Show x all button */
+    /* Show H button, x all button, and toolbar */
     /* Move worksheet above header */
     /* Answers */
     /* Grading header */
@@ -23,25 +22,11 @@
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-container {
     outline-width: 1px !important;
   }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .headerZindexBtn {
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .customToolbar {
     left: 376px;
-    display: unset !important;
-    position: fixed;
-    top: 80px;
-    height: 30px;
-    width: 30px;
-    z-index: 252;
-    padding: 0;
   }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .xallbtn {
-    left: 376px;
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .headerZindexBtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .xallbtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .customToolbar {
     display: unset !important;
-    position: fixed;
-    top: 130px;
-    height: 30px;
-    width: 30px;
-    z-index: 252;
-    padding: 0;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .z300 {
     z-index: 300 !important;
