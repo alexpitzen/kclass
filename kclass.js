@@ -64,8 +64,8 @@ texttab.addEventListener("mouseleave", () => {
     texttab.style.display = "none";
 });
 
-/* scale = font size / 75 */
-const fontScaleConversion = 75;
+/* scale = font size / 57 */
+const fontScaleConversion = 57;
 
 const sizeslider = document.createElement("input");
 sizeslider.className = "sizeslider";
