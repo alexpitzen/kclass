@@ -60,7 +60,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   position: absolute;
   top: 80px;
   border: 1px solid;
-  width: 100px;
+  width: 200px;
   height: 100px;
   z-index: 253;
   right: 0px;
@@ -71,7 +71,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 }
 .drawtab .squarebtn {
   width: 30px;
-  margin: 2px;
+  margin: 10px;
 }
 
 .textbtn {

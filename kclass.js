@@ -40,7 +40,6 @@ customToolbar.appendChild(drawtab);
 
 drawtab.addEventListener("mouseleave", () => {
     drawtab.style.display = "none";
-    // console.log("drawtab mouseleave");
 });
 
 const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
@@ -72,7 +71,7 @@ const sizeslider = document.createElement("input");
 sizeslider.className = "sizeslider";
 sizeslider.type = "range";
 sizeslider.value = 20;
-sizeslider.min = fontScaleConversion * 0.15; // 0.15 scale
+sizeslider.min = fontScaleConversion * 0.2; // 0.2 scale
 sizeslider.max = fontScaleConversion * 1.0; // 1.0 scale
 texttab.appendChild(sizeslider);
 sizeslider.addEventListener("input", (e) => {
@@ -81,7 +80,6 @@ sizeslider.addEventListener("input", (e) => {
 });
 
 makebtn("textprintbtn", "print", texttab, () => {
-    console.log("print text");
     let printclickhandler = (e) => {
         try {
             drawtab.style.display = "none";
@@ -89,12 +87,19 @@ makebtn("textprintbtn", "print", texttab, () => {
             let canvasRect = atd.bcanvas.getBoundingClientRect();
             let zoomRatio = atd.drawingContext.zoomRatio;
 
+            if (
+                e.clientX < canvasRect.left
+                || e.clientY < canvasRect.top
+                || e.clientX > canvasRect.right
+                || e.clientY > canvasRect.bottom
+            ) {
+                console.log("Outside bounds");
+                return;
+            }
+
             let position = {
                 x: (e.clientX - canvasRect.left) / zoomRatio,
                 y: (e.clientY - canvasRect.top) / zoomRatio,
-            }
-            if (position.x < 0 || position.y < 0) {
-                return;
             }
             let scale = sizeslider.value / fontScaleConversion;
 
