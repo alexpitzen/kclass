@@ -49,7 +49,8 @@ const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
 
 makebtn("textbtn squarebtn", "abc", drawtab, () => {
     texttab.style.display = "unset !important";
-    texttab.focus();
+    textarea.focus();
+    textarea.select();
 });
 
 makebtn("undoLast squarebtn", "&#11148;", drawtab, () => {
