@@ -54,7 +54,7 @@ makebtn("textbtn squarebtn", "abc", drawtab, () => {
 });
 
 makebtn("undoLast squarebtn", "&#11148;", drawtab, () => {
-    CustomDrawLib.undoLastWriteAll();
+    StampLib.undoLastWriteAll();
 });
 
 const texttab = document.createElement("div");
@@ -84,7 +84,7 @@ makebtn("textprintbtn", "print", texttab, () => {
     let printclickhandler = (e) => {
         try {
             drawtab.style.display = "none";
-            let atd = CustomDrawLib.getAtd();
+            let atd = StampLib.getAtd();
             let canvasRect = atd.bcanvas.getBoundingClientRect();
             let zoomRatio = atd.drawingContext.zoomRatio;
 
@@ -104,7 +104,7 @@ makebtn("textprintbtn", "print", texttab, () => {
             }
             let scale = sizeslider.value / fontScaleConversion;
 
-            CustomDrawLib.writeAllAt(textarea.value, position, scale);
+            StampLib.writeAllAt(textarea.value, position, scale, textcolorbtn.value);
         } finally {
             printoverlay.style.display = "none";
             printoverlay.removeEventListener("click", printclickhandler);
@@ -114,10 +114,18 @@ makebtn("textprintbtn", "print", texttab, () => {
     printoverlay.style.display = "unset";
 });
 
-makebtn("textclearbtn", "clear", texttab, () => {
-    textarea.value = "";
-    updateTextAreaSize();
-});
+const textcolorbtn = document.createElement("input");
+textcolorbtn.type = "color";
+textcolorbtn.value = "#ff2200";
+textcolorbtn.className = "textcolorbtn";
+function updateColor() {
+    StampLib.setPenColorHex(this.value);
+    textarea.style.color = this.value;
+}
+textcolorbtn.addEventListener("input", updateColor);
+textcolorbtn.addEventListener("change", updateColor);
+textcolorbtn.addEventListener("blur", updateColor);
+texttab.appendChild(textcolorbtn);
 
 const textarea = document.createElement("textarea");
 texttab.appendChild(textarea);

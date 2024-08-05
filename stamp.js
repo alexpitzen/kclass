@@ -813,7 +813,7 @@
     var writeStrokes = {}
     var newDrawCounter = 0;
 
-    function writeAllAt(text, pos, scale) {
+    function writeAllAt(text, pos, scale, color = "#ff2200") {
         // copy
         let original_pos = {x: pos.x, y: pos.y};
         let current_pos = {x: pos.x, y: pos.y};
@@ -822,6 +822,7 @@
         newDrawCounter = 0;
 
         selectPen();
+        setPenColorHex(color);
         let pointer = InkTool.InkCanvasLib.PointerTraceList[0];
         // atd.pen.col.R = 24;
         // atd.pen.col.G = 255;
@@ -954,6 +955,19 @@
             atd.pen.drawEnd(atd.drawingContext);
         }
         atd.arrayCopy.push(cell);
+    }
+
+    function setPenColorHex(color) {
+        let atd = getAtd();
+        try {
+            atd.pen.col.R = parseInt(color.substr(1,2), 16);
+            atd.pen.col.G = parseInt(color.substr(3,2), 16);
+            atd.pen.col.B = parseInt(color.substr(5,2), 16);
+        } catch {
+            atd.pen.col.R = 255;
+            atd.pen.col.G = 34;
+            atd.pen.col.B = 0;
+        }
     }
 
     function wip() {
@@ -1158,10 +1172,11 @@
 
     //wip();
 
-    global.CustomDrawLib = {
+    global.StampLib = {
         getAtd: getAtd,
         writeAllAt: writeAllAt,
         undoLastWriteAll: undoLastWriteAll,
+        setPenColorHex: setPenColorHex,
         private: {
             expandToolbar: expandToolbar,
             selectPen: selectPen,
@@ -1179,5 +1194,5 @@
             drawCell: drawCell,
         },
     }
-    global.cdl = global.CustomDrawLib;
+    global.stamp = global.StampLib;
 })(window);

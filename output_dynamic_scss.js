@@ -68,7 +68,7 @@ makebtn("textbtn squarebtn", "abc", drawtab, () => {
 });
 
 makebtn("undoLast squarebtn", "&#11148;", drawtab, () => {
-    CustomDrawLib.undoLastWriteAll();
+    StampLib.undoLastWriteAll();
 });
 
 const texttab = document.createElement("div");
@@ -98,7 +98,7 @@ makebtn("textprintbtn", "print", texttab, () => {
     let printclickhandler = (e) => {
         try {
             drawtab.style.display = "none";
-            let atd = CustomDrawLib.getAtd();
+            let atd = StampLib.getAtd();
             let canvasRect = atd.bcanvas.getBoundingClientRect();
             let zoomRatio = atd.drawingContext.zoomRatio;
 
@@ -118,7 +118,7 @@ makebtn("textprintbtn", "print", texttab, () => {
             }
             let scale = sizeslider.value / fontScaleConversion;
 
-            CustomDrawLib.writeAllAt(textarea.value, position, scale);
+            StampLib.writeAllAt(textarea.value, position, scale, textcolorbtn.value);
         } finally {
             printoverlay.style.display = "none";
             printoverlay.removeEventListener("click", printclickhandler);
@@ -128,10 +128,18 @@ makebtn("textprintbtn", "print", texttab, () => {
     printoverlay.style.display = "unset";
 });
 
-makebtn("textclearbtn", "clear", texttab, () => {
-    textarea.value = "";
-    updateTextAreaSize();
-});
+const textcolorbtn = document.createElement("input");
+textcolorbtn.type = "color";
+textcolorbtn.value = "#ff2200";
+textcolorbtn.className = "textcolorbtn";
+function updateColor() {
+    StampLib.setPenColorHex(this.value);
+    textarea.style.color = this.value;
+}
+textcolorbtn.addEventListener("input", updateColor);
+textcolorbtn.addEventListener("change", updateColor);
+textcolorbtn.addEventListener("blur", updateColor);
+texttab.appendChild(textcolorbtn);
 
 const textarea = document.createElement("textarea");
 texttab.appendChild(textarea);
@@ -964,7 +972,7 @@ document.body.appendChild(printoverlay);
     var writeStrokes = {}
     var newDrawCounter = 0;
 
-    function writeAllAt(text, pos, scale) {
+    function writeAllAt(text, pos, scale, color = "#ff2200") {
         // copy
         let original_pos = {x: pos.x, y: pos.y};
         let current_pos = {x: pos.x, y: pos.y};
@@ -973,6 +981,7 @@ document.body.appendChild(printoverlay);
         newDrawCounter = 0;
 
         selectPen();
+        setPenColorHex(color);
         let pointer = InkTool.InkCanvasLib.PointerTraceList[0];
         // atd.pen.col.R = 24;
         // atd.pen.col.G = 255;
@@ -1105,6 +1114,19 @@ document.body.appendChild(printoverlay);
             atd.pen.drawEnd(atd.drawingContext);
         }
         atd.arrayCopy.push(cell);
+    }
+
+    function setPenColorHex(color) {
+        let atd = getAtd();
+        try {
+            atd.pen.col.R = parseInt(color.substr(1,2), 16);
+            atd.pen.col.G = parseInt(color.substr(3,2), 16);
+            atd.pen.col.B = parseInt(color.substr(5,2), 16);
+        } catch {
+            atd.pen.col.R = 255;
+            atd.pen.col.G = 34;
+            atd.pen.col.B = 0;
+        }
     }
 
     function wip() {
@@ -1309,10 +1331,11 @@ document.body.appendChild(printoverlay);
 
     //wip();
 
-    global.CustomDrawLib = {
+    global.StampLib = {
         getAtd: getAtd,
         writeAllAt: writeAllAt,
         undoLastWriteAll: undoLastWriteAll,
+        setPenColorHex: setPenColorHex,
         private: {
             expandToolbar: expandToolbar,
             selectPen: selectPen,
@@ -1330,7 +1353,7 @@ document.body.appendChild(printoverlay);
             drawCell: drawCell,
         },
     }
-    global.cdl = global.CustomDrawLib;
+    global.stamp = global.StampLib;
 })(window);
 // TODO up/down "scroll" buttons on 200+% or slightly reduce height
 let z = document.createElement("style");
@@ -1438,14 +1461,14 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   margin: 10px 20px;
 }
 
-.texttab .textclearbtn, .texttab .textprintbtn {
+.texttab .textcolorbtn, .texttab .textprintbtn {
   margin-bottom: 10px;
   margin-top: 6px;
 }
 .texttab .textprintbtn {
   margin-left: 55px;
 }
-.texttab .textclearbtn {
+.texttab .textcolorbtn {
   float: right;
   margin-right: 6px;
 }

@@ -104,14 +104,14 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 }
 
 .texttab {
-    .textclearbtn, .textprintbtn {
+    .textcolorbtn, .textprintbtn {
         margin-bottom: 10px;
         margin-top: 6px;
     }
     .textprintbtn {
         margin-left: 55px;
     }
-    .textclearbtn {
+    .textcolorbtn {
         float: right;
         margin-right: 6px;
     }
