@@ -50,6 +50,7 @@ makebtn("xallbtn", "x all", customToolbar, () => {
 
 const drawtab = document.createElement("div");
 drawtab.className = "drawtab";
+drawtab.style.display = "none";
 customToolbar.appendChild(drawtab);
 
 drawtab.addEventListener("mouseleave", () => {
@@ -57,22 +58,19 @@ drawtab.addEventListener("mouseleave", () => {
 });
 
 const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
-    drawtab.style.display = "unset !important";
+    drawtab.style.display = "unset";
     drawtab.focus();
 });
 
 makebtn("textbtn squarebtn", "abc", drawtab, () => {
-    texttab.style.display = "unset !important";
+    texttab.style.display = "unset";
     textarea.focus();
     textarea.select();
 });
 
-makebtn("undoLast squarebtn", "&#11148;", drawtab, () => {
-    StampLib.undoLastWriteAll();
-});
-
 const texttab = document.createElement("div");
 texttab.className = "texttab";
+texttab.style.display = "none";
 drawtab.appendChild(texttab);
 
 texttab.addEventListener("mouseleave", () => {
@@ -80,21 +78,45 @@ texttab.addEventListener("mouseleave", () => {
 });
 
 /* scale = font size / 57 */
-const fontScaleConversion = 57;
+const FONTSCALECONVERSION = 57;
 
 const sizeslider = document.createElement("input");
 sizeslider.className = "sizeslider";
 sizeslider.type = "range";
 sizeslider.value = 20;
-sizeslider.min = fontScaleConversion * 0.2; // 0.2 scale
-sizeslider.max = fontScaleConversion * 1.0; // 1.0 scale
+sizeslider.min = FONTSCALECONVERSION * 0.2; // 0.2 scale
+sizeslider.max = FONTSCALECONVERSION * 1.0; // 1.0 scale
 texttab.appendChild(sizeslider);
 sizeslider.addEventListener("input", (e) => {
     textarea.style["font-size"] = `${e.target.value}px`;
     updateTextAreaSize();
 });
 
+function getScale() {
+    return sizeslider.value / FONTSCALECONVERSION;
+}
+
+makebtn("undoLast squarebtn", "&#11148;", texttab, () => {
+    StampLib.undoLastWriteAll();
+});
+
 makebtn("textprintbtn", "print", texttab, () => {
+    let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
+    let printPreviewDiv = document.createElement("div");
+    printPreviewDiv.className = "printPreviewDiv";
+    printPreviewDiv.style.height = `${writeDimensions.height}px`;
+    printPreviewDiv.style.width = `${writeDimensions.width}px`;
+    printPreviewDiv.style["border-color"] = textcolorbtn.value;
+    printoverlay.appendChild(printPreviewDiv);
+    let mousemovehandler = (e) => {
+        console.log("pointermove");
+        console.log(e);
+        printPreviewDiv.animate({
+            left: `${e.clientX}px`,
+            top: `${e.clientY}px`,
+        }, {duration: 500, fill: "forwards"});
+    };
+    printoverlay.addEventListener("pointermove", mousemovehandler);
     let printclickhandler = (e) => {
         try {
             drawtab.style.display = "none";
@@ -116,12 +138,13 @@ makebtn("textprintbtn", "print", texttab, () => {
                 x: (e.clientX - canvasRect.left) / zoomRatio,
                 y: (e.clientY - canvasRect.top) / zoomRatio,
             }
-            let scale = sizeslider.value / fontScaleConversion;
 
-            StampLib.writeAllAt(textarea.value, position, scale, textcolorbtn.value);
+            StampLib.writeAllAt(textarea.value, position, getScale(), {color: textcolorbtn.value});
         } finally {
             printoverlay.style.display = "none";
             printoverlay.removeEventListener("click", printclickhandler);
+            printoverlay.removeChild(printPreviewDiv);
+            printoverlay.removeEventListener("pointermove", mousemovehandler);
         }
     };
     printoverlay.addEventListener("click", printclickhandler);
@@ -132,18 +155,49 @@ const textcolorbtn = document.createElement("input");
 textcolorbtn.type = "color";
 textcolorbtn.value = "#ff2200";
 textcolorbtn.className = "textcolorbtn";
-function updateColor() {
+function updateTextColor() {
     StampLib.setPenColorHex(this.value);
+    StampLib.setHighlighter(highlighter.checked);
     textarea.style.color = this.value;
+    pencolorbtn.value = this.value;
 }
-textcolorbtn.addEventListener("input", updateColor);
-textcolorbtn.addEventListener("change", updateColor);
-textcolorbtn.addEventListener("blur", updateColor);
+textcolorbtn.addEventListener("input", updateTextColor);
+textcolorbtn.addEventListener("change", updateTextColor);
+textcolorbtn.addEventListener("blur", updateTextColor);
 texttab.appendChild(textcolorbtn);
+
+const pencolorbtn = document.createElement("input");
+pencolorbtn.type = "color";
+pencolorbtn.value = "#ff2200";
+pencolorbtn.className = "pencolorbtn";
+function updatePenColor() {
+    StampLib.setPenColorHex(this.value);
+    StampLib.setHighlighter(highlighter.checked);
+    textarea.style.color = this.value;
+    textcolorbtn.value = this.value;
+}
+pencolorbtn.addEventListener("input", updatePenColor);
+pencolorbtn.addEventListener("change", updatePenColor);
+pencolorbtn.addEventListener("blur", updatePenColor);
+drawtab.appendChild(pencolorbtn);
+
+const highlighter = document.createElement("input");
+highlighter.type = "checkbox";
+highlighter.id = "highlighter";
+drawtab.appendChild(highlighter);
+highlighter.addEventListener("change", function() {
+    StampLib.setHighlighter(highlighter.checked);
+    StampLib.setPenColorHex(textcolorbtn.value);
+})
+const highlighterlabel = document.createElement("label");
+highlighterlabel.setAttribute("for", highlighter.id);
+highlighterlabel.innerText = "Highlighter";
+drawtab.appendChild(highlighterlabel);
 
 const textarea = document.createElement("textarea");
 texttab.appendChild(textarea);
 textarea.style["font-size"] = "20px";
+textarea.style.color = "#ff2200";
 function updateTextAreaSize() {
     textarea.style.height = "";
     textarea.style.height = `${textarea.scrollHeight}px`;
@@ -810,12 +864,12 @@ document.body.appendChild(printoverlay);
         ], 10),
         ":": new DrawLetter(":",[
             new Stroke([
-                new Circular({x:5, y:35}, {x:5, y:45}, 5, true, true),
-                new Circular({x:5, y:45}, {x:5, y:35}, 5, true, true),
+                new Circular({x:5, y:30}, {x:5, y:40}, 5, true, true),
+                new Circular({x:5, y:40}, {x:5, y:30}, 5, true, true),
             ]),
             new Stroke([
-                new Circular({x:5, y:55}, {x:5, y:65}, 5, true, true),
-                new Circular({x:5, y:65}, {x:5, y:55}, 5, true, true),
+                new Circular({x:5, y:60}, {x:5, y:70}, 5, true, true),
+                new Circular({x:5, y:70}, {x:5, y:60}, 5, true, true),
             ]),
         ], 10),
         "?": new DrawLetter("?",[
@@ -972,39 +1026,87 @@ document.body.appendChild(printoverlay);
     var writeStrokes = {}
     var newDrawCounter = 0;
 
-    function writeAllAt(text, pos, scale, color = "#ff2200") {
+    function writeAllAt(text, pos, scale, options, dryRun = false) {
+        let color = options.color || "#ff2200",
+            alpha = options.alpha || 255,
+            width = options.width || 2;
         // copy
         let original_pos = {x: pos.x, y: pos.y};
         let current_pos = {x: pos.x, y: pos.y};
         let atd = getAtd();
         let currentDrawIndex = atd.countDrawItems();
         newDrawCounter = 0;
+        let maxwidth = 0, currentwidth = 0, height = 100 * scale;
 
-        selectPen();
-        setPenColorHex(color);
+        if (!dryRun) {
+            selectPen();
+            setPenColorHex(color);
+        }
+        let previousAlpha = atd.pen.col.A;
+        let previousWidth = atd.pen.w;
+        if (!dryRun) {
+            atd.pen.col.A = alpha;
+            atd.pen.w = width;
+        }
         let pointer = InkTool.InkCanvasLib.PointerTraceList[0];
         // atd.pen.col.R = 24;
         // atd.pen.col.G = 255;
-        // // type 150 for writing?
+        // // type 150 for writing with SolidPen?
         // atd.pen.tp = 150;
-        atd.pen.w = 2;
         for (let c of text) {
             if (c == "\n") {
                 current_pos.x = original_pos.x;
-                current_pos.y = current_pos.y + 145 * scale + 5;
+                let addHeight = 145 * scale + 5;
+                current_pos.y += addHeight;
+                height += addHeight;
+                if (currentwidth > maxwidth) {
+                    maxwidth = currentwidth;
+                }
+                currentwidth = 0;
+                continue;
             }
             let letter = LETTERS[c];
             if (typeof letter === "undefined") {
                 continue;
             }
-            writeAt(letter, current_pos, scale, atd, pointer);
-            current_pos.x += (letter.width + 10) * scale + 3;
+            if (!dryRun) {
+                writeAt(letter, current_pos, scale, atd, pointer);
+            }
+            let addWidth = (letter.width + 10) * scale + 3;
+            current_pos.x += addWidth;
+            currentwidth += addWidth;
         }
-        saveDrawing(atd, pointer);
-        if (!(atd in writeStrokes)) {
-            writeStrokes[atd] = []
+        if (currentwidth > maxwidth) {
+            maxwidth = currentwidth;
         }
-        writeStrokes[atd].push({startIndex: currentDrawIndex, numLines: newDrawCounter});
+        // Subtract the letter spacing at the end
+        maxwidth = maxwidth - (10 * scale + 3);
+        if (!dryRun) {
+            saveDrawing(atd, pointer);
+            if (!(atd in writeStrokes)) {
+                writeStrokes[atd] = []
+            }
+            writeStrokes[atd].push({startIndex: currentDrawIndex, numLines: newDrawCounter});
+            atd.pen.col.A = previousAlpha;
+            atd.pen.w = previousWidth;
+        }
+        return {width: maxwidth * atd.drawingContext.zoomRatio, height: height * atd.drawingContext.zoomRatio};
+    }
+
+    function getWriteAllDimensions(text, scale) {
+        return writeAllAt(text, {x:0, y:0}, scale, {}, true);
+    }
+
+    function setHighlighter(on = true) {
+        selectPen();
+        let atd = getAtd();
+        if (on) {
+            atd.pen.w = 25;
+            atd.pen.col.A = 100;
+        } else {
+            atd.pen.w = 2;
+            atd.pen.col.A = 255;
+        }
     }
 
     function undoLastWriteAll() {
@@ -1118,6 +1220,7 @@ document.body.appendChild(printoverlay);
 
     function setPenColorHex(color) {
         let atd = getAtd();
+        selectPen();
         try {
             atd.pen.col.R = parseInt(color.substr(1,2), 16);
             atd.pen.col.G = parseInt(color.substr(3,2), 16);
@@ -1336,6 +1439,8 @@ document.body.appendChild(printoverlay);
         writeAllAt: writeAllAt,
         undoLastWriteAll: undoLastWriteAll,
         setPenColorHex: setPenColorHex,
+        setHighlighter: setHighlighter,
+        getWriteAllDimensions: getWriteAllDimensions,
         private: {
             expandToolbar: expandToolbar,
             selectPen: selectPen,
@@ -1383,6 +1488,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   width: 30px;
   height: 150px;
   z-index: 252;
+  display: none;
 }
 .customToolbar > button {
   display: none;
@@ -1392,10 +1498,6 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   width: 30px;
   z-index: 252;
   padding: 0;
-}
-
-.customToolbar, .headerZindexBtn, .shiftbtn, .xallbtn, .drawtab, .texttab {
-  display: none;
 }
 
 .headerZindexBtn {
@@ -1420,7 +1522,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   position: absolute;
   top: 80px;
   border: 1px solid;
-  width: 200px;
+  width: 300px;
   height: 100px;
   z-index: 253;
   right: 0px;
@@ -1432,6 +1534,12 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 .drawtab .squarebtn {
   width: 30px;
   margin: 10px;
+}
+.drawtab > input {
+  margin: 10px;
+}
+.drawtab > input[type=checkbox] {
+  margin-right: 3px;
 }
 
 .textbtn {
@@ -1448,7 +1556,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   position: absolute;
   z-index: 254;
   right: 0;
-  top: 0;
+  top: 15px;
   background: white;
 }
 .texttab textarea {
@@ -1461,12 +1569,13 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   margin: 10px 20px;
 }
 
-.texttab .textcolorbtn, .texttab .textprintbtn {
-  margin-bottom: 10px;
-  margin-top: 6px;
+.texttab .textcolorbtn {
+  margin: 10px;
 }
 .texttab .textprintbtn {
-  margin-left: 55px;
+  margin-left: 38px;
+  margin-bottom: 10px;
+  margin-top: 6px;
 }
 .texttab .textcolorbtn {
   float: right;
@@ -1482,6 +1591,12 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   z-index: 998;
   display: none;
   border: 0px;
+}
+
+.printPreviewDiv {
+  border: 1px solid;
+  z-index: 997;
+  position: fixed;
 }
 
 /*# sourceMappingURL=all.css.map */

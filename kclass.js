@@ -36,6 +36,7 @@ makebtn("xallbtn", "x all", customToolbar, () => {
 
 const drawtab = document.createElement("div");
 drawtab.className = "drawtab";
+drawtab.style.display = "none";
 customToolbar.appendChild(drawtab);
 
 drawtab.addEventListener("mouseleave", () => {
@@ -43,22 +44,19 @@ drawtab.addEventListener("mouseleave", () => {
 });
 
 const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
-    drawtab.style.display = "unset !important";
+    drawtab.style.display = "unset";
     drawtab.focus();
 });
 
 makebtn("textbtn squarebtn", "abc", drawtab, () => {
-    texttab.style.display = "unset !important";
+    texttab.style.display = "unset";
     textarea.focus();
     textarea.select();
 });
 
-makebtn("undoLast squarebtn", "&#11148;", drawtab, () => {
-    StampLib.undoLastWriteAll();
-});
-
 const texttab = document.createElement("div");
 texttab.className = "texttab";
+texttab.style.display = "none";
 drawtab.appendChild(texttab);
 
 texttab.addEventListener("mouseleave", () => {
@@ -66,21 +64,45 @@ texttab.addEventListener("mouseleave", () => {
 });
 
 /* scale = font size / 57 */
-const fontScaleConversion = 57;
+const FONTSCALECONVERSION = 57;
 
 const sizeslider = document.createElement("input");
 sizeslider.className = "sizeslider";
 sizeslider.type = "range";
 sizeslider.value = 20;
-sizeslider.min = fontScaleConversion * 0.2; // 0.2 scale
-sizeslider.max = fontScaleConversion * 1.0; // 1.0 scale
+sizeslider.min = FONTSCALECONVERSION * 0.2; // 0.2 scale
+sizeslider.max = FONTSCALECONVERSION * 1.0; // 1.0 scale
 texttab.appendChild(sizeslider);
 sizeslider.addEventListener("input", (e) => {
     textarea.style["font-size"] = `${e.target.value}px`;
     updateTextAreaSize();
 });
 
+function getScale() {
+    return sizeslider.value / FONTSCALECONVERSION;
+}
+
+makebtn("undoLast squarebtn", "&#11148;", texttab, () => {
+    StampLib.undoLastWriteAll();
+});
+
 makebtn("textprintbtn", "print", texttab, () => {
+    let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
+    let printPreviewDiv = document.createElement("div");
+    printPreviewDiv.className = "printPreviewDiv";
+    printPreviewDiv.style.height = `${writeDimensions.height}px`;
+    printPreviewDiv.style.width = `${writeDimensions.width}px`;
+    printPreviewDiv.style["border-color"] = textcolorbtn.value;
+    printoverlay.appendChild(printPreviewDiv);
+    let mousemovehandler = (e) => {
+        console.log("pointermove");
+        console.log(e);
+        printPreviewDiv.animate({
+            left: `${e.clientX}px`,
+            top: `${e.clientY}px`,
+        }, {duration: 500, fill: "forwards"});
+    };
+    printoverlay.addEventListener("pointermove", mousemovehandler);
     let printclickhandler = (e) => {
         try {
             drawtab.style.display = "none";
@@ -102,12 +124,13 @@ makebtn("textprintbtn", "print", texttab, () => {
                 x: (e.clientX - canvasRect.left) / zoomRatio,
                 y: (e.clientY - canvasRect.top) / zoomRatio,
             }
-            let scale = sizeslider.value / fontScaleConversion;
 
-            StampLib.writeAllAt(textarea.value, position, scale, textcolorbtn.value);
+            StampLib.writeAllAt(textarea.value, position, getScale(), {color: textcolorbtn.value});
         } finally {
             printoverlay.style.display = "none";
             printoverlay.removeEventListener("click", printclickhandler);
+            printoverlay.removeChild(printPreviewDiv);
+            printoverlay.removeEventListener("pointermove", mousemovehandler);
         }
     };
     printoverlay.addEventListener("click", printclickhandler);
@@ -118,18 +141,49 @@ const textcolorbtn = document.createElement("input");
 textcolorbtn.type = "color";
 textcolorbtn.value = "#ff2200";
 textcolorbtn.className = "textcolorbtn";
-function updateColor() {
+function updateTextColor() {
     StampLib.setPenColorHex(this.value);
+    StampLib.setHighlighter(highlighter.checked);
     textarea.style.color = this.value;
+    pencolorbtn.value = this.value;
 }
-textcolorbtn.addEventListener("input", updateColor);
-textcolorbtn.addEventListener("change", updateColor);
-textcolorbtn.addEventListener("blur", updateColor);
+textcolorbtn.addEventListener("input", updateTextColor);
+textcolorbtn.addEventListener("change", updateTextColor);
+textcolorbtn.addEventListener("blur", updateTextColor);
 texttab.appendChild(textcolorbtn);
+
+const pencolorbtn = document.createElement("input");
+pencolorbtn.type = "color";
+pencolorbtn.value = "#ff2200";
+pencolorbtn.className = "pencolorbtn";
+function updatePenColor() {
+    StampLib.setPenColorHex(this.value);
+    StampLib.setHighlighter(highlighter.checked);
+    textarea.style.color = this.value;
+    textcolorbtn.value = this.value;
+}
+pencolorbtn.addEventListener("input", updatePenColor);
+pencolorbtn.addEventListener("change", updatePenColor);
+pencolorbtn.addEventListener("blur", updatePenColor);
+drawtab.appendChild(pencolorbtn);
+
+const highlighter = document.createElement("input");
+highlighter.type = "checkbox";
+highlighter.id = "highlighter";
+drawtab.appendChild(highlighter);
+highlighter.addEventListener("change", function() {
+    StampLib.setHighlighter(highlighter.checked);
+    StampLib.setPenColorHex(textcolorbtn.value);
+})
+const highlighterlabel = document.createElement("label");
+highlighterlabel.setAttribute("for", highlighter.id);
+highlighterlabel.innerText = "Highlighter";
+drawtab.appendChild(highlighterlabel);
 
 const textarea = document.createElement("textarea");
 texttab.appendChild(textarea);
 textarea.style["font-size"] = "20px";
+textarea.style.color = "#ff2200";
 function updateTextAreaSize() {
     textarea.style.height = "";
     textarea.style.height = `${textarea.scrollHeight}px`;

@@ -651,12 +651,12 @@
         ], 10),
         ":": new DrawLetter(":",[
             new Stroke([
-                new Circular({x:5, y:35}, {x:5, y:45}, 5, true, true),
-                new Circular({x:5, y:45}, {x:5, y:35}, 5, true, true),
+                new Circular({x:5, y:30}, {x:5, y:40}, 5, true, true),
+                new Circular({x:5, y:40}, {x:5, y:30}, 5, true, true),
             ]),
             new Stroke([
-                new Circular({x:5, y:55}, {x:5, y:65}, 5, true, true),
-                new Circular({x:5, y:65}, {x:5, y:55}, 5, true, true),
+                new Circular({x:5, y:60}, {x:5, y:70}, 5, true, true),
+                new Circular({x:5, y:70}, {x:5, y:60}, 5, true, true),
             ]),
         ], 10),
         "?": new DrawLetter("?",[
@@ -813,39 +813,87 @@
     var writeStrokes = {}
     var newDrawCounter = 0;
 
-    function writeAllAt(text, pos, scale, color = "#ff2200") {
+    function writeAllAt(text, pos, scale, options, dryRun = false) {
+        let color = options.color || "#ff2200",
+            alpha = options.alpha || 255,
+            width = options.width || 2;
         // copy
         let original_pos = {x: pos.x, y: pos.y};
         let current_pos = {x: pos.x, y: pos.y};
         let atd = getAtd();
         let currentDrawIndex = atd.countDrawItems();
         newDrawCounter = 0;
+        let maxwidth = 0, currentwidth = 0, height = 100 * scale;
 
-        selectPen();
-        setPenColorHex(color);
+        if (!dryRun) {
+            selectPen();
+            setPenColorHex(color);
+        }
+        let previousAlpha = atd.pen.col.A;
+        let previousWidth = atd.pen.w;
+        if (!dryRun) {
+            atd.pen.col.A = alpha;
+            atd.pen.w = width;
+        }
         let pointer = InkTool.InkCanvasLib.PointerTraceList[0];
         // atd.pen.col.R = 24;
         // atd.pen.col.G = 255;
-        // // type 150 for writing?
+        // // type 150 for writing with SolidPen?
         // atd.pen.tp = 150;
-        atd.pen.w = 2;
         for (let c of text) {
             if (c == "\n") {
                 current_pos.x = original_pos.x;
-                current_pos.y = current_pos.y + 145 * scale + 5;
+                let addHeight = 145 * scale + 5;
+                current_pos.y += addHeight;
+                height += addHeight;
+                if (currentwidth > maxwidth) {
+                    maxwidth = currentwidth;
+                }
+                currentwidth = 0;
+                continue;
             }
             let letter = LETTERS[c];
             if (typeof letter === "undefined") {
                 continue;
             }
-            writeAt(letter, current_pos, scale, atd, pointer);
-            current_pos.x += (letter.width + 10) * scale + 3;
+            if (!dryRun) {
+                writeAt(letter, current_pos, scale, atd, pointer);
+            }
+            let addWidth = (letter.width + 10) * scale + 3;
+            current_pos.x += addWidth;
+            currentwidth += addWidth;
         }
-        saveDrawing(atd, pointer);
-        if (!(atd in writeStrokes)) {
-            writeStrokes[atd] = []
+        if (currentwidth > maxwidth) {
+            maxwidth = currentwidth;
         }
-        writeStrokes[atd].push({startIndex: currentDrawIndex, numLines: newDrawCounter});
+        // Subtract the letter spacing at the end
+        maxwidth = maxwidth - (10 * scale + 3);
+        if (!dryRun) {
+            saveDrawing(atd, pointer);
+            if (!(atd in writeStrokes)) {
+                writeStrokes[atd] = []
+            }
+            writeStrokes[atd].push({startIndex: currentDrawIndex, numLines: newDrawCounter});
+            atd.pen.col.A = previousAlpha;
+            atd.pen.w = previousWidth;
+        }
+        return {width: maxwidth * atd.drawingContext.zoomRatio, height: height * atd.drawingContext.zoomRatio};
+    }
+
+    function getWriteAllDimensions(text, scale) {
+        return writeAllAt(text, {x:0, y:0}, scale, {}, true);
+    }
+
+    function setHighlighter(on = true) {
+        selectPen();
+        let atd = getAtd();
+        if (on) {
+            atd.pen.w = 25;
+            atd.pen.col.A = 100;
+        } else {
+            atd.pen.w = 2;
+            atd.pen.col.A = 255;
+        }
     }
 
     function undoLastWriteAll() {
@@ -959,6 +1007,7 @@
 
     function setPenColorHex(color) {
         let atd = getAtd();
+        selectPen();
         try {
             atd.pen.col.R = parseInt(color.substr(1,2), 16);
             atd.pen.col.G = parseInt(color.substr(3,2), 16);
@@ -1177,6 +1226,8 @@
         writeAllAt: writeAllAt,
         undoLastWriteAll: undoLastWriteAll,
         setPenColorHex: setPenColorHex,
+        setHighlighter: setHighlighter,
+        getWriteAllDimensions: getWriteAllDimensions,
         private: {
             expandToolbar: expandToolbar,
             selectPen: selectPen,

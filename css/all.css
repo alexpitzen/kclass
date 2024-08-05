@@ -23,6 +23,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   width: 30px;
   height: 150px;
   z-index: 252;
+  display: none;
 }
 .customToolbar > button {
   display: none;
@@ -32,10 +33,6 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   width: 30px;
   z-index: 252;
   padding: 0;
-}
-
-.customToolbar, .headerZindexBtn, .shiftbtn, .xallbtn, .drawtab, .texttab {
-  display: none;
 }
 
 .headerZindexBtn {
@@ -60,7 +57,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   position: absolute;
   top: 80px;
   border: 1px solid;
-  width: 200px;
+  width: 300px;
   height: 100px;
   z-index: 253;
   right: 0px;
@@ -72,6 +69,12 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 .drawtab .squarebtn {
   width: 30px;
   margin: 10px;
+}
+.drawtab > input {
+  margin: 10px;
+}
+.drawtab > input[type=checkbox] {
+  margin-right: 3px;
 }
 
 .textbtn {
@@ -88,7 +91,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   position: absolute;
   z-index: 254;
   right: 0;
-  top: 0;
+  top: 15px;
   background: white;
 }
 .texttab textarea {
@@ -101,12 +104,13 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   margin: 10px 20px;
 }
 
-.texttab .textcolorbtn, .texttab .textprintbtn {
-  margin-bottom: 10px;
-  margin-top: 6px;
+.texttab .textcolorbtn {
+  margin: 10px;
 }
 .texttab .textprintbtn {
-  margin-left: 55px;
+  margin-left: 38px;
+  margin-bottom: 10px;
+  margin-top: 6px;
 }
 .texttab .textcolorbtn {
   float: right;
@@ -122,6 +126,12 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   z-index: 998;
   display: none;
   border: 0px;
+}
+
+.printPreviewDiv {
+  border: 1px solid;
+  z-index: 997;
+  position: fixed;
 }
 
 /*# sourceMappingURL=all.css.map */
