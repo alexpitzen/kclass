@@ -61,7 +61,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   height: 100px;
   z-index: 253;
   right: 0px;
-  background: white;
+  background-color: rgb(240, 240, 247);
 }
 .drawtab button {
   height: 30px;
@@ -92,11 +92,12 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   z-index: 254;
   right: 0;
   top: 15px;
-  background: white;
+  background-color: rgb(240, 240, 247);
 }
 .texttab textarea {
-  max-width: 100%;
+  max-width: calc(100% - 5px);
   width: calc(100% - 5px);
+  min-width: calc(100% - 5px);
   margin-bottom: -6px;
 }
 

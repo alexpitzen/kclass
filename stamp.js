@@ -659,6 +659,11 @@
                 new Circular({x:5, y:70}, {x:5, y:60}, 5, true, true),
             ]),
         ], 10),
+        "_": new DrawLetter("_",[
+            new Stroke([
+                new Linear({x:0, y:100}, {x:50, y:100}),
+            ]),
+        ], 50),
         "?": new DrawLetter("?",[
             new Stroke([
                 new Circular({x:0, y:25}, {x:25, y:50}, 25, true, true),
@@ -826,7 +831,6 @@
         let maxwidth = 0, currentwidth = 0, height = 100 * scale;
 
         if (!dryRun) {
-            selectPen();
             setPenColorHex(color);
         }
         let previousAlpha = atd.pen.col.A;
@@ -889,7 +893,7 @@
         let atd = getAtd();
         if (on) {
             atd.pen.w = 25;
-            atd.pen.col.A = 100;
+            atd.pen.col.A = 50;
         } else {
             atd.pen.w = 2;
             atd.pen.col.A = 255;

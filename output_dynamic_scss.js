@@ -44,8 +44,9 @@ makebtn("shiftbtn", "↕", customToolbar, () => {
     }
 });
 
-makebtn("xallbtn", "x all", customToolbar, () => {
+const xallbtn = makebtn("xallbtn", "x all", customToolbar, () => {
     document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
+    xallbtn.blur();
 });
 
 const drawtab = document.createElement("div");
@@ -57,9 +58,15 @@ drawtab.addEventListener("mouseleave", () => {
     drawtab.style.display = "none";
 });
 
+function updatePenSettings() {
+    StampLib.setPenColorHex(textcolorbtn.value);
+    StampLib.setHighlighter(highlighter.checked);
+}
+
 const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
     drawtab.style.display = "unset";
     drawtab.focus();
+    updatePenSettings();
 });
 
 makebtn("textbtn squarebtn", "abc", drawtab, () => {
@@ -100,17 +107,17 @@ makebtn("undoLast squarebtn", "&#11148;", texttab, () => {
     StampLib.undoLastWriteAll();
 });
 
-makebtn("textprintbtn", "print", texttab, () => {
+makebtn("textprintbtn", "print", texttab, (e) => {
     let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
     let printPreviewDiv = document.createElement("div");
     printPreviewDiv.className = "printPreviewDiv";
     printPreviewDiv.style.height = `${writeDimensions.height}px`;
     printPreviewDiv.style.width = `${writeDimensions.width}px`;
+    printPreviewDiv.style.left = `${e.clientX}px`;
+    printPreviewDiv.style.top = `${e.clientY}px`;
     printPreviewDiv.style["border-color"] = textcolorbtn.value;
     printoverlay.appendChild(printPreviewDiv);
     let mousemovehandler = (e) => {
-        console.log("pointermove");
-        console.log(e);
         printPreviewDiv.animate({
             left: `${e.clientX}px`,
             top: `${e.clientY}px`,
@@ -156,10 +163,9 @@ textcolorbtn.type = "color";
 textcolorbtn.value = "#ff2200";
 textcolorbtn.className = "textcolorbtn";
 function updateTextColor() {
-    StampLib.setPenColorHex(this.value);
-    StampLib.setHighlighter(highlighter.checked);
     textarea.style.color = this.value;
     pencolorbtn.value = this.value;
+    updatePenSettings();
 }
 textcolorbtn.addEventListener("input", updateTextColor);
 textcolorbtn.addEventListener("change", updateTextColor);
@@ -171,10 +177,9 @@ pencolorbtn.type = "color";
 pencolorbtn.value = "#ff2200";
 pencolorbtn.className = "pencolorbtn";
 function updatePenColor() {
-    StampLib.setPenColorHex(this.value);
-    StampLib.setHighlighter(highlighter.checked);
     textarea.style.color = this.value;
     textcolorbtn.value = this.value;
+    updatePenSettings();
 }
 pencolorbtn.addEventListener("input", updatePenColor);
 pencolorbtn.addEventListener("change", updatePenColor);
@@ -186,8 +191,7 @@ highlighter.type = "checkbox";
 highlighter.id = "highlighter";
 drawtab.appendChild(highlighter);
 highlighter.addEventListener("change", function() {
-    StampLib.setHighlighter(highlighter.checked);
-    StampLib.setPenColorHex(textcolorbtn.value);
+    updatePenSettings();
 })
 const highlighterlabel = document.createElement("label");
 highlighterlabel.setAttribute("for", highlighter.id);
@@ -872,6 +876,11 @@ document.body.appendChild(printoverlay);
                 new Circular({x:5, y:70}, {x:5, y:60}, 5, true, true),
             ]),
         ], 10),
+        "_": new DrawLetter("_",[
+            new Stroke([
+                new Linear({x:0, y:100}, {x:50, y:100}),
+            ]),
+        ], 50),
         "?": new DrawLetter("?",[
             new Stroke([
                 new Circular({x:0, y:25}, {x:25, y:50}, 25, true, true),
@@ -1039,7 +1048,6 @@ document.body.appendChild(printoverlay);
         let maxwidth = 0, currentwidth = 0, height = 100 * scale;
 
         if (!dryRun) {
-            selectPen();
             setPenColorHex(color);
         }
         let previousAlpha = atd.pen.col.A;
@@ -1102,7 +1110,7 @@ document.body.appendChild(printoverlay);
         let atd = getAtd();
         if (on) {
             atd.pen.w = 25;
-            atd.pen.col.A = 100;
+            atd.pen.col.A = 50;
         } else {
             atd.pen.w = 2;
             atd.pen.col.A = 255;
@@ -1526,7 +1534,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   height: 100px;
   z-index: 253;
   right: 0px;
-  background: white;
+  background-color: rgb(240, 240, 247);
 }
 .drawtab button {
   height: 30px;
@@ -1557,11 +1565,12 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   z-index: 254;
   right: 0;
   top: 15px;
-  background: white;
+  background-color: rgb(240, 240, 247);
 }
 .texttab textarea {
-  max-width: 100%;
+  max-width: calc(100% - 5px);
   width: calc(100% - 5px);
+  min-width: calc(100% - 5px);
   margin-bottom: -6px;
 }
 

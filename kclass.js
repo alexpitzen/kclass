@@ -30,8 +30,9 @@ makebtn("shiftbtn", "↕", customToolbar, () => {
     }
 });
 
-makebtn("xallbtn", "x all", customToolbar, () => {
+const xallbtn = makebtn("xallbtn", "x all", customToolbar, () => {
     document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
+    xallbtn.blur();
 });
 
 const drawtab = document.createElement("div");
@@ -43,9 +44,15 @@ drawtab.addEventListener("mouseleave", () => {
     drawtab.style.display = "none";
 });
 
+function updatePenSettings() {
+    StampLib.setPenColorHex(textcolorbtn.value);
+    StampLib.setHighlighter(highlighter.checked);
+}
+
 const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
     drawtab.style.display = "unset";
     drawtab.focus();
+    updatePenSettings();
 });
 
 makebtn("textbtn squarebtn", "abc", drawtab, () => {
@@ -86,17 +93,17 @@ makebtn("undoLast squarebtn", "&#11148;", texttab, () => {
     StampLib.undoLastWriteAll();
 });
 
-makebtn("textprintbtn", "print", texttab, () => {
+makebtn("textprintbtn", "print", texttab, (e) => {
     let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
     let printPreviewDiv = document.createElement("div");
     printPreviewDiv.className = "printPreviewDiv";
     printPreviewDiv.style.height = `${writeDimensions.height}px`;
     printPreviewDiv.style.width = `${writeDimensions.width}px`;
+    printPreviewDiv.style.left = `${e.clientX}px`;
+    printPreviewDiv.style.top = `${e.clientY}px`;
     printPreviewDiv.style["border-color"] = textcolorbtn.value;
     printoverlay.appendChild(printPreviewDiv);
     let mousemovehandler = (e) => {
-        console.log("pointermove");
-        console.log(e);
         printPreviewDiv.animate({
             left: `${e.clientX}px`,
             top: `${e.clientY}px`,
@@ -142,10 +149,9 @@ textcolorbtn.type = "color";
 textcolorbtn.value = "#ff2200";
 textcolorbtn.className = "textcolorbtn";
 function updateTextColor() {
-    StampLib.setPenColorHex(this.value);
-    StampLib.setHighlighter(highlighter.checked);
     textarea.style.color = this.value;
     pencolorbtn.value = this.value;
+    updatePenSettings();
 }
 textcolorbtn.addEventListener("input", updateTextColor);
 textcolorbtn.addEventListener("change", updateTextColor);
@@ -157,10 +163,9 @@ pencolorbtn.type = "color";
 pencolorbtn.value = "#ff2200";
 pencolorbtn.className = "pencolorbtn";
 function updatePenColor() {
-    StampLib.setPenColorHex(this.value);
-    StampLib.setHighlighter(highlighter.checked);
     textarea.style.color = this.value;
     textcolorbtn.value = this.value;
+    updatePenSettings();
 }
 pencolorbtn.addEventListener("input", updatePenColor);
 pencolorbtn.addEventListener("change", updatePenColor);
@@ -172,8 +177,7 @@ highlighter.type = "checkbox";
 highlighter.id = "highlighter";
 drawtab.appendChild(highlighter);
 highlighter.addEventListener("change", function() {
-    StampLib.setHighlighter(highlighter.checked);
-    StampLib.setPenColorHex(textcolorbtn.value);
+    updatePenSettings();
 })
 const highlighterlabel = document.createElement("label");
 highlighterlabel.setAttribute("for", highlighter.id);
