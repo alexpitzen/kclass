@@ -93,6 +93,58 @@ makebtn("undoLast squarebtn", "&#11148;", texttab, () => {
     StampLib.undoLastWriteAll();
 });
 
+makebtn("axolotlbtn", "axolotl", drawtab, (e) => {
+    let scale = getScale() / 5;
+    let writeDimensions = StampLib.getWriteStampDimensions(StampLib.stamps.axolotl, scale);
+    let printPreviewDiv = document.createElement("div");
+    printPreviewDiv.className = "printPreviewDiv";
+    printPreviewDiv.style.height = `${writeDimensions.height}px`;
+    printPreviewDiv.style.width = `${writeDimensions.width}px`;
+    printPreviewDiv.style.left = `${e.clientX}px`;
+    printPreviewDiv.style.top = `${e.clientY}px`;
+    printPreviewDiv.style["border-color"] = textcolorbtn.value;
+    printoverlay.appendChild(printPreviewDiv);
+    let mousemovehandler = (e) => {
+        printPreviewDiv.animate({
+            left: `${e.clientX}px`,
+            top: `${e.clientY}px`,
+        }, {duration: 500, fill: "forwards"});
+    };
+    printoverlay.addEventListener("pointermove", mousemovehandler);
+    let printclickhandler = (e) => {
+        try {
+            drawtab.style.display = "none";
+            let atd = StampLib.getAtd();
+            let canvasRect = atd.bcanvas.getBoundingClientRect();
+            let zoomRatio = atd.drawingContext.zoomRatio;
+
+            if (
+                e.clientX < canvasRect.left
+                || e.clientY < canvasRect.top
+                || e.clientX > canvasRect.right
+                || e.clientY > canvasRect.bottom
+            ) {
+                console.log("Outside bounds");
+                return;
+            }
+
+            let position = {
+                x: (e.clientX - canvasRect.left) / zoomRatio,
+                y: (e.clientY - canvasRect.top) / zoomRatio,
+            }
+
+            StampLib.writeStampAt(StampLib.stamps.axolotl, position, scale, {color: textcolorbtn.value});
+        } finally {
+            printoverlay.style.display = "none";
+            printoverlay.removeEventListener("click", printclickhandler);
+            printoverlay.removeChild(printPreviewDiv);
+            printoverlay.removeEventListener("pointermove", mousemovehandler);
+        }
+    };
+    printoverlay.addEventListener("click", printclickhandler);
+    printoverlay.style.display = "unset";
+})
+
 makebtn("textprintbtn", "print", texttab, (e) => {
     let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
     let printPreviewDiv = document.createElement("div");
