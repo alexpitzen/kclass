@@ -45,7 +45,7 @@ drawtab.addEventListener("mouseleave", () => {
 });
 
 function updatePenSettings() {
-    StampLib.setPenColorHex(textcolorbtn.value);
+    StampLib.setPenColorHex(pencolorbtn.value);
     StampLib.setHighlighter(highlighter.checked);
 }
 
@@ -89,61 +89,9 @@ function getScale() {
     return sizeslider.value / FONTSCALECONVERSION;
 }
 
-makebtn("undoLast squarebtn", "&#11148;", texttab, () => {
+makebtn("undoLast squarebtn", "&#11148;", drawtab, () => {
     StampLib.undoLastWriteAll();
 });
-
-makebtn("axolotlbtn", "axolotl", drawtab, (e) => {
-    let scale = getScale() / 5;
-    let writeDimensions = StampLib.getWriteStampDimensions(StampLib.stamps.axolotl, scale);
-    let printPreviewDiv = document.createElement("div");
-    printPreviewDiv.className = "printPreviewDiv";
-    printPreviewDiv.style.height = `${writeDimensions.height}px`;
-    printPreviewDiv.style.width = `${writeDimensions.width}px`;
-    printPreviewDiv.style.left = `${e.clientX}px`;
-    printPreviewDiv.style.top = `${e.clientY}px`;
-    printPreviewDiv.style["border-color"] = textcolorbtn.value;
-    printoverlay.appendChild(printPreviewDiv);
-    let mousemovehandler = (e) => {
-        printPreviewDiv.animate({
-            left: `${e.clientX}px`,
-            top: `${e.clientY}px`,
-        }, {duration: 500, fill: "forwards"});
-    };
-    printoverlay.addEventListener("pointermove", mousemovehandler);
-    let printclickhandler = (e) => {
-        try {
-            drawtab.style.display = "none";
-            let atd = StampLib.getAtd();
-            let canvasRect = atd.bcanvas.getBoundingClientRect();
-            let zoomRatio = atd.drawingContext.zoomRatio;
-
-            if (
-                e.clientX < canvasRect.left
-                || e.clientY < canvasRect.top
-                || e.clientX > canvasRect.right
-                || e.clientY > canvasRect.bottom
-            ) {
-                console.log("Outside bounds");
-                return;
-            }
-
-            let position = {
-                x: (e.clientX - canvasRect.left) / zoomRatio,
-                y: (e.clientY - canvasRect.top) / zoomRatio,
-            }
-
-            StampLib.writeStampAt(StampLib.stamps.axolotl, position, scale, {color: textcolorbtn.value});
-        } finally {
-            printoverlay.style.display = "none";
-            printoverlay.removeEventListener("click", printclickhandler);
-            printoverlay.removeChild(printPreviewDiv);
-            printoverlay.removeEventListener("pointermove", mousemovehandler);
-        }
-    };
-    printoverlay.addEventListener("click", printclickhandler);
-    printoverlay.style.display = "unset";
-})
 
 makebtn("textprintbtn", "print", texttab, (e) => {
     let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
@@ -153,13 +101,13 @@ makebtn("textprintbtn", "print", texttab, (e) => {
     printPreviewDiv.style.width = `${writeDimensions.width}px`;
     printPreviewDiv.style.left = `${e.clientX}px`;
     printPreviewDiv.style.top = `${e.clientY}px`;
-    printPreviewDiv.style["border-color"] = textcolorbtn.value;
+    printPreviewDiv.style["border-color"] = pencolorbtn.value;
     printoverlay.appendChild(printPreviewDiv);
     let mousemovehandler = (e) => {
         printPreviewDiv.animate({
             left: `${e.clientX}px`,
             top: `${e.clientY}px`,
-        }, {duration: 500, fill: "forwards"});
+        }, {duration: 100, fill: "forwards"});
     };
     printoverlay.addEventListener("pointermove", mousemovehandler);
     let printclickhandler = (e) => {
@@ -184,7 +132,7 @@ makebtn("textprintbtn", "print", texttab, (e) => {
                 y: (e.clientY - canvasRect.top) / zoomRatio,
             }
 
-            StampLib.writeAllAt(textarea.value, position, getScale(), {color: textcolorbtn.value});
+            StampLib.writeAllAt(textarea.value, position, getScale(), {color: pencolorbtn.value});
         } finally {
             printoverlay.style.display = "none";
             printoverlay.removeEventListener("click", printclickhandler);
@@ -196,27 +144,12 @@ makebtn("textprintbtn", "print", texttab, (e) => {
     printoverlay.style.display = "unset";
 });
 
-const textcolorbtn = document.createElement("input");
-textcolorbtn.type = "color";
-textcolorbtn.value = "#ff2200";
-textcolorbtn.className = "textcolorbtn";
-function updateTextColor() {
-    textarea.style.color = this.value;
-    pencolorbtn.value = this.value;
-    updatePenSettings();
-}
-textcolorbtn.addEventListener("input", updateTextColor);
-textcolorbtn.addEventListener("change", updateTextColor);
-textcolorbtn.addEventListener("blur", updateTextColor);
-texttab.appendChild(textcolorbtn);
-
 const pencolorbtn = document.createElement("input");
 pencolorbtn.type = "color";
 pencolorbtn.value = "#ff2200";
 pencolorbtn.className = "pencolorbtn";
 function updatePenColor() {
     textarea.style.color = this.value;
-    textcolorbtn.value = this.value;
     updatePenSettings();
 }
 pencolorbtn.addEventListener("input", updatePenColor);
@@ -235,6 +168,72 @@ const highlighterlabel = document.createElement("label");
 highlighterlabel.setAttribute("for", highlighter.id);
 highlighterlabel.innerText = "Highlighter";
 drawtab.appendChild(highlighterlabel);
+
+function makeStamp(stamp, name) {
+    let btn = document.createElement("button");
+    btn.className = "stampbtn";
+    btn.appendChild(stamp.svg);
+    drawtab.appendChild(btn);
+    let stampDimensions = StampLib.getWriteStampDimensions(stamp, 1);
+    let maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
+    btn.setAttribute("maxScaleFactor", maxScaleFactor);
+    btn.onclick = (e) => {
+        let scale = getScale() * maxScaleFactor;
+        let writeDimensions = {width: stampDimensions.width * scale, height: stampDimensions.height * scale};
+        let printPreviewDiv = document.createElement("div");
+        printPreviewDiv.className = "printPreviewDiv";
+        printPreviewDiv.style.height = `${writeDimensions.height}px`;
+        printPreviewDiv.style.width = `${writeDimensions.width}px`;
+        printPreviewDiv.style.left = `${e.clientX}px`;
+        printPreviewDiv.style.top = `${e.clientY}px`;
+        printPreviewDiv.style["border-color"] = pencolorbtn.value;
+        printoverlay.appendChild(printPreviewDiv);
+        let mousemovehandler = (e) => {
+            printPreviewDiv.animate({
+                left: `${e.clientX}px`,
+                top: `${e.clientY}px`,
+            }, {duration: 100, fill: "forwards"});
+        };
+        printoverlay.addEventListener("pointermove", mousemovehandler);
+        let printclickhandler = (e) => {
+            try {
+                drawtab.style.display = "none";
+                let atd = StampLib.getAtd();
+                let canvasRect = atd.bcanvas.getBoundingClientRect();
+                let zoomRatio = atd.drawingContext.zoomRatio;
+
+                if (
+                    e.clientX < canvasRect.left
+                    || e.clientY < canvasRect.top
+                    || e.clientX > canvasRect.right
+                    || e.clientY > canvasRect.bottom
+                ) {
+                    console.log("Outside bounds");
+                    return;
+                }
+
+                let position = {
+                    x: (e.clientX - canvasRect.left) / zoomRatio,
+                    y: (e.clientY - canvasRect.top) / zoomRatio,
+                }
+
+                StampLib.writeStampAt(stamp, position, scale, {color: pencolorbtn.value});
+            } finally {
+                printoverlay.style.display = "none";
+                printoverlay.removeEventListener("click", printclickhandler);
+                printoverlay.removeChild(printPreviewDiv);
+                printoverlay.removeEventListener("pointermove", mousemovehandler);
+            }
+        };
+        printoverlay.addEventListener("click", printclickhandler);
+        printoverlay.style.display = "unset";
+    };
+    return btn;
+}
+
+for (let stampName in StampLib.stamps) {
+    makeStamp(StampLib.stamps[stampName], stampName);
+}
 
 const textarea = document.createElement("textarea");
 texttab.appendChild(textarea);

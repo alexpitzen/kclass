@@ -58,13 +58,19 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   top: 80px;
   border: 1px solid;
   width: 300px;
-  height: 100px;
   z-index: 253;
   right: 0px;
   background-color: rgb(240, 240, 247);
+  max-height: calc(-160px + 100vh);
+  /* overflow: auto; */
 }
 .drawtab button {
   height: 30px;
+}
+.drawtab button.stampbtn {
+  background: white;
+  height: 100px;
+  width: 100px;
 }
 .drawtab .squarebtn {
   width: 30px;

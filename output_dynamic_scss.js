@@ -12,261 +12,6 @@
 (function() {
     'use strict';
 
-const customToolbar = document.createElement("div");
-customToolbar.className = "customToolbar";
-customToolbar.style.display = "none";
-document.body.appendChild(customToolbar);
-
-function makebtn(className, innerText, container, fn) {
-    let btn = document.createElement("button");
-    btn.className = className;
-    btn.innerHTML = innerText;
-    container.appendChild(btn);
-    btn.onclick = fn;
-    return btn;
-}
-
-makebtn("headerZindexBtn", "H", customToolbar, () => {
-    let header = document.getElementsByClassName("grading-header")[0];
-    if (header.classList.contains("z300")) {
-        header.classList.remove("z300");
-    } else {
-        header.classList.add("z300");
-    }
-});
-
-makebtn("shiftbtn", "↕", customToolbar, () => {
-    let container = document.getElementsByClassName("worksheet-container")[0];
-    if (container.classList.contains("shiftup")) {
-        container.classList.remove("shiftup");
-    } else {
-        container.classList.add("shiftup");
-    }
-});
-
-const xallbtn = makebtn("xallbtn", "x all", customToolbar, () => {
-    document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
-    xallbtn.blur();
-});
-
-const drawtab = document.createElement("div");
-drawtab.className = "drawtab";
-drawtab.style.display = "none";
-customToolbar.appendChild(drawtab);
-
-drawtab.addEventListener("mouseleave", () => {
-    drawtab.style.display = "none";
-});
-
-function updatePenSettings() {
-    StampLib.setPenColorHex(textcolorbtn.value);
-    StampLib.setHighlighter(highlighter.checked);
-}
-
-const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
-    drawtab.style.display = "unset";
-    drawtab.focus();
-    updatePenSettings();
-});
-
-makebtn("textbtn squarebtn", "abc", drawtab, () => {
-    texttab.style.display = "unset";
-    textarea.focus();
-    textarea.select();
-});
-
-const texttab = document.createElement("div");
-texttab.className = "texttab";
-texttab.style.display = "none";
-drawtab.appendChild(texttab);
-
-texttab.addEventListener("mouseleave", () => {
-    texttab.style.display = "none";
-});
-
-/* scale = font size / 57 */
-const FONTSCALECONVERSION = 57;
-
-const sizeslider = document.createElement("input");
-sizeslider.className = "sizeslider";
-sizeslider.type = "range";
-sizeslider.value = 20;
-sizeslider.min = FONTSCALECONVERSION * 0.2; // 0.2 scale
-sizeslider.max = FONTSCALECONVERSION * 1.0; // 1.0 scale
-texttab.appendChild(sizeslider);
-sizeslider.addEventListener("input", (e) => {
-    textarea.style["font-size"] = `${e.target.value}px`;
-    updateTextAreaSize();
-});
-
-function getScale() {
-    return sizeslider.value / FONTSCALECONVERSION;
-}
-
-makebtn("undoLast squarebtn", "&#11148;", texttab, () => {
-    StampLib.undoLastWriteAll();
-});
-
-makebtn("axolotlbtn", "axolotl", drawtab, (e) => {
-    let scale = getScale() / 5;
-    let writeDimensions = StampLib.getWriteStampDimensions(StampLib.stamps.axolotl, scale);
-    let printPreviewDiv = document.createElement("div");
-    printPreviewDiv.className = "printPreviewDiv";
-    printPreviewDiv.style.height = `${writeDimensions.height}px`;
-    printPreviewDiv.style.width = `${writeDimensions.width}px`;
-    printPreviewDiv.style.left = `${e.clientX}px`;
-    printPreviewDiv.style.top = `${e.clientY}px`;
-    printPreviewDiv.style["border-color"] = textcolorbtn.value;
-    printoverlay.appendChild(printPreviewDiv);
-    let mousemovehandler = (e) => {
-        printPreviewDiv.animate({
-            left: `${e.clientX}px`,
-            top: `${e.clientY}px`,
-        }, {duration: 500, fill: "forwards"});
-    };
-    printoverlay.addEventListener("pointermove", mousemovehandler);
-    let printclickhandler = (e) => {
-        try {
-            drawtab.style.display = "none";
-            let atd = StampLib.getAtd();
-            let canvasRect = atd.bcanvas.getBoundingClientRect();
-            let zoomRatio = atd.drawingContext.zoomRatio;
-
-            if (
-                e.clientX < canvasRect.left
-                || e.clientY < canvasRect.top
-                || e.clientX > canvasRect.right
-                || e.clientY > canvasRect.bottom
-            ) {
-                console.log("Outside bounds");
-                return;
-            }
-
-            let position = {
-                x: (e.clientX - canvasRect.left) / zoomRatio,
-                y: (e.clientY - canvasRect.top) / zoomRatio,
-            }
-
-            StampLib.writeStampAt(StampLib.stamps.axolotl, position, scale, {color: textcolorbtn.value});
-        } finally {
-            printoverlay.style.display = "none";
-            printoverlay.removeEventListener("click", printclickhandler);
-            printoverlay.removeChild(printPreviewDiv);
-            printoverlay.removeEventListener("pointermove", mousemovehandler);
-        }
-    };
-    printoverlay.addEventListener("click", printclickhandler);
-    printoverlay.style.display = "unset";
-})
-
-makebtn("textprintbtn", "print", texttab, (e) => {
-    let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
-    let printPreviewDiv = document.createElement("div");
-    printPreviewDiv.className = "printPreviewDiv";
-    printPreviewDiv.style.height = `${writeDimensions.height}px`;
-    printPreviewDiv.style.width = `${writeDimensions.width}px`;
-    printPreviewDiv.style.left = `${e.clientX}px`;
-    printPreviewDiv.style.top = `${e.clientY}px`;
-    printPreviewDiv.style["border-color"] = textcolorbtn.value;
-    printoverlay.appendChild(printPreviewDiv);
-    let mousemovehandler = (e) => {
-        printPreviewDiv.animate({
-            left: `${e.clientX}px`,
-            top: `${e.clientY}px`,
-        }, {duration: 500, fill: "forwards"});
-    };
-    printoverlay.addEventListener("pointermove", mousemovehandler);
-    let printclickhandler = (e) => {
-        try {
-            drawtab.style.display = "none";
-            let atd = StampLib.getAtd();
-            let canvasRect = atd.bcanvas.getBoundingClientRect();
-            let zoomRatio = atd.drawingContext.zoomRatio;
-
-            if (
-                e.clientX < canvasRect.left
-                || e.clientY < canvasRect.top
-                || e.clientX > canvasRect.right
-                || e.clientY > canvasRect.bottom
-            ) {
-                console.log("Outside bounds");
-                return;
-            }
-
-            let position = {
-                x: (e.clientX - canvasRect.left) / zoomRatio,
-                y: (e.clientY - canvasRect.top) / zoomRatio,
-            }
-
-            StampLib.writeAllAt(textarea.value, position, getScale(), {color: textcolorbtn.value});
-        } finally {
-            printoverlay.style.display = "none";
-            printoverlay.removeEventListener("click", printclickhandler);
-            printoverlay.removeChild(printPreviewDiv);
-            printoverlay.removeEventListener("pointermove", mousemovehandler);
-        }
-    };
-    printoverlay.addEventListener("click", printclickhandler);
-    printoverlay.style.display = "unset";
-});
-
-const textcolorbtn = document.createElement("input");
-textcolorbtn.type = "color";
-textcolorbtn.value = "#ff2200";
-textcolorbtn.className = "textcolorbtn";
-function updateTextColor() {
-    textarea.style.color = this.value;
-    pencolorbtn.value = this.value;
-    updatePenSettings();
-}
-textcolorbtn.addEventListener("input", updateTextColor);
-textcolorbtn.addEventListener("change", updateTextColor);
-textcolorbtn.addEventListener("blur", updateTextColor);
-texttab.appendChild(textcolorbtn);
-
-const pencolorbtn = document.createElement("input");
-pencolorbtn.type = "color";
-pencolorbtn.value = "#ff2200";
-pencolorbtn.className = "pencolorbtn";
-function updatePenColor() {
-    textarea.style.color = this.value;
-    textcolorbtn.value = this.value;
-    updatePenSettings();
-}
-pencolorbtn.addEventListener("input", updatePenColor);
-pencolorbtn.addEventListener("change", updatePenColor);
-pencolorbtn.addEventListener("blur", updatePenColor);
-drawtab.appendChild(pencolorbtn);
-
-const highlighter = document.createElement("input");
-highlighter.type = "checkbox";
-highlighter.id = "highlighter";
-drawtab.appendChild(highlighter);
-highlighter.addEventListener("change", function() {
-    updatePenSettings();
-})
-const highlighterlabel = document.createElement("label");
-highlighterlabel.setAttribute("for", highlighter.id);
-highlighterlabel.innerText = "Highlighter";
-drawtab.appendChild(highlighterlabel);
-
-const textarea = document.createElement("textarea");
-texttab.appendChild(textarea);
-textarea.style["font-size"] = "20px";
-textarea.style.color = "#ff2200";
-function updateTextAreaSize() {
-    textarea.style.height = "";
-    textarea.style.height = `${textarea.scrollHeight}px`;
-}
-textarea.addEventListener("input", updateTextAreaSize);
-
-
-const printoverlay = document.createElement("div");
-printoverlay.className = "printoverlay";
-document.body.appendChild(printoverlay);
-
-
-;
 (function(global) {
     function expandToolbar() {
         if (document.querySelector(".grading-toolbar-box.close")) {
@@ -292,10 +37,11 @@ document.body.appendChild(printoverlay);
     }
 
     class DrawStamp {
-        constructor(strokes, width, height) {
+        constructor(strokes, width, height, svg) {
             this.strokes = strokes;
             this.width = width;
             this.height = height;
+            this.svg = svg;
         }
     }
 
@@ -1120,11 +866,6 @@ document.body.appendChild(printoverlay);
             //     new Linear({x:50, y:0}, {x:50, y:100}),
             // ]),
         ], 50),
-        "@": new DrawLetter("@", [
-            new Stroke([
-                new Linear({x:0, y:0}, {x:0.01, y:0.01}),
-            ]),
-        ], 1),
     }
 
     function getAtd() {
@@ -1142,14 +883,25 @@ document.body.appendChild(printoverlay);
             alpha = options.alpha || 255,
             width = options.width || 2;
 
-        let atd = getAtd();
-        let currentDrawIndex = atd.countDrawItems();
+        let atd = null;
+        let currentDrawIndex = 0;
         newDrawCounter = 0;
-        if (!dryRun) {
-            setPenColorHex(color);
+        let previousAlpha = 0;
+        let previousWidth = 0;
+        let zoomRatio = 0;
+        try {
+            atd = getAtd();
+            zoomRatio = atd.drawingContext.zoomRatio;
+        } catch {
+            zoomRatio = 370/768;
         }
-        let previousAlpha = atd.pen.col.A;
-        let previousWidth = atd.pen.w;
+        if (!dryRun) {
+            atd = getAtd();
+            currentDrawIndex = atd.countDrawItems();
+            setPenColorHex(color);
+            previousAlpha = atd.pen.col.A;
+            previousWidth = atd.pen.w;
+        }
         let stampDimensions = getStampDimensions(stamp, scale);
         pos = {
             x: pos.x - stampDimensions.min.x,
@@ -1169,8 +921,8 @@ document.body.appendChild(printoverlay);
             atd.pen.w = previousWidth;
         }
         return {
-            width: (stampDimensions.max.x - stampDimensions.min.x) * atd.drawingContext.zoomRatio,
-            height: (stampDimensions.max.y - stampDimensions.min.y) * atd.drawingContext.zoomRatio,
+            width: (stampDimensions.max.x - stampDimensions.min.x) * zoomRatio,
+            height: (stampDimensions.max.y - stampDimensions.min.y) * zoomRatio,
         };
     }
 
@@ -1611,11 +1363,16 @@ document.body.appendChild(printoverlay);
         let svgElem = doc.querySelector("svg");
         let width = parseInt(svgElem.getAttribute("width").replaceAll(/[^0-9.]/g, ""));
         let height = parseInt(svgElem.getAttribute("height").replaceAll(/[^0-9.]/g, ""));
+        svgElem.removeAttribute("width");
+        svgElem.removeAttribute("height");
+        if (!svgElem.hasAttribute("viewBox")) {
+            svgElem.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        }
         let strokes = [];
         for (let child of svgElem.children) {
             strokes = strokes.concat(parseChild(child));
         }
-        return new DrawStamp(strokes, width, height);
+        return new DrawStamp(strokes, width, height, svgElem);
     }
 
     function drawAxolotl(pos, scale, options, dryRun = false) {
@@ -1634,14 +1391,57 @@ document.body.appendChild(printoverlay);
         }
     }
 
+    const transformsRegex = /(?<transform>[^\(\)]*)\((?<params>[^\)]*)\)/g;
+
+    class Transformation {
+        transform(x, y, relative) {}
+    }
+
+    class ScaleTransformation extends Transformation{
+        constructor(x, y) {
+            super();
+            this.x = parseFloat(x);
+            this.y = parseFloat(y);
+        }
+        transform(x, y, relative) {
+            return [
+                x * this.x,
+                y * this.y,
+            ];
+        }
+    }
+
+    class TranslateTransformation extends Transformation {
+        constructor(x, y) {
+            super();
+            this.x = parseFloat(x);
+            this.y = parseFloat(y);
+        }
+        transform(x, y, relative) {
+            return relative ? [x, y] : [
+                x + this.x,
+                y + this.y,
+            ];
+        }
+    }
+
+    const TRANSFORM_CLASSES = {
+        "translate": TranslateTransformation,
+        "scale": ScaleTransformation,
+    };
+
+    // <g transform="translate(0.000000,654.000000) scale(0.100000,-0.100000)"
     function parseG(element, transform) {
         let newTransforms = element.getAttribute("transform") || "";
         let allTransforms = [];
         if (newTransforms !== "") {
-            for (let newTransform of newTransforms.split(" ").reverse()) {
-                // TODO
-                // allTransforms.push();
+            for (let match of newTransforms.matchAll(transformsRegex)) {
+                let transformClass = TRANSFORM_CLASSES[match.groups.transform.trim().toLowerCase()] || null;
+                if (transformClass != null) {
+                    allTransforms.push(new transformClass(...match.groups.params.split(",")));
+                }
             }
+            allTransforms.reverse();
         }
         allTransforms = allTransforms.concat(transform);
         let strokes = [];
@@ -1651,13 +1451,22 @@ document.body.appendChild(printoverlay);
         return strokes;
     }
 
-    const pathRegex = /([MmCcLlZzQq][0-9. -]*)/g;
+    const pathRegex = /[MmCcLlZzQq][0-9. -]*/g;
 
     function parameterizePathSection(str) {
         return [str[0], ...str.substring(1).trim().split(" ").map(parseFloat)];
     }
 
-    function parsePath(element, transform) {
+    function shift2Translated(pathSection, transformations, relative) {
+        let x = pathSection.shift();
+        let y = pathSection.shift();
+        for (let transformation of transformations) {
+            [x, y] = transformation.transform(x, y, relative);
+        }
+        return [x, y];
+    }
+
+    function parsePath(element, transformations) {
         let pathstring = element.getAttribute("d") || "";
         let strokes = [];
         let x = 0, y = 0;
@@ -1677,11 +1486,11 @@ document.body.appendChild(printoverlay);
                     currentStroke = null;
                 }
                 if (cmd == "M") {
-                    x = pathSection.shift();
-                    y = pathSection.shift();
+                    [x, y] = shift2Translated(pathSection, transformations, false);
                 } else {
-                    x += pathSection.shift();
-                    y += pathSection.shift();
+                    let [dx, dy] = shift2Translated(pathSection, transformations, true);
+                    x += dx;
+                    y += dy;
                 }
                 mx = x;
                 my = y;
@@ -1691,14 +1500,12 @@ document.body.appendChild(printoverlay);
                 }
                 do {
                     if (cmd == "L") {
-                        let x2 = pathSection.shift();
-                        let y2 = pathSection.shift();
+                        let [x2, y2] = shift2Translated(pathSection, transformations, false);
                         currentStroke.lines.push(makeLinear(x2, y2));
                         x = x2;
                         y = y2;
                     } else if (cmd == "l") {
-                        let dx = pathSection.shift();
-                        let dy = pathSection.shift();
+                        let [dx, dy] = shift2Translated(pathSection, transformations, true);
                         currentStroke.lines.push(makeLinear(x + dx, y + dy));
                         x += dx;
                         y += dy;
@@ -1709,18 +1516,27 @@ document.body.appendChild(printoverlay);
                         // dump anything attached to Z/z
                         pathSection = [];
                     } else if (cmd == "C" || cmd == "c") {
-                        let cx1 = pathSection.shift();
-                        let cy1 = pathSection.shift();
-                        let cx2 = pathSection.shift();
-                        let cy2 = pathSection.shift();
-                        let x2 = pathSection.shift();
-                        let y2 = pathSection.shift();
+                        let [cx1, cy1] = shift2Translated(pathSection, transformations, cmd == "c");
+                        let [cx2, cy2] = shift2Translated(pathSection, transformations, cmd == "c");
+                        let [x2, y2] = shift2Translated(pathSection, transformations, cmd == "c");
+                        if (cmd == "c") {
+                            cx1 += x;
+                            cy1 += y;
+                            cx2 += x;
+                            cy2 += y;
+                            x2 += x;
+                            y2 += y;
+                        }
                         currentStroke.lines.push(new Bezier(x,y,cx1,cy1,cx2,cy2,x2,y2));
                         x = x2;
                         y = y2;
                     }
                 } while (pathSection.length > 0);
             }
+        }
+        if (currentStroke != null) {
+            strokes.push(currentStroke);
+            currentStroke = null;
         }
         return strokes;
     }
@@ -1731,6 +1547,11 @@ document.body.appendChild(printoverlay);
 </svg>`;
     const axolotlStamp = parseSvg(axolotl_centerline);
 
+    const great_job = `<?xml version="1.0" standalone="no"?> <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"> <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="1024.000000pt" height="654.000000pt" viewBox="0 0 1024.000000 654.000000" preserveAspectRatio="xMidYMid meet"> <metadata> Created by potrace 1.16, written by Peter Selinger 2001-2019 </metadata> <g transform="translate(0.000000,654.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none"> <path d="M3010 5924 c-197 -23 -341 -60 -426 -110 l-43 -26 -67 27 c-75 30 -22 28 -589 27 -223 0 -338 -5 -410 -16 -455 -68 -737 -338 -837 -799 -30 -141 -33 -507 -4 -667 69 -392 261 -682 556 -843 91 -50 157 -74 290 -107 191 -48 236 -53 475 -55 127 -1 241 -6 254 -10 21 -7 13 -12 -53 -31 -161 -48 -282 -145 -326 -262 -44 -116 -36 -352 15 -469 35 -77 121 -163 208 -207 40 -20 138 -53 220 -75 82 -21 150 -41 152 -43 8 -7 25 -135 25 -185 l0 -52 -62 32 c-55 29 -70 32 -148 32 -80 0 -92 -3 -163 -38 -103 -51 -184 -127 -233 -219 l-39 -73 0 -130 c1 -116 4 -139 28 -210 50 -143 145 -260 297 -367 141 -98 221 -133 410 -179 277 -67 460 -61 627 21 70 34 99 57 180 141 86 88 169 149 202 149 6 0 41 -22 78 -49 160 -116 325 -189 568 -250 209 -52 432 -72 595 -52 177 22 262 48 435 136 205 105 205 105 258 60 60 -52 152 -94 238 -110 41 -7 103 -20 139 -28 103 -25 223 -30 400 -17 216 15 333 38 526 105 88 30 174 55 192 55 19 0 66 -16 105 -35 104 -49 337 -105 468 -112 140 -7 230 9 329 58 176 88 226 214 186 461 -18 111 -20 184 -6 278 5 36 14 119 20 185 11 124 33 260 75 475 53 268 69 456 45 540 -5 19 -14 71 -20 115 -13 103 -45 168 -118 237 -69 66 -155 112 -259 138 -41 10 -77 21 -81 24 -14 15 123 4 194 -15 115 -31 183 -37 329 -28 72 4 220 13 330 19 308 18 402 43 475 126 66 76 74 134 41 314 -24 132 -36 160 -101 239 l-52 63 -1 126 c-1 230 38 297 216 366 54 21 117 52 140 70 53 40 95 121 107 206 25 170 -62 598 -160 790 -50 99 -167 186 -274 205 -62 11 -215 7 -344 -9 -195 -24 -380 -29 -631 -16 -274 15 -345 8 -445 -44 -57 -29 -115 -91 -162 -172 -10 -17 -15 -15 -64 28 -123 107 -280 159 -485 158 -195 0 -345 -35 -471 -111 -80 -48 -192 -146 -243 -212 -24 -31 -45 -57 -47 -57 -1 0 -15 39 -29 88 -15 48 -34 100 -42 116 -23 45 -93 116 -138 139 -54 28 -177 34 -267 13 -51 -12 -80 -13 -125 -6 -150 25 -419 34 -718 23 -335 -11 -369 -18 -468 -89 -33 -24 -55 -33 -62 -28 -105 78 -206 129 -335 168 -161 48 -253 58 -560 61 -157 2 -301 1 -320 -1z m685 -238 c114 -24 231 -63 298 -98 81 -42 186 -147 219 -218 57 -122 78 -283 60 -455 -26 -230 -119 -382 -291 -474 -33 -18 -61 -37 -61 -43 0 -27 161 -284 220 -352 24 -27 40 -35 80 -40 29 -4 59 -15 70 -26 39 -39 54 -166 25 -208 -38 -53 -148 -94 -367 -137 -164 -32 -280 -37 -324 -13 -38 21 -64 86 -64 159 0 39 4 51 26 68 15 12 34 21 44 21 31 0 29 12 -14 78 -56 89 -125 211 -170 300 -27 53 -41 72 -56 72 -19 0 -20 -7 -20 -204 0 -112 -3 -211 -6 -220 -4 -11 6 -20 36 -32 50 -20 63 -47 51 -109 -12 -64 -35 -94 -94 -120 -86 -39 -172 -49 -376 -41 -198 7 -321 22 -321 40 1 6 7 38 15 71 8 33 15 81 15 107 0 43 2 47 28 50 26 3 27 6 34 68 11 109 21 875 13 1042 l-7 157 -35 12 -36 11 7 57 c16 140 17 306 3 359 l-15 54 45 19 c60 26 149 48 235 59 116 14 650 4 733 -14z m5281 -46 c76 -37 121 -168 160 -472 19 -153 10 -224 -36 -270 -61 -60 -132 -27 -203 94 l-37 63 -100 19 c-55 10 -103 16 -106 13 -3 -3 -1 -174 5 -381 6 -207 11 -459 11 -560 0 -199 -1 -196 56 -196 39 0 103 -38 124 -73 12 -20 20 -50 20 -79 0 -129 -45 -146 -465 -168 -351 -18 -508 -11 -522 25 -2 7 4 28 14 47 13 25 18 55 18 131 l0 98 30 7 c70 18 79 106 72 686 -3 273 -9 462 -15 468 -12 12 -133 -17 -143 -35 -46 -82 -145 -172 -160 -145 -3 7 -12 45 -19 83 -16 88 -75 274 -107 339 -19 38 -24 60 -20 93 6 56 59 162 93 187 35 25 141 30 384 18 192 -9 498 -1 640 17 36 5 110 9 164 10 81 1 107 -3 142 -19z m-6566 -35 c67 -40 75 -62 74 -203 -1 -224 -44 -442 -97 -489 -30 -28 -52 -31 -131 -22 -81 10 -124 34 -154 87 -22 39 -23 40 -105 52 -118 18 -259 10 -322 -19 -68 -30 -121 -84 -147 -151 -27 -69 -37 -301 -18 -417 30 -191 113 -313 211 -313 72 0 115 64 126 184 l6 75 -29 6 c-64 15 -91 27 -128 57 -51 42 -66 81 -66 177 0 74 2 82 24 97 60 38 120 45 436 46 299 1 306 1 359 -22 68 -30 81 -58 81 -178 0 -93 -7 -109 -52 -125 -16 -6 -18 -26 -18 -226 0 -121 5 -265 11 -321 17 -158 -9 -232 -95 -271 -58 -26 -175 -25 -282 3 -83 22 -84 22 -156 4 -41 -10 -128 -20 -198 -23 -354 -14 -632 141 -785 438 -99 191 -141 410 -132 684 11 319 79 510 241 670 97 96 184 145 324 182 90 24 116 27 362 31 176 3 287 0 330 -7 56 -10 70 -10 95 4 43 23 188 17 235 -10z m2850 -16 c102 -6 211 -17 242 -24 51 -11 63 -10 110 6 101 35 177 20 199 -40 34 -89 70 -336 72 -506 2 -106 -11 -146 -59 -176 -43 -26 -164 -37 -217 -20 -66 22 -125 111 -126 189 -1 26 -7 35 -27 42 -35 14 -221 25 -266 16 l-35 -6 -12 -88 c-6 -48 -14 -111 -17 -140 l-7 -52 190 0 c125 1 198 -3 215 -10 87 -40 89 -215 2 -304 -51 -52 -90 -60 -226 -47 -63 6 -131 11 -151 11 -35 0 -37 -2 -37 -34 0 -45 26 -188 45 -255 l17 -54 71 5 c40 3 105 13 144 23 71 18 73 19 78 54 20 121 49 188 95 222 60 45 194 44 268 -1 54 -33 67 -76 65 -220 -1 -249 -47 -477 -105 -525 -47 -40 -159 -32 -228 16 -23 15 -38 16 -145 8 -66 -5 -264 -10 -440 -11 -279 -2 -328 0 -384 15 -36 10 -66 19 -67 20 -1 1 5 30 14 64 15 59 15 69 -1 150 -10 49 -31 115 -46 148 -38 81 -52 187 -53 407 0 155 3 194 21 256 66 238 47 563 -46 745 -28 55 -24 64 35 93 30 15 71 20 212 25 306 10 411 9 600 -2z m1736 -4 c130 -30 259 -134 340 -271 77 -132 135 -328 173 -589 l16 -110 40 -13 c22 -7 51 -23 64 -35 90 -83 77 -265 -26 -365 l-45 -43 7 -93 c4 -51 10 -98 14 -103 3 -5 21 -15 39 -22 70 -29 111 -108 82 -161 -36 -68 -221 -105 -449 -89 -172 12 -273 46 -299 103 -24 54 19 146 70 146 22 0 23 43 4 144 -20 102 -27 106 -191 106 -121 0 -135 -2 -166 -23 -42 -28 -55 -66 -61 -174 -4 -79 -4 -83 16 -83 35 0 86 -38 102 -75 33 -79 9 -137 -71 -171 -58 -24 -228 -37 -415 -31 -187 5 -215 10 -205 36 32 81 63 285 71 471 9 189 -18 294 -96 384 l-30 34 26 21 c15 12 33 21 41 21 18 0 29 32 38 115 11 116 64 354 97 440 89 231 253 386 453 428 91 20 282 21 361 2z m284 -2150 l105 -29 -45 -8 c-203 -37 -313 -79 -403 -151 l-57 -47 -60 30 c-33 17 -99 43 -146 59 -71 24 -83 31 -68 39 44 23 284 115 334 128 84 21 216 13 340 -21z m-2590 -1 c66 -13 177 -18 505 -24 307 -5 430 -10 458 -20 20 -7 37 -16 37 -20 0 -3 -30 -12 -67 -20 -90 -17 -199 -60 -256 -99 -42 -28 -69 -57 -125 -130 l-19 -24 -64 36 c-90 50 -196 91 -324 123 -107 28 -117 29 -370 29 -250 -1 -264 -2 -380 -29 -127 -30 -222 -64 -334 -121 l-69 -34 -27 44 c-14 25 -54 68 -88 96 -34 29 -63 55 -65 59 -2 4 19 18 45 31 45 23 60 24 250 25 216 2 297 11 435 51 197 55 286 61 458 27z m3045 -279 c120 -32 206 -92 218 -151 10 -51 -22 -305 -67 -536 -51 -254 -63 -333 -81 -541 -15 -172 -17 -178 -111 -207 -132 -40 -307 -49 -416 -20 l-36 10 5 138 c4 103 1 155 -11 211 -17 82 -60 182 -102 236 l-27 36 36 77 c42 92 57 158 57 256 0 131 -39 265 -103 350 -40 53 -40 53 6 81 105 61 238 86 432 80 87 -2 163 -10 200 -20z m-1340 -30 c276 -49 454 -135 530 -255 64 -101 73 -268 21 -373 -27 -56 -116 -148 -163 -170 -33 -15 -25 -27 34 -49 188 -70 268 -314 192 -588 -85 -311 -287 -472 -674 -536 -87 -15 -165 -19 -370 -19 -302 0 -311 2 -355 90 -22 45 -25 62 -25 170 0 111 2 126 31 200 78 199 113 487 83 702 -32 239 -111 433 -239 591 -48 60 -51 65 -40 96 27 83 140 138 325 156 128 13 546 4 650 -15z m-3140 5 c82 -12 187 -58 208 -92 37 -59 26 -278 -18 -354 -31 -53 -30 -52 -111 -69 -36 -7 -68 -15 -69 -17 -2 -2 3 -93 10 -203 19 -256 19 -409 0 -615 -17 -194 -26 -248 -61 -351 -64 -196 -182 -307 -359 -340 -86 -16 -297 -4 -383 23 -130 40 -246 112 -345 216 -78 83 -117 181 -120 303 -1 63 18 106 72 162 42 45 73 63 131 76 68 15 93 0 147 -87 67 -110 94 -141 129 -152 44 -15 103 6 126 45 67 116 72 401 11 737 l-15 86 -97 6 c-244 15 -365 46 -426 110 -52 54 -65 99 -65 227 0 122 13 157 76 205 54 40 175 73 308 83 151 12 770 12 851 1z m1545 -95 c179 -43 303 -108 428 -220 139 -125 243 -361 260 -592 25 -344 -65 -650 -250 -847 -167 -179 -343 -261 -613 -287 -291 -27 -594 38 -810 173 -115 73 -227 197 -290 322 l-46 91 11 110 c14 134 17 403 6 545 l-7 105 30 18 c85 50 153 165 172 288 6 41 16 85 23 99 29 62 227 158 401 195 152 33 156 33 375 31 176 -2 206 -5 310 -31z m2857 -1459 c104 -33 183 -122 183 -206 0 -51 -38 -120 -88 -157 -68 -51 -158 -75 -282 -75 -181 0 -309 40 -357 111 -31 45 -29 90 5 148 16 26 39 74 52 105 25 61 21 59 165 92 46 11 272 -2 322 -18z"/> <path d="M3368 5144 c-10 -9 -10 -208 -1 -294 l6 -63 106 5 c160 8 220 40 241 129 22 89 -4 183 -57 209 -31 15 -282 27 -295 14z"/> <path d="M6763 4976 c-40 -45 -67 -148 -68 -256 0 -80 1 -85 25 -97 17 -10 58 -13 132 -11 144 4 146 6 130 130 -24 189 -68 268 -150 268 -33 0 -45 -6 -69 -34z"/> <path d="M6165 2648 c-3 -8 -4 -63 -3 -124 l3 -109 48 -3 c63 -4 150 22 188 56 38 34 49 90 25 127 -23 35 -73 53 -171 61 -69 5 -86 4 -90 -8z"/> <path d="M6160 1913 c0 -76 -3 -189 -7 -250 l-6 -113 39 0 c86 0 184 51 229 118 35 53 51 150 36 216 -26 113 -96 166 -219 166 l-72 0 0 -137z"/> <path d="M4361 2394 c-63 -17 -96 -39 -148 -98 -46 -52 -62 -96 -70 -191 -14 -176 53 -312 185 -377 58 -29 77 -33 142 -33 97 1 164 29 225 97 59 66 80 130 80 243 -1 266 -181 422 -414 359z m197 -368 c8 -65 -27 -116 -78 -116 -34 0 -37 13 -16 65 17 39 64 87 80 82 6 -2 12 -16 14 -31z"/> </g> </svg>`;
+
+    const greatJobStamp = parseSvg(great_job);
+
+    const cuteAxolotl = parseSvg(`<?xml version="1.0" standalone="yes"?> <svg xmlns="http://www.w3.org/2000/svg" width="656" height="608"> <path style="stroke:#0d0d0c; fill:none;" d="M93 75C86.2699 76.0548 65.177 70.5256 72.6042 60.1327C76.0881 55.2576 87.5224 56.0547 88.5772 49.892C90.0333 41.3834 76.8667 29.098 87.1443 21.743C98.9835 13.2706 106.394 36.8672 115.961 34.2878C120.055 33.1841 121.748 28.309 126.003 27.2068C137.657 24.1881 139.075 46.113 142 53C158.722 46.767 155.173 58.0817 161 69C162.983 68.158 164.861 67.4109 167.005 67.054C182.939 64.4009 174.78 81.7208 180.028 88.3973C181.924 90.8093 186.354 90.145 188.956 91.4337C193.179 93.5255 193.973 97.7773 194.799 102C195.895 107.599 191.725 123.889 199.059 125.667C206.17 127.391 218.052 120.676 225 118.71C240.661 114.279 257.748 112.006 274 112C320.984 111.982 365.956 121.256 406 146.95C415.962 153.342 429.623 161.193 437.2 170.274C448.759 184.127 461.218 201.923 467.427 219C470.141 226.465 469.721 234.591 473 242C480.241 236.455 503.128 213.769 504 235"/> <path style="stroke:#0d0d0c; fill:none;" d="M161 70L159 80"/> <path style="stroke:#0d0d0c; fill:none;" d="M87 76C83.2345 92.4727 91.6514 91.7353 103 100C95.4332 113.979 113.76 119.485 125 119"/> <path style="stroke:#0d0d0c; fill:none;" d="M501 142C501.078 135.423 512.072 115.193 519.04 113.337C524.791 111.806 528.276 119.186 533.815 114.586C542.123 107.686 548.357 86.0233 562.892 89.3572C569.625 90.9016 566.455 102.226 575.005 100.901C584.616 99.4121 602.787 85.524 609.343 100.015C615.546 113.727 596.699 117.823 592.281 127.04C589.736 132.348 595.86 137.355 592.82 142.895C587.35 152.866 571.482 149.48 564.603 156.589C561.393 159.905 562.871 165.849 559.49 169.468C551.624 177.888 536.181 176.563 526 176M180 90L177 101"/> <path style="stroke:#0d0d0c; fill:none;" d="M104 100L112 99"/> <path style="stroke:#0d0d0c; fill:none;" d="M529 118L529 124M122 120C113.35 136.293 136.116 140.566 147 142.801C151.549 143.735 158.843 145.695 155.713 151.91C154.076 155.16 150.539 157.507 148.004 160.015C145.745 162.249 143.678 164.618 141.576 166.995C127.743 182.638 126.444 153.277 114.005 149.851C107.555 148.075 108.195 158.216 101.985 156.704C91.3444 154.112 87.9163 140.34 79 154C72.7916 150.515 68.5351 143.2 62 140.743C52.0116 136.988 51.1345 152.101 54 158"/> <path style="stroke:#0d0d0c; fill:none;" d="M198 126C187.594 134.551 171.467 142.961 159 148M437 168C443.132 161.122 446.051 145.767 456 143.207C462.996 141.406 464.59 152.232 470.907 148.882C477.573 145.347 484.319 120.674 494.829 127.617C497.205 129.188 499.082 131.925 501 134"/> <path style="stroke:#0d0d0c; fill:none;" d="M586 131L590 130"/> <path style="stroke:#0d0d0c; fill:none;" d="M55 189C50.2941 189.866 28.3777 195.753 29.5818 185.981C30.1918 181.03 38.587 177.337 36.7438 172.105C34.7782 166.525 11.3102 159.493 19.6042 150.703C27.5882 142.241 42.353 153.222 51 154"/> <path style="stroke:#0d0d0c; fill:none;" d="M468 151L468 156"/> <path style="stroke:#0d0d0c; fill:none;" d="M559 156L563 158"/> <path style="stroke:#0d0d0c; fill:none;" d="M133 174C131.264 182.065 126.075 188.496 122.851 196C121.519 199.101 120.525 204.111 117.582 206.111C114.055 208.508 108.126 207.634 104 209.865C98.46 212.86 89.8004 218.832 83.1335 216.092C77.5008 213.777 81.4971 206.584 77.5123 204.201C70.1137 199.778 53.4439 215.671 53.1829 197.002C53.1503 194.672 53.709 192.304 54 190M533 178C532.588 197.358 508.082 199.137 493 197"/> <path style="stroke:#0d0d0c; fill:none;" d="M155 232C144.718 221.595 147.775 205.561 157.591 195.174C161.687 190.841 172.823 184.267 178.775 188.618C181.371 190.515 182.422 194.052 183.254 197C187.512 212.085 172.898 214.375 164 223.015C158.667 228.194 153.496 233.298 158.279 240.851C161.808 246.425 173.586 242.096 177.906 239.157C185.842 233.757 188.758 215.775 184 208"/> <path style="stroke:#0d0d0c; fill:none;" d="M83 198L79 203M498 200C502.547 218.254 476.247 211.068 468 217"/> <path style="stroke:#0d0d0c; fill:none;" d="M540 230C543.768 221.713 563.321 200.443 573.981 205.357C579.709 207.998 577.689 215.058 582.303 217.968C589.208 222.324 617.533 212.669 609.282 232.996C605.693 241.839 594.925 240.957 589.746 247.418C584.038 254.539 595.713 263.422 586.891 270.49C576.734 278.628 565.078 268.507 555.228 272.618C550.978 274.391 551.105 280.142 545.995 281.566C536.272 284.276 527.404 278.485 518.058 279.122C513.518 279.431 513.307 285.305 508.956 286.566C501.078 288.85 477.919 281.142 474.028 273.945C469.997 266.489 473 250.446 473 242M117 208L114.039 234L117 279C108.665 281.182 107.238 289.644 99.9961 293.427C91.7547 297.732 92.0709 287.552 85.9568 287.971C78.8469 288.457 63.4272 308.381 61.304 290.005C61.0467 287.777 61.3927 286.114 62 284C54.0309 281.987 39.2663 290.358 32.7423 283.411C23.076 273.119 49.2346 269.034 51.9329 263.867C54.8447 258.29 48.0456 251.866 51.8727 246.214C57.4674 237.951 66.6412 245.378 73.8912 244.393C79.4083 243.643 77.4153 235.264 84.0046 234.438C94.3082 233.146 102.946 244.638 113 246"/> <path style="stroke:#0d0d0c; fill:none;" d="M380.995 214.873C388.98 215.826 389.38 228.13 391.482 234C393.014 238.278 396.681 241.425 397.478 246C400.098 261.056 389.805 279.065 373.004 276.837C365.096 275.788 365.845 267.68 362.57 262.471C360.114 258.563 354.805 258.064 353.662 252.985C350.158 237.408 362.85 212.706 380.995 214.873"/> <path style="stroke:#0d0d0c; fill:none;" d="M506 232C518.944 225.83 530.275 206.178 543 222"/> <path style="stroke:#0d0d0c; fill:none;" d="M392 237L363 261"/> <path style="stroke:#0d0d0c; fill:none;" d="M76 245L84 253M223 253C226.415 292.114 271.841 293.458 292 267"/> <path style="stroke:#0d0d0c; fill:none;" d="M549 267L554 272"/> <path style="stroke:#0d0d0c; fill:none;" d="M512 274L515 278M473 276C464.645 320.845 444.428 360.077 403 383.138C391.799 389.373 379.722 390.602 368 395L382.742 425L393 452C401.223 450.042 409.669 451.722 418 450.826C428.858 449.66 437.686 443.143 448 440.759C453.283 439.538 458.597 441.202 464 439.316C480.571 433.53 494.372 419.68 510 411.756C518.421 407.486 527.88 403.294 537 400.785C539.727 400.035 544.873 399.018 546.382 402.318C549.861 409.929 537.173 426.479 533.745 433C517.036 464.779 494.82 495.066 462 511.244C451.18 516.577 439.698 515.54 429.005 519.603C423.799 521.582 423.692 526.143 427.309 529.772C436.391 538.883 457.524 535.93 469 535.089C535.048 530.247 552.913 461.4 583.746 416C592.766 402.718 602.773 391.143 616 381.861C619.683 379.277 627.715 374.862 626.208 369.188C625.113 365.07 618.511 363.589 615 362.64C602.873 359.365 590.434 360 578 360C567.25 360 557.625 353.306 547.005 357.728C539.089 361.023 544.333 369.673 538.686 374.258C526.938 383.794 503.008 362.381 497 354M117 279C122.968 287.759 123.983 298.959 129.696 308C146.346 334.349 165.875 346.752 192 362C187.159 377.276 179.797 391.571 175.025 407C171.796 417.445 171.413 428.66 168.072 439C165.425 447.191 155.057 453.545 155.782 462.941C156.437 471.423 172.062 462.292 175.972 466.693C180.034 471.265 174.445 480.639 179.589 485.382C185.476 490.812 190.096 479.112 195.015 478.443C199.65 477.813 202.092 483.643 206.039 485.091C215.785 488.667 216.098 474.409 219 469C230.437 477.198 233.215 489.69 239.37 502C246.179 515.618 254.693 528.838 265.09 540C280.022 556.032 306.668 575.169 330 573.62C337.612 573.115 342.452 564.459 350 564.505C356.858 564.546 363.246 572.955 371 574L366 548"/> <path style="stroke:#0d0d0c; fill:none;" d="M466 311C476.186 319.613 490.602 306.325 502.999 307.045C510.475 307.479 508.767 315.559 514.147 316.512C523.153 318.106 533.768 305.788 542.682 310.313C548.189 313.109 541.769 322.68 549.059 324.682C556.853 326.822 577.553 320.374 579.64 332.015C581.564 342.743 566.544 346.324 562 354"/> <path style="stroke:#0d0d0c; fill:none;" d="M513 317L506 324"/> <path style="stroke:#0d0d0c; fill:none;" d="M539 326L544 324"/> <path style="stroke:#0d0d0c; fill:none;" d="M453 339C462.148 348.341 469.818 362.967 482 368.583C489.007 371.814 498.211 371.763 500 363"/> <path style="stroke:#0d0d0c; fill:none;" d="M516 374C510.307 381.254 500.285 385.961 493 391.668C476.919 404.267 459.597 420.001 450 438"/> <path style="stroke:#0d0d0c; fill:none;" d="M363 395L368 395M335 396C334.759 408.055 337.133 419.948 336.981 432C336.876 440.372 334.401 448.581 334.746 457C335.005 463.316 340.734 475.03 336.972 480.682C332.472 487.444 321.06 477.861 315.09 479.634C310.689 480.941 308.446 487.09 303.044 485.928C298.254 484.898 299.222 478.336 294.853 477.407C290.597 476.503 278.968 483.01 276.643 477.681C273.886 471.364 280.793 463.083 281.699 457C284.425 438.706 284.548 420.324 288 402M233 399L232.334 426L219 469"/> <path style="stroke:#0d0d0c; fill:none;" d="M393 452L394 471"/> <path style="stroke:#0d0d0c; fill:none;" d="M276 502L305 513.388L325.892 517.742L333.258 531L349 562"/> <path style="stroke:#0d0d0c; fill:none;" d="M371 574C388.68 590.494 405.757 562.442 406.91 546C407.277 540.773 405.994 531.851 409.028 527.318C411.359 523.834 419.231 524.162 423 524"/> <path style="stroke:#0d0d0c; fill:none;" d="M382 542C385.448 551.637 389.77 560.704 397 568M325 544C326.665 552.637 333.617 561.221 339 568M312 550L320 571"/> </svg> `);
 
     global.StampLib = {
         getAtd: getAtd,
@@ -1744,6 +1565,8 @@ document.body.appendChild(printoverlay);
         writeStampAt: writeStampAt,
         stamps: {
             "axolotl": axolotlStamp,
+            "greatJob": greatJobStamp,
+            "cuteAxolotl": cuteAxolotl,
         },
         private: {
             axolotlStamp: axolotlStamp,
@@ -1772,6 +1595,260 @@ document.body.appendChild(printoverlay);
     }
     global.stamp = global.StampLib;
 })(window);
+const customToolbar = document.createElement("div");
+customToolbar.className = "customToolbar";
+customToolbar.style.display = "none";
+document.body.appendChild(customToolbar);
+
+function makebtn(className, innerText, container, fn) {
+    let btn = document.createElement("button");
+    btn.className = className;
+    btn.innerHTML = innerText;
+    container.appendChild(btn);
+    btn.onclick = fn;
+    return btn;
+}
+
+makebtn("headerZindexBtn", "H", customToolbar, () => {
+    let header = document.getElementsByClassName("grading-header")[0];
+    if (header.classList.contains("z300")) {
+        header.classList.remove("z300");
+    } else {
+        header.classList.add("z300");
+    }
+});
+
+makebtn("shiftbtn", "↕", customToolbar, () => {
+    let container = document.getElementsByClassName("worksheet-container")[0];
+    if (container.classList.contains("shiftup")) {
+        container.classList.remove("shiftup");
+    } else {
+        container.classList.add("shiftup");
+    }
+});
+
+const xallbtn = makebtn("xallbtn", "x all", customToolbar, () => {
+    document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
+    xallbtn.blur();
+});
+
+const drawtab = document.createElement("div");
+drawtab.className = "drawtab";
+drawtab.style.display = "none";
+customToolbar.appendChild(drawtab);
+
+drawtab.addEventListener("mouseleave", () => {
+    drawtab.style.display = "none";
+});
+
+function updatePenSettings() {
+    StampLib.setPenColorHex(pencolorbtn.value);
+    StampLib.setHighlighter(highlighter.checked);
+}
+
+const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
+    drawtab.style.display = "unset";
+    drawtab.focus();
+    updatePenSettings();
+});
+
+makebtn("textbtn squarebtn", "abc", drawtab, () => {
+    texttab.style.display = "unset";
+    textarea.focus();
+    textarea.select();
+});
+
+const texttab = document.createElement("div");
+texttab.className = "texttab";
+texttab.style.display = "none";
+drawtab.appendChild(texttab);
+
+texttab.addEventListener("mouseleave", () => {
+    texttab.style.display = "none";
+});
+
+/* scale = font size / 57 */
+const FONTSCALECONVERSION = 57;
+
+const sizeslider = document.createElement("input");
+sizeslider.className = "sizeslider";
+sizeslider.type = "range";
+sizeslider.value = 20;
+sizeslider.min = FONTSCALECONVERSION * 0.2; // 0.2 scale
+sizeslider.max = FONTSCALECONVERSION * 1.0; // 1.0 scale
+texttab.appendChild(sizeslider);
+sizeslider.addEventListener("input", (e) => {
+    textarea.style["font-size"] = `${e.target.value}px`;
+    updateTextAreaSize();
+});
+
+function getScale() {
+    return sizeslider.value / FONTSCALECONVERSION;
+}
+
+makebtn("undoLast squarebtn", "&#11148;", drawtab, () => {
+    StampLib.undoLastWriteAll();
+});
+
+makebtn("textprintbtn", "print", texttab, (e) => {
+    let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
+    let printPreviewDiv = document.createElement("div");
+    printPreviewDiv.className = "printPreviewDiv";
+    printPreviewDiv.style.height = `${writeDimensions.height}px`;
+    printPreviewDiv.style.width = `${writeDimensions.width}px`;
+    printPreviewDiv.style.left = `${e.clientX}px`;
+    printPreviewDiv.style.top = `${e.clientY}px`;
+    printPreviewDiv.style["border-color"] = pencolorbtn.value;
+    printoverlay.appendChild(printPreviewDiv);
+    let mousemovehandler = (e) => {
+        printPreviewDiv.animate({
+            left: `${e.clientX}px`,
+            top: `${e.clientY}px`,
+        }, {duration: 100, fill: "forwards"});
+    };
+    printoverlay.addEventListener("pointermove", mousemovehandler);
+    let printclickhandler = (e) => {
+        try {
+            drawtab.style.display = "none";
+            let atd = StampLib.getAtd();
+            let canvasRect = atd.bcanvas.getBoundingClientRect();
+            let zoomRatio = atd.drawingContext.zoomRatio;
+
+            if (
+                e.clientX < canvasRect.left
+                || e.clientY < canvasRect.top
+                || e.clientX > canvasRect.right
+                || e.clientY > canvasRect.bottom
+            ) {
+                console.log("Outside bounds");
+                return;
+            }
+
+            let position = {
+                x: (e.clientX - canvasRect.left) / zoomRatio,
+                y: (e.clientY - canvasRect.top) / zoomRatio,
+            }
+
+            StampLib.writeAllAt(textarea.value, position, getScale(), {color: pencolorbtn.value});
+        } finally {
+            printoverlay.style.display = "none";
+            printoverlay.removeEventListener("click", printclickhandler);
+            printoverlay.removeChild(printPreviewDiv);
+            printoverlay.removeEventListener("pointermove", mousemovehandler);
+        }
+    };
+    printoverlay.addEventListener("click", printclickhandler);
+    printoverlay.style.display = "unset";
+});
+
+const pencolorbtn = document.createElement("input");
+pencolorbtn.type = "color";
+pencolorbtn.value = "#ff2200";
+pencolorbtn.className = "pencolorbtn";
+function updatePenColor() {
+    textarea.style.color = this.value;
+    updatePenSettings();
+}
+pencolorbtn.addEventListener("input", updatePenColor);
+pencolorbtn.addEventListener("change", updatePenColor);
+pencolorbtn.addEventListener("blur", updatePenColor);
+drawtab.appendChild(pencolorbtn);
+
+const highlighter = document.createElement("input");
+highlighter.type = "checkbox";
+highlighter.id = "highlighter";
+drawtab.appendChild(highlighter);
+highlighter.addEventListener("change", function() {
+    updatePenSettings();
+})
+const highlighterlabel = document.createElement("label");
+highlighterlabel.setAttribute("for", highlighter.id);
+highlighterlabel.innerText = "Highlighter";
+drawtab.appendChild(highlighterlabel);
+
+function makeStamp(stamp, name) {
+    let btn = document.createElement("button");
+    btn.className = "stampbtn";
+    btn.appendChild(stamp.svg);
+    drawtab.appendChild(btn);
+    let stampDimensions = StampLib.getWriteStampDimensions(stamp, 1);
+    let maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
+    btn.setAttribute("maxScaleFactor", maxScaleFactor);
+    btn.onclick = (e) => {
+        let scale = getScale() * maxScaleFactor;
+        let writeDimensions = {width: stampDimensions.width * scale, height: stampDimensions.height * scale};
+        let printPreviewDiv = document.createElement("div");
+        printPreviewDiv.className = "printPreviewDiv";
+        printPreviewDiv.style.height = `${writeDimensions.height}px`;
+        printPreviewDiv.style.width = `${writeDimensions.width}px`;
+        printPreviewDiv.style.left = `${e.clientX}px`;
+        printPreviewDiv.style.top = `${e.clientY}px`;
+        printPreviewDiv.style["border-color"] = pencolorbtn.value;
+        printoverlay.appendChild(printPreviewDiv);
+        let mousemovehandler = (e) => {
+            printPreviewDiv.animate({
+                left: `${e.clientX}px`,
+                top: `${e.clientY}px`,
+            }, {duration: 100, fill: "forwards"});
+        };
+        printoverlay.addEventListener("pointermove", mousemovehandler);
+        let printclickhandler = (e) => {
+            try {
+                drawtab.style.display = "none";
+                let atd = StampLib.getAtd();
+                let canvasRect = atd.bcanvas.getBoundingClientRect();
+                let zoomRatio = atd.drawingContext.zoomRatio;
+
+                if (
+                    e.clientX < canvasRect.left
+                    || e.clientY < canvasRect.top
+                    || e.clientX > canvasRect.right
+                    || e.clientY > canvasRect.bottom
+                ) {
+                    console.log("Outside bounds");
+                    return;
+                }
+
+                let position = {
+                    x: (e.clientX - canvasRect.left) / zoomRatio,
+                    y: (e.clientY - canvasRect.top) / zoomRatio,
+                }
+
+                StampLib.writeStampAt(stamp, position, scale, {color: pencolorbtn.value});
+            } finally {
+                printoverlay.style.display = "none";
+                printoverlay.removeEventListener("click", printclickhandler);
+                printoverlay.removeChild(printPreviewDiv);
+                printoverlay.removeEventListener("pointermove", mousemovehandler);
+            }
+        };
+        printoverlay.addEventListener("click", printclickhandler);
+        printoverlay.style.display = "unset";
+    };
+    return btn;
+}
+
+for (let stampName in StampLib.stamps) {
+    makeStamp(StampLib.stamps[stampName], stampName);
+}
+
+const textarea = document.createElement("textarea");
+texttab.appendChild(textarea);
+textarea.style["font-size"] = "20px";
+textarea.style.color = "#ff2200";
+function updateTextAreaSize() {
+    textarea.style.height = "";
+    textarea.style.height = `${textarea.scrollHeight}px`;
+}
+textarea.addEventListener("input", updateTextAreaSize);
+
+
+const printoverlay = document.createElement("div");
+printoverlay.className = "printoverlay";
+document.body.appendChild(printoverlay);
+
+
+;
 // TODO up/down "scroll" buttons on 200+% or slightly reduce height
 let z = document.createElement("style");
 z.innerHTML = `
@@ -1835,13 +1912,19 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   top: 80px;
   border: 1px solid;
   width: 300px;
-  height: 100px;
   z-index: 253;
   right: 0px;
   background-color: rgb(240, 240, 247);
+  max-height: calc(-160px + 100vh);
+  /* overflow: auto; */
 }
 .drawtab button {
   height: 30px;
+}
+.drawtab button.stampbtn {
+  background: white;
+  height: 100px;
+  width: 100px;
 }
 .drawtab .squarebtn {
   width: 30px;
