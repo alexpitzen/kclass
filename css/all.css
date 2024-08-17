@@ -57,71 +57,52 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   position: absolute;
   top: 80px;
   border: 1px solid;
-  width: 300px;
+  width: 405px;
   z-index: 253;
   right: 0px;
   background-color: rgb(240, 240, 247);
   max-height: calc(-160px + 100vh);
-  /* overflow: auto; */
+  overflow: auto;
+  --sizeslider: 0.35;
 }
 .drawtab button {
   height: 30px;
 }
 .drawtab button.stampbtn {
   background: white;
-  height: 100px;
-  width: 100px;
+  height: 100%;
+  width: calc(var(--sizeslider) * var(--height-limiter) * 370px);
+  float: left;
 }
 .drawtab .squarebtn {
   width: 30px;
   margin: 10px;
 }
 .drawtab > input {
-  margin: 10px;
+  margin: 7px;
 }
 .drawtab > input[type=checkbox] {
   margin-right: 3px;
 }
-
-.textbtn {
-  padding: 0px;
+.drawtab label {
+  font-size: 12px;
 }
-
-.undoLast {
+.drawtab textarea {
+  max-width: calc(100% - 5px);
+  width: calc(100% - 6px);
+  min-width: calc(100% - 6px);
+  margin-bottom: -6px;
+  font-size: calc(var(--sizeslider) * 57px);
+}
+.drawtab .undoLast {
   padding-top: 3px;
 }
-
-.texttab {
-  width: 404px;
-  border: 1px solid;
-  position: absolute;
-  z-index: 254;
-  right: 0;
-  top: 15px;
-  background-color: rgb(240, 240, 247);
-}
-.texttab textarea {
-  max-width: calc(100% - 5px);
-  width: calc(100% - 5px);
-  min-width: calc(100% - 5px);
-  margin-bottom: -6px;
-}
-
-.sizeslider {
-  margin: 10px 20px;
-}
-
-.texttab .textcolorbtn {
+.drawtab .textprintbtn {
   margin: 10px;
 }
-.texttab .textprintbtn {
-  margin-left: 38px;
-  margin-bottom: 10px;
-  margin-top: 6px;
-}
-.texttab .textcolorbtn {
-  float: right;
-  margin-right: 6px;
+.drawtab .sizeslider {
+  position: sticky;
+  top: 13px;
 }
 
 .printoverlay {

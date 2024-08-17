@@ -1648,49 +1648,74 @@ function updatePenSettings() {
 
 const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
     drawtab.style.display = "unset";
-    drawtab.focus();
+    textarea.focus();
+    textarea.select();
     updatePenSettings();
 });
 
-makebtn("textbtn squarebtn", "abc", drawtab, () => {
-    texttab.style.display = "unset";
-    textarea.focus();
-    textarea.select();
-});
+// makebtn("textbtn squarebtn", "abc", drawtab, () => {
+//     texttab.style.display = "unset";
+//     textarea.focus();
+//     textarea.select();
+// });
 
-const texttab = document.createElement("div");
-texttab.className = "texttab";
-texttab.style.display = "none";
-drawtab.appendChild(texttab);
+// TODO move texttab contents into drawtab
 
-texttab.addEventListener("mouseleave", () => {
-    texttab.style.display = "none";
-});
+// const texttab = document.createElement("div");
+// texttab.className = "texttab";
+// texttab.style.display = "none";
+// drawtab.appendChild(texttab);
 
-/* scale = font size / 57 */
-const FONTSCALECONVERSION = 57;
+// texttab.addEventListener("mouseleave", () => {
+//     texttab.style.display = "none";
+// });
 
 const sizeslider = document.createElement("input");
 sizeslider.className = "sizeslider";
 sizeslider.type = "range";
-sizeslider.value = 20;
-sizeslider.min = FONTSCALECONVERSION * 0.2; // 0.2 scale
-sizeslider.max = FONTSCALECONVERSION * 1.0; // 1.0 scale
-texttab.appendChild(sizeslider);
+sizeslider.value = 35;
+sizeslider.min = 10;
+sizeslider.max = 100;
+drawtab.appendChild(sizeslider);
 sizeslider.addEventListener("input", (e) => {
-    textarea.style["font-size"] = `${e.target.value}px`;
+    drawtab.style.setProperty("--sizeslider", `${e.target.value} / 100`);
     updateTextAreaSize();
 });
 
 function getScale() {
-    return sizeslider.value / FONTSCALECONVERSION;
+    return sizeslider.value / 100;
 }
+
+const pencolorbtn = document.createElement("input");
+pencolorbtn.type = "color";
+pencolorbtn.value = "#ff2200";
+pencolorbtn.className = "pencolorbtn";
+function updatePenColor() {
+    textarea.style.color = this.value;
+    updatePenSettings();
+}
+pencolorbtn.addEventListener("input", updatePenColor);
+pencolorbtn.addEventListener("change", updatePenColor);
+pencolorbtn.addEventListener("blur", updatePenColor);
+drawtab.appendChild(pencolorbtn);
+
+const highlighter = document.createElement("input");
+highlighter.type = "checkbox";
+highlighter.id = "highlighter";
+drawtab.appendChild(highlighter);
+highlighter.addEventListener("change", function() {
+    updatePenSettings();
+})
+const highlighterlabel = document.createElement("label");
+highlighterlabel.setAttribute("for", highlighter.id);
+highlighterlabel.innerText = "Highlighter";
+drawtab.appendChild(highlighterlabel);
 
 makebtn("undoLast squarebtn", "&#11148;", drawtab, () => {
     StampLib.undoLastWriteAll();
 });
 
-makebtn("textprintbtn", "print", texttab, (e) => {
+makebtn("textprintbtn", "text", drawtab, (e) => {
     let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
     let printPreviewDiv = document.createElement("div");
     printPreviewDiv.className = "printPreviewDiv";
@@ -1741,39 +1766,18 @@ makebtn("textprintbtn", "print", texttab, (e) => {
     printoverlay.style.display = "unset";
 });
 
-const pencolorbtn = document.createElement("input");
-pencolorbtn.type = "color";
-pencolorbtn.value = "#ff2200";
-pencolorbtn.className = "pencolorbtn";
-function updatePenColor() {
-    textarea.style.color = this.value;
-    updatePenSettings();
-}
-pencolorbtn.addEventListener("input", updatePenColor);
-pencolorbtn.addEventListener("change", updatePenColor);
-pencolorbtn.addEventListener("blur", updatePenColor);
-drawtab.appendChild(pencolorbtn);
-
-const highlighter = document.createElement("input");
-highlighter.type = "checkbox";
-highlighter.id = "highlighter";
-drawtab.appendChild(highlighter);
-highlighter.addEventListener("change", function() {
-    updatePenSettings();
-})
-const highlighterlabel = document.createElement("label");
-highlighterlabel.setAttribute("for", highlighter.id);
-highlighterlabel.innerText = "Highlighter";
-drawtab.appendChild(highlighterlabel);
-
 function makeStamp(stamp, name) {
     let btn = document.createElement("button");
     btn.className = "stampbtn";
     btn.appendChild(stamp.svg);
+    stamp.svg.addEventListener("mouseover", (e) => {
+        // Prevent a bunch of errors being sent because of some code looking at .className and assuming it's a string
+        e.stopPropagation();
+    })
     drawtab.appendChild(btn);
     let stampDimensions = StampLib.getWriteStampDimensions(stamp, 1);
     let maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
-    btn.setAttribute("maxScaleFactor", maxScaleFactor);
+    btn.style.setProperty("--height-limiter", stampDimensions.height <= stampDimensions.width ? 1 : stampDimensions.width / stampDimensions.height);
     btn.onclick = (e) => {
         let scale = getScale() * maxScaleFactor;
         let writeDimensions = {width: stampDimensions.width * scale, height: stampDimensions.height * scale};
@@ -1828,13 +1832,9 @@ function makeStamp(stamp, name) {
     return btn;
 }
 
-for (let stampName in StampLib.stamps) {
-    makeStamp(StampLib.stamps[stampName], stampName);
-}
-
 const textarea = document.createElement("textarea");
-texttab.appendChild(textarea);
-textarea.style["font-size"] = "20px";
+textarea.value = "Text";
+drawtab.appendChild(textarea);
 textarea.style.color = "#ff2200";
 function updateTextAreaSize() {
     textarea.style.height = "";
@@ -1842,6 +1842,10 @@ function updateTextAreaSize() {
 }
 textarea.addEventListener("input", updateTextAreaSize);
 
+
+for (let stampName in StampLib.stamps) {
+    makeStamp(StampLib.stamps[stampName], stampName);
+}
 
 const printoverlay = document.createElement("div");
 printoverlay.className = "printoverlay";
@@ -1911,71 +1915,52 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   position: absolute;
   top: 80px;
   border: 1px solid;
-  width: 300px;
+  width: 405px;
   z-index: 253;
   right: 0px;
   background-color: rgb(240, 240, 247);
   max-height: calc(-160px + 100vh);
-  /* overflow: auto; */
+  overflow: auto;
+  --sizeslider: 0.35;
 }
 .drawtab button {
   height: 30px;
 }
 .drawtab button.stampbtn {
   background: white;
-  height: 100px;
-  width: 100px;
+  height: 100%;
+  width: calc(var(--sizeslider) * var(--height-limiter) * 370px);
+  float: left;
 }
 .drawtab .squarebtn {
   width: 30px;
   margin: 10px;
 }
 .drawtab > input {
-  margin: 10px;
+  margin: 7px;
 }
 .drawtab > input[type=checkbox] {
   margin-right: 3px;
 }
-
-.textbtn {
-  padding: 0px;
+.drawtab label {
+  font-size: 12px;
 }
-
-.undoLast {
+.drawtab textarea {
+  max-width: calc(100% - 5px);
+  width: calc(100% - 6px);
+  min-width: calc(100% - 6px);
+  margin-bottom: -6px;
+  font-size: calc(var(--sizeslider) * 57px);
+}
+.drawtab .undoLast {
   padding-top: 3px;
 }
-
-.texttab {
-  width: 404px;
-  border: 1px solid;
-  position: absolute;
-  z-index: 254;
-  right: 0;
-  top: 15px;
-  background-color: rgb(240, 240, 247);
-}
-.texttab textarea {
-  max-width: calc(100% - 5px);
-  width: calc(100% - 5px);
-  min-width: calc(100% - 5px);
-  margin-bottom: -6px;
-}
-
-.sizeslider {
-  margin: 10px 20px;
-}
-
-.texttab .textcolorbtn {
+.drawtab .textprintbtn {
   margin: 10px;
 }
-.texttab .textprintbtn {
-  margin-left: 38px;
-  margin-bottom: 10px;
-  margin-top: 6px;
-}
-.texttab .textcolorbtn {
-  float: right;
-  margin-right: 6px;
+.drawtab .sizeslider {
+  position: sticky;
+  top: 13px;
 }
 
 .printoverlay {
