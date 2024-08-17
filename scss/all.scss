@@ -73,7 +73,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
             background: white;
             height: 100%;
             width: calc(var(--sizeslider) * var(--height-limiter) * 370px);
-            float: left;
+            margin: 4px;
         }
     }
     .squarebtn {
