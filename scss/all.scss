@@ -100,6 +100,13 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 
     .undoLast {
         padding-top: 3px;
+        position: sticky;
+        top: 10px;
+    }
+
+    .pencolorbtn {
+        position: sticky;
+        top: 10px;
     }
 
     .textprintbtn {
