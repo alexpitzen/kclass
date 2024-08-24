@@ -182,6 +182,7 @@ function makeStamp(stamp, name) {
     let maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
     btn.style.setProperty("--height-limiter", stampDimensions.height <= stampDimensions.width ? 1 : stampDimensions.width / stampDimensions.height);
     btn.onclick = (e) => {
+        drawtab.style.display = "none";
         let scale = getScale() * maxScaleFactor;
         let writeDimensions = {width: stampDimensions.width * scale, height: stampDimensions.height * scale};
         let printPreviewDiv = document.createElement("div");
@@ -191,6 +192,7 @@ function makeStamp(stamp, name) {
         printPreviewDiv.style.left = `${e.clientX}px`;
         printPreviewDiv.style.top = `${e.clientY}px`;
         printPreviewDiv.style["border-color"] = pencolorbtn.value;
+        printPreviewDiv.innerHTML = stamp.svg.outerHTML;
         printoverlay.appendChild(printPreviewDiv);
         let mousemovehandler = (e) => {
             printPreviewDiv.animate({
@@ -201,7 +203,6 @@ function makeStamp(stamp, name) {
         printoverlay.addEventListener("pointermove", mousemovehandler);
         let printclickhandler = (e) => {
             try {
-                drawtab.style.display = "none";
                 let atd = StampLib.getAtd();
                 let canvasRect = atd.bcanvas.getBoundingClientRect();
                 let zoomRatio = atd.drawingContext.zoomRatio;
