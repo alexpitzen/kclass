@@ -1582,19 +1582,19 @@
         getWriteStampDimensions: getWriteStampDimensions,
         writeStampAt: writeStampAt,
         stamps: {
-            "axolotl": axolotlStamp,
+            "youCanDoIt": youCanDoIt,
+            "excellentWorkStreaked2": excellentWorkStreaked2,
             "greatJob": greatJobStamp,
+            "newLevel": newLevel,
+            "axolotl": axolotlStamp,
             "cuteAxolotl": cuteAxolotl,
             "cuteCat": cuteCat,
-            "cuteFish": cuteFish,
             "cuteCrab": cuteCrab,
-            "cuteTurtle": cuteTurtle,
-            "newLevel": newLevel,
+            "cuteFish": cuteFish,
             "cuteHorse": cuteHorse,
+            "cuteTurtle": cuteTurtle,
             "tanjiro": tanjiro,
             //"thinkingFace": thinkingFace,
-            "excellentWorkStreaked2": excellentWorkStreaked2,
-            "youCanDoIt": youCanDoIt,
         },
         private: {
             axolotlStamp: axolotlStamp,
@@ -1701,7 +1701,7 @@ const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
 const sizeslider = document.createElement("input");
 sizeslider.className = "sizeslider";
 sizeslider.type = "range";
-sizeslider.value = 35;
+sizeslider.value = 33;
 sizeslider.min = 10;
 sizeslider.max = 100;
 drawtab.appendChild(sizeslider);
@@ -1950,7 +1950,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   background-color: rgb(240, 240, 247);
   max-height: calc(-160px + 100vh);
   overflow: auto;
-  --sizeslider: 0.35;
+  --sizeslider: 0.33;
 }
 .drawtab button {
   height: 30px;

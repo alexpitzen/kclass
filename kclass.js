@@ -76,7 +76,7 @@ const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
 const sizeslider = document.createElement("input");
 sizeslider.className = "sizeslider";
 sizeslider.type = "range";
-sizeslider.value = 35;
+sizeslider.value = 33;
 sizeslider.min = 10;
 sizeslider.max = 100;
 drawtab.appendChild(sizeslider);
