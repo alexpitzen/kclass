@@ -55,13 +55,13 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 
 .drawtab {
   position: absolute;
-  top: 80px;
+  top: -60px;
   border: 1px solid;
   width: 405px;
   z-index: 253;
   right: 0px;
   background-color: rgb(240, 240, 247);
-  max-height: calc(-160px + 100vh);
+  max-height: calc(-20px + 100vh);
   overflow: auto;
   --sizeslider: 0.33;
 }
@@ -78,12 +78,6 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   width: 30px;
   margin: 10px;
 }
-.drawtab > input {
-  margin: 7px;
-}
-.drawtab > input[type=checkbox] {
-  margin-right: 3px;
-}
 .drawtab label {
   font-size: 12px;
 }
@@ -94,21 +88,32 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   margin-bottom: -6px;
   font-size: calc(var(--sizeslider) * 57px);
 }
+.drawtab .header {
+  position: sticky;
+  top: 0px;
+  background-color: rgb(240, 240, 247);
+}
+.drawtab .header > input {
+  margin: 7px;
+}
+.drawtab .header > input[type=checkbox] {
+  margin-right: 3px;
+}
 .drawtab .undoLast {
   padding-top: 3px;
-  position: sticky;
-  top: 10px;
+  /* position: sticky; */
+  /* top: 10px; */
 }
 .drawtab .pencolorbtn {
-  position: sticky;
-  top: 10px;
+  /* position: sticky; */
+  /* top: 10px; */
 }
 .drawtab .textprintbtn {
   margin: 10px;
 }
 .drawtab .sizeslider {
-  position: sticky;
-  top: 13px;
+  /* position: sticky; */
+  /* top: 13px; */
 }
 
 .printoverlay {

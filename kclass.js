@@ -73,13 +73,17 @@ const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
 //     texttab.style.display = "none";
 // });
 
+const drawheader = document.createElement("div");
+drawheader.className = "header";
+drawtab.appendChild(drawheader);
+
 const sizeslider = document.createElement("input");
 sizeslider.className = "sizeslider";
 sizeslider.type = "range";
 sizeslider.value = 33;
 sizeslider.min = 10;
 sizeslider.max = 100;
-drawtab.appendChild(sizeslider);
+drawheader.appendChild(sizeslider);
 sizeslider.addEventListener("input", (e) => {
     drawtab.style.setProperty("--sizeslider", `${e.target.value} / 100`);
     updateTextAreaSize();
@@ -100,25 +104,25 @@ function updatePenColor() {
 pencolorbtn.addEventListener("input", updatePenColor);
 pencolorbtn.addEventListener("change", updatePenColor);
 pencolorbtn.addEventListener("blur", updatePenColor);
-drawtab.appendChild(pencolorbtn);
+drawheader.appendChild(pencolorbtn);
 
 const highlighter = document.createElement("input");
 highlighter.type = "checkbox";
 highlighter.id = "highlighter";
-drawtab.appendChild(highlighter);
+drawheader.appendChild(highlighter);
 highlighter.addEventListener("change", function() {
     updatePenSettings();
 })
 const highlighterlabel = document.createElement("label");
 highlighterlabel.setAttribute("for", highlighter.id);
 highlighterlabel.innerText = "Highlighter";
-drawtab.appendChild(highlighterlabel);
+drawheader.appendChild(highlighterlabel);
 
-makebtn("undoLast squarebtn", "&#11148;", drawtab, () => {
+makebtn("undoLast squarebtn", "&#11148;", drawheader, () => {
     StampLib.undoLastWriteAll();
 });
 
-makebtn("textprintbtn", "text", drawtab, (e) => {
+makebtn("textprintbtn", "text", drawheader, (e) => {
     let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
     let printPreviewDiv = document.createElement("div");
     printPreviewDiv.className = "printPreviewDiv";
@@ -169,6 +173,10 @@ makebtn("textprintbtn", "text", drawtab, (e) => {
     printoverlay.style.display = "unset";
 });
 
+const drawstamps = document.createElement("div");
+drawstamps.className = "stamps";
+drawtab.appendChild(drawstamps);
+
 function makeStamp(stamp, name) {
     let btn = document.createElement("button");
     btn.className = "stampbtn";
@@ -177,7 +185,7 @@ function makeStamp(stamp, name) {
         // Prevent a bunch of errors being sent because of some code looking at .className and assuming it's a string
         e.stopPropagation();
     })
-    drawtab.appendChild(btn);
+    drawstamps.appendChild(btn);
     let stampDimensions = StampLib.getWriteStampDimensions(stamp, 1);
     let maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
     btn.style.setProperty("--height-limiter", stampDimensions.height <= stampDimensions.width ? 1 : stampDimensions.width / stampDimensions.height);
@@ -222,7 +230,13 @@ function makeStamp(stamp, name) {
                     y: (e.clientY - canvasRect.top) / zoomRatio,
                 }
 
-                StampLib.writeStampAt(stamp, position, scale, {color: pencolorbtn.value});
+                let options = {
+                    color: pencolorbtn.value,
+                    rainbow: rainbowstamp.checked,
+                    rainbowspeed: rainbowspeed.value,
+                };
+
+                StampLib.writeStampAt(stamp, position, scale, options);
             } finally {
                 printoverlay.style.display = "none";
                 printoverlay.removeEventListener("click", printclickhandler);
@@ -238,7 +252,7 @@ function makeStamp(stamp, name) {
 
 const textarea = document.createElement("textarea");
 textarea.value = "Text";
-drawtab.appendChild(textarea);
+drawheader.appendChild(textarea);
 textarea.style.color = "#ff2200";
 function updateTextAreaSize() {
     textarea.style.height = "";
@@ -246,6 +260,30 @@ function updateTextAreaSize() {
 }
 textarea.addEventListener("input", updateTextAreaSize);
 
+const rainbowstamp = document.createElement("input");
+rainbowstamp.type = "checkbox";
+rainbowstamp.id = "rainbowstamp";
+drawheader.appendChild(rainbowstamp);
+rainbowstamp.addEventListener("change", function() {
+    if (rainbowstamp.checked) {
+        rainbowspeed.removeAttribute("disabled");
+    } else {
+        rainbowspeed.setAttribute("disabled", "");
+    }
+})
+const rainbowstamplabel = document.createElement("label");
+rainbowstamplabel.setAttribute("for", rainbowstamp.id);
+rainbowstamplabel.innerText = "Rainbow Stamps";
+drawheader.appendChild(rainbowstamplabel);
+
+const rainbowspeed = document.createElement("input");
+rainbowspeed.className = "rainbowspeed";
+rainbowspeed.type = "range";
+rainbowspeed.value = 1;
+rainbowspeed.min = 1;
+rainbowspeed.max = 30;
+rainbowspeed.setAttribute("disabled", "");
+drawheader.appendChild(rainbowspeed);
 
 for (let stampName in StampLib.stamps) {
     makeStamp(StampLib.stamps[stampName], stampName);

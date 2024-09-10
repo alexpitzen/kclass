@@ -55,14 +55,14 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 
 .drawtab {
     position: absolute;
-    top: 80px;
+    top: -60px;
     border: 1px solid;
     width: 405px;
     z-index: 253;
     right: 0px;
     background-color: rgb(240, 240, 247);
 
-    max-height: calc(-160px + 100vh);
+    max-height: calc(-20px + 100vh);
     overflow: auto;
 
     --sizeslider: 0.33;
@@ -80,12 +80,6 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
         width: 30px;
         margin: 10px;
     }
-    > input {
-        margin: 7px;
-        &[type='checkbox'] {
-            margin-right: 3px;
-        }
-    }
     label {
         font-size: 12px;
     }
@@ -98,15 +92,27 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
         font-size: calc(var(--sizeslider) * 57px);
     }
 
+    .header {
+        position: sticky;
+        top: 0px;
+        background-color: rgb(240, 240, 247);
+        > input {
+            margin: 7px;
+            &[type='checkbox'] {
+                margin-right: 3px;
+            }
+        }
+    }
+
     .undoLast {
         padding-top: 3px;
-        position: sticky;
-        top: 10px;
+        /* position: sticky; */
+        /* top: 10px; */
     }
 
     .pencolorbtn {
-        position: sticky;
-        top: 10px;
+        /* position: sticky; */
+        /* top: 10px; */
     }
 
     .textprintbtn {
@@ -114,8 +120,8 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     }
 
     .sizeslider {
-        position: sticky;
-        top: 13px;
+        /* position: sticky; */
+        /* top: 13px; */
     }
 }
 
