@@ -202,6 +202,10 @@ function makeStamp(stamp, name) {
         printPreviewDiv.style["border-color"] = pencolorbtn.value;
         printPreviewDiv.innerHTML = stamp.svg.outerHTML;
         printoverlay.appendChild(printPreviewDiv);
+        printoverlay.addEventListener("mouseover", (e) => {
+            // Prevent a bunch of errors being sent because of some code looking at .className and assuming it's a string
+            e.stopPropagation();
+        })
         let mousemovehandler = (e) => {
             printPreviewDiv.animate({
                 left: `${e.clientX}px`,
