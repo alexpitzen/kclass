@@ -285,7 +285,7 @@ rainbowspeed.className = "rainbowspeed";
 rainbowspeed.type = "range";
 rainbowspeed.value = 1;
 rainbowspeed.min = 1;
-rainbowspeed.max = 30;
+rainbowspeed.max = 130;
 rainbowspeed.setAttribute("disabled", "");
 drawheader.appendChild(rainbowspeed);
 
