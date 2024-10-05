@@ -80,7 +80,7 @@ drawtab.appendChild(drawheader);
 const sizeslider = document.createElement("input");
 sizeslider.className = "sizeslider";
 sizeslider.type = "range";
-sizeslider.value = 33;
+sizeslider.value = 25;
 sizeslider.min = 10;
 sizeslider.max = 100;
 drawheader.appendChild(sizeslider);
