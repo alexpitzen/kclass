@@ -65,7 +65,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     max-height: calc(-20px + 100vh);
     overflow: auto;
 
-    --sizeslider: 0.33;
+    --sizeslider: 0.25;
 
     button {
         height: 30px;
