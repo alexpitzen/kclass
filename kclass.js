@@ -123,6 +123,7 @@ makebtn("undoLast squarebtn", "&#11148;", drawheader, () => {
 });
 
 makebtn("textprintbtn", "text", drawheader, (e) => {
+    drawtab.style.display = "none";
     let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
     let printPreviewDiv = document.createElement("div");
     printPreviewDiv.className = "printPreviewDiv";
@@ -141,7 +142,6 @@ makebtn("textprintbtn", "text", drawheader, (e) => {
     printoverlay.addEventListener("pointermove", mousemovehandler);
     let printclickhandler = (e) => {
         try {
-            drawtab.style.display = "none";
             let atd = StampLib.getAtd();
             let canvasRect = atd.bcanvas.getBoundingClientRect();
             let zoomRatio = atd.drawingContext.zoomRatio;
