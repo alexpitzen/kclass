@@ -236,8 +236,9 @@ function makeStamp(stamp, name) {
 
                 let options = {
                     color: pencolorbtn.value,
-                    rainbow: rainbowstamp.checked,
+                    rainbow: stampColorType.value == "Rainbow",
                     rainbowspeed: rainbowspeed.value,
+                    usePredefinedColor: stampColorType.value == "Unchanged",
                 };
 
                 StampLib.writeStampAt(stamp, position, scale, options);
@@ -264,21 +265,29 @@ function updateTextAreaSize() {
 }
 textarea.addEventListener("input", updateTextAreaSize);
 
-const rainbowstamp = document.createElement("input");
-rainbowstamp.type = "checkbox";
-rainbowstamp.id = "rainbowstamp";
-drawheader.appendChild(rainbowstamp);
-rainbowstamp.addEventListener("change", function() {
-    if (rainbowstamp.checked) {
+const stampColorTypeLabel = document.createElement("label");
+stampColorTypeLabel.setAttribute("for", "stampColorType");
+stampColorTypeLabel.innerText = "Stamp Color: ";
+drawheader.appendChild(stampColorTypeLabel);
+
+const stampColorType = document.createElement("select");
+stampColorType.id = "stampColorType";
+drawheader.appendChild(stampColorType);
+
+for (let i = 0; i < 3; i++) {
+    let stampColorTypeOption = document.createElement("option");
+    stampColorTypeOption.innerText = ["Color Picker", "Rainbow", "Unchanged"][i];
+    stampColorType.appendChild(stampColorTypeOption);
+}
+stampColorType.value = "Color Picker";
+
+stampColorType.addEventListener("change", function() {
+    if (this.value == "Rainbow") {
         rainbowspeed.removeAttribute("disabled");
     } else {
         rainbowspeed.setAttribute("disabled", "");
     }
-})
-const rainbowstamplabel = document.createElement("label");
-rainbowstamplabel.setAttribute("for", rainbowstamp.id);
-rainbowstamplabel.innerText = "Rainbow Stamps";
-drawheader.appendChild(rainbowstamplabel);
+});
 
 const rainbowspeed = document.createElement("input");
 rainbowspeed.className = "rainbowspeed";
