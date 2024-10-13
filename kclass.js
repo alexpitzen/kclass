@@ -146,19 +146,29 @@ makebtn("textprintbtn", "text", drawheader, (e) => {
             let canvasRect = atd.bcanvas.getBoundingClientRect();
             let zoomRatio = atd.drawingContext.zoomRatio;
 
+            let [x, y] = [e.clientX, e.clientY];
+
+            // if it's close to the edge, just set it to the edge
+            if (e.clientX < canvasRect.left && e.clientX > canvasRect.left - 10) {
+                x = canvasRect.left;
+            }
+            if (e.clientY < canvasRect.top && e.clientY > canvasRect.top - 10) {
+                y = canvasRect.top;
+            }
+
             if (
-                e.clientX < canvasRect.left
-                || e.clientY < canvasRect.top
-                || e.clientX > canvasRect.right
-                || e.clientY > canvasRect.bottom
+                x < canvasRect.left
+                || y < canvasRect.top
+                || x > canvasRect.right
+                || y > canvasRect.bottom
             ) {
                 console.log("Outside bounds");
                 return;
             }
 
             let position = {
-                x: (e.clientX - canvasRect.left) / zoomRatio,
-                y: (e.clientY - canvasRect.top) / zoomRatio,
+                x: (x - canvasRect.left) / zoomRatio,
+                y: (y - canvasRect.top) / zoomRatio,
             }
 
             StampLib.writeAllAt(textarea.value, position, getScale(), {color: pencolorbtn.value});
@@ -219,19 +229,28 @@ function makeStamp(stamp) {
                 let canvasRect = atd.bcanvas.getBoundingClientRect();
                 let zoomRatio = atd.drawingContext.zoomRatio;
 
+                let [x, y] = [e.clientX, e.clientY];
+                // if it's close to the edge, just set it to the edge
+                if (e.clientX < canvasRect.left && e.clientX > canvasRect.left - 10) {
+                    x = canvasRect.left;
+                }
+                if (e.clientY < canvasRect.top && e.clientY > canvasRect.top - 10) {
+                    y = canvasRect.top;
+                }
+
                 if (
-                    e.clientX < canvasRect.left
-                    || e.clientY < canvasRect.top
-                    || e.clientX > canvasRect.right
-                    || e.clientY > canvasRect.bottom
+                    x < canvasRect.left
+                    || y < canvasRect.top
+                    || x > canvasRect.right
+                    || y > canvasRect.bottom
                 ) {
                     console.log("Outside bounds");
                     return;
                 }
 
                 let position = {
-                    x: (e.clientX - canvasRect.left) / zoomRatio,
-                    y: (e.clientY - canvasRect.top) / zoomRatio,
+                    x: (x - canvasRect.left) / zoomRatio,
+                    y: (y - canvasRect.top) / zoomRatio,
                 }
 
                 let options = {
