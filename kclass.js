@@ -177,15 +177,15 @@ const drawstamps = document.createElement("div");
 drawstamps.className = "stamps";
 drawtab.appendChild(drawstamps);
 
-function makeStamp(stamp, name) {
+function makeStamp(stamp) {
     let btn = document.createElement("button");
     btn.className = "stampbtn";
-    btn.appendChild(stamp.svg);
-    stamp.svg.addEventListener("mouseover", (e) => {
+    let svg = stamp.svg.cloneNode(true);
+    btn.appendChild(svg);
+    svg.addEventListener("mouseover", (e) => {
         // Prevent a bunch of errors being sent because of some code looking at .className and assuming it's a string
         e.stopPropagation();
-    })
-    drawstamps.appendChild(btn);
+    });
     let stampDimensions = StampLib.getWriteStampDimensions(stamp, 1);
     let maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
     btn.style.setProperty("--height-limiter", stampDimensions.height <= stampDimensions.width ? 1 : stampDimensions.width / stampDimensions.height);
@@ -200,7 +200,7 @@ function makeStamp(stamp, name) {
         printPreviewDiv.style.left = `${e.clientX}px`;
         printPreviewDiv.style.top = `${e.clientY}px`;
         printPreviewDiv.style["border-color"] = pencolorbtn.value;
-        printPreviewDiv.innerHTML = stamp.svg.outerHTML;
+        printPreviewDiv.innerHTML = svg.outerHTML;
         printoverlay.appendChild(printPreviewDiv);
         printoverlay.addEventListener("mouseover", (e) => {
             // Prevent a bunch of errors being sent because of some code looking at .className and assuming it's a string
@@ -298,8 +298,14 @@ rainbowspeed.max = 130;
 rainbowspeed.setAttribute("disabled", "");
 drawheader.appendChild(rainbowspeed);
 
-for (let stampName in StampLib.stamps) {
-    makeStamp(StampLib.stamps[stampName], stampName);
+for (let stampCategory in StampLib.stamps) {
+    const stampSection = document.createElement("details");
+    stampSection.innerHTML = `<summary>${stampCategory}</summary>`;
+    for (let stamp of StampLib.stamps[stampCategory]) {
+        let btn = makeStamp(stamp);
+        stampSection.appendChild(btn);
+    }
+    drawstamps.appendChild(stampSection);
 }
 
 const printoverlay = document.createElement("div");

@@ -73,6 +73,11 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   height: 100%;
   width: calc(var(--sizeslider) * var(--height-limiter) * 370px);
   margin: 4px;
+  padding: 0px;
+  border-width: 1px;
+}
+.drawtab button.stampbtn svg {
+  margin-bottom: -3px;
 }
 .drawtab .squarebtn {
   width: 30px;
