@@ -2196,7 +2196,12 @@ sizeslider.min = 10;
 sizeslider.max = 100;
 drawheader.appendChild(sizeslider);
 sizeslider.addEventListener("input", (e) => {
+    let scrollPercent = 0;
+    try {
+        scrollPercent = drawtab.scrollTop / (drawtab.scrollHeight - drawtab.clientHeight);
+    } catch {}
     drawtab.style.setProperty("--sizeslider", `${e.target.value} / 100`);
+    drawtab.scrollTop = scrollPercent * (drawtab.scrollHeight - drawtab.clientHeight);
     updateTextAreaSize();
 });
 
