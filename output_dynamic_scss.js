@@ -1238,9 +1238,6 @@
                 _incrementRainbow(col, rainbowspeed, rainbowmin, rainbowmax);
             }
         }
-        // Doesn't look important
-        atd.drawingBuffer = atd.currentLayer.Drawing.clone();
-        atd.penUpFunc(atd); // updates the models in angular
     }
 
     function writeAt(letter, pos, scale, atd, pointer, usePredefinedColor) {
@@ -1291,9 +1288,6 @@
                 atd.pen.col.B = b;
             }
         }
-        // Doesn't look important
-        atd.drawingBuffer = atd.currentLayer.Drawing.clone();
-        atd.penUpFunc(atd); // updates the models in angular
     }
 
     function drawCell(startPos, point, m, atd, pointer) {
