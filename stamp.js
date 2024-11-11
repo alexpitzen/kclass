@@ -78,6 +78,19 @@
         toString() {
             return this.xmlstring;
         }
+
+        getDimensions(scale) {
+            return {
+                min: {
+                    x: 0,
+                    y: 0,
+                },
+                max: {
+                    x: this.width * scale,
+                    y: this.height * scale,
+                }
+            };
+        }
     }
 
     class Stroke {

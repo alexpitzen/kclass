@@ -125,6 +125,12 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   border: 0px;
 }
 
+.stampPrintPreviewDiv {
+    border: 0px;
+    z-index: 997;
+    position: fixed;
+}
+
 .printPreviewDiv {
   border: 1px solid;
   z-index: 997;

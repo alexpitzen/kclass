@@ -92,6 +92,19 @@
         toString() {
             return this.xmlstring;
         }
+
+        getDimensions(scale) {
+            return {
+                min: {
+                    x: 0,
+                    y: 0,
+                },
+                max: {
+                    x: this.width * scale,
+                    y: this.height * scale,
+                }
+            };
+        }
     }
 
     class Stroke {
@@ -2323,7 +2336,7 @@ function makeStamp(stamp) {
         let scale = getScale() * maxScaleFactor;
         let writeDimensions = {width: stampDimensions.width * scale, height: stampDimensions.height * scale};
         let printPreviewDiv = document.createElement("div");
-        printPreviewDiv.className = "printPreviewDiv";
+        printPreviewDiv.className = "stampPrintPreviewDiv";
         printPreviewDiv.style.height = `${writeDimensions.height}px`;
         printPreviewDiv.style.width = `${writeDimensions.width}px`;
         printPreviewDiv.style.left = `${e.clientX}px`;
@@ -2334,7 +2347,7 @@ function makeStamp(stamp) {
         printoverlay.addEventListener("mouseover", (e) => {
             // Prevent a bunch of errors being sent because of some code looking at .className and assuming it's a string
             e.stopPropagation();
-        })
+        });
         let mousemovehandler = (e) => {
             printPreviewDiv.animate({
                 left: `${e.clientX}px`,
@@ -2349,7 +2362,7 @@ function makeStamp(stamp) {
                 let zoomRatio = atd.drawingContext.zoomRatio;
 
                 let [x, y] = [e.clientX, e.clientY];
-                // if it's close to the edge, just set it to the edge
+                // if it's outside but close to the edge, just set it to the edge
                 if (e.clientX < canvasRect.left && e.clientX > canvasRect.left - 10) {
                     x = canvasRect.left;
                 }
@@ -2580,6 +2593,12 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   z-index: 998;
   display: none;
   border: 0px;
+}
+
+.stampPrintPreviewDiv {
+    border: 0px;
+    z-index: 997;
+    position: fixed;
 }
 
 .printPreviewDiv {
