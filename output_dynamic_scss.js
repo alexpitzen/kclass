@@ -2532,6 +2532,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   right: 0px;
   background-color: rgb(240, 240, 247);
   max-height: calc(-20px + 100vh);
+  height: calc(-20px + 100vh);
   overflow: auto;
   --sizeslider: 0.25;
 }
