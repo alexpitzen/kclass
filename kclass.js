@@ -304,7 +304,7 @@ for (let i = 0; i < 4; i++) {
     stampColorTypeOption.innerText = ["Color Picker", "Rainbow", "Rainbow Fill", "Unchanged"][i];
     stampColorType.appendChild(stampColorTypeOption);
 }
-stampColorType.value = "Color Picker";
+stampColorType.value = "Unchanged";
 
 stampColorType.addEventListener("change", function() {
     if (this.value == "Rainbow" || this.value == "Rainbow Fill") {
@@ -313,6 +313,13 @@ stampColorType.addEventListener("change", function() {
         rainbowspeed.setAttribute("disabled", "");
     }
 });
+
+/* TODO - options
+ * unchanged outline
+ * remove fill outline
+ * no fill
+ * background
+ */
 
 const rainbowspeed = document.createElement("input");
 rainbowspeed.className = "rainbowspeed";
