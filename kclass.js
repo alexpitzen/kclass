@@ -260,9 +260,10 @@ function makeStamp(stamp) {
 
                 let options = {
                     color: pencolorbtn.value,
-                    rainbow: stampColorType.value == "Rainbow",
-                    rainbowspeed: rainbowspeed.value,
+                    rainbow: (stampColorType.value == "Rainbow" || stampColorType.value == "Rainbow Fill"),
+                    rainbowSpeed: parseFloat(rainbowspeed.value),
                     usePredefinedColor: stampColorType.value == "Unchanged",
+                    rainbowFill: stampColorType.value == "Rainbow Fill",
                 };
 
                 StampLib.writeStampAt(stamp, position, scale, options);
@@ -298,15 +299,15 @@ const stampColorType = document.createElement("select");
 stampColorType.id = "stampColorType";
 drawheader.appendChild(stampColorType);
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 4; i++) {
     let stampColorTypeOption = document.createElement("option");
-    stampColorTypeOption.innerText = ["Color Picker", "Rainbow", "Unchanged"][i];
+    stampColorTypeOption.innerText = ["Color Picker", "Rainbow", "Rainbow Fill", "Unchanged"][i];
     stampColorType.appendChild(stampColorTypeOption);
 }
 stampColorType.value = "Color Picker";
 
 stampColorType.addEventListener("change", function() {
-    if (this.value == "Rainbow") {
+    if (this.value == "Rainbow" || this.value == "Rainbow Fill") {
         rainbowspeed.removeAttribute("disabled");
     } else {
         rainbowspeed.setAttribute("disabled", "");
