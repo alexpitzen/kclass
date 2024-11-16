@@ -1327,59 +1327,18 @@
             // console.log(`stroke: ${stroke}`);
             // console.log(`typeof stroke: ${typeof stroke}`);
             // console.log(`stroke.lines: ${stroke.lines}`);
-
-            if (usePredefinedColor) {
-                let strokeColor = stroke.strokeColor;
-                if ((strokeColor || "none") == "none") {
-                    strokeColor = stroke.fillColor;
-                }
-                if (strokeColor || "none" != "none") {
-                    _setPenColorHex(atd, strokeColor);
-                    changedColor = true;
-                }
-            }
+            let fill = (stroke.fillColor || "none") != "none";
 
             let allStrokePoints = [];
-            for (let lines of stroke.lines) {
-                let strokePoints = []
-                let doneFirst = false;
-                atd.currentStroke = new InkTool.InkStroke(atd.pen);
-                atd.drawingContext.context = atd.dcanvas.getContext("2d");
-                for (let line of lines) {
-                    let points = line.getPoints(scale);
-                    if ((stroke.fillColor || "none") != "none") {
+            if (fill) {
+                for (let lines of stroke.lines) {
+                    let strokePoints = [];
+                    for (let line of lines) {
+                        let points = line.getPoints(scale);
                         strokePoints = strokePoints.concat(points);
                     }
-                    if (points.length < 3) {
-                        continue;
-                    }
-
-                    if (!doneFirst) {
-                        drawCell(pos, points[0], 0, atd, pointer);
-                        doneFirst = true;
-                    } else {
-                        drawCell(pos, points[0], 4, atd, pointer);
-                    }
-
-                    for (let i = 1; i < points.length; i++) {
-                        drawCell(pos, points[i], 4, atd, pointer);
-                    }
-                    lastPoint = points[points.length - 1];
+                    allStrokePoints.push(strokePoints);
                 }
-                drawCell(pos, lastPoint, 2, atd, pointer);
-                allStrokePoints.push(strokePoints);
-                // finishing point
-                atd.currentLayer.Drawing.is.push(atd.currentStroke);
-
-                newDrawCounter++;
-                if (rainbowSpeed > 0) {
-                    _incrementRainbow(atd.pen.col, rainbowSpeed, rainbowInfo);
-                    changedColor = true;
-                }
-            }
-
-
-            if ((stroke.fillColor || "none") != "none") {
                 // atd.pen.w /= 2;
                 if (usePredefinedColor) {
                     _setPenColorHex(atd, stroke.fillColor);
@@ -1410,6 +1369,49 @@
                     }
                 }
                 // atd.pen.w *= 2;
+            }
+
+            if (usePredefinedColor) {
+                let strokeColor = stroke.strokeColor;
+                if ((strokeColor || "none") == "none") {
+                    strokeColor = stroke.fillColor;
+                } else {
+                    _setPenColorHex(atd, strokeColor);
+                    changedColor = true;
+                }
+            }
+
+            for (let lines of stroke.lines) {
+                let doneFirst = false;
+                atd.currentStroke = new InkTool.InkStroke(atd.pen);
+                atd.drawingContext.context = atd.dcanvas.getContext("2d");
+                for (let line of lines) {
+                    let points = line.getPoints(scale);
+                    if (points.length < 3) {
+                        continue;
+                    }
+
+                    if (!doneFirst) {
+                        drawCell(pos, points[0], 0, atd, pointer);
+                        doneFirst = true;
+                    } else {
+                        drawCell(pos, points[0], 4, atd, pointer);
+                    }
+
+                    for (let i = 1; i < points.length; i++) {
+                        drawCell(pos, points[i], 4, atd, pointer);
+                    }
+                    lastPoint = points[points.length - 1];
+                }
+                drawCell(pos, lastPoint, 2, atd, pointer);
+                // finishing point
+                atd.currentLayer.Drawing.is.push(atd.currentStroke);
+
+                newDrawCounter++;
+                if (rainbowSpeed > 0) {
+                    _incrementRainbow(atd.pen.col, rainbowSpeed, rainbowInfo);
+                    changedColor = true;
+                }
             }
         }
         if (changedColor) {
@@ -1854,6 +1856,12 @@
     function getStyleInfo(element) {
         let style = element.getAttribute("style") || "";
         let styleInfo = {};
+        for (let key of ["stroke", "fill"]) {
+            let value = element.getAttribute(key) || null;
+            if (value !== null) {
+                styleInfo[key] = value;
+            }
+        }
         for (let match of style.matchAll(/[^;]*;?/g)) {
             try {
                 let [key, val] = match[0].split(":");
@@ -1863,33 +1871,7 @@
                 console.log(`unexpected style match ${match}. Style: ${style}`);
             }
         }
-        for (let key of ["stroke", "fill"]) {
-            let value = element.getAttribute(key) || null;
-            if (value !== null) {
-                styleInfo[key] = value;
-            }
-        }
-        return styleInfo
-    }
-
-    function getColor(element) {
-        let stroke = element.getAttribute("stroke") || "";
-        if (stroke) {
-            return stroke;
-        }
-        let style = element.getAttribute("style") || "";
-        for (let match of style.matchAll(/[^;]*;?/g)) {
-            try {
-                let [key, val] = match[0].split(":");
-                if (key == "stroke") {
-                    return val.substr(0, 7);
-                }
-            }
-            catch {
-                console.log(`unexpected style match ${match}. Style: ${style}`);
-            }
-        }
-        return null;
+        return styleInfo;
     }
 
     function parsePath(element, transformations, styleInfo) {
