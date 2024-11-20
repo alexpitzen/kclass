@@ -105,9 +105,18 @@
             this.lines = lines;
             this.strokeColor = strokeColor;
             this.fillColor = fillColor;
+            if (!this.doFill() && !this.doStroke()) {
+                this.fillColor = "#000000";
+            }
             if (this.lines.length > 0 && !Array.isArray(this.lines[0])) {
                 this.lines = [this.lines];
             }
+        }
+        doFill() {
+            return (this.fillColor || "none") != "none";
+        }
+        doStroke() {
+            return (this.strokeColor || "none") != "none";
         }
     }
     class Line {
@@ -1313,11 +1322,9 @@
             // console.log(`stroke: ${stroke}`);
             // console.log(`typeof stroke: ${typeof stroke}`);
             // console.log(`stroke.lines: ${stroke.lines}`);
-            let doFill = (stroke.fillColor || "none") != "none";
-            let doStroke = (stroke.strokeColor || "none") != "none";
 
             let allStrokePoints = [];
-            if (doFill) {
+            if (stroke.doFill()) {
                 for (let lines of stroke.lines) {
                     let strokePoints = [];
                     for (let line of lines) {
@@ -1358,7 +1365,7 @@
                 // atd.pen.w *= 2;
             }
 
-            if (doStroke) {
+            if (stroke.doStroke()) {
                 if (usePredefinedColor) {
                     let strokeColor = stroke.strokeColor;
                     if ((strokeColor || "none") == "none") {
