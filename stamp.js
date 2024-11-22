@@ -1338,89 +1338,33 @@
                     _setPenColorHex(atd, stroke.fillColor);
                     changedColor = true;
                 }
-                if (rainbowSpeed > 0 && rainbowFill) {
-                    let prevX = null;
-                    for (let line of getStrokeFillLines(allStrokePoints, atd.pen.w)) {
-                        let points = line.getPoints(1);
-                        if (points.length < 3) {
-                            continue;
-                        }
-
-                        // For rainbow, need a new line for each row
-                        atd.currentStroke = new InkTool.InkStroke(atd.pen);
-                        atd.drawingContext.context = atd.dcanvas.getContext("2d");
-
-                        if (prevX != null && points[0][0] != prevX) {
-                            _incrementRainbow(atd.pen.col, rainbowSpeed, rainbowInfo);
-                            changedColor = true;
-                        }
-                        prevX = points[0][0];
-
-                        drawCell(pos, points[0], 0, atd, pointer);
-
-                        for (let i = 1; i < points.length - 1; i++) {
-                            drawCell(pos, points[i], 4, atd, pointer);
-                        }
-
-                        // finishing point
-                        drawCell(pos, points[points.length - 1], 2, atd, pointer);
-                        atd.currentLayer.Drawing.is.push(atd.currentStroke);
-
-                        newDrawCounter++;
+                let prevX = null;
+                for (let line of getStrokeFillLines(allStrokePoints, atd.pen.w)) {
+                    let points = line.getPoints(1);
+                    if (points.length < 3) {
+                        continue;
                     }
-                } else {
-                    // Non-rainbow fill, let's optimize
-                    let strokeLines = getStrokeFillLines(allStrokePoints, atd.pen.w);
-                    while (strokeLines.length > 0) {
-                        atd.currentStroke = new InkTool.InkStroke(atd.pen);
-                        atd.drawingContext.context = atd.dcanvas.getContext("2d");
 
-                        let unfinished = [];
-                        let prevLine = null;
-                        let doneFirst = false;
-                        let lastPoint = null;
-                        for (let line of strokeLines) {
-                            if (prevLine && (
-                                Math.abs(line.start.y - prevLine.start.y - atd.pen.w) >= 0.01 // Not exactly one step down
-                                || line.end.x + 1 < prevLine.start.x // line is entirely left of prevLine
-                                || prevLine.end.x + 1 < line.start.x // prevLine is entirely left of line
-                            )) {
-                                unfinished.push(line);
-                                continue;
-                            }
+                    atd.currentStroke = new InkTool.InkStroke(atd.pen);
+                    atd.drawingContext.context = atd.dcanvas.getContext("2d");
 
-                            let points = line.getPoints(1);
-                            if (!doneFirst) {
-                                drawCell(pos, points[0], 0, atd, pointer);
-                                doneFirst = true;
-                            } else {
-                                // Go left as far as possible
-                                let x = Math.max(prevLine.start.x, line.start.x);
-                                for (let point of new Linear({x:prevLine.end.x, y:prevLine.end.y}, {x:x, y:prevLine.end.y}).getPoints(1)) {
-                                    drawCell(pos, point, 4, atd, pointer);
-                                }
-                                // Go down
-                                for (let point of new Linear({x:x, y:prevLine.end.y}, {x:x, y:line.start.y}).getPoints(1)) {
-                                    drawCell(pos, point, 4, atd, pointer);
-                                }
-                            }
-
-                            for (let i = 1; i < points.length; i++) {
-                                drawCell(pos, points[i], 4, atd, pointer);
-                            }
-
-                            lastPoint = points[points.length - 1];
-
-                            prevLine = line;
-                        }
-                        // finishing point
-                        drawCell(pos, lastPoint, 2, atd, pointer);
-                        atd.currentLayer.Drawing.is.push(atd.currentStroke);
-
-                        newDrawCounter++;
-
-                        strokeLines = unfinished;
+                    if (rainbowSpeed > 0 && rainbowFill && prevX != null && points[0][0] != prevX) {
+                        _incrementRainbow(atd.pen.col, rainbowSpeed, rainbowInfo);
+                        changedColor = true;
                     }
+                    prevX = points[0][0];
+
+                    drawCell(pos, points[0], 0, atd, pointer);
+
+                    for (let i = 1; i < points.length - 1; i++) {
+                        drawCell(pos, points[i], 4, atd, pointer);
+                    }
+
+                    // finishing point
+                    drawCell(pos, points[points.length - 1], 2, atd, pointer);
+                    atd.currentLayer.Drawing.is.push(atd.currentStroke);
+
+                    newDrawCounter++;
                 }
                 // atd.pen.w *= 2;
             }
