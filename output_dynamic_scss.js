@@ -195,16 +195,16 @@
         }
         getPoints(scale) {
             let mms = [
-                this.start.x < this.end.x ? 0.1 : -0.1,
-                this.start.y < this.end.y ? 0.1 : -0.1,
+                this.start.x < this.end.x ? 0.01 : this.start.x > this.end.x ? -0.01 : 0,
+                this.start.y < this.end.y ? 0.01 : this.start.y > this.end.y ? -0.01 : 0,
             ];
             return [
                 [this.start.x*scale, this.start.y*scale],
                 [this.start.x*scale + mms[0], this.start.y*scale + mms[1]],
                 [this.start.x*scale + mms[0] * 2, this.start.y*scale + mms[1] * 2],
-                [this.start.x*scale + mms[0] * 3, this.start.y*scale + mms[1] * 3],
+                // [this.start.x*scale + mms[0] * 3, this.start.y*scale + mms[1] * 3],
                 [(this.start.x + this.end.x)/2*scale, (this.start.y + this.end.y)/2*scale],
-                [this.end.x*scale - mms[0] * 3, this.end.y*scale - mms[1] * 3],
+                // [this.end.x*scale - mms[0] * 3, this.end.y*scale - mms[1] * 3],
                 [this.end.x*scale - mms[0] * 2, this.end.y*scale - mms[1] * 2],
                 [this.end.x*scale - mms[0] * 1, this.end.y*scale - mms[1] * 1],
                 [this.end.x*scale, this.end.y*scale],
@@ -1270,7 +1270,7 @@
     }
 
     function getStrokeFillLines(pointsLists, strokeWidth) {
-        strokeWidth /= 2;
+        // strokeWidth /= 2;
         let minX = null, minY = null, maxX = null, maxY = null;
         for (let pointsList of pointsLists) {
             for (let point of pointsList) {
@@ -1395,7 +1395,7 @@
                         let lastPoint = null;
                         for (let line of strokeLines) {
                             if (prevLine && (
-                                Math.abs(line.start.y - prevLine.start.y - atd.pen.w / 2) >= 0.01 // Not exactly one step down
+                                Math.abs(line.start.y - prevLine.start.y - atd.pen.w) >= 0.01 // Not exactly one step down
                                 || line.end.x + 1 < prevLine.start.x // line is entirely left of prevLine
                                 || prevLine.end.x + 1 < line.start.x // prevLine is entirely left of line
                             )) {
@@ -1408,21 +1408,14 @@
                                 drawCell(pos, points[0], 0, atd, pointer);
                                 doneFirst = true;
                             } else {
-                                if (prevLine.end.x >= line.start.x && prevLine.end.x <= line.end.x) {
-                                    // the last line ended between the new line's start & end, so just go down
-                                    // need to use Linear because otherwise it will arc when jumping to the start of line later
-                                    for (let point of new Linear({x:prevLine.end.x, y:prevLine.end.y}, {x:prevLine.end.x, y:line.start.y}).getPoints(1)) {
-                                        drawCell(pos, point, 4, atd, pointer);
-                                    }
-                                } else {
-                                    // last line didn't end between new line's start & end, so we can just
-                                    // go left to the new line's end and then go down
-                                    for (let point of new Linear({x:prevLine.end.x, y:prevLine.end.y}, {x:line.end.x, y:prevLine.end.y}).getPoints(1)) {
-                                        drawCell(pos, point, 4, atd, pointer);
-                                    }
-                                    for (let point of new Linear({x:line.end.x, y:prevLine.end.y}, {x:line.end.x, y:line.start.y}).getPoints(1)) {
-                                        drawCell(pos, point, 4, atd, pointer);
-                                    }
+                                // Go left as far as possible
+                                let x = Math.max(prevLine.start.x, line.start.x);
+                                for (let point of new Linear({x:prevLine.end.x, y:prevLine.end.y}, {x:x, y:prevLine.end.y}).getPoints(1)) {
+                                    drawCell(pos, point, 4, atd, pointer);
+                                }
+                                // Go down
+                                for (let point of new Linear({x:x, y:prevLine.end.y}, {x:x, y:line.start.y}).getPoints(1)) {
+                                    drawCell(pos, point, 4, atd, pointer);
                                 }
                             }
 
