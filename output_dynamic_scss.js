@@ -1352,7 +1352,7 @@
                     _setPenColorHex(atd, stroke.fillColor);
                     changedColor = true;
                 }
-                let prevX = null;
+                let prevY = null;
                 for (let line of getStrokeFillLines(allStrokePoints, atd.pen.w)) {
                     let points = line.getPoints(1);
                     if (points.length < 3) {
@@ -1362,11 +1362,11 @@
                     atd.currentStroke = new InkTool.InkStroke(atd.pen);
                     atd.drawingContext.context = atd.dcanvas.getContext("2d");
 
-                    if (rainbowSpeed > 0 && rainbowFill && prevX != null && points[0][0] != prevX) {
+                    if (rainbowSpeed > 0 && rainbowFill && prevY != null && points[0][1] != prevY) {
                         _incrementRainbow(atd.pen.col, rainbowSpeed, rainbowInfo);
                         changedColor = true;
                     }
-                    prevX = points[0][0];
+                    prevY = points[0][1];
 
                     drawCell(pos, points[0], 0, atd, pointer);
 
