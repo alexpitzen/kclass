@@ -319,6 +319,9 @@ stampColorType.addEventListener("change", function() {
  * remove fill outline
  * no fill
  * background
+ *
+ * clear button
+ * single line fill
  */
 
 const rainbowspeed = document.createElement("input");
