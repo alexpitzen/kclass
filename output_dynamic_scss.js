@@ -1120,6 +1120,20 @@
         return writeStampAt(stamp, {x:0, y:0}, scale, {}, true);
     }
 
+    function setPenSettings(settings) {
+        let atd = getAtd();
+        selectPen();
+        if (settings.color) {
+            _setPenColorHex(atd, settings.color);
+        }
+        if (settings.width) {
+            atd.pen.w = settings.width;
+        }
+        if (settings.alpha) {
+            atd.pen.col.A = settings.alpha;
+        }
+    }
+
     function setHighlighter(on = true) {
         selectPen();
         let atd = getAtd();
@@ -1130,6 +1144,11 @@
             atd.pen.w = 2;
             atd.pen.col.A = 255;
         }
+    }
+
+    function clearPage() {
+        let atd = getAtd();
+        atd.clearInk();
     }
 
     function undoLastWriteAll() {
@@ -2120,8 +2139,10 @@
         getAtd: getAtd,
         writeAllAt: writeAllAt,
         undoLastWriteAll: undoLastWriteAll,
+        clearPage: clearPage,
         setPenColorHex: setPenColorHex,
         setHighlighter: setHighlighter,
+        setPenSettings: setPenSettings,
         getWriteAllDimensions: getWriteAllDimensions,
         getWriteStampDimensions: getWriteStampDimensions,
         writeStampAt: writeStampAt,
@@ -2335,9 +2356,27 @@ drawtab.addEventListener("mouseleave", () => {
     drawtab.style.display = "none";
 });
 
+const penSettings = {
+    "pen": {
+        width: 2,
+        alpha: 255,
+    },
+    "thick-highlighter": {
+        width: 25,
+        alpha: 50
+    },
+    "thin-highlighter": {
+        width: 10,
+        alpha: 50
+    }
+}
+
 function updatePenSettings() {
-    StampLib.setPenColorHex(pencolorbtn.value);
-    StampLib.setHighlighter(highlighter.checked);
+    let penType = document.querySelector("input[name=penType]:checked")?.value || "pen";
+    StampLib.setPenSettings({
+        color: pencolorbtn.value,
+        ...penSettings[penType]
+    });
 }
 
 const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
@@ -2402,81 +2441,42 @@ pencolorbtn.addEventListener("change", updatePenColor);
 pencolorbtn.addEventListener("blur", updatePenColor);
 drawheader.appendChild(pencolorbtn);
 
-const highlighter = document.createElement("input");
-highlighter.type = "checkbox";
-highlighter.id = "highlighter";
-drawheader.appendChild(highlighter);
-highlighter.addEventListener("change", function() {
-    updatePenSettings();
-})
-const highlighterlabel = document.createElement("label");
-highlighterlabel.setAttribute("for", highlighter.id);
-highlighterlabel.innerText = "Highlighter";
-drawheader.appendChild(highlighterlabel);
+const penTypeContainer = document.createElement("fieldset");
+const penTypeLegend = document.createElement("legend");
+penTypeLegend.innerHTML = "Pen type:";
+penTypeContainer.appendChild(penTypeLegend);
+
+function createPenType(type, text, checked=false) {
+    let div = document.createElement("div");
+    let input = document.createElement("input");
+    input.type = "radio";
+    input.name = "penType";
+    input.id = type;
+    input.value = type;
+    input.checked = checked;
+    input.addEventListener("change", function() {
+        updatePenSettings();
+    })
+    let label = document.createElement("label");
+    label.setAttribute("for", input.id);
+    label.innerText = text;
+    div.appendChild(input);
+    div.appendChild(label);
+    return div;
+}
+
+penTypeContainer.appendChild(createPenType("pen", "Pen", true));
+penTypeContainer.appendChild(createPenType("thick-highlighter", "Highlighter"));
+penTypeContainer.appendChild(createPenType("thin-highlighter", "Thin highlighter"));
+
+drawheader.appendChild(penTypeContainer);
 
 makebtn("undoLast squarebtn", "&#11148;", drawheader, () => {
     StampLib.undoLastWriteAll();
 });
 
-makebtn("textprintbtn", "text", drawheader, (e) => {
-    drawtab.style.display = "none";
-    let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
-    let printPreviewDiv = document.createElement("div");
-    printPreviewDiv.className = "printPreviewDiv";
-    printPreviewDiv.style.height = `${writeDimensions.height}px`;
-    printPreviewDiv.style.width = `${writeDimensions.width}px`;
-    printPreviewDiv.style.left = `${e.clientX}px`;
-    printPreviewDiv.style.top = `${e.clientY}px`;
-    printPreviewDiv.style["border-color"] = pencolorbtn.value;
-    printoverlay.appendChild(printPreviewDiv);
-    let mousemovehandler = (e) => {
-        printPreviewDiv.animate({
-            left: `${e.clientX}px`,
-            top: `${e.clientY}px`,
-        }, {duration: 100, fill: "forwards"});
-    };
-    printoverlay.addEventListener("pointermove", mousemovehandler);
-    let printclickhandler = (e) => {
-        try {
-            let atd = StampLib.getAtd();
-            let canvasRect = atd.bcanvas.getBoundingClientRect();
-            let zoomRatio = atd.drawingContext.zoomRatio;
-
-            let [x, y] = [e.clientX, e.clientY];
-
-            // if it's close to the edge, just set it to the edge
-            if (e.clientX < canvasRect.left && e.clientX > canvasRect.left - 10) {
-                x = canvasRect.left;
-            }
-            if (e.clientY < canvasRect.top && e.clientY > canvasRect.top - 10) {
-                y = canvasRect.top;
-            }
-
-            if (
-                x < canvasRect.left
-                || y < canvasRect.top
-                || x > canvasRect.right
-                || y > canvasRect.bottom
-            ) {
-                console.log("Outside bounds");
-                return;
-            }
-
-            let position = {
-                x: (x - canvasRect.left) / zoomRatio,
-                y: (y - canvasRect.top) / zoomRatio,
-            }
-
-            StampLib.writeAllAt(textarea.value, position, getScale(), {color: pencolorbtn.value});
-        } finally {
-            printoverlay.style.display = "none";
-            printoverlay.removeEventListener("click", printclickhandler);
-            printoverlay.removeChild(printPreviewDiv);
-            printoverlay.removeEventListener("pointermove", mousemovehandler);
-        }
-    };
-    printoverlay.addEventListener("click", printclickhandler);
-    printoverlay.style.display = "unset";
+makebtn("clearAll", "clear", drawheader, () => {
+    StampLib.clearPage();
 });
 
 const drawstamps = document.createElement("div");
@@ -2571,15 +2571,79 @@ function makeStamp(stamp) {
     return btn;
 }
 
+const textareadiv = document.createElement("div");
+drawheader.appendChild(textareadiv);
+
 const textarea = document.createElement("textarea");
 textarea.value = "Text";
-drawheader.appendChild(textarea);
+textareadiv.appendChild(textarea);
 textarea.style.color = "#ff2200";
 function updateTextAreaSize() {
     textarea.style.height = "";
     textarea.style.height = `${textarea.scrollHeight}px`;
 }
 textarea.addEventListener("input", updateTextAreaSize);
+
+makebtn("textprintbtn squarebtn", "T", textareadiv, (e) => {
+    drawtab.style.display = "none";
+    let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
+    let printPreviewDiv = document.createElement("div");
+    printPreviewDiv.className = "printPreviewDiv";
+    printPreviewDiv.style.height = `${writeDimensions.height}px`;
+    printPreviewDiv.style.width = `${writeDimensions.width}px`;
+    printPreviewDiv.style.left = `${e.clientX}px`;
+    printPreviewDiv.style.top = `${e.clientY}px`;
+    printPreviewDiv.style["border-color"] = pencolorbtn.value;
+    printoverlay.appendChild(printPreviewDiv);
+    let mousemovehandler = (e) => {
+        printPreviewDiv.animate({
+            left: `${e.clientX}px`,
+            top: `${e.clientY}px`,
+        }, {duration: 100, fill: "forwards"});
+    };
+    printoverlay.addEventListener("pointermove", mousemovehandler);
+    let printclickhandler = (e) => {
+        try {
+            let atd = StampLib.getAtd();
+            let canvasRect = atd.bcanvas.getBoundingClientRect();
+            let zoomRatio = atd.drawingContext.zoomRatio;
+
+            let [x, y] = [e.clientX, e.clientY];
+
+            // if it's close to the edge, just set it to the edge
+            if (e.clientX < canvasRect.left && e.clientX > canvasRect.left - 10) {
+                x = canvasRect.left;
+            }
+            if (e.clientY < canvasRect.top && e.clientY > canvasRect.top - 10) {
+                y = canvasRect.top;
+            }
+
+            if (
+                x < canvasRect.left
+                || y < canvasRect.top
+                || x > canvasRect.right
+                || y > canvasRect.bottom
+            ) {
+                console.log("Outside bounds");
+                return;
+            }
+
+            let position = {
+                x: (x - canvasRect.left) / zoomRatio,
+                y: (y - canvasRect.top) / zoomRatio,
+            }
+
+            StampLib.writeAllAt(textarea.value, position, getScale(), {color: pencolorbtn.value});
+        } finally {
+            printoverlay.style.display = "none";
+            printoverlay.removeEventListener("click", printclickhandler);
+            printoverlay.removeChild(printPreviewDiv);
+            printoverlay.removeEventListener("pointermove", mousemovehandler);
+        }
+    };
+    printoverlay.addEventListener("click", printclickhandler);
+    printoverlay.style.display = "unset";
+});
 
 const stampColorTypeLabel = document.createElement("label");
 stampColorTypeLabel.setAttribute("for", "stampColorType");
@@ -2727,15 +2791,17 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 }
 .drawtab .squarebtn {
   width: 30px;
-  margin: 10px;
+  margin: 4px;
 }
-.drawtab label {
+.drawtab label, .drawtab legend {
   font-size: 12px;
+}
+.drawtab fieldset {
+  display: inline-grid;
 }
 .drawtab textarea {
   max-width: calc(100% - 5px);
-  width: calc(100% - 6px);
-  min-width: calc(100% - 6px);
+  width: calc(100% - 50px);
   margin-bottom: -6px;
   font-size: calc(var(--sizeslider) * 57px);
 }
@@ -2754,7 +2820,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   padding-top: 3px;
 }
 .drawtab .textprintbtn {
-  margin: 10px;
+  float: right;
 }
 .drawtab .rainbowspeed {
   width: 210px;
@@ -2772,9 +2838,9 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 }
 
 .stampPrintPreviewDiv {
-    border: 0px;
-    z-index: 997;
-    position: fixed;
+  border: 0px;
+  z-index: 997;
+  position: fixed;
 }
 
 .printPreviewDiv {

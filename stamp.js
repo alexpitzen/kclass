@@ -1106,6 +1106,20 @@
         return writeStampAt(stamp, {x:0, y:0}, scale, {}, true);
     }
 
+    function setPenSettings(settings) {
+        let atd = getAtd();
+        selectPen();
+        if (settings.color) {
+            _setPenColorHex(atd, settings.color);
+        }
+        if (settings.width) {
+            atd.pen.w = settings.width;
+        }
+        if (settings.alpha) {
+            atd.pen.col.A = settings.alpha;
+        }
+    }
+
     function setHighlighter(on = true) {
         selectPen();
         let atd = getAtd();
@@ -1116,6 +1130,11 @@
             atd.pen.w = 2;
             atd.pen.col.A = 255;
         }
+    }
+
+    function clearPage() {
+        let atd = getAtd();
+        atd.clearInk();
     }
 
     function undoLastWriteAll() {
@@ -2106,8 +2125,10 @@
         getAtd: getAtd,
         writeAllAt: writeAllAt,
         undoLastWriteAll: undoLastWriteAll,
+        clearPage: clearPage,
         setPenColorHex: setPenColorHex,
         setHighlighter: setHighlighter,
+        setPenSettings: setPenSettings,
         getWriteAllDimensions: getWriteAllDimensions,
         getWriteStampDimensions: getWriteStampDimensions,
         writeStampAt: writeStampAt,

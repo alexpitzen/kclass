@@ -82,15 +82,17 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 }
 .drawtab .squarebtn {
   width: 30px;
-  margin: 10px;
+  margin: 4px;
 }
-.drawtab label {
+.drawtab label, .drawtab legend {
   font-size: 12px;
+}
+.drawtab fieldset {
+  display: inline-grid;
 }
 .drawtab textarea {
   max-width: calc(100% - 5px);
-  width: calc(100% - 6px);
-  min-width: calc(100% - 6px);
+  width: calc(100% - 50px);
   margin-bottom: -6px;
   font-size: calc(var(--sizeslider) * 57px);
 }
@@ -109,7 +111,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   padding-top: 3px;
 }
 .drawtab .textprintbtn {
-  margin: 10px;
+  float: right;
 }
 .drawtab .rainbowspeed {
   width: 210px;
@@ -127,9 +129,9 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 }
 
 .stampPrintPreviewDiv {
-    border: 0px;
-    z-index: 997;
-    position: fixed;
+  border: 0px;
+  z-index: 997;
+  position: fixed;
 }
 
 .printPreviewDiv {

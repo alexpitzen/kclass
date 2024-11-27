@@ -61,8 +61,8 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     z-index: 253;
     right: 0px;
     background-color: rgb(240, 240, 247);
-
     max-height: calc(-20px + 100vh);
+    height: calc(-20px + 100vh);
     overflow: auto;
 
     --sizeslider: 0.25;
@@ -83,16 +83,19 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     }
     .squarebtn {
         width: 30px;
-        margin: 10px;
+        margin: 4px;
     }
-    label {
+    label, legend {
         font-size: 12px;
+    }
+
+    fieldset {
+        display: inline-grid;
     }
 
     textarea {
         max-width: calc(100% - 5px);
-        width: calc(100% - 6px);
-        min-width: calc(100% - 6px);
+        width: calc(100% - 50px);
         margin-bottom: -6px;
         font-size: calc(var(--sizeslider) * 57px);
     }
@@ -114,7 +117,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     }
 
     .textprintbtn {
-        margin: 10px;
+        float: right;
     }
 
     .rainbowspeed {
@@ -131,6 +134,12 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     z-index: 998;
     display: none;
     border: 0px;
+}
+
+.stampPrintPreviewDiv {
+    border: 0px;
+    z-index: 997;
+    position: fixed;
 }
 
 .printPreviewDiv {
