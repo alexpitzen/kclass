@@ -2849,6 +2849,17 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   position: fixed;
 }
 
+canvas[id^=inktool_ATD][id*=study-stroke] {
+  z-index: 1 !important;
+}
+canvas[id^=inktool_ATD][id*=red-comment][id$=_draw] {
+  z-index: 2 !important;
+}
+
+div.mark-boxs.worksheet-layer {
+  z-index: 3;
+}
+
 /*# sourceMappingURL=all.css.map */
 @media screen and (orientation: landscape) and (max-height: 733px) {
   .container {

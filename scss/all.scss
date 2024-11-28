@@ -147,3 +147,16 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     z-index: 997;
     position: fixed;
 }
+
+canvas[id^=inktool_ATD] {
+    &[id*=study-stroke] {
+        z-index: 1 !important;
+    }
+    &[id*=red-comment][id$=_draw] {
+        z-index: 2 !important;
+    }
+}
+
+div.mark-boxs.worksheet-layer {
+    z-index: 3;
+}
