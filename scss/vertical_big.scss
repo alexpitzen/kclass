@@ -5,6 +5,7 @@
     min-width: unset !important;
     padding-left: 0px !important;
   }
+  /* less width on marking list */
   .studentRow {
     .gradeColumn {
       flex: none !important;
@@ -49,6 +50,25 @@
         .time {
           width: unset !important;
         }
+      }
+    }
+  }
+  .navHeader {
+    .logoWrap {
+      display: none;
+    }
+    .tabItem {
+      padding: 18px 0 !important;
+    }
+  }
+  .filterHeader {
+    .selectFilter {
+      display: none !important;
+    }
+    app-student-list-filter-capsule {
+      margin: 0px !important;
+      div {
+        min-width: unset !important;
       }
     }
   }

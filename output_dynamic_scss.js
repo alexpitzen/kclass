@@ -3105,6 +3105,7 @@ div.mark-boxs.worksheet-layer {
     min-width: unset !important;
     padding-left: 0px !important;
   }
+  /* less width on marking list */
   .studentRow .gradeColumn {
     flex: none !important;
     min-width: unset !important;
@@ -3144,6 +3145,21 @@ div.mark-boxs.worksheet-layer {
   }
   .studentRow .subjectColumn .worksheetBar .time {
     width: unset !important;
+  }
+  .navHeader .logoWrap {
+    display: none;
+  }
+  .navHeader .tabItem {
+    padding: 18px 0 !important;
+  }
+  .filterHeader .selectFilter {
+    display: none !important;
+  }
+  .filterHeader app-student-list-filter-capsule {
+    margin: 0px !important;
+  }
+  .filterHeader app-student-list-filter-capsule div {
+    min-width: unset !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
     /* Show worksheet tool */
