@@ -1,14 +1,4 @@
 @media screen and (orientation:landscape) and (max-height:633px) {
-    /* Less space on grade column */
-    .studentRowHeader .gradeColumn {
-        width: unset !important;
-        min-width: unset !important;
-        padding-left: 0px !important;
-    }
-    .studentRow .gradeColumn {
-        flex: none !important;
-    }
-
     /* login page */
     div.root {
         min-width: unset !important;

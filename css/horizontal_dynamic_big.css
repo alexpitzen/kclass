@@ -1,4 +1,17 @@
 @media screen and (orientation: landscape) and (max-height: 733px) {
+  /* Less space on grade column */
+  .studentRowHeader .gradeColumn {
+    width: unset !important;
+    min-width: unset !important;
+    padding-left: 0px !important;
+  }
+  .studentRow .gradeColumn {
+    flex: none !important;
+    min-width: unset !important;
+  }
+  .studentRow .gradeColumn span {
+    margin-left: none !important;
+  }
   .container {
     min-width: unset !important;
   }
