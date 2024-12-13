@@ -8,9 +8,10 @@
   .studentRow .gradeColumn {
     flex: none !important;
     min-width: unset !important;
+    width: unset !important;
   }
   .studentRow .gradeColumn span {
-    margin-left: none !important;
+    margin-left: 0 !important;
   }
   .container {
     min-width: unset !important;

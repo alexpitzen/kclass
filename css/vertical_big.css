@@ -1,4 +1,50 @@
 @media screen and (orientation: portrait) and (max-width: 977px) {
+  /* Less space on grade column */
+  .studentRowHeader .gradeColumn {
+    width: unset !important;
+    min-width: unset !important;
+    padding-left: 0px !important;
+  }
+  .studentRow .gradeColumn {
+    flex: none !important;
+    min-width: unset !important;
+    width: unset !important;
+  }
+  .studentRow .gradeColumn span {
+    margin-left: 0 !important;
+  }
+  .studentRow .checkboxColumn {
+    width: unset !important;
+    padding-right: 10px !important;
+  }
+  .studentRow .checkboxColumn i {
+    margin-left: 5px !important;
+  }
+  .studentRow .nameColumn {
+    width: unset !important;
+    padding: 0 10px !important;
+  }
+  .studentRow .nameColumn span {
+    width: unset !important;
+  }
+  .studentRow .subjectColumn {
+    width: unset !important;
+  }
+  .studentRow .subjectColumn .worksheetBar {
+    padding: 0 !important;
+  }
+  .studentRow .subjectColumn .worksheetBar span {
+    text-wrap-mode: nowrap;
+  }
+  .studentRow .subjectColumn .worksheetBar .barWrap {
+    width: unset !important;
+  }
+  .studentRow .subjectColumn .worksheetBar .barWrap > span {
+    padding: 0px 5px !important;
+  }
+  .studentRow .subjectColumn .worksheetBar .time {
+    width: unset !important;
+  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
     /* Show worksheet tool */
     /* Show H button, x all button, and toolbar */
