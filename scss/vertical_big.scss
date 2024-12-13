@@ -1,9 +1,44 @@
 @media screen and (orientation:portrait) and (max-width:977px) {
   /* Less space on grade column */
-  .studentRowHeader .gradeColumn {
-    width: unset !important;
-    min-width: unset !important;
-    padding-left: 0px !important;
+  .studentRowHeader {
+    .gradeColumn {
+      width: unset !important;
+      min-width: unset !important;
+      padding-left: 0px !important;
+      i {
+        margin: 0px !important;
+      }
+    }
+
+    .checkboxColumn {
+      width: unset !important;
+      padding-right: 10px !important;
+
+      i {
+        margin-left: 5px !important;
+      }
+    }
+
+    .nameColumn {
+      padding: 0px !important;
+      width: unset !important;
+    }
+
+    .subjectColumn {
+      width: unset !important;
+      padding: 0px !important;
+    }
+
+    .fromDateColumn {
+      display: none !important;
+    }
+  }
+  .studentList {
+    app-score-list-filler-item {
+      &[type="footer"], &[type="header"] {
+        display: none !important;
+      }
+    }
   }
   /* less width on marking list */
   .studentRow {
@@ -28,6 +63,7 @@
     .nameColumn {
       width: unset !important;
       padding: 0 10px !important;
+      flex-basis: unset !important;
 
       span {
         width: unset !important;
@@ -36,6 +72,9 @@
 
     .subjectColumn {
       width: unset !important;
+      padding-left: 0px !important;
+      padding-right: 0px !important;
+
       .worksheetBar {
         padding: 0 !important;
         span {
@@ -51,6 +90,30 @@
           width: unset !important;
         }
       }
+      .subjectStatus {
+        width: unset !important;
+        .worksheetwrap {
+          width: unset !important;
+        }
+        .correctionWrap {
+          display: none !important;
+        }
+      }
+      .setIcon, .markingIcon {
+        margin: 0 !important;
+        width: 19px !important;
+      }
+      .statusIcon {
+        margin: 0 !important;
+        width: 21px !important;
+      }
+    }
+
+    .lastStudyColumn, .messageColumn, .fromDateColumn {
+      flex-basis: unset !important;
+    }
+    .fromDateColumn {
+      display: none !important;
     }
   }
   .navHeader {

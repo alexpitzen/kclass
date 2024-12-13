@@ -5,6 +5,30 @@
     min-width: unset !important;
     padding-left: 0px !important;
   }
+  .studentRowHeader .gradeColumn i {
+    margin: 0px !important;
+  }
+  .studentRowHeader .checkboxColumn {
+    width: unset !important;
+    padding-right: 10px !important;
+  }
+  .studentRowHeader .checkboxColumn i {
+    margin-left: 5px !important;
+  }
+  .studentRowHeader .nameColumn {
+    padding: 0px !important;
+    width: unset !important;
+  }
+  .studentRowHeader .subjectColumn {
+    width: unset !important;
+    padding: 0px !important;
+  }
+  .studentRowHeader .fromDateColumn {
+    display: none !important;
+  }
+  .studentList app-score-list-filler-item[type=footer], .studentList app-score-list-filler-item[type=header] {
+    display: none !important;
+  }
   /* less width on marking list */
   .studentRow .gradeColumn {
     flex: none !important;
@@ -24,12 +48,15 @@
   .studentRow .nameColumn {
     width: unset !important;
     padding: 0 10px !important;
+    flex-basis: unset !important;
   }
   .studentRow .nameColumn span {
     width: unset !important;
   }
   .studentRow .subjectColumn {
     width: unset !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
   }
   .studentRow .subjectColumn .worksheetBar {
     padding: 0 !important;
@@ -45,6 +72,29 @@
   }
   .studentRow .subjectColumn .worksheetBar .time {
     width: unset !important;
+  }
+  .studentRow .subjectColumn .subjectStatus {
+    width: unset !important;
+  }
+  .studentRow .subjectColumn .subjectStatus .worksheetwrap {
+    width: unset !important;
+  }
+  .studentRow .subjectColumn .subjectStatus .correctionWrap {
+    display: none !important;
+  }
+  .studentRow .subjectColumn .setIcon, .studentRow .subjectColumn .markingIcon {
+    margin: 0 !important;
+    width: 19px !important;
+  }
+  .studentRow .subjectColumn .statusIcon {
+    margin: 0 !important;
+    width: 21px !important;
+  }
+  .studentRow .lastStudyColumn, .studentRow .messageColumn, .studentRow .fromDateColumn {
+    flex-basis: unset !important;
+  }
+  .studentRow .fromDateColumn {
+    display: none !important;
   }
   .navHeader .logoWrap {
     display: none;
