@@ -33,6 +33,25 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
         z-index: 252;
         padding: 0;
     }
+
+    [data-hovertext] {
+        position: relative;
+    }
+    [data-hovertext]:after {
+        content: attr(data-hovertext);
+        color: black;
+        position: absolute;
+        right: 0;
+        bottom: 100%;
+        background-color: white;
+        border: 1px solid;
+        width: max-content;
+        opacity: 0;
+        transition: opacity 0.1s ease-in-out;
+    }
+    [data-hovertext]:hover:after {
+        opacity: 1;
+    }
 }
 
 .headerZindexBtn {
@@ -40,15 +59,15 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 }
 
 .shiftbtn {
-    top: 40px;
+    top: 10px;
 }
 
 .xallbtn {
-    top: 80px;
+    top: 20px;
 }
 
 .drawbtn {
-    top: 120px;
+    top: 30px;
     padding-top: 4px !important;
     display: unset !important;
 }

@@ -3,16 +3,17 @@ customToolbar.className = "customToolbar";
 customToolbar.style.display = "none";
 document.body.appendChild(customToolbar);
 
-function makebtn(className, innerText, container, fn) {
+function makebtn(className, innerText, hoverText, container, fn) {
     let btn = document.createElement("button");
     btn.className = className;
     btn.innerHTML = innerText;
+    btn.dataset.hovertext = hoverText;
     container.appendChild(btn);
     btn.onclick = fn;
     return btn;
 }
 
-makebtn("headerZindexBtn", "H", customToolbar, () => {
+makebtn("headerZindexBtn", "H", "Toggle header bar visibility", customToolbar, () => {
     let header = document.getElementsByClassName("grading-header")[0];
     if (header.classList.contains("z300")) {
         header.classList.remove("z300");
@@ -21,7 +22,7 @@ makebtn("headerZindexBtn", "H", customToolbar, () => {
     }
 });
 
-makebtn("shiftbtn", "↕", customToolbar, () => {
+makebtn("shiftbtn", "↕", "Toggle shifting the page up/down", customToolbar, () => {
     let container = document.getElementsByClassName("worksheet-container")[0];
     if (container.classList.contains("shiftup")) {
         container.classList.remove("shiftup");
@@ -30,7 +31,7 @@ makebtn("shiftbtn", "↕", customToolbar, () => {
     }
 });
 
-const xallbtn = makebtn("xallbtn", "x all", customToolbar, () => {
+const xallbtn = makebtn("xallbtn", "x all", "Click every grading box on the page", customToolbar, () => {
     document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
     xallbtn.blur();
 });
@@ -67,14 +68,14 @@ function updatePenSettings() {
     });
 }
 
-const drawbtn = makebtn("drawbtn", "&#128393;", customToolbar, () => {
+const drawbtn = makebtn("drawbtn", "&#128393;", "Show the draw tab", customToolbar, () => {
     drawtab.style.display = "unset";
     textarea.focus();
     textarea.select();
     updatePenSettings();
 });
 
-// makebtn("textbtn squarebtn", "abc", drawtab, () => {
+// makebtn("textbtn squarebtn", "abc", "", drawtab, () => {
 //     texttab.style.display = "unset";
 //     textarea.focus();
 //     textarea.select();
@@ -101,6 +102,7 @@ sizeslider.type = "range";
 sizeslider.value = 25;
 sizeslider.min = 10;
 sizeslider.max = 100;
+sizeslider.dataset.hovertext = "Adjust stamp size";
 drawheader.appendChild(sizeslider);
 sizeslider.addEventListener("input", (e) => {
     let scrollPercent = 0;
@@ -159,11 +161,11 @@ penTypeContainer.appendChild(createPenType("thin-highlighter", "Thin highlighter
 
 drawheader.appendChild(penTypeContainer);
 
-makebtn("undoLast squarebtn", "&#11148;", drawheader, () => {
+makebtn("undoLast squarebtn", "&#11148;", "Undo last stamp", drawheader, () => {
     StampLib.undoLastWriteAll();
 });
 
-makebtn("clearAll", "clear", drawheader, () => {
+makebtn("clearAll", "clear", "Clear the entire page (can't be undone)", drawheader, () => {
     StampLib.clearPage();
 });
 
@@ -272,7 +274,7 @@ function updateTextAreaSize() {
 }
 textarea.addEventListener("input", updateTextAreaSize);
 
-makebtn("textprintbtn squarebtn", "T", textareadiv, (e) => {
+makebtn("textprintbtn squarebtn", "T", "Stamp the contents of the textbox", textareadiv, (e) => {
     drawtab.style.display = "none";
     let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
     let printPreviewDiv = document.createElement("div");
@@ -374,6 +376,7 @@ rainbowspeed.value = 1;
 rainbowspeed.min = 1;
 rainbowspeed.max = 130;
 rainbowspeed.setAttribute("disabled", "");
+rainbowspeed.dataset.hovertext = "Adjust speed of rainbow progression";
 drawheader.appendChild(rainbowspeed);
 
 for (let stampCategory in StampLib.stamps) {
@@ -390,5 +393,38 @@ const printoverlay = document.createElement("div");
 printoverlay.className = "printoverlay";
 document.body.appendChild(printoverlay);
 
+const pointerScroll = (parent, draggable) => {
+    let dragging = false;
+    let startY = 0;
+    let scrollStart = 0;
+    let dragged = 0;
+    const dragStart = (ev) => {
+        dragging = true;
+        startY = ev.clientY;
+        scrollStart = parent.scrollTop;
+        dragged = 0;
+    };
+    const dragEnd = (ev) => {
+        dragging = false;
+        if (draggable.hasPointerCapture(ev.pointerId)) {
+            draggable.releasePointerCapture(ev.pointerId);
+        }
+    };
+    const drag = (ev) => {
+        if (dragging) {
+            dragged++;
+            parent.scrollTop = scrollStart - (ev.clientY - startY);
+            if (dragged == 5) {
+                draggable.setPointerCapture(ev.pointerId);
+            }
+        }
+    }
+
+    draggable.addEventListener("pointerdown", dragStart);
+    draggable.addEventListener("pointerup", dragEnd);
+    draggable.addEventListener("pointermove", drag);
+};
+
+pointerScroll(drawtab, drawstamps);
 
 ;
