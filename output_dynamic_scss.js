@@ -2925,6 +2925,12 @@ div.mark-boxs.worksheet-layer {
     min-width: unset !important;
     padding-left: 0px !important;
   }
+  .studentRowHeader .nameColumn {
+    width: 185px !important;
+  }
+  app-student-list-filler-item {
+    display: none !important;
+  }
   .studentRow .gradeColumn {
     flex: none !important;
     min-width: unset !important;
@@ -2932,6 +2938,16 @@ div.mark-boxs.worksheet-layer {
   }
   .studentRow .gradeColumn span {
     margin-left: 0 !important;
+  }
+  .studentRow .gradeColumn .columnContent {
+    width: 10px !important;
+  }
+  .studentRow .nameColumn {
+    padding-right: 0px !important;
+    flex-basis: 248px !important;
+  }
+  .studentRow .nameColumn .fullNameEN {
+    width: 234px !important;
   }
   .container {
     min-width: unset !important;

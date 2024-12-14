@@ -1,16 +1,38 @@
 @media screen and (orientation:landscape) and (max-height:733px) {
     /* Less space on grade column */
-    .studentRowHeader .gradeColumn {
-        width: unset !important;
-        min-width: unset !important;
-        padding-left: 0px !important;
+    .studentRowHeader {
+        .gradeColumn {
+            width: unset !important;
+            min-width: unset !important;
+            padding-left: 0px !important;
+        }
+        .nameColumn {
+            width: 185px !important;
+        }
     }
-    .studentRow .gradeColumn {
-        flex: none !important;
-        min-width: unset !important;
-        width: unset !important;
-        span {
-            margin-left: 0 !important;
+
+    app-student-list-filler-item {
+        display: none !important;
+    }
+
+    .studentRow {
+        .gradeColumn {
+            flex: none !important;
+            min-width: unset !important;
+            width: unset !important;
+            span {
+                margin-left: 0 !important;
+            }
+            .columnContent {
+                width: 10px !important;
+            }
+        }
+        .nameColumn {
+            padding-right: 0px !important;
+            flex-basis: 248px !important;
+            .fullNameEN {
+                width: 234px !important;
+            }
         }
     }
 
