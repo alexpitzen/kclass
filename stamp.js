@@ -1135,6 +1135,7 @@
     function clearPage() {
         let atd = getAtd();
         atd.clearInk();
+        atd.penUpFunc(atd);
     }
 
     function undoLastWriteAll() {

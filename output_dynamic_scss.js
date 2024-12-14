@@ -1149,6 +1149,7 @@
     function clearPage() {
         let atd = getAtd();
         atd.clearInk();
+        atd.penUpFunc(atd);
     }
 
     function undoLastWriteAll() {
@@ -2793,9 +2794,11 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   width: max-content;
   opacity: 0;
   transition: opacity 0.1s ease-in-out;
+  display: none;
 }
 .customToolbar [data-hovertext]:hover:after {
   opacity: 1;
+  display: unset;
 }
 
 .headerZindexBtn {
