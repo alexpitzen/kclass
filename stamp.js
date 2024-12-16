@@ -969,6 +969,11 @@
         return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-red-comment-']").id];
     }
 
+    function unlockPage() {
+        let atd = getAtd();
+        atd.drawingMode = 1;
+    }
+
     // map[atd:list[{startIndex, numLines}]]
     var writeStrokes = {}
     // TODO Why isn't this just using atd.countDrawItems at the end of the draw?
@@ -2135,6 +2140,7 @@
         getWriteAllDimensions: getWriteAllDimensions,
         getWriteStampDimensions: getWriteStampDimensions,
         writeStampAt: writeStampAt,
+        unlockPage: unlockPage,
         stamps: {
             "All": [
                 youCanDoIt,

@@ -50,8 +50,23 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
         transition: opacity 0.1s ease-in-out;
         display: none;
     }
+    .ttleft[data-hovertext]:after {
+        right: unset;
+        left: 0;
+    }
     [data-hovertext]:hover:after {
         opacity: 1;
+        display: unset;
+    }
+}
+
+.unlockbtn {
+    display: none;
+}
+
+/* we're on a page that's already corrected */
+body:has(.worksheet-container.selected .full-score-mark) {
+    .unlockbtn {
         display: unset;
     }
 }
@@ -87,6 +102,11 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     overflow: auto;
 
     --sizeslider: 0.25;
+
+    .buttonsleft {
+        width: 129px;
+        display: inline-table;
+    }
 
     button {
         height: 30px;
@@ -138,7 +158,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     }
 
     .textprintbtn {
-        float: right;
+        vertical-align: top;
     }
 
     .rainbowspeed {

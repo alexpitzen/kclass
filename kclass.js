@@ -96,6 +96,10 @@ const drawheader = document.createElement("div");
 drawheader.className = "header";
 drawtab.appendChild(drawheader);
 
+const buttonsleft = document.createElement("div");
+buttonsleft.className = "buttonsleft";
+drawheader.appendChild(buttonsleft);
+
 const sizeslider = document.createElement("input");
 sizeslider.className = "sizeslider";
 sizeslider.type = "range";
@@ -103,7 +107,7 @@ sizeslider.value = 25;
 sizeslider.min = 10;
 sizeslider.max = 100;
 sizeslider.dataset.hovertext = "Adjust stamp size";
-drawheader.appendChild(sizeslider);
+buttonsleft.appendChild(sizeslider);
 sizeslider.addEventListener("input", (e) => {
     let scrollPercent = 0;
     try {
@@ -112,6 +116,11 @@ sizeslider.addEventListener("input", (e) => {
     drawtab.style.setProperty("--sizeslider", `${e.target.value} / 100`);
     drawtab.scrollTop = scrollPercent * (drawtab.scrollHeight - drawtab.clientHeight);
     updateTextAreaSize();
+});
+
+const unlockbtn = makebtn("unlockbtn ttleft", "&#128275;", "Unlock the page for writing", buttonsleft, () => {
+    stamp.unlockPage();
+    drawtab.style.display = "none";
 });
 
 function getScale() {

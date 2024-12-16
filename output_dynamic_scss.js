@@ -983,6 +983,11 @@
         return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-red-comment-']").id];
     }
 
+    function unlockPage() {
+        let atd = getAtd();
+        atd.drawingMode = 1;
+    }
+
     // map[atd:list[{startIndex, numLines}]]
     var writeStrokes = {}
     // TODO Why isn't this just using atd.countDrawItems at the end of the draw?
@@ -2149,6 +2154,7 @@
         getWriteAllDimensions: getWriteAllDimensions,
         getWriteStampDimensions: getWriteStampDimensions,
         writeStampAt: writeStampAt,
+        unlockPage: unlockPage,
         stamps: {
             "All": [
                 youCanDoIt,
@@ -2413,6 +2419,10 @@ const drawheader = document.createElement("div");
 drawheader.className = "header";
 drawtab.appendChild(drawheader);
 
+const buttonsleft = document.createElement("div");
+buttonsleft.className = "buttonsleft";
+drawheader.appendChild(buttonsleft);
+
 const sizeslider = document.createElement("input");
 sizeslider.className = "sizeslider";
 sizeslider.type = "range";
@@ -2420,7 +2430,7 @@ sizeslider.value = 25;
 sizeslider.min = 10;
 sizeslider.max = 100;
 sizeslider.dataset.hovertext = "Adjust stamp size";
-drawheader.appendChild(sizeslider);
+buttonsleft.appendChild(sizeslider);
 sizeslider.addEventListener("input", (e) => {
     let scrollPercent = 0;
     try {
@@ -2429,6 +2439,11 @@ sizeslider.addEventListener("input", (e) => {
     drawtab.style.setProperty("--sizeslider", `${e.target.value} / 100`);
     drawtab.scrollTop = scrollPercent * (drawtab.scrollHeight - drawtab.clientHeight);
     updateTextAreaSize();
+});
+
+const unlockbtn = makebtn("unlockbtn ttleft", "&#128275;", "Unlock the page for writing", buttonsleft, () => {
+    stamp.unlockPage();
+    drawtab.style.display = "none";
 });
 
 function getScale() {
@@ -2800,8 +2815,21 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   transition: opacity 0.1s ease-in-out;
   display: none;
 }
+.customToolbar .ttleft[data-hovertext]:after {
+  right: unset;
+  left: 0;
+}
 .customToolbar [data-hovertext]:hover:after {
   opacity: 1;
+  display: unset;
+}
+
+.unlockbtn {
+  display: none;
+}
+
+/* we're on a page that's already corrected */
+body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
   display: unset;
 }
 
@@ -2835,6 +2863,10 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   height: calc(-20px + 100vh);
   overflow: auto;
   --sizeslider: 0.25;
+}
+.drawtab .buttonsleft {
+  width: 129px;
+  display: inline-table;
 }
 .drawtab button {
   height: 30px;
@@ -2881,7 +2913,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   padding-top: 3px;
 }
 .drawtab .textprintbtn {
-  float: right;
+  vertical-align: top;
 }
 .drawtab .rainbowspeed {
   width: 210px;
