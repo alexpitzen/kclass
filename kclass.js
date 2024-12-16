@@ -256,6 +256,12 @@ function makeStamp(stamp) {
                     rainbowFill: stampColorType.value == "Rainbow Fill",
                 };
 
+                console.log("position");
+                console.log(position);
+                console.log("scale");
+                console.log(scale);
+                console.log("options");
+                console.log(options);
                 StampLib.writeStampAt(stamp, position, scale, options);
             } finally {
                 printoverlay.style.display = "none";
