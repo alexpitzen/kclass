@@ -2959,6 +2959,25 @@ div.mark-boxs.worksheet-layer {
   z-index: 3;
 }
 
+/* EXPERIMENTAL */
+@media screen and (orientation: landscape) and (min-height: 1300px) and (min-width: 1300px) {
+  .ATD0020P-worksheet-container {
+    height: min(100vh, 1270px) !important;
+    width: min(100vw, 768px) !important;
+  }
+  .worksheet-container:has(.worksheet-container) {
+    height: min(100vh, 1270px) !important;
+    width: min(100vw, 768px) !important;
+  }
+  .worksheet-container:has(.worksheet-container) .worksheet-group-page {
+    max-width: min(100vw, 768px) !important;
+    padding: 0 !important;
+  }
+  .content-detail {
+    height: min(100vh, 1270px) !important;
+  }
+}
+
 /*# sourceMappingURL=all.css.map */
 @media screen and (orientation: landscape) and (max-height: 733px) {
   /* Less space on grade column */

@@ -201,3 +201,24 @@ canvas[id^=inktool_ATD] {
 div.mark-boxs.worksheet-layer {
     z-index: 3;
 }
+
+/* EXPERIMENTAL */
+@media screen and (orientation:landscape) and (min-height:1300px) and (min-width:1300px) {
+    .ATD0020P-worksheet-container {
+        height:calc(min(100vh,1270px)) !important;
+        width:calc(min(100vw,768px)) !important;
+    }
+    .worksheet-container:has(.worksheet-container) {
+        height: calc(min(100vh,1270px)) !important;
+        width: calc(min(100vw,768px)) !important;
+
+        .worksheet-group-page {
+            max-width: calc(min(100vw, 768px)) !important;
+            padding: 0 !important;
+        }
+    }
+
+    .content-detail {
+        height: calc(min(100vh, 1270px)) !important;
+    }
+}
