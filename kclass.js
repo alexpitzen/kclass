@@ -3,11 +3,11 @@ customToolbar.className = "customToolbar";
 customToolbar.style.display = "none";
 document.body.appendChild(customToolbar);
 
-function makebtn(className, innerText, hoverText, container, fn) {
+function makebtn(className, innerText, title, container, fn) {
     let btn = document.createElement("button");
     btn.className = className;
     btn.innerHTML = innerText;
-    btn.dataset.hovertext = hoverText;
+    btn.title = title;
     container.appendChild(btn);
     btn.onclick = fn;
     return btn;
@@ -41,8 +41,16 @@ drawtab.className = "drawtab";
 drawtab.style.display = "none";
 customToolbar.appendChild(drawtab);
 
-drawtab.addEventListener("mouseleave", () => {
-    drawtab.style.display = "none";
+drawtab.addEventListener("mouseleave", (e) => {
+    let rect = drawtab.getBoundingClientRect();
+    if (
+        e.x <= rect.left
+        || e.x >= rect.right
+        || e.y <= rect.top
+        || e.y >= e.bottom
+    ) {
+        drawtab.style.display = "none";
+    }
 });
 
 const penSettings = {
@@ -106,7 +114,7 @@ sizeslider.type = "range";
 sizeslider.value = 25;
 sizeslider.min = 10;
 sizeslider.max = 100;
-sizeslider.dataset.hovertext = "Adjust stamp size";
+sizeslider.title = "Adjust stamp size";
 buttonsleft.appendChild(sizeslider);
 sizeslider.addEventListener("input", (e) => {
     let scrollPercent = 0;
@@ -391,7 +399,7 @@ rainbowspeed.value = 1;
 rainbowspeed.min = 1;
 rainbowspeed.max = 130;
 rainbowspeed.setAttribute("disabled", "");
-rainbowspeed.dataset.hovertext = "Adjust speed of rainbow progression";
+rainbowspeed.title = "Adjust speed of rainbow progression";
 drawheader.appendChild(rainbowspeed);
 
 for (let stampCategory in StampLib.stamps) {

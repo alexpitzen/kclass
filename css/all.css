@@ -34,30 +34,6 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   z-index: 252;
   padding: 0;
 }
-.customToolbar [data-hovertext] {
-  position: relative;
-}
-.customToolbar [data-hovertext]:after {
-  content: attr(data-hovertext);
-  color: black;
-  position: absolute;
-  right: 0;
-  bottom: 100%;
-  background-color: white;
-  border: 1px solid;
-  width: max-content;
-  opacity: 0;
-  transition: opacity 0.1s ease-in-out;
-  display: none;
-}
-.customToolbar .ttleft[data-hovertext]:after {
-  right: unset;
-  left: 0;
-}
-.customToolbar [data-hovertext]:hover:after {
-  opacity: 1;
-  display: unset;
-}
 
 .unlockbtn {
   display: none;
@@ -68,19 +44,19 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
   display: unset;
 }
 
-.headerZindexBtn {
+.customToolbar > button {
+  position: relative;
+}
+.customToolbar .headerZindexBtn {
   top: 0px;
 }
-
-.shiftbtn {
+.customToolbar .shiftbtn {
   top: 10px;
 }
-
-.xallbtn {
+.customToolbar .xallbtn {
   top: 20px;
 }
-
-.drawbtn {
+.customToolbar .drawbtn {
   top: 30px;
   padding-top: 4px !important;
   display: unset !important;
