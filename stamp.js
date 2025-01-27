@@ -1143,6 +1143,58 @@
         atd.penUpFunc(atd);
     }
 
+    function makeHD(target) {
+        console.log("MAKE HD");
+        console.log(target);
+        document.querySelectorAll(".worksheet-container:has(.worksheet-container)").forEach(container => {
+            container.style.height = "1270px";
+            container.style.width = "768px";
+        });
+
+        target.querySelectorAll("stroke .stroke").forEach(stroke => {
+            let atd = InkTool.InkCanvasLib.List[stroke.id];
+            target.querySelectorAll(`canvas#inktool_${stroke.id}_back, #inktool_${stroke.id}_draw`).forEach(canvas => {
+                canvas.setAttribute("width", "768");
+                canvas.setAttribute("height", "1270");
+            });
+            atd.drawingContext.setZoomRatio(1);
+            atd.drawingContext.setCanvasSize(768,1270);
+
+            atd.srect.height=1270;
+            atd.srect.width=768;
+
+            atd.rect.height=1270;
+            atd.rect.width=768;
+
+            atd.redrawCurrentLayerByInk();
+        });
+
+        document.querySelectorAll(".worksheet-container:has(.worksheet-container)").forEach(container => {
+            container.style.height = null;
+            container.style.width = null;
+        });
+    }
+
+    function makeSD(target) {
+        target.querySelectorAll("stroke .stroke").forEach(stroke => {
+            let atd = InkTool.InkCanvasLib.List[stroke.id];
+            target.querySelectorAll(`canvas#inktool_${stroke.id}_back, #inktool_${stroke.id}_draw`).forEach(canvas => {
+                canvas.setAttribute("width", "370");
+                canvas.setAttribute("height", "612");
+            });
+            atd.drawingContext.setZoomRatio(612/1270);
+            atd.drawingContext.setCanvasSize(370,612);
+
+            atd.srect.height=612;
+            atd.srect.width=370;
+
+            atd.rect.height=612;
+            atd.rect.width=370;
+
+            atd.redrawCurrentLayerByInk();
+        });
+    }
+
     function undoLastWriteAll() {
         let atd = getAtd();
         if (!(atd in writeStrokes) || writeStrokes[atd].length == 0) {
@@ -2163,6 +2215,8 @@
         getWriteStampDimensions: getWriteStampDimensions,
         writeStampAt: writeStampAt,
         unlockPage: unlockPage,
+        makeHD: makeHD,
+        makeSD: makeSD,
         stamps: {
             "All": [
                 youCanDoIt,

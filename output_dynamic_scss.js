@@ -1157,6 +1157,58 @@
         atd.penUpFunc(atd);
     }
 
+    function makeHD(target) {
+        console.log("MAKE HD");
+        console.log(target);
+        document.querySelectorAll(".worksheet-container:has(.worksheet-container)").forEach(container => {
+            container.style.height = "1270px";
+            container.style.width = "768px";
+        });
+
+        target.querySelectorAll("stroke .stroke").forEach(stroke => {
+            let atd = InkTool.InkCanvasLib.List[stroke.id];
+            target.querySelectorAll(`canvas#inktool_${stroke.id}_back, #inktool_${stroke.id}_draw`).forEach(canvas => {
+                canvas.setAttribute("width", "768");
+                canvas.setAttribute("height", "1270");
+            });
+            atd.drawingContext.setZoomRatio(1);
+            atd.drawingContext.setCanvasSize(768,1270);
+
+            atd.srect.height=1270;
+            atd.srect.width=768;
+
+            atd.rect.height=1270;
+            atd.rect.width=768;
+
+            atd.redrawCurrentLayerByInk();
+        });
+
+        document.querySelectorAll(".worksheet-container:has(.worksheet-container)").forEach(container => {
+            container.style.height = null;
+            container.style.width = null;
+        });
+    }
+
+    function makeSD(target) {
+        target.querySelectorAll("stroke .stroke").forEach(stroke => {
+            let atd = InkTool.InkCanvasLib.List[stroke.id];
+            target.querySelectorAll(`canvas#inktool_${stroke.id}_back, #inktool_${stroke.id}_draw`).forEach(canvas => {
+                canvas.setAttribute("width", "370");
+                canvas.setAttribute("height", "612");
+            });
+            atd.drawingContext.setZoomRatio(612/1270);
+            atd.drawingContext.setCanvasSize(370,612);
+
+            atd.srect.height=612;
+            atd.srect.width=370;
+
+            atd.rect.height=612;
+            atd.rect.width=370;
+
+            atd.redrawCurrentLayerByInk();
+        });
+    }
+
     function undoLastWriteAll() {
         let atd = getAtd();
         if (!(atd in writeStrokes) || writeStrokes[atd].length == 0) {
@@ -2177,6 +2229,8 @@
         getWriteStampDimensions: getWriteStampDimensions,
         writeStampAt: writeStampAt,
         unlockPage: unlockPage,
+        makeHD: makeHD,
+        makeSD: makeSD,
         stamps: {
             "All": [
                 youCanDoIt,
@@ -2441,7 +2495,7 @@ const penSettings = {
         alpha: 50
     },
     "thin-highlighter": {
-        width: 10,
+        width: 5,
         alpha: 50
     }
 }
@@ -2460,6 +2514,88 @@ const drawbtn = makebtn("drawbtn", "&#128393;", "Show the draw tab", customToolb
     textarea.select();
     updatePenSettings();
 });
+
+var _mo;
+var _mo2;
+
+function enableHD() {
+    if (typeof(_mo2) === "undefined") {
+        _mo2 = new MutationObserver((mutationList, _) => {
+            for (const mutation of mutationList) {
+                // if (mutation.addedNodes.entries().find(i => i[1].classList?.contains("ATD0020P-worksheet-container") || i[1].classList?.contains("ATD0020P-worksheet-page") || i[1].classList?.contains("worksheet-group-page"))) {
+                if (mutation.target.nodeName == "LOADING-SPINNER" && mutation.removedNodes.length) {
+                    console.log("SPINNER DONE");
+                    console.log(mutation);
+                    initHD();
+                    break;
+                }
+            }
+        });
+    }
+    _mo2.observe(document.querySelector("app-root"), {childList: true, subtree: true});
+    initHD();
+}
+
+function initHD() {
+    if (!document.querySelector("app-atd0020p")) {
+        console.log("No grading app");
+        return;
+    }
+    updatePenSettings();
+    document.querySelectorAll(".content-scroll-container .content-bg .content-detail").forEach(detail => {
+        detail.style.minWidth = "372px";
+        detail.style.width = "372px";
+    });
+
+    document.querySelectorAll(".worksheet-group").forEach(i => {
+        i.style.width = "410px";
+    });
+
+    document.querySelectorAll(".worksheet-group-page").forEach(i => {
+        i.style.maxWidth = "410px";
+    });
+
+    document.querySelectorAll(".ATD0020P-worksheet-container img.worksheet-img").forEach(i => {
+        i.style.height = "612px";
+        i.style.width = "370px";
+    });
+
+    document.querySelectorAll(".ATD0020P-worksheet-container canvas").forEach(i => {
+        i.style.height = "612px";
+        i.style.width = "370px";
+    });
+
+    if (typeof(_mo) === "undefined") {
+        _mo = new MutationObserver((mutationList, _) => {
+            console.log("Mutation");
+            console.log(mutationList);
+            for (const mutation of mutationList) {
+                if (mutation.target.classList.contains("selected")) {
+                    StampLib.makeHD(mutation.target);
+                } else {
+                    StampLib.makeSD(mutation.target);
+                }
+            }
+        });
+    }
+    _mo.disconnect();
+    document.querySelectorAll(".ATD0020P-worksheet-container").forEach(page => {
+        console.log("Observing page");
+        console.log(page);
+        _mo.observe(page, {attributeFilter:["class"]});
+    });
+    StampLib.makeHD(document.querySelector(".ATD0020P-worksheet-container.selected"));
+}
+
+function disableHD() {
+    if (typeof(_mo) !== "undefined") {
+        _mo.disconnect();
+    }
+    if (typeof(_mo2) !== "undefined") {
+        _mo2.disconnect();
+    }
+    StampLib.makeSD(document.querySelector(".ATD0020P-worksheet-container.selected"));
+}
 
 // makebtn("textbtn squarebtn", "abc", "", drawtab, () => {
 //     texttab.style.display = "unset";
@@ -2504,10 +2640,32 @@ sizeslider.addEventListener("input", (e) => {
     updateTextAreaSize();
 });
 
-const unlockbtn = makebtn("unlockbtn ttleft", "&#128275;", "Unlock the page for writing", buttonsleft, () => {
+const unlockbtn = makebtn("unlockbtn", "&#128275;", "Unlock the page for writing", buttonsleft, () => {
     stamp.unlockPage();
     drawtab.style.display = "none";
 });
+
+const hdbtn = document.createElement("input");
+hdbtn.type = "checkbox";
+hdbtn.id = "hdbtn";
+hdbtn.className = "hdbtn";
+hdbtn.title = "HD mode! Disable this when using pen/eraser";
+hdbtn.addEventListener("change", function() {
+    if (hdbtn.checked) {
+        enableHD();
+    } else {
+        disableHD();
+    }
+});
+hdbtn.accessKey = "h";
+
+let hdbtnlabel = document.createElement("label");
+hdbtnlabel.setAttribute("for", hdbtn.id);
+hdbtnlabel.innerText = "HD mode";
+hdbtnlabel.title = "HD mode! Disable this when using pen/eraser";
+
+buttonsleft.appendChild(hdbtn);
+buttonsleft.appendChild(hdbtnlabel);
 
 function getScale() {
     return sizeslider.value / 100;
@@ -2608,7 +2766,8 @@ function makeStamp(stamp) {
             try {
                 let atd = StampLib.getAtd();
                 let canvasRect = atd.bcanvas.getBoundingClientRect();
-                let zoomRatio = atd.drawingContext.zoomRatio;
+                // let zoomRatio = atd.drawingContext.zoomRatio;
+                let zoomRatio = atd.bcanvas.clientHeight / atd.inkHeight;
 
                 let [x, y] = [e.clientX, e.clientY];
                 // if it's outside but close to the edge, just set it to the edge
@@ -2677,6 +2836,7 @@ textarea.addEventListener("input", updateTextAreaSize);
 
 makebtn("textprintbtn squarebtn", "T", "Stamp the contents of the textbox", textareadiv, (e) => {
     drawtab.style.display = "none";
+    // TODO these dimensions are wrong in HD mode for some reason
     let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
     let printPreviewDiv = document.createElement("div");
     printPreviewDiv.className = "printPreviewDiv";
@@ -2697,7 +2857,8 @@ makebtn("textprintbtn squarebtn", "T", "Stamp the contents of the textbox", text
         try {
             let atd = StampLib.getAtd();
             let canvasRect = atd.bcanvas.getBoundingClientRect();
-            let zoomRatio = atd.drawingContext.zoomRatio;
+            // let zoomRatio = atd.drawingContext.zoomRatio;
+            let zoomRatio = atd.bcanvas.clientHeight / atd.inkHeight;
 
             let [x, y] = [e.clientX, e.clientY];
 
@@ -3017,46 +3178,53 @@ div.mark-boxs.worksheet-layer {
   }
 }
 /* EXPERIMENTAL */
-/* @media screen and (orientation:landscape) and (max-height:1299px) { */
-/*     body:not( */
-/*         :has( */
-/*             div.worksheet-container.landscape.selected, */
-/*             div.worksheet-group.landscape.selected */
-/*         ) */
-/*     ) { */
-/*         .content-scroll-container .content-bg .content-detail { */
-/*             min-width: 370px !important; */
-/*             width: 370px !important; */
-/*             .worksheet-container:has(.worksheet-container) { */
-/*                 .worksheet-group { */
-/*                     width: 370px !important; */
-/*                     margin-left: 1px !important; */
-/*                     .worksheet-group-page { */
-/*                         max-width: 370px !important; */
-/*                         padding: 0 !important; */
-/*                         .ATD0020P-worksheet-container { */
-/*                             height: 1277px !important; */
-/*                             width: 772px !important; */
-/*                             img.worksheet-img { */
-/*                                 height: 612px; */
-/*                                 width: 370px; */
-/*                             } */
-/*                             canvas { */
-/*                                 height: 612px !important; */
-/*                                 width: 370px !important; */
-/*                             } */
-/*                             .mark-boxs { */
-/*                                 transform: scale(calc(612/1270)); */
-/*                                 right: unset; */
-/*                                 bottom: unset; */
-/*                             } */
-/*                         } */
-/*                     } */
-/*                 } */
-/*             } */
-/*         } */
-/*     } */
-/* } */
+/*@media screen and (orientation:landscape) and (max-height:1299px) {
+    body:not(
+        :has(
+            div.worksheet-container.landscape.selected,
+            div.worksheet-group.landscape.selected
+        )
+    ) {
+        .content-scroll-container .content-bg .content-detail {
+            min-width: 370px !important;
+            width: 370px !important;
+
+            .worksheet-container:has(.worksheet-container) {
+
+                .worksheet-group {
+                    width: 370px !important;
+                    margin-left: 1px !important;
+
+                    .worksheet-group-page {
+                        max-width: 370px !important;
+                        padding: 0 !important;
+
+                        .ATD0020P-worksheet-container {
+                            height: 1277px !important;
+                            width: 772px !important;
+
+                            img.worksheet-img {
+                                height: 612px;
+                                width: 370px;
+                            }
+
+                            canvas {
+                                height: 612px !important;
+                                width: 370px !important;
+                            }
+
+                            .mark-boxs {
+                                transform: scale(calc(612/1270));
+                                right: unset;
+                                bottom: unset;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}*/
 
 /*# sourceMappingURL=all.css.map */
 @media screen and (orientation: landscape) and (max-height: 733px) {

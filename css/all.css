@@ -183,45 +183,52 @@ div.mark-boxs.worksheet-layer {
   }
 }
 /* EXPERIMENTAL */
-/* @media screen and (orientation:landscape) and (max-height:1299px) { */
-/*     body:not( */
-/*         :has( */
-/*             div.worksheet-container.landscape.selected, */
-/*             div.worksheet-group.landscape.selected */
-/*         ) */
-/*     ) { */
-/*         .content-scroll-container .content-bg .content-detail { */
-/*             min-width: 370px !important; */
-/*             width: 370px !important; */
-/*             .worksheet-container:has(.worksheet-container) { */
-/*                 .worksheet-group { */
-/*                     width: 370px !important; */
-/*                     margin-left: 1px !important; */
-/*                     .worksheet-group-page { */
-/*                         max-width: 370px !important; */
-/*                         padding: 0 !important; */
-/*                         .ATD0020P-worksheet-container { */
-/*                             height: 1277px !important; */
-/*                             width: 772px !important; */
-/*                             img.worksheet-img { */
-/*                                 height: 612px; */
-/*                                 width: 370px; */
-/*                             } */
-/*                             canvas { */
-/*                                 height: 612px !important; */
-/*                                 width: 370px !important; */
-/*                             } */
-/*                             .mark-boxs { */
-/*                                 transform: scale(calc(612/1270)); */
-/*                                 right: unset; */
-/*                                 bottom: unset; */
-/*                             } */
-/*                         } */
-/*                     } */
-/*                 } */
-/*             } */
-/*         } */
-/*     } */
-/* } */
+/*@media screen and (orientation:landscape) and (max-height:1299px) {
+    body:not(
+        :has(
+            div.worksheet-container.landscape.selected,
+            div.worksheet-group.landscape.selected
+        )
+    ) {
+        .content-scroll-container .content-bg .content-detail {
+            min-width: 370px !important;
+            width: 370px !important;
+
+            .worksheet-container:has(.worksheet-container) {
+
+                .worksheet-group {
+                    width: 370px !important;
+                    margin-left: 1px !important;
+
+                    .worksheet-group-page {
+                        max-width: 370px !important;
+                        padding: 0 !important;
+
+                        .ATD0020P-worksheet-container {
+                            height: 1277px !important;
+                            width: 772px !important;
+
+                            img.worksheet-img {
+                                height: 612px;
+                                width: 370px;
+                            }
+
+                            canvas {
+                                height: 612px !important;
+                                width: 370px !important;
+                            }
+
+                            .mark-boxs {
+                                transform: scale(calc(612/1270));
+                                right: unset;
+                                bottom: unset;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}*/
 
 /*# sourceMappingURL=all.css.map */
