@@ -45,6 +45,7 @@ if __name__ == "__main__":
     xmlns:svg="http://www.w3.org/2000/svg"
 >
     <defs id="defs4" />
+    <rect width="100%" height="100%" fill="white" />
     <g
         fill="none"
         stroke="#000000"
