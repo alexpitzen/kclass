@@ -523,6 +523,26 @@ const printoverlay = document.createElement("div");
 printoverlay.className = "printoverlay";
 document.body.appendChild(printoverlay);
 
+function findPinchDisabler() {
+    for (let listener of document.eventListeners("touchstart")) {
+        if (listener.toString().indexOf("disable pinch zoom") > -1) {
+            return listener;
+        }
+    }
+    return null;
+}
+
+/* remove the event listener that disable pinch zoom */
+
+let pinchDisablerDisabler = setInterval(() => {
+    pinchDisabler = findPinchDisabler();
+    console.log(`pinchDisabler: ${pinchDisabler}`)
+    if (pinchDisabler) {
+        document.removeEventListener("touchstart", pinchDisabler);
+        clearInterval(pinchDisablerDisabler);
+    }
+}, 1000);
+
 const pointerScroll = (parent, draggable) => {
     let dragging = false;
     let startY = 0;
