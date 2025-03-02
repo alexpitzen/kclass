@@ -2982,9 +2982,7 @@ let pinchDisablerDisabler = setInterval(() => {
     if (pinchDisabler) {
         document.removeEventListener("touchstart", pinchDisabler);
         clearInterval(pinchDisablerDisabler);
-        let meta = document.querySelector("meta[content*='user-scalable']");
-        document.head.removeChild(meta);
-        // meta.content = meta.content.replace("user-scalable=no", "user-scalable=yes");
+        document.querySelector("meta[content*='user-scalable']").content = "width=device-width, initial-scale=1";
     }
 }, 1000);
 
