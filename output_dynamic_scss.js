@@ -3625,6 +3625,7 @@ div.mark-boxs.worksheet-layer {
     min-width: unset !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
+    /* adjust sidebar width */
     /* Show worksheet tool */
     /* Show H button, x all button, and toolbar */
     /* Move worksheet above header */
@@ -3639,6 +3640,19 @@ div.mark-boxs.worksheet-layer {
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .scroll-content {
     overflow-x: auto !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-menu-scroll {
+    width: 251px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-menu-scroll.close {
+    width: 50px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-menu-scroll .content-menu-open-close {
+    width: 41px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-menu-scroll .content-menu {
+    padding-left: 49px !important;
+    width: 242px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-tool {
     margin-left: 371px !important;

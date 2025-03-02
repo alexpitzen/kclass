@@ -147,6 +147,21 @@
       overflow-x: auto !important;
     }
 
+    /* adjust sidebar width */
+    .content-menu-scroll {
+      width: 251px !important;
+      &.close {
+        width: 50px !important;
+      }
+      .content-menu-open-close {
+        width: 41px !important;
+      }
+      .content-menu {
+        padding-left: 49px !important;
+        width: 242px !important;
+      }
+    }
+
     /* Show worksheet tool */
     .worksheet-tool {
         margin-left: 371px !important;
