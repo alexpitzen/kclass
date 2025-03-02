@@ -535,7 +535,7 @@ function findPinchDisabler() {
 /* remove the event listener that disable pinch zoom */
 
 let pinchDisablerDisabler = setInterval(() => {
-    pinchDisabler = findPinchDisabler();
+    let pinchDisabler = findPinchDisabler();
     console.log(`pinchDisabler: ${pinchDisabler}`)
     if (pinchDisabler) {
         document.removeEventListener("touchstart", pinchDisabler);
