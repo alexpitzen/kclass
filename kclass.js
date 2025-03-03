@@ -536,7 +536,6 @@ function findPinchDisabler() {
 
 let pinchDisablerDisabler = setInterval(() => {
     let pinchDisabler = findPinchDisabler();
-    console.log(`pinchDisabler: ${pinchDisabler}`)
     if (pinchDisabler) {
         document.removeEventListener("touchstart", pinchDisabler);
         clearInterval(pinchDisablerDisabler);
@@ -565,7 +564,7 @@ const pointerScroll = (parent, draggable) => {
         if (dragging) {
             dragged++;
             parent.scrollTop = scrollStart - (ev.clientY - startY);
-            if (dragged == 5) {
+            if (dragged == 40) {
                 draggable.setPointerCapture(ev.pointerId);
             }
         }

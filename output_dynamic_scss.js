@@ -2978,7 +2978,6 @@ function findPinchDisabler() {
 
 let pinchDisablerDisabler = setInterval(() => {
     let pinchDisabler = findPinchDisabler();
-    console.log(`pinchDisabler: ${pinchDisabler}`)
     if (pinchDisabler) {
         document.removeEventListener("touchstart", pinchDisabler);
         clearInterval(pinchDisablerDisabler);
@@ -3007,7 +3006,7 @@ const pointerScroll = (parent, draggable) => {
         if (dragging) {
             dragged++;
             parent.scrollTop = scrollStart - (ev.clientY - startY);
-            if (dragged == 5) {
+            if (dragged == 40) {
                 draggable.setPointerCapture(ev.pointerId);
             }
         }
@@ -3104,6 +3103,9 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
 .drawtab .buttonsleft {
   width: 129px;
   display: inline-table;
+}
+.drawtab .stamps {
+  touch-action: none !important;
 }
 .drawtab button {
   height: 30px;

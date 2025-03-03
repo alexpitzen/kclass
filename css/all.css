@@ -79,6 +79,9 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
   width: 129px;
   display: inline-table;
 }
+.drawtab .stamps {
+  touch-action: none !important;
+}
 .drawtab button {
   height: 30px;
 }
