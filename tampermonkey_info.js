@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kclass
 // @namespace    http://tampermonkey.net/
-// @version      2024-01-08
+// @version      2025-03-08_1
 // @description  improvements to class-navi grading layout when zoomed in
 // @author       You
 // @match        https://class-navi.digital.kumon.com/*
