@@ -2989,7 +2989,8 @@ let pinchDisablerDisabler = setInterval(() => {
     if (pinchDisabler) {
         document.removeEventListener("touchstart", pinchDisabler);
         clearInterval(pinchDisablerDisabler);
-        document.querySelector("meta[content*='user-scalable']").content = "width=device-width, initial-scale=1";
+        // document.querySelector("meta[content*='user-scalable']").content = "width=device-width, initial-scale=1";
+        document.querySelector("meta[content*='user-scalable']").content = "width=490px, initial-scale=1";
     }
 }, 1000);
 
