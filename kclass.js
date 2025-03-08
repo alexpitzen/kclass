@@ -135,12 +135,15 @@ function initHD() {
 
     if (typeof(_mo) === "undefined") {
         _mo = new MutationObserver((mutationList, _) => {
-            console.log("Mutation");
-            console.log(mutationList);
+            // console.log("Mutation");
+            // console.log(mutationList);
             for (const mutation of mutationList) {
                 if (mutation.target.classList.contains("selected")) {
                     StampLib.makeHD(mutation.target);
                 } else {
+                    // reset non-selected page to SD
+                    // because selecting an already HD page with the pen tool selected
+                    // makes things really messed up
                     StampLib.makeSD(mutation.target);
                 }
             }
@@ -148,8 +151,8 @@ function initHD() {
     }
     _mo.disconnect();
     document.querySelectorAll(".ATD0020P-worksheet-container").forEach(page => {
-        console.log("Observing page");
-        console.log(page);
+        // console.log("Observing page");
+        // console.log(page);
         _mo.observe(page, {attributeFilter:["class"]});
     });
     StampLib.makeHD(document.querySelector(".ATD0020P-worksheet-container.selected"));
