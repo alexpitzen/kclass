@@ -196,8 +196,8 @@ drawheader.appendChild(buttonsleft);
 const sizeslider = document.createElement("input");
 sizeslider.className = "sizeslider";
 sizeslider.type = "range";
-sizeslider.value = 25;
-sizeslider.min = 10;
+sizeslider.value = 10;
+sizeslider.min = 1;
 sizeslider.max = 100;
 sizeslider.title = "Adjust stamp size";
 buttonsleft.appendChild(sizeslider);
@@ -307,7 +307,8 @@ function makeStamp(stamp) {
         e.stopPropagation();
     });
     let stampDimensions = StampLib.getWriteStampDimensions(stamp, 1);
-    let maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
+    // let maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
+    let maxScaleFactor = 612 / Math.max(stampDimensions.width, stampDimensions.height);
     btn.style.setProperty("--height-limiter", stampDimensions.height <= stampDimensions.width ? 1 : stampDimensions.width / stampDimensions.height);
     btn.onclick = (e) => {
         drawtab.style.display = "none";
