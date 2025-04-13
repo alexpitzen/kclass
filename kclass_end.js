@@ -1,5 +1,0 @@
-`; //`
-
-document.body.appendChild(z);
-
-})();

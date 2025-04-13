@@ -13,7 +13,7 @@
     'use strict';
     // {# 
     /* #}
-    {% include 'stamp.js' %}
+    {% include 'stamplib.js' %}
     //*/
 
     // {# 
