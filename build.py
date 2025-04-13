@@ -14,7 +14,7 @@ def get_local_stamps():
         if name in local_stamps:
             print(f"Warning: {f} is overwriting another image named {name}.", file=sys.stderr)
         try:
-            local_stamps[name] = f.read_text()
+            local_stamps[name] = f.read_text().replace("\n", " ")
         except Exception as ex:
             print(f"Failed to load {f}: {ex}", file=sys.stderr)
 

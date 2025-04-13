@@ -2059,7 +2059,7 @@
 
     {% for stamp_name, stamp_contents in stamps.items() %}
     const {{ stamp_name }} = parseSvg(`{{ stamp_contents }}`);
-    {% endfor %}
+    {%- endfor %}
 
     global.StampLib = {
         getAtd: getAtd,
@@ -2117,6 +2117,8 @@
                 shibaPuppyOutlined,
                 christmasShiba,
                 poodle,
+                pvPanda,
+                pvHamster2,
                 halloweenCuteCatFilled,
                 christmasCat,
                 halloweenCuteCatHat,
@@ -2208,6 +2210,8 @@
                 shibaPuppyOutlined,
                 christmasShiba,
                 poodle,
+                pvPanda,
+                pvHamster2,
                 halloweenCuteCatFilled,
                 christmasCat,
                 halloweenCuteCatHat,

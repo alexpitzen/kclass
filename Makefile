@@ -1,3 +1,7 @@
-all:
+all: .env
 	sass --update scss:css
-	python3 build.py
+	.env/bin/python3 build.py
+
+.env:
+	python3 -m venv .env
+	.env/bin/pip install jinja2
