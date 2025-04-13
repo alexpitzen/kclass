@@ -22,7 +22,7 @@ def get_local_stamps():
 
 def get_css():
     with io.StringIO() as css:
-        for f in Path("css").glob("*.css"):
+        for f in sorted(Path("css").glob("*.css")):
             if not f.is_file():
                 continue
             try:

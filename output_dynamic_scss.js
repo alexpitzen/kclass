@@ -2968,21 +2968,6 @@ pointerScroll(drawtab, drawstamps);
 
     let z = document.createElement("style");
     z.innerHTML = `
-@media screen and (orientation: landscape) and (max-height: 613px) {
-  /* Grading */
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .shiftbtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .customToolbar {
-    display: unset !important;
-  }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-container.shiftup > .worksheet-group .worksheet-container > div {
-    margin-top: calc(100vh - 615px);
-  }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-container.shiftup > .worksheet-group.single:last-child .worksheet-group-page:last-child .worksheet-container > div {
-    margin-top: calc(100vh - 617px);
-  }
-}
-
-/*# sourceMappingURL=horizontal_dynamic_small.css.map */
-
 * {
   touch-action: auto !important;
 }
@@ -3221,6 +3206,126 @@ div.mark-boxs.worksheet-layer {
 
 /*# sourceMappingURL=all.css.map */
 
+@media screen and (orientation: landscape) and (max-height: 733px) {
+  /* Less space on grade column */
+  .studentRowHeader .gradeColumn {
+    width: unset !important;
+    min-width: unset !important;
+    padding-left: 0px !important;
+  }
+  .studentRowHeader .nameColumn {
+    width: 185px !important;
+  }
+  app-student-list-filler-item {
+    display: none !important;
+  }
+  .studentRow .gradeColumn {
+    flex: none !important;
+    min-width: unset !important;
+    width: unset !important;
+  }
+  .studentRow .gradeColumn span {
+    margin-left: 0 !important;
+  }
+  .studentRow .gradeColumn .columnContent {
+    width: 10px !important;
+  }
+  .studentRow .nameColumn {
+    padding-right: 0px !important;
+    flex-basis: 248px !important;
+  }
+  .studentRow .nameColumn .fullNameEN {
+    width: 234px !important;
+  }
+  .container {
+    min-width: unset !important;
+  }
+  .content-bg {
+    padding: 0px !important;
+  }
+  .scroll-content {
+    overflow-x: auto !important;
+  }
+  .grading-header-icon {
+    display: none;
+  }
+  .grading-header-title {
+    display: none;
+  }
+  .grading-header {
+    min-height: unset !important;
+    padding: 0px !important;
+  }
+  .grading-header .backBtnWrap {
+    height: unset !important;
+  }
+  .grading-header .btn-subject {
+    border: none !important;
+    height: unset !important;
+    line-height: 20px !important;
+    min-width: unset !important;
+    padding: 0px 10px !important;
+  }
+  .grading-header .full-name {
+    line-height: 20px !important;
+  }
+  .grading-header .header-left {
+    line-height: 10px;
+  }
+  .grading-header .name-kana {
+    display: none;
+  }
+  .grading-header .student-info-btn::before {
+    top: 8px !important;
+  }
+  .grading-header .student-info-right .num {
+    height: 20px !important;
+    line-height: 20px !important;
+    min-width: 20px !important;
+  }
+  .grading-header .student-pulldown-root {
+    min-height: unset !important;
+    margin-left: 0px !important;
+  }
+  .grading-header #studentInfoPullDown {
+    min-height: unset;
+    border: 0px !important;
+  }
+  .worksheet-tool {
+    margin-left: 0px !important;
+  }
+  /* Grading */
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):has(.content-answer-content) .customToolbar {
+    /* account for dynamic width answer content */
+    left: calc((100vw - 410px) * 2 / 3 + 385px + 6px) !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-answer-content {
+    /* dynamic width answer content so our xallbtn can have "fixed" position relative to the other buttons */
+    width: calc((100vw - 410px) * 2 / 3) !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)):has(.worksheet-group.single) .customToolbar {
+    left: 391px;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-group.single) .xallbtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-group.single) .customToolbar {
+    /* for this size, only show if in single page mode */
+    display: unset !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
+  div.worksheet-group.landscape.selected) .content-detail {
+    min-width: 550px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
+  div.worksheet-group.landscape.selected) .customToolbar {
+    left: 515px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
+  div.worksheet-group.landscape.selected) .worksheet-tool {
+    margin-left: 510px !important;
+  }
+}
+
+/*# sourceMappingURL=horizontal_dynamic_big.css.map */
+
 @media screen and (orientation: landscape) and (max-height: 633px) {
   /* login page */
   div.root {
@@ -3341,6 +3446,21 @@ div.mark-boxs.worksheet-layer {
 }
 
 /*# sourceMappingURL=horizontal_dynamic_medium.css.map */
+
+@media screen and (orientation: landscape) and (max-height: 613px) {
+  /* Grading */
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .shiftbtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .customToolbar {
+    display: unset !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-container.shiftup > .worksheet-group .worksheet-container > div {
+    margin-top: calc(100vh - 615px);
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-container.shiftup > .worksheet-group.single:last-child .worksheet-group-page:last-child .worksheet-container > div {
+    margin-top: calc(100vh - 617px);
+  }
+}
+
+/*# sourceMappingURL=horizontal_dynamic_small.css.map */
 
 @media screen and (orientation: portrait) and (max-width: 977px) {
   /* Less space on grade column */
@@ -3578,126 +3698,6 @@ div.mark-boxs.worksheet-layer {
 }
 
 /*# sourceMappingURL=vertical_big.css.map */
-
-@media screen and (orientation: landscape) and (max-height: 733px) {
-  /* Less space on grade column */
-  .studentRowHeader .gradeColumn {
-    width: unset !important;
-    min-width: unset !important;
-    padding-left: 0px !important;
-  }
-  .studentRowHeader .nameColumn {
-    width: 185px !important;
-  }
-  app-student-list-filler-item {
-    display: none !important;
-  }
-  .studentRow .gradeColumn {
-    flex: none !important;
-    min-width: unset !important;
-    width: unset !important;
-  }
-  .studentRow .gradeColumn span {
-    margin-left: 0 !important;
-  }
-  .studentRow .gradeColumn .columnContent {
-    width: 10px !important;
-  }
-  .studentRow .nameColumn {
-    padding-right: 0px !important;
-    flex-basis: 248px !important;
-  }
-  .studentRow .nameColumn .fullNameEN {
-    width: 234px !important;
-  }
-  .container {
-    min-width: unset !important;
-  }
-  .content-bg {
-    padding: 0px !important;
-  }
-  .scroll-content {
-    overflow-x: auto !important;
-  }
-  .grading-header-icon {
-    display: none;
-  }
-  .grading-header-title {
-    display: none;
-  }
-  .grading-header {
-    min-height: unset !important;
-    padding: 0px !important;
-  }
-  .grading-header .backBtnWrap {
-    height: unset !important;
-  }
-  .grading-header .btn-subject {
-    border: none !important;
-    height: unset !important;
-    line-height: 20px !important;
-    min-width: unset !important;
-    padding: 0px 10px !important;
-  }
-  .grading-header .full-name {
-    line-height: 20px !important;
-  }
-  .grading-header .header-left {
-    line-height: 10px;
-  }
-  .grading-header .name-kana {
-    display: none;
-  }
-  .grading-header .student-info-btn::before {
-    top: 8px !important;
-  }
-  .grading-header .student-info-right .num {
-    height: 20px !important;
-    line-height: 20px !important;
-    min-width: 20px !important;
-  }
-  .grading-header .student-pulldown-root {
-    min-height: unset !important;
-    margin-left: 0px !important;
-  }
-  .grading-header #studentInfoPullDown {
-    min-height: unset;
-    border: 0px !important;
-  }
-  .worksheet-tool {
-    margin-left: 0px !important;
-  }
-  /* Grading */
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):has(.content-answer-content) .customToolbar {
-    /* account for dynamic width answer content */
-    left: calc((100vw - 410px) * 2 / 3 + 385px + 6px) !important;
-  }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-answer-content {
-    /* dynamic width answer content so our xallbtn can have "fixed" position relative to the other buttons */
-    width: calc((100vw - 410px) * 2 / 3) !important;
-  }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)):has(.worksheet-group.single) .customToolbar {
-    left: 391px;
-  }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-group.single) .xallbtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-group.single) .customToolbar {
-    /* for this size, only show if in single page mode */
-    display: unset !important;
-  }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
-  div.worksheet-group.landscape.selected) .content-detail {
-    min-width: 550px !important;
-  }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
-  div.worksheet-group.landscape.selected) .customToolbar {
-    left: 515px !important;
-  }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
-  div.worksheet-group.landscape.selected) .worksheet-tool {
-    margin-left: 510px !important;
-  }
-}
-
-/*# sourceMappingURL=horizontal_dynamic_big.css.map */
 `;
 
     document.body.appendChild(z);
