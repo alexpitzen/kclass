@@ -187,7 +187,12 @@ div.mark-boxs.worksheet-layer {
     z-index: 3;
 }
 
+div.barWrap[aria-describedby] {
+    background: darkgray;
+}
+
 /* EXPERIMENTAL */
+/*
 @media screen and (orientation:landscape) and (min-height:1300px) and (min-width:1300px) {
     .ATD0020P-worksheet-container {
         height:calc(min(100vh,1270px)) !important;
@@ -207,6 +212,8 @@ div.mark-boxs.worksheet-layer {
         height: calc(min(100vh, 1270px)) !important;
     }
 }
+*/
+
 /* EXPERIMENTAL */
 /*@media screen and (orientation:landscape) and (max-height:1299px) {
     body:not(
