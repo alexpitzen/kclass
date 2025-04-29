@@ -3142,7 +3142,7 @@ div.mark-boxs.worksheet-layer {
 }
 
 div.barWrap[aria-describedby] {
-  background: darkgray;
+  background: darkgray !important;
 }
 
 /* EXPERIMENTAL */
