@@ -2232,6 +2232,7 @@
                 karthikaBananamon,
                 karthikaEggcellentWork,
                 karthikaAmazingHeart,
+                karthikaPurrfect,
             ],
             "Christmas": [
                 christmasCat,
