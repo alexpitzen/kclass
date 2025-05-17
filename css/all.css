@@ -171,6 +171,16 @@ div.barWrap[aria-describedby] {
   background: darkgray !important;
 }
 
+/* keyboard mode stuff */
+.mark-box .key {
+  position: absolute;
+  color: mediumpurple;
+  font-weight: 800;
+  right: 40px;
+  word-break: keep-all;
+  top: 0;
+}
+
 /* EXPERIMENTAL */
 /*
 @media screen and (orientation:landscape) and (min-height:1300px) and (min-width:1300px) {

@@ -2471,12 +2471,12 @@ const drawbtn = makebtn("drawbtn", "&#128393;", "Show the draw tab", customToolb
     updatePenSettings();
 });
 
-var _mo;
-var _mo2;
+var _hdmo;
+var _hdmo2;
 
 function enableHD() {
-    if (typeof(_mo2) === "undefined") {
-        _mo2 = new MutationObserver((mutationList, _) => {
+    if (typeof(_hdmo2) === "undefined") {
+        _hdmo2 = new MutationObserver((mutationList, _) => {
             for (const mutation of mutationList) {
                 // if (mutation.addedNodes.entries().find(i => i[1].classList?.contains("ATD0020P-worksheet-container") || i[1].classList?.contains("ATD0020P-worksheet-page") || i[1].classList?.contains("worksheet-group-page"))) {
                 if (mutation.target.nodeName == "LOADING-SPINNER" && mutation.removedNodes.length) {
@@ -2488,7 +2488,7 @@ function enableHD() {
             }
         });
     }
-    _mo2.observe(document.querySelector("app-root"), {childList: true, subtree: true});
+    _hdmo2.observe(document.querySelector("app-root"), {childList: true, subtree: true});
     initHD();
 }
 
@@ -2521,8 +2521,8 @@ function initHD() {
         i.style.width = "370px";
     });
 
-    if (typeof(_mo) === "undefined") {
-        _mo = new MutationObserver((mutationList, _) => {
+    if (typeof(_hdmo) === "undefined") {
+        _hdmo = new MutationObserver((mutationList, _) => {
             // console.log("Mutation");
             // console.log(mutationList);
             for (const mutation of mutationList) {
@@ -2537,21 +2537,21 @@ function initHD() {
             }
         });
     }
-    _mo.disconnect();
+    _hdmo.disconnect();
     document.querySelectorAll(".ATD0020P-worksheet-container").forEach(page => {
         // console.log("Observing page");
         // console.log(page);
-        _mo.observe(page, {attributeFilter:["class"]});
+        _hdmo.observe(page, {attributeFilter:["class"]});
     });
     StampLib.makeHD(document.querySelector(".ATD0020P-worksheet-container.selected"));
 }
 
 function disableHD() {
-    if (typeof(_mo) !== "undefined") {
-        _mo.disconnect();
+    if (typeof(_hdmo) !== "undefined") {
+        _hdmo.disconnect();
     }
-    if (typeof(_mo2) !== "undefined") {
-        _mo2.disconnect();
+    if (typeof(_hdmo2) !== "undefined") {
+        _hdmo2.disconnect();
     }
     StampLib.makeSD(document.querySelector(".ATD0020P-worksheet-container.selected"));
 }
@@ -2969,6 +2969,133 @@ const pointerScroll = (parent, draggable) => {
 
 pointerScroll(drawtab, drawstamps);
 
+var kclassKeyboardMode = false;
+function keyboardMode(enable) {
+    if (enable == kclassKeyboardMode) {
+        return;
+    }
+    enable ? enableKeyboardMode() : disableKeyboardMode();
+}
+
+const kbbtn = document.createElement("input");
+kbbtn.type = "checkbox";
+kbbtn.id = "kbbtn";
+kbbtn.className = "kbbtn";
+kbbtn.title = "HD mode! Disable this when using pen/eraser";
+kbbtn.addEventListener("change", function() {
+    keyboardMode(kbbtn.checked);
+});
+kbbtn.accessKey = "k";
+kbbtn.style.display = "none";
+
+let kbbtnlabel = document.createElement("label");
+kbbtnlabel.setAttribute("for", kbbtn.id);
+kbbtnlabel.innerText = "HD mode";
+kbbtnlabel.title = "HD mode! Disable this when using pen/eraser";
+kbbtnlabel.style.display = "none";
+
+buttonsleft.appendChild(kbbtn);
+buttonsleft.appendChild(kbbtnlabel);
+
+function goLastPage() {
+    let pages = document.querySelectorAll(".worksheet-navigator-page");
+    pages[pages.length - 1]?.click();
+}
+
+function goNextCorrectionPage() {
+    let cur = document.querySelector(".worksheet-navigator-page.active");
+    let pages = Array.from(document.querySelectorAll(".worksheet-navigator-page"));
+    let i = pages.indexOf(cur);
+    for (let j = i+1; j < pages.length; j++) {
+        if (pages[j].querySelector("span:not(.disabled)")) {
+            pages[j].click();
+            break;
+        }
+    }
+}
+
+function goPrevCorrectionPage() {
+    let cur = document.querySelector(".worksheet-navigator-page.active");
+    let pages = Array.from(document.querySelectorAll(".worksheet-navigator-page"));
+    let i = pages.indexOf(cur);
+    for (let j = i-1; j >= 0; j--) {
+        if (pages[j].querySelector("span:not(.disabled)")) {
+            pages[j].click();
+            break;
+        }
+    }
+}
+
+var _kbmo;
+function keyboardModeHandler(e) {
+    console.log(e);
+    if (e.target.nodeName == "INPUT" || e.target.nodeName == "TEXTAREA") {
+        return;
+    }
+    if (e.altKey || e.ctrlKey || e.metaKey) {
+        return;
+    }
+    switch(e.key) {
+        case "j":
+            console.log("down");
+            document.querySelector("button.pager-button.down")?.click();
+            break;
+        case "k":
+            console.log("up");
+            document.querySelector("button.pager-button.up")?.click();
+            break;
+        case "g":
+            document.querySelectorAll(".worksheet-navigator-page span:not(.disabled)")[0]?.click();
+            break;
+        case "G":
+            goLastPage();
+            break;
+        case "x":
+            xallbtn?.click();
+            break;
+        case "Backspace":
+            (
+                document.querySelector(".btn-dialog-cancel")
+                ?? document.querySelector("app-page-back-button")
+            )?.click();
+            break;
+        case "n":
+            goNextCorrectionPage();
+            break;
+        case "N":
+            goPrevCorrectionPage();
+            break;
+        case "p":
+            document.querySelector("#BreakScoringButton")?.click();
+            break;
+        case "Enter":
+            (
+                document.querySelector("#EndScoringButton")
+                ?? document.querySelector(".btn-dialog-navy")
+            )?.click();
+            break;
+        case "Escape":
+            (
+                document.querySelector(".btn-dialog-cancel")
+                ?? document.querySelector(".end-scoring-area")
+            )?.click();
+            break;
+        case "d":
+            document.querySelector(".other-worksheet-button")?.click();
+            break;
+
+    }
+}
+function enableKeyboardMode() {
+    document.addEventListener("keydown", keyboardModeHandler);
+}
+function disableKeyboardMode() {
+    document.removeEventListener("keydown", keyboardModeHandler);
+}
+
+window.keyboardMode = keyboardMode;
+
+
 ;
     //*/
 
@@ -3145,6 +3272,16 @@ div.mark-boxs.worksheet-layer {
 
 div.barWrap[aria-describedby] {
   background: darkgray !important;
+}
+
+/* keyboard mode stuff */
+.mark-box .key {
+  position: absolute;
+  color: mediumpurple;
+  font-weight: 800;
+  right: 40px;
+  word-break: keep-all;
+  top: 0;
 }
 
 /* EXPERIMENTAL */
