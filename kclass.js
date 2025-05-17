@@ -49,9 +49,19 @@ drawtab.addEventListener("mouseleave", (e) => {
         || e.y <= rect.top
         || e.y >= e.bottom
     ) {
-        drawtab.style.display = "none";
+        hideDrawTab(true);
     }
 });
+
+function hideDrawTab(hide) {
+    console.log(`hideDrawTab ${hide}`);
+    if (hide) {
+        drawtab.style.display = "none";
+    } else {
+        drawtab.style.display = "unset";
+    }
+    return true;
+}
 
 const penSettings = {
     "pen": {
@@ -77,11 +87,12 @@ function updatePenSettings() {
 }
 
 const drawbtn = makebtn("drawbtn", "&#128393;", "Show the draw tab", customToolbar, () => {
-    drawtab.style.display = "unset";
+    hideDrawTab(false);
     textarea.focus();
     textarea.select();
     updatePenSettings();
 });
+drawbtn.accessKey = "d";
 
 var _hdmo;
 var _hdmo2;
@@ -213,8 +224,15 @@ sizeslider.addEventListener("input", (e) => {
 
 const unlockbtn = makebtn("unlockbtn", "&#128275;", "Unlock the page for writing", buttonsleft, () => {
     stamp.unlockPage();
-    drawtab.style.display = "none";
+    hideDrawTab(true);
 });
+
+const togglesleft = document.createElement("div");
+buttonsleft.appendChild(togglesleft);
+
+const toggleleft1 = document.createElement("div");
+toggleleft1.className = "toggle";
+togglesleft.appendChild(toggleleft1);
 
 const hdbtn = document.createElement("input");
 hdbtn.type = "checkbox";
@@ -235,8 +253,8 @@ hdbtnlabel.setAttribute("for", hdbtn.id);
 hdbtnlabel.innerText = "HD mode";
 hdbtnlabel.title = "HD mode! Disable this when using pen/eraser";
 
-buttonsleft.appendChild(hdbtn);
-buttonsleft.appendChild(hdbtnlabel);
+toggleleft1.appendChild(hdbtn);
+toggleleft1.appendChild(hdbtnlabel);
 
 function getScale() {
     return sizeslider.value / 100;
@@ -310,7 +328,7 @@ function makeStamp(stamp) {
     let maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
     btn.style.setProperty("--height-limiter", stampDimensions.height <= stampDimensions.width ? 1 : stampDimensions.width / stampDimensions.height);
     btn.onclick = (e) => {
-        drawtab.style.display = "none";
+        hideDrawTab(true);
         let scale = getScale() * maxScaleFactor;
         let writeDimensions = {width: stampDimensions.width * scale, height: stampDimensions.height * scale};
         let printPreviewDiv = document.createElement("div");
@@ -405,8 +423,8 @@ function updateTextAreaSize() {
 }
 textarea.addEventListener("input", updateTextAreaSize);
 
-makebtn("textprintbtn squarebtn", "T", "Stamp the contents of the textbox", textareadiv, (e) => {
-    drawtab.style.display = "none";
+const textbtn = makebtn("textprintbtn squarebtn", "T", "Stamp the contents of the textbox", textareadiv, (e) => {
+    hideDrawTab(true);
     // TODO these dimensions are wrong in HD mode for some reason
     let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
     let printPreviewDiv = document.createElement("div");
@@ -467,6 +485,7 @@ makebtn("textprintbtn squarebtn", "T", "Stamp the contents of the textbox", text
     printoverlay.addEventListener("click", printclickhandler);
     printoverlay.style.display = "unset";
 });
+textbtn.accessKey = "t";
 
 const stampColorTypeLabel = document.createElement("label");
 stampColorTypeLabel.setAttribute("for", "stampColorType");
@@ -589,26 +608,6 @@ function keyboardMode(enable) {
     enable ? enableKeyboardMode() : disableKeyboardMode();
 }
 
-const kbbtn = document.createElement("input");
-kbbtn.type = "checkbox";
-kbbtn.id = "kbbtn";
-kbbtn.className = "kbbtn";
-kbbtn.title = "HD mode! Disable this when using pen/eraser";
-kbbtn.addEventListener("change", function() {
-    keyboardMode(kbbtn.checked);
-});
-kbbtn.accessKey = "k";
-kbbtn.style.display = "none";
-
-let kbbtnlabel = document.createElement("label");
-kbbtnlabel.setAttribute("for", kbbtn.id);
-kbbtnlabel.innerText = "HD mode";
-kbbtnlabel.title = "HD mode! Disable this when using pen/eraser";
-kbbtnlabel.style.display = "none";
-
-buttonsleft.appendChild(kbbtn);
-buttonsleft.appendChild(kbbtnlabel);
-
 function goLastPage() {
     let pages = document.querySelectorAll(".worksheet-navigator-page");
     pages[pages.length - 1]?.click();
@@ -638,6 +637,40 @@ function goPrevCorrectionPage() {
     }
 }
 
+const kbbtn = document.createElement("input");
+kbbtn.type = "checkbox";
+kbbtn.id = "kbbtn";
+kbbtn.className = "kbbtn";
+kbbtn.title = `Keyboard mode:
+j: down
+k: up
+g: top
+G: bottom
+x: x all
+n: next active page
+N: previous active page
+p: pause (when bottom pause button is visible)
+d: go to next set
+backspace: exit/cancel
+escape: close dialog
+enter: submit/accept dialog`;
+kbbtn.addEventListener("change", function() {
+    keyboardMode(kbbtn.checked);
+});
+kbbtn.accessKey = "k";
+
+let kbbtnlabel = document.createElement("label");
+kbbtnlabel.setAttribute("for", kbbtn.id);
+kbbtnlabel.innerText = "Keyboard mode";
+kbbtnlabel.title = kbbtn.title;
+
+const toggleleft2 = document.createElement("div");
+toggleleft2.className = "toggle";
+togglesleft.appendChild(toggleleft2);
+
+toggleleft2.appendChild(kbbtn);
+toggleleft2.appendChild(kbbtnlabel);
+
 var _kbmo;
 function keyboardModeHandler(e) {
     console.log(e);
@@ -649,11 +682,9 @@ function keyboardModeHandler(e) {
     }
     switch(e.key) {
         case "j":
-            console.log("down");
             document.querySelector("button.pager-button.down")?.click();
             break;
         case "k":
-            console.log("up");
             document.querySelector("button.pager-button.up")?.click();
             break;
         case "g":
@@ -668,7 +699,7 @@ function keyboardModeHandler(e) {
         case "Backspace":
             (
                 document.querySelector(".btn-dialog-cancel")
-                ?? document.querySelector("app-page-back-button")
+                || document.querySelector("app-page-back-button")
             )?.click();
             break;
         case "n":
@@ -683,14 +714,11 @@ function keyboardModeHandler(e) {
         case "Enter":
             (
                 document.querySelector("#EndScoringButton")
-                ?? document.querySelector(".btn-dialog-navy")
+                || document.querySelector(".btn-dialog-navy")
             )?.click();
             break;
         case "Escape":
-            (
-                document.querySelector(".btn-dialog-cancel")
-                ?? document.querySelector(".end-scoring-area")
-            )?.click();
+            doEscape();
             break;
         case "d":
             document.querySelector(".other-worksheet-button")?.click();
@@ -704,8 +732,19 @@ function enableKeyboardMode() {
 function disableKeyboardMode() {
     document.removeEventListener("keydown", keyboardModeHandler);
 }
-
-window.keyboardMode = keyboardMode;
+function doEscape() {
+    let escapable = (
+        document.querySelector(".btn-dialog-cancel")
+        || document.querySelector(".end-scoring-area")
+    );
+    if (escapable) {
+        escapable.click();
+        return;
+    }
+    if (drawtab.checkVisibility()) {
+        hideDrawTab(true);
+    }
+}
 
 
 ;
