@@ -712,12 +712,7 @@ function keyboardModeHandler(e) {
             document.querySelector("#BreakScoringButton")?.click();
             break;
         case "Enter":
-            (
-                document.querySelector("#EndScoringButton")
-                || document.querySelector(".btn-dialog-navy")
-                || document.querySelector(".bottomSheet .scoreBtn")
-                || document.querySelector("#customPulldown:not([hidden]) > .kbfocus")
-            )?.click();
+            doEnter();
             break;
         case "Escape":
             doEscape();
@@ -734,6 +729,7 @@ function keyboardModeHandler(e) {
         case "H":
             let wasPulldownOpen = isPulldownOpen();
             document.querySelector("#studentInfoPullDown")?.click();
+            document.querySelector("#studentInfoPullDown")?.blur();
             document.querySelectorAll("#customPulldown > .kbfocus").forEach((p) => {
                 p.classList.remove("kbfocus");
             });
@@ -774,7 +770,7 @@ function doEscape() {
 function doDown() {
     if (isPulldownOpen()) {
         let kbfocus = (
-            document.querySelector("#customPulldown .option .kbfocus")
+            document.querySelector("#customPulldown .option.kbfocus")
             || document.querySelector("#customPulldown > .option-select")
         );
         let options = Array.from(document.querySelectorAll("#customPulldown > .option"));
@@ -791,7 +787,7 @@ function doDown() {
 function doUp() {
     if (isPulldownOpen()) {
         let kbfocus = (
-            document.querySelector("#customPulldown .option .kbfocus")
+            document.querySelector("#customPulldown .option.kbfocus")
             || document.querySelector("#customPulldown > .option-select")
         );
         let options = Array.from(document.querySelectorAll("#customPulldown > .option"));
@@ -804,5 +800,29 @@ function doUp() {
     }
     document.querySelector("button.pager-button.up")?.click();
 }
+
+function doEnter() {
+    let mainBtn = (
+        document.querySelector("#EndScoringButton")
+        || document.querySelector(".btn-dialog-navy")
+        || document.querySelector(".bottomSheet .scoreBtn")
+    );
+    if (mainBtn) {
+        mainBtn.click();
+        return;
+    }
+    let studentPulldownKbfocus = document.querySelector("#customPulldown:not([hidden]) > .kbfocus");
+    if (studentPulldownKbfocus) {
+        studentPulldownKbfocus.dispatchEvent(
+            new MouseEvent("mousedown"),
+            {
+                button: 0,
+                bubbles: true,
+            },
+        );
+        return;
+    }
+}
+
 
 ;
