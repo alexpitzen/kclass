@@ -2401,13 +2401,26 @@ function makebtn(className, innerText, title, container, fn) {
     return btn;
 }
 
-makebtn("headerZindexBtn", "H", "Toggle header bar visibility", customToolbar, () => {
+function showHeader(show) {
+    let header = document.getElementsByClassName("grading-header")[0];
+    if (!show && header.classList.contains("z300")) {
+        header.classList.remove("z300");
+    } else if (show && !header.classList.contains("z300")) {
+        header.classList.add("z300");
+    }
+}
+
+function toggleHeader() {
     let header = document.getElementsByClassName("grading-header")[0];
     if (header.classList.contains("z300")) {
         header.classList.remove("z300");
     } else {
         header.classList.add("z300");
     }
+}
+
+makebtn("headerZindexBtn", "H", "Toggle header bar visibility", customToolbar, () => {
+    toggleHeader();
 });
 
 makebtn("shiftbtn", "↕", "Toggle shifting the page up/down", customToolbar, () => {
@@ -3060,6 +3073,101 @@ toggleleft2.appendChild(kbbtn);
 toggleleft2.appendChild(kbbtnlabel);
 
 var _kbmo;
+var _kbmo2;
+function enableMarkboxKeys() {
+    if (typeof(_kbmo2) === "undefined") {
+        _kbmo2 = new MutationObserver((mutationList, _) => {
+            for (const mutation of mutationList) {
+                if (mutation.target.nodeName == "LOADING-SPINNER" && mutation.removedNodes.length) {
+                    console.log("SPINNER DONE");
+                    console.log(mutation);
+                    initMarkboxKeys();
+                    break;
+                }
+            }
+        });
+    }
+    _kbmo2.observe(document.querySelector("app-root"), {childList: true, subtree: true});
+    initMarkboxKeys();
+}
+
+function initMarkboxKeys() {
+    if (!document.querySelector("app-atd0020p")) {
+        console.log("No grading app");
+        return;
+    }
+
+    if (typeof(_kbmo) === "undefined") {
+        _kbmo = new MutationObserver((mutationList, _) => {
+            // console.log("Mutation");
+            // console.log(mutationList);
+            for (const mutation of mutationList) {
+                if (mutation.target.classList.contains("selected")) {
+                    addMarkboxKeys(mutation.target);
+                } else {
+                    removeMarkboxKeys(mutation.target);
+                }
+            }
+        });
+    }
+    _kbmo.disconnect();
+    document.querySelectorAll(".ATD0020P-worksheet-container").forEach(page => {
+        // console.log("Observing page");
+        // console.log(page);
+        _kbmo.observe(page, {attributeFilter:["class"]});
+    });
+    addMarkboxKeys(document.querySelector(".ATD0020P-worksheet-container.selected"));
+}
+
+function disableMarkboxKeys() {
+    if (typeof(_kbmo) !== "undefined") {
+        _kbmo.disconnect();
+    }
+    if (typeof(_kbmo2) !== "undefined") {
+        _kbmo2.disconnect();
+    }
+    removeMarkboxKeys(document.querySelector(".ATD0020P-worksheet-container.selected"));
+}
+
+var markboxMap = {};
+
+let keyindexmap = [
+    "0",
+    "!",
+    "@",
+    "#",
+    "$",
+    "%",
+    "^",
+    "&",
+    "*",
+    "(",
+    ")",
+]
+
+function addMarkboxKeys(page) {
+    markboxMap = {};
+    page.querySelectorAll(".mark-box").forEach((box, index) => {
+        let key = index + 1;
+        if (key > 9) {
+            key = keyindexmap[key - 10];
+        } else {
+            key = String(key);
+        }
+        let markboxkey = document.createElement("div");
+        markboxkey.className = "key";
+        markboxkey.innerText = key;
+        markboxMap[key] = box;
+        box.appendChild(markboxkey);
+    });
+}
+
+function removeMarkboxKeys(page) {
+    page.querySelectorAll(".mark-box").forEach(box => {
+        box.removeChild(box.querySelector(".key"));
+    });
+}
+
 function keyboardModeHandler(e) {
     console.log(e);
     if (e.target.nodeName == "INPUT" || e.target.nodeName == "TEXTAREA") {
@@ -3116,23 +3224,38 @@ function keyboardModeHandler(e) {
             break;
         case "H":
             let wasPulldownOpen = isPulldownOpen();
+            let pulldownExists = document.querySelector("#studentInfoPullDown.student-info-btn");
             document.querySelector("#studentInfoPullDown")?.click();
             document.querySelector("#studentInfoPullDown")?.blur();
             document.querySelectorAll("#customPulldown > .kbfocus").forEach((p) => {
                 p.classList.remove("kbfocus");
             });
-            if (!wasPulldownOpen) {
-                document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
+            if (pulldownExists) {
+                if (!wasPulldownOpen) {
+                    document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
+                    showHeader(true);
+                } else {
+                    showHeader(false);
+                }
+            } else {
+                toggleHeader();
             }
             break;
-
+        default:
+            if (markboxMap[e.key]?.parentNode.parentNode.classList.contains("selected")) {
+                markboxMap[e.key].click();
+            }
+            break;
     }
 }
+
 function enableKeyboardMode() {
     document.addEventListener("keydown", keyboardModeHandler);
+    enableMarkboxKeys();
 }
 function disableKeyboardMode() {
     document.removeEventListener("keydown", keyboardModeHandler);
+    disableMarkboxKeys();
 }
 function isPulldownOpen() {
     return document.querySelector("#customPulldown").checkVisibility();
@@ -3148,6 +3271,10 @@ function doEscape() {
     }
     if (isPulldownOpen()) {
         document.querySelector("#studentInfoPullDown").click();
+        let header = document.getElementsByClassName("grading-header")[0];
+        if (header.classList.contains("z300")) {
+            header.classList.remove("z300");
+        }
         return;
     }
     if (drawtab.checkVisibility()) {
@@ -3166,6 +3293,7 @@ function doDown() {
         if (options[i+1]) {
             kbfocus.classList.remove("kbfocus");
             options[i+1].classList.add("kbfocus");
+            options[i+1].scrollIntoViewIfNeeded();
         }
         return;
     }
@@ -3183,6 +3311,7 @@ function doUp() {
         if (options[i-1]) {
             kbfocus.classList.remove("kbfocus");
             options[i-1].classList.add("kbfocus");
+            options[i-1].scrollIntoViewIfNeeded();
         }
         return;
     }
