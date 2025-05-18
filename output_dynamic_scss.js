@@ -3070,10 +3070,10 @@ function keyboardModeHandler(e) {
     }
     switch(e.key) {
         case "j":
-            document.querySelector("button.pager-button.down")?.click();
+            doDown();
             break;
         case "k":
-            document.querySelector("button.pager-button.up")?.click();
+            doUp();
             break;
         case "g":
             document.querySelectorAll(".worksheet-navigator-page span:not(.disabled)")[0]?.click();
@@ -3103,6 +3103,8 @@ function keyboardModeHandler(e) {
             (
                 document.querySelector("#EndScoringButton")
                 || document.querySelector(".btn-dialog-navy")
+                || document.querySelector(".bottomSheet .scoreBtn")
+                || document.querySelector("#customPulldown:not([hidden]) > .kbfocus")
             )?.click();
             break;
         case "Escape":
@@ -3110,6 +3112,22 @@ function keyboardModeHandler(e) {
             break;
         case "d":
             document.querySelector(".other-worksheet-button")?.click();
+            break;
+        case "R":
+            document.querySelector(".btn-subject.border-radius-right")?.click();
+            break;
+        case "M":
+            document.querySelector(".btn-subject.border-radius-left")?.click();
+            break;
+        case "H":
+            let wasPulldownOpen = isPulldownOpen();
+            document.querySelector("#studentInfoPullDown")?.click();
+            document.querySelectorAll("#customPulldown > .kbfocus").forEach((p) => {
+                p.classList.remove("kbfocus");
+            });
+            if (!wasPulldownOpen) {
+                document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
+            }
             break;
 
     }
@@ -3120,6 +3138,9 @@ function enableKeyboardMode() {
 function disableKeyboardMode() {
     document.removeEventListener("keydown", keyboardModeHandler);
 }
+function isPulldownOpen() {
+    return document.querySelector("#customPulldown").checkVisibility();
+}
 function doEscape() {
     let escapable = (
         document.querySelector(".btn-dialog-cancel")
@@ -3129,11 +3150,48 @@ function doEscape() {
         escapable.click();
         return;
     }
+    if (isPulldownOpen()) {
+        document.querySelector("#studentInfoPullDown").click();
+        return;
+    }
     if (drawtab.checkVisibility()) {
         hideDrawTab(true);
     }
 }
 
+function doDown() {
+    if (isPulldownOpen()) {
+        let kbfocus = (
+            document.querySelector("#customPulldown .option .kbfocus")
+            || document.querySelector("#customPulldown > .option-select")
+        );
+        let options = Array.from(document.querySelectorAll("#customPulldown > .option"));
+        let i = options.indexOf(kbfocus);
+        if (options[i+1]) {
+            kbfocus.classList.remove("kbfocus");
+            options[i+1].classList.add("kbfocus");
+        }
+        return;
+    }
+    document.querySelector("button.pager-button.down")?.click();
+}
+
+function doUp() {
+    if (isPulldownOpen()) {
+        let kbfocus = (
+            document.querySelector("#customPulldown .option .kbfocus")
+            || document.querySelector("#customPulldown > .option-select")
+        );
+        let options = Array.from(document.querySelectorAll("#customPulldown > .option"));
+        let i = options.indexOf(kbfocus);
+        if (options[i-1]) {
+            kbfocus.classList.remove("kbfocus");
+            options[i-1].classList.add("kbfocus");
+        }
+        return;
+    }
+    document.querySelector("button.pager-button.up")?.click();
+}
 
 ;
     //*/
@@ -3321,6 +3379,10 @@ div.barWrap[aria-describedby] {
   right: 40px;
   word-break: keep-all;
   top: 0;
+}
+
+#customPulldown .kbfocus {
+  border: 1px solid !important;
 }
 
 /* EXPERIMENTAL */

@@ -201,6 +201,11 @@ div.barWrap[aria-describedby] {
     top: 0;
 }
 
+#customPulldown {
+    .kbfocus {
+        border: 1px solid !important;
+    }
+}
 
 /* EXPERIMENTAL */
 /*
