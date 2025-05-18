@@ -3109,10 +3109,10 @@ function keyboardModeHandler(e) {
             document.querySelector(".other-worksheet-button")?.click();
             break;
         case "R":
-            document.querySelector(".btn-subject.border-radius-right")?.click();
+            document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
             break;
         case "M":
-            document.querySelector(".btn-subject.border-radius-left")?.click();
+            document.querySelector(".btn-subject.border-radius-left:not(.btn-subject-disabled)")?.click();
             break;
         case "H":
             let wasPulldownOpen = isPulldownOpen();
@@ -3405,6 +3405,12 @@ div.barWrap[aria-describedby] {
   border: 1px solid !important;
 }
 
+/* doesn't help */
+/*
+.loading-icon {
+    display: none;
+}
+*/
 /* EXPERIMENTAL */
 /*
 @media screen and (orientation:landscape) and (min-height:1300px) and (min-width:1300px) {

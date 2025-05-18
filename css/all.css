@@ -185,6 +185,12 @@ div.barWrap[aria-describedby] {
   border: 1px solid !important;
 }
 
+/* doesn't help */
+/*
+.loading-icon {
+    display: none;
+}
+*/
 /* EXPERIMENTAL */
 /*
 @media screen and (orientation:landscape) and (min-height:1300px) and (min-width:1300px) {

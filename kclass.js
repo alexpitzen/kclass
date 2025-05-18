@@ -721,10 +721,10 @@ function keyboardModeHandler(e) {
             document.querySelector(".other-worksheet-button")?.click();
             break;
         case "R":
-            document.querySelector(".btn-subject.border-radius-right")?.click();
+            document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
             break;
         case "M":
-            document.querySelector(".btn-subject.border-radius-left")?.click();
+            document.querySelector(".btn-subject.border-radius-left:not(.btn-subject-disabled)")?.click();
             break;
         case "H":
             let wasPulldownOpen = isPulldownOpen();
