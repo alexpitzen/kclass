@@ -3143,11 +3143,30 @@ let keyindexmap = [
     "*",
     "(",
     ")",
-]
+    "-",
+    "=",
+    "_",
+    "+",
+];
+let keyindexdisplay = {
+    "!": "⇧1",
+    "@": "⇧2",
+    "#": "⇧3",
+    "$": "⇧4",
+    "%": "⇧5",
+    "^": "⇧6",
+    "&": "⇧7",
+    "*": "⇧8",
+    "(": "⇧9",
+    ")": "⇧0",
+    "_": "⇧-",
+    "+": "⇧=",
+}
 
 function addMarkboxKeys(page) {
     markboxMap = {};
     let boxparent = page.querySelector(".mark-boxs");
+    let parentWidth = boxparent?.offsetWidth;
     page.querySelectorAll(".mark-box").forEach((box, index) => {
         let key = index + 1;
         if (key > 9) {
@@ -3156,15 +3175,15 @@ function addMarkboxKeys(page) {
             key = String(key);
         }
         let markboxkey = document.createElement("div");
-        if (box.offsetLeft < 3) {
-            markboxkey.style.left = `${box.offsetLeft + 6}px`;
-            markboxkey.style.top = `${box.offsetTop - 12}px`;
+        if (box.offsetLeft >= 3) {
+            markboxkey.style.right = `${parentWidth - box.offsetLeft - 4}px`;
+            markboxkey.style.top = `${box.offsetTop + 4}px`;
         } else {
-            markboxkey.style.left = `${box.offsetLeft - 4}px`;
-            markboxkey.style.top = `${box.offsetTop - 1}px`;
+            markboxkey.style.left = "0px";
+            markboxkey.style.top = `${box.offsetTop - 7}px`;
         }
         markboxkey.classList.add("markboxkey");
-        markboxkey.innerText = key;
+        markboxkey.innerText = keyindexdisplay[key] ?? key;
         markboxMap[key] = index;
         boxparent.appendChild(markboxkey);
     });
@@ -3183,6 +3202,9 @@ function keyboardModeHandler(e) {
         return;
     }
     if (e.altKey || e.ctrlKey || e.metaKey) {
+        return;
+    }
+    if (!document.querySelector(".ATD0020P-worksheet-container.selected")) {
         return;
     }
     switch(e.key) {
@@ -3535,7 +3557,9 @@ div.barWrap[aria-describedby] {
   color: mediumpurple;
   font-weight: 800;
   word-break: keep-all;
-  transform: scale(0.71);
+  font-size: 11px;
+  background-color: white;
+  line-height: 11px;
 }
 
 #customPulldown .kbfocus {

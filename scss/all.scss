@@ -197,7 +197,9 @@ div.barWrap[aria-describedby] {
     color: mediumpurple;
     font-weight: 800;
     word-break: keep-all;
-    transform: scale(0.71);
+    font-size: 11px;
+    background-color: white;
+    line-height: 11px;
 }
 
 #customPulldown {
