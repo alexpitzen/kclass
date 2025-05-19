@@ -11,7 +11,16 @@
         }
         expandToolbar();
         document.querySelector(".grading-toolbar-box .grading-toolbar .pen").click();
-        document.querySelector(".grading-toolbar-box").classList.add("close");
+        collapseToolbar();
+    }
+
+    function collapseToolbar() {
+        document.querySelector(".grading-toolbar-box").dispatchEvent(
+            new MouseEvent("mouseleave"),
+            {
+                bubbles: true,
+            },
+        );
     }
 
     class DrawThing {
@@ -2082,6 +2091,8 @@
         unlockPage: unlockPage,
         makeHD: makeHD,
         makeSD: makeSD,
+        expandToolbar: expandToolbar,
+        collapseToolbar: collapseToolbar,
         stamps: {
             "All": [
                 youCanDoIt,

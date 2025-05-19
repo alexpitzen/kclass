@@ -867,7 +867,16 @@ function keyboardModeHandler(e) {
             goPrevCorrectionPage();
             break;
         case "p":
-            document.querySelector("#BreakScoringButton")?.click();
+            doP();
+            break;
+        case "s":
+            doS();
+            break;
+        case "2":
+            do2();
+            break;
+        case "8":
+            do8();
             break;
         case "Enter":
             doEnter();
@@ -908,7 +917,7 @@ function keyboardModeHandler(e) {
                 sizeslider.value--;
                 changeSizeSlider();
             } else {
-                doKeyboardDefault(e.key);
+                doKeyboardDefault("-");
             }
             break;
         case "+":
@@ -941,6 +950,7 @@ function doEscape() {
     let escapable = (
         document.querySelector(".btn-dialog-cancel")
         || document.querySelector(".end-scoring-area")
+        || document.querySelector(".playback-control .close")
     );
     if (escapable) {
         escapable.click();
@@ -993,6 +1003,52 @@ function doUp() {
         return;
     }
     document.querySelector("button.pager-button.up")?.click();
+}
+
+function getPlaybackControl() {
+    return document.querySelector(".playback-control");
+}
+
+function doP() {
+    let breakScoringButton = document.querySelector("#BreakScoringButton")
+    if (breakScoringButton) {
+        breakScoringButton.click();
+        return;
+    }
+    let playbackControl = getPlaybackControl();
+    if (playbackControl) {
+        playbackControl.querySelector(".play,.pause").click();
+        return;
+    }
+    StampLib.expandToolbar();
+    document.querySelector(".grading-toolbar-box .grading-toolbar .play").click();
+    StampLib.collapseToolbar();
+}
+
+function doS() {
+    let playbackControl = getPlaybackControl();
+    if (playbackControl) {
+        playbackControl.querySelector(".stop").click();
+        return;
+    }
+}
+
+function do2() {
+    let playbackControl = getPlaybackControl();
+    if (playbackControl) {
+        playbackControl.querySelector(".speed-2").click();
+        return;
+    }
+    doKeyboardDefault("2");
+}
+
+function do8() {
+    let playbackControl = getPlaybackControl();
+    if (playbackControl) {
+        playbackControl.querySelector(".speed-8").click();
+        return;
+    }
+    doKeyboardDefault("8");
 }
 
 function doEnter() {
