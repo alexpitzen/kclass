@@ -3250,8 +3250,11 @@ function keyboardModeHandler(e) {
         case "G":
             goLastPage();
             break;
-        case "x":
+        case "X":
             xallbtn?.click();
+            break;
+        case "x":
+            matchPreviousMarkings();
             break;
         case "Backspace":
             (
@@ -3477,6 +3480,33 @@ function doKeyboardDefault(key) {
     document.querySelector(
         ".ATD0020P-worksheet-container.selected"
     ).querySelectorAll(".mark-box")[markboxMap[key]]?.click();
+}
+
+function matchPreviousMarkings() {
+    let resultMapping = {
+        "check": "check",
+        "check-double": "check",
+        "check-triangle": "check",
+        "triangle": "triangle",
+        "triangle-double": "triangle",
+        "triangle-check": "triangle",
+    };
+    let resultBoxes = document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-result-boxs .result-box:not(.right) .result-box-type");
+    if (!resultBoxes.length) {
+        xallbtn?.click();
+        return;
+    }
+    for (let i = 0; i < 2; i++) {
+        let markboxes = document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-boxs .mark-box");
+
+        resultBoxes.forEach((resultBox, index) => {
+            let required = resultMapping[resultBox.classList[1]];
+            let markbox = markboxes[index];
+            if (!markbox.querySelector(`.${required}`)) {
+                markbox.click();
+            }
+        });
+    }
 }
 
 
