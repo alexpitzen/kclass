@@ -2491,6 +2491,7 @@ const drawbtn = makebtn("drawbtn", "&#128393;", "Show the draw tab", customToolb
     hideDrawTab(false);
     textarea.focus();
     textarea.select();
+    updateTextAreaSize();
     updatePenSettings();
 });
 drawbtn.accessKey = "d";
@@ -2613,15 +2614,29 @@ sizeslider.min = 10;
 sizeslider.max = 100;
 sizeslider.title = "Adjust stamp size";
 buttonsleft.appendChild(sizeslider);
-sizeslider.addEventListener("input", (e) => {
+
+function changeSizeSlider() {
     let scrollPercent = 0;
     try {
         scrollPercent = drawtab.scrollTop / (drawtab.scrollHeight - drawtab.clientHeight);
     } catch {}
-    drawtab.style.setProperty("--sizeslider", `${e.target.value} / 100`);
+    drawtab.style.setProperty("--sizeslider", `${sizeslider.value} / 100`);
     drawtab.scrollTop = scrollPercent * (drawtab.scrollHeight - drawtab.clientHeight);
     updateTextAreaSize();
-});
+
+    if (stampPrintPreviewDiv?.checkVisibility()) {
+        let scale = getScale() * stampPrintPreviewDiv.maxScaleFactor;
+        stampPrintPreviewDiv.style.height = `${stampPrintPreviewDiv.stampDimensions.height * scale}px`;
+        stampPrintPreviewDiv.style.width = `${stampPrintPreviewDiv.stampDimensions.width * scale}px`;
+    }
+    if (textPrintPreviewDiv?.checkVisibility()) {
+        let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
+        textPrintPreviewDiv.style.height = `${writeDimensions.height}px`;
+        textPrintPreviewDiv.style.width = `${writeDimensions.width}px`;
+    }
+}
+
+sizeslider.addEventListener("input", changeSizeSlider);
 
 const unlockbtn = makebtn("unlockbtn", "&#128275;", "Unlock the page for writing", buttonsleft, () => {
     stamp.unlockPage();
@@ -2716,6 +2731,8 @@ const drawstamps = document.createElement("div");
 drawstamps.className = "stamps";
 drawtab.appendChild(drawstamps);
 
+var stampPrintPreviewDiv;
+
 function makeStamp(stamp) {
     let btn = document.createElement("button");
     btn.className = "stampbtn";
@@ -2732,21 +2749,23 @@ function makeStamp(stamp) {
         hideDrawTab(true);
         let scale = getScale() * maxScaleFactor;
         let writeDimensions = {width: stampDimensions.width * scale, height: stampDimensions.height * scale};
-        let printPreviewDiv = document.createElement("div");
-        printPreviewDiv.className = "stampPrintPreviewDiv";
-        printPreviewDiv.style.height = `${writeDimensions.height}px`;
-        printPreviewDiv.style.width = `${writeDimensions.width}px`;
-        printPreviewDiv.style.left = `${e.clientX}px`;
-        printPreviewDiv.style.top = `${e.clientY}px`;
-        printPreviewDiv.style["border-color"] = pencolorbtn.value;
-        printPreviewDiv.innerHTML = svg.outerHTML;
-        printoverlay.appendChild(printPreviewDiv);
+        stampPrintPreviewDiv = document.createElement("div");
+        stampPrintPreviewDiv.className = "stampPrintPreviewDiv";
+        stampPrintPreviewDiv.style.height = `${writeDimensions.height}px`;
+        stampPrintPreviewDiv.style.width = `${writeDimensions.width}px`;
+        stampPrintPreviewDiv.style.left = `${e.clientX}px`;
+        stampPrintPreviewDiv.style.top = `${e.clientY}px`;
+        stampPrintPreviewDiv.style["border-color"] = pencolorbtn.value;
+        stampPrintPreviewDiv.innerHTML = svg.outerHTML;
+        stampPrintPreviewDiv.stampDimensions = stampDimensions;
+        stampPrintPreviewDiv.maxScaleFactor = maxScaleFactor;
+        printoverlay.appendChild(stampPrintPreviewDiv);
         printoverlay.addEventListener("mouseover", (e) => {
             // Prevent a bunch of errors being sent because of some code looking at .className and assuming it's a string
             e.stopPropagation();
         });
         let mousemovehandler = (e) => {
-            printPreviewDiv.animate({
+            stampPrintPreviewDiv.animate({
                 left: `${e.clientX}px`,
                 top: `${e.clientY}px`,
             }, {duration: 100, fill: "forwards"});
@@ -2793,15 +2812,13 @@ function makeStamp(stamp) {
 
                 console.log("position");
                 console.log(position);
-                console.log("scale");
-                console.log(scale);
                 console.log("options");
                 console.log(options);
-                StampLib.writeStampAt(stamp, position, scale, options);
+                StampLib.writeStampAt(stamp, position, getScale() * maxScaleFactor, options);
             } finally {
                 printoverlay.style.display = "none";
                 printoverlay.removeEventListener("click", printclickhandler);
-                printoverlay.removeChild(printPreviewDiv);
+                printoverlay.removeChild(stampPrintPreviewDiv);
                 printoverlay.removeEventListener("pointermove", mousemovehandler);
             }
         };
@@ -2824,20 +2841,22 @@ function updateTextAreaSize() {
 }
 textarea.addEventListener("input", updateTextAreaSize);
 
+var textPrintPreviewDiv;
+
 const textbtn = makebtn("textprintbtn squarebtn", "T", "Stamp the contents of the textbox", textareadiv, (e) => {
     hideDrawTab(true);
     // TODO these dimensions are wrong in HD mode for some reason
     let writeDimensions = StampLib.getWriteAllDimensions(textarea.value, getScale());
-    let printPreviewDiv = document.createElement("div");
-    printPreviewDiv.className = "printPreviewDiv";
-    printPreviewDiv.style.height = `${writeDimensions.height}px`;
-    printPreviewDiv.style.width = `${writeDimensions.width}px`;
-    printPreviewDiv.style.left = `${e.clientX}px`;
-    printPreviewDiv.style.top = `${e.clientY}px`;
-    printPreviewDiv.style["border-color"] = pencolorbtn.value;
-    printoverlay.appendChild(printPreviewDiv);
+    textPrintPreviewDiv = document.createElement("div");
+    textPrintPreviewDiv.className = "printPreviewDiv";
+    textPrintPreviewDiv.style.height = `${writeDimensions.height}px`;
+    textPrintPreviewDiv.style.width = `${writeDimensions.width}px`;
+    textPrintPreviewDiv.style.left = `${e.clientX}px`;
+    textPrintPreviewDiv.style.top = `${e.clientY}px`;
+    textPrintPreviewDiv.style["border-color"] = pencolorbtn.value;
+    printoverlay.appendChild(textPrintPreviewDiv);
     let mousemovehandler = (e) => {
-        printPreviewDiv.animate({
+        textPrintPreviewDiv.animate({
             left: `${e.clientX}px`,
             top: `${e.clientY}px`,
         }, {duration: 100, fill: "forwards"});
@@ -2879,7 +2898,7 @@ const textbtn = makebtn("textprintbtn squarebtn", "T", "Stamp the contents of th
         } finally {
             printoverlay.style.display = "none";
             printoverlay.removeEventListener("click", printclickhandler);
-            printoverlay.removeChild(printPreviewDiv);
+            printoverlay.removeChild(textPrintPreviewDiv);
             printoverlay.removeEventListener("pointermove", mousemovehandler);
         }
     };
@@ -3272,10 +3291,25 @@ function keyboardModeHandler(e) {
                 toggleHeader();
             }
             break;
+        case "-":
+            if (drawtab.checkVisibility() || printoverlay.checkVisibility()) {
+                sizeslider.value--;
+                changeSizeSlider();
+            } else {
+                doKeyboardDefault(e.key);
+            }
+            break;
+        case "+":
+        case "=":
+            if (drawtab.checkVisibility() || printoverlay.checkVisibility()) {
+                sizeslider.value++;
+                changeSizeSlider();
+            } else {
+                doKeyboardDefault(e.key);
+            }
+            break;
         default:
-            document.querySelector(
-                ".ATD0020P-worksheet-container.selected"
-            ).querySelectorAll(".mark-box")[markboxMap[e.key]]?.click();
+            doKeyboardDefault(e.key);
             break;
     }
 }
@@ -3370,6 +3404,12 @@ function doEnter() {
         );
         return;
     }
+}
+
+function doKeyboardDefault(key) {
+    document.querySelector(
+        ".ATD0020P-worksheet-container.selected"
+    ).querySelectorAll(".mark-box")[markboxMap[key]]?.click();
 }
 
 
