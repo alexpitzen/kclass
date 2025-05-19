@@ -3147,6 +3147,7 @@ let keyindexmap = [
 
 function addMarkboxKeys(page) {
     markboxMap = {};
+    let boxparent = page.querySelector(".mark-boxs");
     page.querySelectorAll(".mark-box").forEach((box, index) => {
         let key = index + 1;
         if (key > 9) {
@@ -3155,16 +3156,24 @@ function addMarkboxKeys(page) {
             key = String(key);
         }
         let markboxkey = document.createElement("div");
-        markboxkey.className = "key";
+        if (box.offsetLeft < 3) {
+            markboxkey.style.left = `${box.offsetLeft + 6}px`;
+            markboxkey.style.top = `${box.offsetTop - 12}px`;
+        } else {
+            markboxkey.style.left = `${box.offsetLeft - 4}px`;
+            markboxkey.style.top = `${box.offsetTop - 1}px`;
+        }
+        markboxkey.classList.add("markboxkey");
         markboxkey.innerText = key;
-        markboxMap[key] = box;
-        box.appendChild(markboxkey);
+        markboxMap[key] = index;
+        boxparent.appendChild(markboxkey);
     });
 }
 
 function removeMarkboxKeys(page) {
-    page.querySelectorAll(".mark-box").forEach(box => {
-        box.removeChild(box.querySelector(".key"));
+    let markboxs = page.querySelector(".mark-boxs");
+    markboxs?.querySelectorAll(".markboxkey").forEach(markboxkey => {
+        markboxs.removeChild(markboxkey);
     });
 }
 
@@ -3242,9 +3251,9 @@ function keyboardModeHandler(e) {
             }
             break;
         default:
-            if (markboxMap[e.key]?.parentNode.parentNode.classList.contains("selected")) {
-                markboxMap[e.key].click();
-            }
+            document.querySelector(
+                ".ATD0020P-worksheet-container.selected"
+            ).querySelectorAll(".mark-box")[markboxMap[e.key]]?.click();
             break;
     }
 }
@@ -3521,13 +3530,12 @@ div.barWrap[aria-describedby] {
 }
 
 /* keyboard mode stuff */
-.mark-box .key {
+.markboxkey {
   position: absolute;
   color: mediumpurple;
   font-weight: 800;
-  right: 40px;
   word-break: keep-all;
-  top: 0;
+  transform: scale(0.71);
 }
 
 #customPulldown .kbfocus {

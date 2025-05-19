@@ -172,13 +172,12 @@ div.barWrap[aria-describedby] {
 }
 
 /* keyboard mode stuff */
-.mark-box .key {
+.markboxkey {
   position: absolute;
   color: mediumpurple;
   font-weight: 800;
-  right: 40px;
   word-break: keep-all;
-  top: 0;
+  transform: scale(0.71);
 }
 
 #customPulldown .kbfocus {
