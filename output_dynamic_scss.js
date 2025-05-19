@@ -3077,14 +3077,27 @@ j: down
 k: up
 g: top
 G: bottom
-x: x all
+x: match previous markings or x all
+X: x all
 n: next active page
 N: previous active page
-p: pause (when bottom pause button is visible)
 d: go to next set
-backspace: exit/cancel
+R: switch to reading
+M: switch to math
+H: header dropdown
+p: pause marking (when bottom pause button is visible)
+p: start replay / pause replay
+s: stop replay
+2: replay 2x speed
+8: replay 8x speed
+-: decrease stamp size
++: increase stamp size
+=: increase stamp size
 escape: close dialog
-enter: submit/accept dialog`;
+backspace: exit/cancel
+enter: submit/accept dialog
+⇧1: shift 1
+`;
 kbbtn.addEventListener("change", function() {
     keyboardMode(kbbtn.checked);
 });
