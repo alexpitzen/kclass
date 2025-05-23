@@ -186,6 +186,10 @@ div.barWrap[aria-describedby] {
   border: 1px solid !important;
 }
 
+.score-item.end-not-perfect .score-item-content {
+  border: 2px solid red;
+}
+
 /* doesn't help */
 /*
 .loading-icon {
