@@ -3036,6 +3036,7 @@ function keyboardMode(enable) {
     if (enable == kclassKeyboardMode) {
         return;
     }
+    kclassKeyboardMode = enable;
     enable ? enableKeyboardMode() : disableKeyboardMode();
 }
 
