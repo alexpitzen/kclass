@@ -692,6 +692,8 @@ p: start replay / pause replay
 s: stop replay
 2: replay 2x speed
 8: replay 8x speed
+J: scroll answer key down
+K: scroll answer key up
 -: decrease stamp size
 +: increase stamp size
 =: increase stamp size
@@ -929,6 +931,12 @@ function keyboardModeHandler(e) {
                 toggleHeader();
             }
             break;
+        case "J":
+            scrollAnswerDown();
+            break;
+        case "K":
+            scrollAnswerUp();
+            break;
         case "-":
             if (drawtab.checkVisibility() || printoverlay.checkVisibility()) {
                 sizeslider.value--;
@@ -1124,5 +1132,18 @@ function matchPreviousMarkings() {
     }
 }
 
+function scrollAnswerUp() {
+    scrollAnswer(-1);
+}
+function scrollAnswerDown() {
+    scrollAnswer(1);
+}
+function scrollAnswer(direction) {
+    let answerKey = document.querySelector(".content-answer-content.image");
+    answerKey.scrollTo({
+        top: answerKey.scrollTop + direction * answerKey.offsetHeight / 2,
+        behavior: "smooth"
+    });
+}
 
 ;
