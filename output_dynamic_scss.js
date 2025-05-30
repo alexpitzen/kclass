@@ -2466,7 +2466,6 @@ drawtab.addEventListener("mouseleave", (e) => {
 });
 
 function hideDrawTab(hide) {
-    console.log(`hideDrawTab ${hide}`);
     if (hide) {
         drawtab.style.display = "none";
     } else {
@@ -3080,6 +3079,7 @@ g: top
 G: bottom
 x: match previous markings or x all
 X: x all
+c: clear x's
 n: next active page
 N: previous active page
 d: go to next set
@@ -3091,8 +3091,8 @@ p: start replay / pause replay
 s: stop replay
 2: replay 2x speed
 8: replay 8x speed
-J: scroll answer key down
-K: scroll answer key up
+J (hold): scroll answer key down
+K (hold): scroll answer key up
 -: decrease stamp size
 +: increase stamp size
 =: increase stamp size
@@ -3210,6 +3210,7 @@ let keyindexdisplay = {
 }
 
 function addMarkboxKeys(page) {
+    if (!page) return;
     markboxMap = {};
     let boxparent = page.querySelector(".mark-boxs");
     let parentWidth = boxparent?.offsetWidth;
@@ -3236,6 +3237,7 @@ function addMarkboxKeys(page) {
 }
 
 function removeMarkboxKeys(page) {
+    if (!page) return;
     let markboxs = page.querySelector(".mark-boxs");
     markboxs?.querySelectorAll(".markboxkey").forEach(markboxkey => {
         markboxs.removeChild(markboxkey);
@@ -3243,128 +3245,178 @@ function removeMarkboxKeys(page) {
 }
 
 function keyboardModeHandler(e) {
-    console.log(e);
     if (e.target.nodeName == "INPUT" || e.target.nodeName == "TEXTAREA") {
+        if (e.key == "Escape") {
+            doEscape();
+        }
+        return;
+    }
+    if (e.altKey && !e.ctrlKey && !e.metaKey) {
+        switch (e.key) {
+            case "d":
+                drawbtn.click();
+                break;
+        }
         return;
     }
     if (e.altKey || e.ctrlKey || e.metaKey) {
         return;
     }
-    if (!document.querySelector(".ATD0020P-worksheet-container.selected")) {
+    if (document.querySelector(".markingList.tabActive")) {
+        // marking list
+        switch (e.key) {
+            case "g":
+                document.querySelector(".studentList:not(.tabItem)").scrollTo(0, 0);
+                break;
+            case "G":
+            {
+                let studentList = document.querySelector(".studentList:not(.tabItem)");
+                studentList.scrollTo(0, studentList.scrollHeight - studentList.clientHeight);
+            }
+                break;
+            case "J":
+                scrollStudentsDown();
+                break;
+            case "K":
+                scrollStudentsUp();
+                break;
+        }
+    }
+    else if (document.querySelector(".ATD0020P-worksheet-container.selected")) {
+        // grading
+        switch(e.key) {
+            case "j":
+                doDown();
+                break;
+            case "k":
+                doUp();
+                break;
+            case "g":
+                document.querySelectorAll(".worksheet-navigator-page span:not(.disabled)")[0]?.click();
+                break;
+            case "G":
+                goLastPage();
+                break;
+            case "X":
+                xallbtn?.click();
+                break;
+            case "x":
+                matchPreviousMarkings();
+                break;
+            case "c":
+                clearMarkboxs();
+                break;
+            case "Backspace":
+                (
+                    document.querySelector(".btn-dialog-cancel")
+                    || document.querySelector("app-page-back-button")
+                )?.click();
+                break;
+            case "n":
+                goNextCorrectionPage();
+                break;
+            case "N":
+                goPrevCorrectionPage();
+                break;
+            case "p":
+                doP();
+                break;
+            case "s":
+                doS();
+                break;
+            case "2":
+                do2();
+                break;
+            case "8":
+                do8();
+                break;
+            case "Enter":
+                doEnter();
+                break;
+            case "Escape":
+                doEscape();
+                break;
+            case "d":
+                document.querySelector(".other-worksheet-button")?.click();
+                break;
+            case "R":
+                document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
+                break;
+            case "M":
+                document.querySelector(".btn-subject.border-radius-left:not(.btn-subject-disabled)")?.click();
+                break;
+            case "H":
+                let wasPulldownOpen = isPulldownOpen();
+                let pulldownExists = document.querySelector("#studentInfoPullDown.student-info-btn");
+                document.querySelector("#studentInfoPullDown")?.click();
+                document.querySelector("#studentInfoPullDown")?.blur();
+                document.querySelectorAll("#customPulldown > .kbfocus").forEach((p) => {
+                    p.classList.remove("kbfocus");
+                });
+                if (pulldownExists) {
+                    if (!wasPulldownOpen) {
+                        document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
+                        showHeader(true);
+                    } else {
+                        showHeader(false);
+                    }
+                } else {
+                    toggleHeader();
+                }
+                break;
+            case "J":
+                scrollAnswerDown();
+                break;
+            case "K":
+                scrollAnswerUp();
+                break;
+            case "-":
+                if (drawtab.checkVisibility() || printoverlay.checkVisibility()) {
+                    sizeslider.value--;
+                    changeSizeSlider();
+                } else {
+                    doKeyboardDefault("-");
+                }
+                break;
+            case "+":
+            case "=":
+                if (drawtab.checkVisibility() || printoverlay.checkVisibility()) {
+                    sizeslider.value++;
+                    changeSizeSlider();
+                } else {
+                    doKeyboardDefault(e.key);
+                }
+                break;
+            default:
+                doKeyboardDefault(e.key);
+                break;
+        }
+    }
+}
+
+function keyboardModeKeyUp(e) {
+    if (e.altKey || e.ctrlKey || e.metaKey) {
         return;
     }
     switch(e.key) {
-        case "j":
-            doDown();
-            break;
-        case "k":
-            doUp();
-            break;
-        case "g":
-            document.querySelectorAll(".worksheet-navigator-page span:not(.disabled)")[0]?.click();
-            break;
-        case "G":
-            goLastPage();
-            break;
-        case "X":
-            xallbtn?.click();
-            break;
-        case "x":
-            matchPreviousMarkings();
-            break;
-        case "Backspace":
-            (
-                document.querySelector(".btn-dialog-cancel")
-                || document.querySelector("app-page-back-button")
-            )?.click();
-            break;
-        case "n":
-            goNextCorrectionPage();
-            break;
-        case "N":
-            goPrevCorrectionPage();
-            break;
-        case "p":
-            doP();
-            break;
-        case "s":
-            doS();
-            break;
-        case "2":
-            do2();
-            break;
-        case "8":
-            do8();
-            break;
-        case "Enter":
-            doEnter();
-            break;
-        case "Escape":
-            doEscape();
-            break;
-        case "d":
-            document.querySelector(".other-worksheet-button")?.click();
-            break;
-        case "R":
-            document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
-            break;
-        case "M":
-            document.querySelector(".btn-subject.border-radius-left:not(.btn-subject-disabled)")?.click();
-            break;
-        case "H":
-            let wasPulldownOpen = isPulldownOpen();
-            let pulldownExists = document.querySelector("#studentInfoPullDown.student-info-btn");
-            document.querySelector("#studentInfoPullDown")?.click();
-            document.querySelector("#studentInfoPullDown")?.blur();
-            document.querySelectorAll("#customPulldown > .kbfocus").forEach((p) => {
-                p.classList.remove("kbfocus");
-            });
-            if (pulldownExists) {
-                if (!wasPulldownOpen) {
-                    document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
-                    showHeader(true);
-                } else {
-                    showHeader(false);
-                }
-            } else {
-                toggleHeader();
-            }
-            break;
         case "J":
-            scrollAnswerDown();
-            break;
         case "K":
-            scrollAnswerUp();
-            break;
-        case "-":
-            if (drawtab.checkVisibility() || printoverlay.checkVisibility()) {
-                sizeslider.value--;
-                changeSizeSlider();
-            } else {
-                doKeyboardDefault("-");
-            }
-            break;
-        case "+":
-        case "=":
-            if (drawtab.checkVisibility() || printoverlay.checkVisibility()) {
-                sizeslider.value++;
-                changeSizeSlider();
-            } else {
-                doKeyboardDefault(e.key);
-            }
-            break;
-        default:
-            doKeyboardDefault(e.key);
+        case "j":
+        case "k":
+            stopScrollingAnswer();
             break;
     }
 }
 
 function enableKeyboardMode() {
     document.addEventListener("keydown", keyboardModeHandler);
+    document.addEventListener("keyup", keyboardModeKeyUp);
     enableMarkboxKeys();
 }
 function disableKeyboardMode() {
     document.removeEventListener("keydown", keyboardModeHandler);
+    document.removeEventListener("keyup", keyboardModeKeyUp);
+    stopScrollingAnswer();
     disableMarkboxKeys();
 }
 function isPulldownOpen() {
@@ -3504,6 +3556,18 @@ function doKeyboardDefault(key) {
     ).querySelectorAll(".mark-box")[markboxMap[key]]?.click();
 }
 
+function clearMarkboxs() {
+    for (let i = 0; i < 2; i++) {
+        document.querySelectorAll(
+            ".worksheet-container .worksheet-container.selected .mark-boxs .mark-box"
+        ).forEach((markbox) => {
+            if (!markbox.querySelector(`.default`)) {
+                markbox.click();
+            }
+        });
+    }
+}
+
 function matchPreviousMarkings() {
     let resultMapping = {
         "check": "check",
@@ -3531,18 +3595,44 @@ function matchPreviousMarkings() {
     }
 }
 
+let pageScrolling = 0;
+
 function scrollAnswerUp() {
     scrollAnswer(-1);
 }
 function scrollAnswerDown() {
     scrollAnswer(1);
 }
+function scrollStudentsUp() {
+    scrollStudents(-1);
+}
+function scrollStudentsDown() {
+    scrollStudents(1);
+}
+function scrollStudents(direction) {
+    scrollPage(".studentList:not(.tabItem)", direction);
+}
 function scrollAnswer(direction) {
-    let answerKey = document.querySelector(".content-answer-content.image");
-    answerKey.scrollTo({
-        top: answerKey.scrollTop + direction * answerKey.offsetHeight / 2,
-        behavior: "smooth"
-    });
+    scrollPage(".content-answer-content.image", direction);
+}
+function scrollPage(item, direction) {
+    if (pageScrolling) {
+        return;
+    }
+    let answerKey = document.querySelector(item);
+    pageScrolling = setInterval(() => {
+        answerKey?.scrollTo({
+            top: answerKey.scrollTop + direction * 5,
+            behavior: "instant"
+        });
+    }, 5);
+}
+
+function stopScrollingAnswer() {
+    if (pageScrolling) {
+        clearInterval(pageScrolling);
+        pageScrolling = 0;
+    }
 }
 
 ;
