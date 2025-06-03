@@ -194,6 +194,15 @@ div.barWrap[aria-describedby] {
   pointer-events: none;
 }
 
+body:has(.markingList.tabActive) .studentRow .checkboxColumnContent {
+  align-items: unset !important;
+  padding-top: 23px;
+}
+body:has(.markingList.tabActive) .studentRow .gradeColumn {
+  align-items: unset !important;
+  padding-top: 24px;
+}
+
 /* doesn't help */
 /*
 .loading-icon {
