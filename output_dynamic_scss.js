@@ -3091,6 +3091,7 @@ p: start replay / pause replay
 s: stop replay
 2: replay 2x speed
 8: replay 8x speed
+A: toggle answers
 J (hold): scroll answer key down
 K (hold): scroll answer key up
 -: decrease stamp size
@@ -3280,6 +3281,22 @@ function keyboardModeHandler(e) {
             case "K":
                 scrollStudentsUp();
                 break;
+            case "S":
+                document.querySelector(".studentList.tabItem").click();
+                break;
+        }
+    }
+    else if (document.querySelector(".studentList.tabActive")) {
+        switch (e.key) {
+            case "M":
+                document.querySelector(".markingList.tabItem").click();
+                break;
+            case "J":
+                scrollStudentsDown();
+                break;
+            case "K":
+                scrollStudentsUp();
+                break;
         }
     }
     else if (document.querySelector(".ATD0020P-worksheet-container.selected")) {
@@ -3329,6 +3346,9 @@ function keyboardModeHandler(e) {
                 break;
             case "8":
                 do8();
+                break;
+            case "A":
+                document.querySelector("#AnswerDisplayButton")?.click();
                 break;
             case "Enter":
                 doEnter();
@@ -3830,6 +3850,10 @@ div.barWrap[aria-describedby] {
 
 .score-item.end-not-perfect .score-item-content {
   border: 2px solid red;
+}
+
+.studentList .fullNameEN, .studentList .studentIDKana {
+  pointer-events: none;
 }
 
 /* doesn't help */

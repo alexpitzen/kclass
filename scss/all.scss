@@ -212,6 +212,10 @@ div.barWrap[aria-describedby] {
     border: 2px solid red;
 }
 
+.studentList .fullNameEN, .studentList .studentIDKana {
+    pointer-events: none;
+}
+
 /* doesn't help */
 /*
 .loading-icon {
