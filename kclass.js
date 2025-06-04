@@ -867,6 +867,19 @@ function keyboardModeHandler(e) {
     if (document.querySelector(".markingList.tabActive")) {
         // marking list
         switch (e.key) {
+            case "f":
+                document.querySelector("input.search-input").focus();
+                e.preventDefault();
+                break;
+            case "c":
+            {
+                let searchInput = document.querySelector("input.search-input");
+                searchInput.value = "";
+                searchInput.setAttribute("value", "");
+                searchInput.dispatchEvent(new Event("input"), {});
+                document.querySelector(".search-bar .search-btn").click();
+            }
+                break;
             case "g":
                 document.querySelector(".studentList:not(.tabItem)").scrollTo(0, 0);
                 break;
@@ -885,10 +898,26 @@ function keyboardModeHandler(e) {
             case "S":
                 document.querySelector(".studentList.tabItem").click();
                 break;
+            case "Enter":
+                doEnter();
+                break;
         }
     }
     else if (document.querySelector(".studentList.tabActive")) {
         switch (e.key) {
+            case "f":
+                document.querySelector("input.search-input").focus();
+                e.preventDefault();
+                break;
+            case "c":
+            {
+                let searchInput = document.querySelector("input.search-input");
+                searchInput.value = "";
+                searchInput.setAttribute("value", "");
+                searchInput.dispatchEvent(new Event("input"), {});
+                document.querySelector(".search-bar .search-btn").click();
+            }
+                break;
             case "M":
                 document.querySelector(".markingList.tabItem").click();
                 break;
@@ -1152,7 +1181,7 @@ function doEnter() {
     let mainBtn = (
         document.querySelector("#EndScoringButton")
         || document.querySelector(".btn-dialog-navy")
-        || document.querySelector(".bottomSheet .scoreBtn")
+        || document.querySelector(".bottomSheet.open .scoreBtn")
     );
     if (mainBtn) {
         mainBtn.click();
