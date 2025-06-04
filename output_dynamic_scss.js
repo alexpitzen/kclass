@@ -3082,9 +3082,11 @@ X: x all
 c: clear x's
 n: next active page
 N: previous active page
-d: go to next set
+d: open the draw tab
+D: go to next set
 R: switch to reading
 M: switch to math
+h: cycle pen/highlighter type
 H: header dropdown
 p: pause marking (when bottom pause button is visible)
 p: start replay / pause replay
@@ -3246,6 +3248,7 @@ function removeMarkboxKeys(page) {
 }
 
 function keyboardModeHandler(e) {
+    if (e.repeat) return;
     if (e.target.nodeName == "INPUT" || e.target.nodeName == "TEXTAREA") {
         if (e.key == "Escape") {
             doEscape();
@@ -3386,7 +3389,20 @@ function keyboardModeHandler(e) {
                 doEscape();
                 break;
             case "d":
+                e.preventDefault();
+                drawbtn.click();
+                break;
+            case "D":
                 document.querySelector(".other-worksheet-button")?.click();
+                break;
+            case "h":
+                {
+                    let penTypes = Array.from(document.querySelectorAll("input[name=penType]"));
+                    penTypes[
+                        (penTypes.indexOf(document.querySelector("input[name=penType]:checked")) + 1)
+                        % penTypes.length
+                    ]?.click();
+                }
                 break;
             case "R":
                 document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
@@ -3444,15 +3460,12 @@ function keyboardModeHandler(e) {
 }
 
 function keyboardModeKeyUp(e) {
-    if (e.altKey || e.ctrlKey || e.metaKey) {
-        return;
-    }
     switch(e.key) {
         case "J":
         case "K":
         case "j":
         case "k":
-            stopScrollingAnswer();
+            stopScrolling();
             break;
     }
 }
@@ -3465,7 +3478,7 @@ function enableKeyboardMode() {
 function disableKeyboardMode() {
     document.removeEventListener("keydown", keyboardModeHandler);
     document.removeEventListener("keyup", keyboardModeKeyUp);
-    stopScrollingAnswer();
+    stopScrolling();
     disableMarkboxKeys();
 }
 function isPulldownOpen() {
@@ -3644,7 +3657,11 @@ function matchPreviousMarkings() {
     }
 }
 
-let pageScrolling = 0;
+let pageScrolling = false;
+let pageScrollingDirection;
+let pageScrollingItem;
+let pageScrollingStartTime;
+let pageScrollingStartPos;
 
 function scrollAnswerUp() {
     scrollAnswer(-1);
@@ -3659,29 +3676,33 @@ function scrollStudentsDown() {
     scrollStudents(1);
 }
 function scrollStudents(direction) {
-    scrollPage(".studentList:not(.tabItem)", direction);
+    startScrolling(direction, ".studentList:not(.tabItem)");
 }
 function scrollAnswer(direction) {
-    scrollPage(".content-answer-content.image", direction);
+    startScrolling(direction, ".content-answer-content.image");
 }
-function scrollPage(item, direction) {
-    if (pageScrolling) {
-        return;
+function startScrolling(direction, item) {
+    pageScrolling = true;
+    pageScrollingDirection = direction;
+    pageScrollingItem = document.querySelector(item);
+    pageScrollingStartPos = pageScrollingItem.scrollTop;
+    pageScrollingStartTime = undefined;
+    requestAnimationFrame(scrollPage);
+}
+function scrollPage(timestamp) {
+    if (!pageScrolling) return;
+    if (pageScrollingStartTime === undefined) {
+        pageScrollingStartTime = timestamp;
     }
-    let answerKey = document.querySelector(item);
-    pageScrolling = setInterval(() => {
-        answerKey?.scrollTo({
-            top: answerKey.scrollTop + direction * 5,
-            behavior: "instant"
-        });
-    }, 5);
+    pageScrollingItem.scrollTo({
+        top: pageScrollingStartPos + 1.5 * pageScrollingDirection * (timestamp - pageScrollingStartTime),
+        behavior: "instant"
+    });
+    requestAnimationFrame(scrollPage);
 }
 
-function stopScrollingAnswer() {
-    if (pageScrolling) {
-        clearInterval(pageScrolling);
-        pageScrolling = 0;
-    }
+function stopScrolling() {
+    pageScrolling = false;
 }
 
 ;
