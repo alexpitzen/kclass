@@ -883,6 +883,11 @@ function keyboardModeHandler(e) {
                 document.querySelector(".search-bar .search-btn").click();
             }
                 break;
+            case "C":
+                document.querySelectorAll(".studentRow .checkbox.checked").forEach((checkbox) => {
+                    checkbox.click();
+                });
+                break;
             case "g":
                 document.querySelector(".studentList:not(.tabItem)").scrollTo(0, 0);
                 break;
@@ -900,6 +905,9 @@ function keyboardModeHandler(e) {
                 break;
             case "S":
                 document.querySelector(".studentList.tabItem").click();
+                break;
+            case "r":
+                document.querySelector(".studentListUpdateButton").click();
                 break;
             case "Enter":
                 doEnter();
@@ -929,6 +937,9 @@ function keyboardModeHandler(e) {
                 break;
             case "K":
                 scrollStudentsUp();
+                break;
+            case "r":
+                document.querySelector(".studentListUpdateButton").click();
                 break;
         }
     }
@@ -1083,7 +1094,7 @@ function disableKeyboardMode() {
     disableMarkboxKeys();
 }
 function isPulldownOpen() {
-    return document.querySelector("#customPulldown").checkVisibility();
+    return document.querySelector("#customPulldown")?.checkVisibility() ?? false;
 }
 function doEscape() {
     let escapable = (
