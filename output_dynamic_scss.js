@@ -3282,6 +3282,11 @@ function keyboardModeHandler(e) {
                 document.querySelector(".search-bar .search-btn").click();
             }
                 break;
+            case "C":
+                document.querySelectorAll(".studentRow .checkbox.checked").forEach((checkbox) => {
+                    checkbox.click();
+                });
+                break;
             case "g":
                 document.querySelector(".studentList:not(.tabItem)").scrollTo(0, 0);
                 break;
@@ -3300,12 +3305,14 @@ function keyboardModeHandler(e) {
             case "S":
                 document.querySelector(".studentList.tabItem").click();
                 break;
+            case "r":
+                document.querySelector(".studentListUpdateButton").click();
+                break;
             case "Enter":
                 doEnter();
                 break;
         }
-    }
-    else if (document.querySelector(".studentList.tabActive")) {
+    } else if (document.querySelector(".studentList.tabActive")) {
         switch (e.key) {
             case "f":
                 document.querySelector("input.search-input").focus();
@@ -3329,9 +3336,11 @@ function keyboardModeHandler(e) {
             case "K":
                 scrollStudentsUp();
                 break;
+            case "r":
+                document.querySelector(".studentListUpdateButton").click();
+                break;
         }
-    }
-    else if (document.querySelector(".ATD0020P-worksheet-container.selected")) {
+    } else if (document.querySelector(".ATD0020P-worksheet-container.selected")) {
         // grading
         switch(e.key) {
             case "j":
@@ -3456,6 +3465,15 @@ function keyboardModeHandler(e) {
                 doKeyboardDefault(e.key);
                 break;
         }
+    } else {
+        switch(e.key) {
+            case "R":
+                document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
+                break;
+            case "M":
+                document.querySelector(".btn-subject.border-radius-left:not(.btn-subject-disabled)")?.click();
+                break;
+        }
     }
 }
 
@@ -3482,7 +3500,7 @@ function disableKeyboardMode() {
     disableMarkboxKeys();
 }
 function isPulldownOpen() {
-    return document.querySelector("#customPulldown").checkVisibility();
+    return document.querySelector("#customPulldown")?.checkVisibility() ?? false;
 }
 function doEscape() {
     let escapable = (

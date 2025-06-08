@@ -913,8 +913,7 @@ function keyboardModeHandler(e) {
                 doEnter();
                 break;
         }
-    }
-    else if (document.querySelector(".studentList.tabActive")) {
+    } else if (document.querySelector(".studentList.tabActive")) {
         switch (e.key) {
             case "f":
                 document.querySelector("input.search-input").focus();
@@ -942,8 +941,7 @@ function keyboardModeHandler(e) {
                 document.querySelector(".studentListUpdateButton").click();
                 break;
         }
-    }
-    else if (document.querySelector(".ATD0020P-worksheet-container.selected")) {
+    } else if (document.querySelector(".ATD0020P-worksheet-container.selected")) {
         // grading
         switch(e.key) {
             case "j":
@@ -1066,6 +1064,15 @@ function keyboardModeHandler(e) {
                 break;
             default:
                 doKeyboardDefault(e.key);
+                break;
+        }
+    } else {
+        switch(e.key) {
+            case "R":
+                document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
+                break;
+            case "M":
+                document.querySelector(".btn-subject.border-radius-left:not(.btn-subject-disabled)")?.click();
                 break;
         }
     }
