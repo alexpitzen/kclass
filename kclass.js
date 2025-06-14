@@ -849,7 +849,7 @@ function removeMarkboxKeys(page) {
 }
 
 function keyboardModeHandler(e) {
-    if (e.repeat) return;
+    if (e.repeat && ["j", "J", "k", "K", "l", "L", "h", "H"].includes(e.key)) return;
     if (e.target.nodeName == "INPUT" || e.target.nodeName == "TEXTAREA") {
         if (e.key == "Escape") {
             doEscape();
