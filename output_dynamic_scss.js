@@ -3365,10 +3365,7 @@ function keyboardModeHandler(e) {
                 clearMarkboxs();
                 break;
             case "Backspace":
-                (
-                    document.querySelector(".btn-dialog-cancel")
-                    || document.querySelector("app-page-back-button")
-                )?.click();
+                doBackspace();
                 break;
             case "n":
                 goNextCorrectionPage();
@@ -3414,10 +3411,10 @@ function keyboardModeHandler(e) {
                 }
                 break;
             case "R":
-                document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
+                clickReading();
                 break;
             case "M":
-                document.querySelector(".btn-subject.border-radius-left:not(.btn-subject-disabled)")?.click();
+                clickMath();
                 break;
             case "H":
                 let wasPulldownOpen = isPulldownOpen();
@@ -3465,13 +3462,77 @@ function keyboardModeHandler(e) {
                 doKeyboardDefault(e.key);
                 break;
         }
-    } else {
+    } else if (document.querySelector(".student-profile")) {
         switch(e.key) {
             case "R":
-                document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
+                clickReading();
                 break;
             case "M":
-                document.querySelector(".btn-subject.border-radius-left:not(.btn-subject-disabled)")?.click();
+                clickMath();
+                break;
+            case "S":
+                document.querySelector(".dashboard-set-left .btn-primary")?.click();
+                break;
+            case "J":
+                if (document.querySelector(".dashboard-progress-chart.isFloating")) {
+                    scrollProgressChartDown();
+                } else {
+                    scrollDashboardDown();
+                }
+                break;
+            case "K":
+                if (document.querySelector(".dashboard-progress-chart.isFloating")) {
+                    scrollProgressChartUp();
+                } else {
+                    scrollDashboardUp();
+                }
+                break;
+            case "H":
+                if (document.querySelector(".dashboard-progress-chart.isFloating")) {
+                    scrollProgressChartLeft();
+                }
+                break;
+            case "L":
+                if (document.querySelector(".dashboard-progress-chart.isFloating")) {
+                    scrollProgressChartRight();
+                }
+                break;
+            case "p":
+                document.querySelector(".dashboard-progress-chart .finally > .icon")?.click();
+                document.body.scroll(0, document.body.offsetHeight);
+                break;
+            case "Backspace":
+                doBackspace();
+                break;
+            case "Escape":
+                document.querySelector(".btn-close")?.click();
+                break;
+        }
+    } else if (document.querySelector(".ATD0010P-root")) {
+        switch(e.key) {
+            case "R":
+                clickReading();
+                break;
+            case "M":
+                clickMath();
+                break;
+            case "Backspace":
+                doBackspace();
+                break;
+            case "J":
+                scrollScoreDown();
+                break;
+            case "K":
+                scrollScoreUp();
+                break;
+            case "G":
+                {
+                    let scoreGrid = document.querySelector(".score-grid-all");
+                    if (scoreGrid) {
+                        scoreGrid.scrollIntoView();
+                        scoreGrid.scroll(0, scoreGrid.scrollHeight);
+                    }
+                }
                 break;
         }
     }
@@ -3480,9 +3541,13 @@ function keyboardModeHandler(e) {
 function keyboardModeKeyUp(e) {
     switch(e.key) {
         case "J":
-        case "K":
         case "j":
+        case "K":
         case "k":
+        case "H":
+        case "h":
+        case "L":
+        case "l":
             stopScrolling();
             break;
     }
@@ -3502,6 +3567,22 @@ function disableKeyboardMode() {
 function isPulldownOpen() {
     return document.querySelector("#customPulldown")?.checkVisibility() ?? false;
 }
+
+function clickReading() {
+    document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
+}
+function clickMath() {
+    document.querySelector(".btn-subject.border-radius-left:not(.btn-subject-disabled)")?.click();
+}
+
+function doBackspace() {
+    (
+        document.querySelector(".btn-dialog-cancel")
+        || document.querySelector("app-page-back-button")
+    )?.click();
+}
+
+
 function doEscape() {
     let escapable = (
         document.querySelector(".btn-dialog-cancel")
@@ -3680,6 +3761,7 @@ let pageScrollingDirection;
 let pageScrollingItem;
 let pageScrollingStartTime;
 let pageScrollingStartPos;
+let pageSideScrolling = false;
 
 function scrollAnswerUp() {
     scrollAnswer(-1);
@@ -3693,17 +3775,63 @@ function scrollStudentsUp() {
 function scrollStudentsDown() {
     scrollStudents(1);
 }
+function scrollDashboardUp() {
+    scrollDashboard(-1);
+}
+function scrollDashboardDown() {
+    scrollDashboard(1);
+}
+function scrollProgressChartUp() {
+    scrollProgressChart(-1);
+}
+function scrollProgressChartDown() {
+    scrollProgressChart(1);
+}
+function scrollProgressChartLeft() {
+    sideScrollProgressChart(-1);
+}
+function scrollProgressChartRight() {
+    sideScrollProgressChart(1);
+}
+function scrollScoreUp() {
+    scrollScore(-1);
+}
+function scrollScoreDown() {
+    scrollScore(1);
+}
 function scrollStudents(direction) {
     startScrolling(direction, ".studentList:not(.tabItem)");
 }
 function scrollAnswer(direction) {
     startScrolling(direction, ".content-answer-content.image");
 }
+function scrollDashboard(direction) {
+    startScrolling(direction, ".dashboard");
+}
+function scrollProgressChart(direction) {
+    startScrolling(direction, ".dashboard-progress-chart .chart");
+}
+function sideScrollProgressChart(direction) {
+    startSideScrolling(direction, ".dashboard-progress-chart .plan-footer");
+}
+function scrollScore(direction) {
+    startScrolling(direction, ".score-grid-all");
+}
 function startScrolling(direction, item) {
     pageScrolling = true;
+    pageSideScrolling = false;
     pageScrollingDirection = direction;
     pageScrollingItem = document.querySelector(item);
     pageScrollingStartPos = pageScrollingItem.scrollTop;
+    pageScrollingStartTime = undefined;
+    requestAnimationFrame(scrollPage);
+}
+function startSideScrolling(direction, item) {
+    pageScrolling = true;
+    pageSideScrolling = true;
+    pageScrollingDirection = direction;
+    pageScrollingItem = document.querySelector(item);
+    pageScrollingStartPos = pageScrollingItem.scrollLeft;
     pageScrollingStartTime = undefined;
     requestAnimationFrame(scrollPage);
 }
@@ -3712,10 +3840,17 @@ function scrollPage(timestamp) {
     if (pageScrollingStartTime === undefined) {
         pageScrollingStartTime = timestamp;
     }
-    pageScrollingItem.scrollTo({
-        top: pageScrollingStartPos + 1.5 * pageScrollingDirection * (timestamp - pageScrollingStartTime),
-        behavior: "instant"
-    });
+    if (pageSideScrolling) {
+        pageScrollingItem.scrollTo({
+            left: pageScrollingStartPos + 1.5 * pageScrollingDirection * (timestamp - pageScrollingStartTime),
+            behavior: "instant"
+        });
+    } else {
+        pageScrollingItem.scrollTo({
+            top: pageScrollingStartPos + 1.5 * pageScrollingDirection * (timestamp - pageScrollingStartTime),
+            behavior: "instant"
+        });
+    }
     requestAnimationFrame(scrollPage);
 }
 
