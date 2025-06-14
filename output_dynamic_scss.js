@@ -3250,8 +3250,22 @@ function removeMarkboxKeys(page) {
 function keyboardModeHandler(e) {
     if (e.repeat && ["j", "J", "k", "K", "l", "L", "h", "H"].includes(e.key)) return;
     if (e.target.nodeName == "INPUT" || e.target.nodeName == "TEXTAREA") {
-        if (e.key == "Escape") {
-            doEscape();
+        switch (e.key) {
+            case "Escape":
+                doEscape(e);
+                break;
+            case "Enter":
+                if (e.target.classList.contains("search-input")) {
+                    let searchBtn = e.target.parentElement.querySelector(".search-btn");
+                    if (searchBtn) {
+                        e.preventDefault();
+                        console.log("Clicked");
+                        searchBtn.click();
+                        // TODO
+                        searchBtn.focus();
+                    }
+                }
+                break;
         }
         return;
     }
@@ -3274,13 +3288,7 @@ function keyboardModeHandler(e) {
                 e.preventDefault();
                 break;
             case "c":
-            {
-                let searchInput = document.querySelector("input.search-input");
-                searchInput.value = "";
-                searchInput.setAttribute("value", "");
-                searchInput.dispatchEvent(new Event("input"), {});
-                document.querySelector(".search-bar .search-btn").click();
-            }
+                clearSearch();
                 break;
             case "C":
                 document.querySelectorAll(".studentRow .checkbox.checked").forEach((checkbox) => {
@@ -3319,13 +3327,7 @@ function keyboardModeHandler(e) {
                 e.preventDefault();
                 break;
             case "c":
-            {
-                let searchInput = document.querySelector("input.search-input");
-                searchInput.value = "";
-                searchInput.setAttribute("value", "");
-                searchInput.dispatchEvent(new Event("input"), {});
-                document.querySelector(".search-bar .search-btn").click();
-            }
+                clearSearch();
                 break;
             case "M":
                 document.querySelector(".markingList.tabItem").click();
@@ -3583,7 +3585,7 @@ function doBackspace() {
 }
 
 
-function doEscape() {
+function doEscape(e) {
     let escapable = (
         document.querySelector(".btn-dialog-cancel")
         || document.querySelector(".end-scoring-area")
@@ -3603,7 +3605,21 @@ function doEscape() {
     }
     if (drawtab.checkVisibility()) {
         hideDrawTab(true);
+        return;
     }
+    if (e.target.classList.contains("search-input")) {
+        clearSearch();
+        // TODO kb focus
+        e.target.parentElement.querySelector(".search-btn")?.focus();
+    }
+
+}
+function clearSearch() {
+    let searchInput = document.querySelector("input.search-input");
+    searchInput.value = "";
+    searchInput.setAttribute("value", "");
+    searchInput.dispatchEvent(new Event("input"), {});
+    document.querySelector(".search-bar .search-btn").click();
 }
 
 function doDown() {
