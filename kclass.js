@@ -10,6 +10,10 @@ function makebtn(className, innerText, title, container, fn) {
     btn.title = title;
     container.appendChild(btn);
     btn.onclick = fn;
+    btn.addEventListener("mouseover", (e) => {
+        // Prevent a bunch of errors being sent because of some code looking at .className and assuming it's a string
+        e.stopPropagation();
+    });
     return btn;
 }
 
@@ -31,18 +35,39 @@ function toggleHeader() {
     }
 }
 
+makebtn(
+    "hoverToolbarBtn",
+    `<svg width="15px" height="15px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M21 12L3 12L8 7M3 12L8 17" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+    "Toggle pen toolbar visibility",
+    customToolbar,
+    () => {
+        let gradingToolbarBox = document.querySelector(".grading-toolbar-box");
+        if (gradingToolbarBox.classList.contains("close")) {
+            gradingToolbarBox.querySelector(".toolbar-item")?.click();
+        } else {
+            StampLib.collapseToolbar();
+        }
+    }
+);
+
 makebtn("headerZindexBtn", "H", "Toggle header bar visibility", customToolbar, () => {
     toggleHeader();
 });
 
-makebtn("shiftbtn", "↕", "Toggle shifting the page up/down", customToolbar, () => {
-    let container = document.getElementsByClassName("worksheet-container")[0];
-    if (container.classList.contains("shiftup")) {
-        container.classList.remove("shiftup");
-    } else {
-        container.classList.add("shiftup");
+makebtn(
+    "shiftbtn",
+    `<svg width="15px" height="15px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12 21L12 3L17 8M12 3L7 8M12 21L7 16M12 21L17 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+    "Toggle shifting the page up/down",
+    customToolbar,
+    () => {
+        let container = document.getElementsByClassName("worksheet-container")[0];
+        if (container.classList.contains("shiftup")) {
+            container.classList.remove("shiftup");
+        } else {
+            container.classList.add("shiftup");
+        }
     }
-});
+);
 
 const xallbtn = makebtn("xallbtn", "x all", "Click every grading box on the page", customToolbar, () => {
     document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
@@ -98,13 +123,19 @@ function updatePenSettings() {
     });
 }
 
-const drawbtn = makebtn("drawbtn", "&#128393;", "Show the draw tab", customToolbar, () => {
-    hideDrawTab(false);
-    textarea.focus();
-    textarea.select();
-    updateTextAreaSize();
-    updatePenSettings();
-});
+const drawbtn = makebtn(
+    "drawbtn",
+    `<svg width="11.4" height="11.4" viewBox="0 0 18.24 18.24" stroke-width="1.5" fill="none" color="#000000" xmlns="http://www.w3.org/2000/svg"><g stroke="#000000" id="g1" transform="translate(-3.173,-2.84)"><path d="m 14.36,5.652 1.48,-1.48 c 0.78,-0.781 2.05,-0.781 2.83,0 l 1.42,1.414 c 0.78,0.781 0.78,2.047 0,2.828 l -1.48,1.48 M 14.36,5.652 4.747,15.27 C 4.415,15.6 4.211,16.04 4.169,16.51 l -0.242,2.74 c -0.05,0.62 0.464,1.13 1.084,1.08 l 2.741,-0.24 c 0.468,0 0.906,-0.25 1.238,-0.58 l 9.62,-9.616 m -4.25,-4.242 4.25,4.242" id="path1" style="stroke-width:1.5" /><path style="stroke-width:0.8608" d="m 4.772,15.26 c 1.07,1.94 2.502,3.27 4.107,4.3" id="path2" /></g></svg>`,
+    "Show the draw tab",
+    customToolbar,
+    () => {
+        hideDrawTab(false);
+        textarea.focus();
+        textarea.select();
+        updateTextAreaSize();
+        updatePenSettings();
+    }
+);
 drawbtn.accessKey = "d";
 
 var _hdmo;
@@ -688,6 +719,7 @@ D: go to next set
 R: switch to reading
 M: switch to math
 h: cycle pen/highlighter type
+e: toggle pen/eraser
 H: header dropdown
 p: pause marking (when bottom pause button is visible)
 p: start replay / pause replay
@@ -995,7 +1027,7 @@ function keyboardModeHandler(e) {
                 doEnter();
                 break;
             case "Escape":
-                doEscape();
+                doEscape(e);
                 break;
             case "d":
                 e.preventDefault();
@@ -1011,6 +1043,13 @@ function keyboardModeHandler(e) {
                         (penTypes.indexOf(document.querySelector("input[name=penType]:checked")) + 1)
                         % penTypes.length
                     ]?.click();
+                }
+                break;
+            case "e":
+                if (document.querySelector(".grading-toolbar .pen.active")) {
+                    selectEraser();
+                } else {
+                    updatePenSettings();
                 }
                 break;
             case "R":
@@ -1257,6 +1296,15 @@ function doUp() {
         return;
     }
     document.querySelector("button.pager-button.up")?.click();
+}
+
+function selectEraser() {
+    if (document.querySelector(".grading-toolbar .active.eraser")) {
+        return;
+    }
+    StampLib.expandToolbar();
+    document.querySelector(".grading-toolbar-box .grading-toolbar .eraser").click();
+    StampLib.collapseToolbar();
 }
 
 function getPlaybackControl() {

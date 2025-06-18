@@ -19,14 +19,13 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 
 .customToolbar {
   position: fixed;
-  top: 80px;
+  top: 65px;
   width: 30px;
   height: 150px;
   z-index: 252;
   display: none;
 }
 .customToolbar > button {
-  display: none;
   position: absolute;
   left: 0px;
   height: 30px;
@@ -47,19 +46,24 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
 .customToolbar > button {
   position: relative;
 }
-.customToolbar .headerZindexBtn {
+.customToolbar > button:has(svg) {
+  padding-top: 3px;
+}
+.customToolbar .hoverToolbarBtn {
   top: 0px;
+}
+.customToolbar .headerZindexBtn {
+  top: 5px;
 }
 .customToolbar .shiftbtn {
   top: 10px;
 }
 .customToolbar .xallbtn {
-  top: 20px;
+  top: 15px;
 }
 .customToolbar .drawbtn {
-  top: 30px;
+  top: 20px;
   padding-top: 4px !important;
-  display: unset !important;
 }
 
 .drawtab {
@@ -178,7 +182,7 @@ div.barWrap[aria-describedby] {
   font-weight: 800;
   word-break: keep-all;
   font-size: 11px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.7);
   line-height: 11px;
 }
 
