@@ -113,7 +113,12 @@ const penSettings = {
         width: 5,
         alpha: 50
     }
-}
+};
+const penIcons = {
+    "pen": `<svg width="20" height="20" viewBox="0 0 18.24 18.24" color="#000000" xmlns="http://www.w3.org/2000/svg" ><g id="g1" transform="translate(-3.173,-2.84)"><path id="path3" style="fill-rule:evenodd" d="m 3.486,16.01 -0.327,3.57 c 0.08,0.89 1.231,1.58 1.737,1.53 L 8.418,20.73 C 9.147,20.53 9.644,19.95 9.964,19.61 13.42,16.11 17.12,12.25 20.9,8.609 21.76,7.588 21.38,5.886 20.79,5.28 L 18.85,3.379 C 17.75,2.318 16.09,2.838 15.36,3.523 L 4.084,14.88 C 3.652,15.31 3.501,15.75 3.486,16.01 Z M 15.42,5.627 18.67,8.915 19.79,7.628 C 20.05,7.242 20.03,6.654 19.73,6.339 L 17.9,4.552 C 17.42,4.173 16.97,4.165 16.65,4.452 Z M 5.547,15.5 c -0.371,0.41 2.855,3.58 3.137,3.28 L 17.56,9.902 14.34,6.715 Z m -0.636,0.83 c -0.07,0.65 -0.502,3.03 -0.181,3.23 0.216,0.2 2.03,0 3.119,-0.19 C 5.543,17.58 4.926,16.2 4.911,16.33 Z" /></g></svg>`,
+    "thick-highlighter": `<svg viewBox="0 0 497.4 542" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g id="g6" transform="translate(0,18.69)"><path d="M 186.6,453.4 447.1,183.6 C 463.8,166.3 484,143 494.9,120.9 l 2.5,-5.1 -135,-134.49 -5.1,2.63 C 335.7,-4.899 316.1,9.353 299.1,26.72 L 39.36,293.8 l -0.38,2.5 c -5.54,36.5 -0.96,78.4 -9.62,114.2 l -6.84,28.2 2.17,2.2 L 0,465.6 v 39.3 h 43.31 l 22.46,-20.4 2.17,2.2 8.98,-3.9 C 110.7,468.2 142.5,446 178.8,452.1 Z M 36.69,484.9 H 16 v -12.7 l 20,-20 18.46,18.3 z M 69.68,466.7 41.49,435.1 C 51.71,405 51.47,353.8 52.12,319.2 L 159.5,431.7 c -32.2,5.7 -59.77,22.2 -89.82,35 z M 94.47,337.4 185.7,246.7 c 7.1,-6.9 16.4,-10.9 26.3,-10.9 20.6,0 44,25.8 44,46.3 0,10 -3.9,19.3 -10.9,26.4 L 152,401.6 Z m 68.83,75.5 93.1,-93.1 c 10.1,-10.1 15.6,-23.4 15.6,-37.7 0,-29.3 -30.6,-62.3 -60,-62.3 -14.2,0 -27.4,5.6 -37.6,15.6 L 83.16,326.1 58.14,297.4 310.6,37.9 C 324.9,23.16 341.4,10.73 359.4,0.9131 L 478,119.1 c -9.4,18.3 -22.8,34.6 -37.2,49.3 L 182.2,434 Z" id="path1" /><rect x="-406" y="37.07" transform="rotate(-135)" width="16" height="135.8" id="rect1" style="stroke-width:0.99999" /><rect x="72" y="476.9" width="392" height="46.36" id="rect3" /></g></svg>`,
+    "thin-highlighter": `<svg viewBox="0 0 496 496" width="20" height="20" xmlns="http://www.w3.org/2000/svg" ><g id="g4"><path d="M179.832,444.412l266.024-272.904c16.816-17.216,30.656-36.96,41.376-59.184l2.424-5.104L385.544,3.116l-5.176,2.632     c-21.624,11.016-41.192,25.408-58.16,42.784L56.456,321.164l-0.376,2.584c-5.208,36.48-15.208,72.136-29.712,105.968     l-3.848,8.992l2.168,2.176L0,465.572v27.312h43.312L60,476.196l2.168,2.168l8.984-3.848     c33.84-14.504,69.504-24.504,105.976-29.712L179.832,444.412z M36.688,476.884H16v-4.688l20-20l12.688,12.688L36.688,476.884z      M65.832,459.396l-24.344-24.344c12.792-30.048,21.952-61.512,27.728-93.648l90.264,90.264     C127.336,437.444,95.88,446.604,65.832,459.396z M99.312,348.884l93.088-93.088c7.04-7.04,16.392-10.912,26.344-10.912     c20.544,0,37.256,16.712,37.256,37.256c0,9.952-3.872,19.304-10.912,26.344L152,401.572L99.312,348.884z M163.312,412.884     l93.088-93.088c10.064-10.064,15.6-23.432,15.6-37.656c0-29.368-23.888-53.256-53.256-53.256c-14.224,0-27.592,5.536-37.656,15.6     L88,337.572l-12.76-12.76L333.664,59.708c14.384-14.736,30.8-27.168,48.84-36.992l87.776,87.768     c-9.416,18.344-21.472,35.096-35.88,49.856L175.928,425.5L163.312,412.884z" id="path1" /><rect x="327.996" y="153.003" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 417.3918 614.6613)" width="16" height="135.767" id="rect1" /><rect x="72" y="476.884" width="392" height="16" id="rect3" /></g></svg>`,
+};
 
 function updatePenSettings() {
     let penType = document.querySelector("input[name=penType]:checked")?.value || "pen";
@@ -121,11 +126,13 @@ function updatePenSettings() {
         color: pencolorbtn.value,
         ...penSettings[penType]
     });
+    drawbtn.innerHTML = penIcons[penType];
+    drawbtn.style.fill = pencolorbtn.value;
 }
 
 const drawbtn = makebtn(
     "drawbtn",
-    `<svg width="11.4" height="11.4" viewBox="0 0 18.24 18.24" stroke-width="1.5" fill="none" color="#000000" xmlns="http://www.w3.org/2000/svg"><g stroke="#000000" id="g1" transform="translate(-3.173,-2.84)"><path d="m 14.36,5.652 1.48,-1.48 c 0.78,-0.781 2.05,-0.781 2.83,0 l 1.42,1.414 c 0.78,0.781 0.78,2.047 0,2.828 l -1.48,1.48 M 14.36,5.652 4.747,15.27 C 4.415,15.6 4.211,16.04 4.169,16.51 l -0.242,2.74 c -0.05,0.62 0.464,1.13 1.084,1.08 l 2.741,-0.24 c 0.468,0 0.906,-0.25 1.238,-0.58 l 9.62,-9.616 m -4.25,-4.242 4.25,4.242" id="path1" style="stroke-width:1.5" /><path style="stroke-width:0.8608" d="m 4.772,15.26 c 1.07,1.94 2.502,3.27 4.107,4.3" id="path2" /></g></svg>`,
+    penIcons.pen,
     "Show the draw tab",
     customToolbar,
     () => {
@@ -138,32 +145,65 @@ const drawbtn = makebtn(
 );
 drawbtn.accessKey = "d";
 
+function onPageChange(onEnable, onPageEnter=()=>{}, onPageLeave=()=>{}, onDisable=()=>{}) {
+    let loadObserver = new MutationObserver((mutationList, _) => {
+        for (const mutation of mutationList) {
+            if (mutation.target.nodeName == "LOADING-SPINNER" && mutation.removedNodes.length) {
+                pageLoad();
+                break;
+            }
+        }
+    });
+    loadObserver.observe(document.querySelector("app-root"), {childList: true, subtree: true});
+    let pageChangeObserver;
+
+    function pageLoad() {
+        if (!document.querySelector("app-atd0020p")) {
+            return;
+        }
+        onEnable();
+        if (typeof(pageChangeObserver) === "undefined") {
+            pageChangeObserver = new MutationObserver((mutationList, _) => {
+                for (const mutation of mutationList) {
+                    if (mutation.target.classList.contains("selected")) {
+                        onPageEnter(mutation.target);
+                    } else {
+                        onPageLeave(mutation.target);
+                    }
+                }
+            });
+        }
+        pageChangeObserver.disconnect();
+        document.querySelectorAll(".ATD0020P-worksheet-container").forEach(page => {
+            pageChangeObserver.observe(page, {attributeFilter:["class"]});
+        });
+        onPageEnter(document.querySelector(".ATD0020P-worksheet-container.selected"));
+    }
+    pageLoad();
+    return {
+        disable: () => {
+            loadObserver.disconnect();
+            pageChangeObserver.disconnect();
+            onDisable(document.querySelector(".ATD0020P-worksheet-container.selected"));
+        },
+    };
+}
+
+let hdMode;
+
 var _hdmo;
 var _hdmo2;
 
 function enableHD() {
-    if (typeof(_hdmo2) === "undefined") {
-        _hdmo2 = new MutationObserver((mutationList, _) => {
-            for (const mutation of mutationList) {
-                // if (mutation.addedNodes.entries().find(i => i[1].classList?.contains("ATD0020P-worksheet-container") || i[1].classList?.contains("ATD0020P-worksheet-page") || i[1].classList?.contains("worksheet-group-page"))) {
-                if (mutation.target.nodeName == "LOADING-SPINNER" && mutation.removedNodes.length) {
-                    console.log("SPINNER DONE");
-                    console.log(mutation);
-                    initHD();
-                    break;
-                }
-            }
-        });
-    }
-    _hdmo2.observe(document.querySelector("app-root"), {childList: true, subtree: true});
-    initHD();
+    hdMode = onPageChange(
+        initHD,
+        StampLib.makeHD,
+        StampLib.makeSD,
+        StampLib.makeSD,
+    );
 }
 
 function initHD() {
-    if (!document.querySelector("app-atd0020p")) {
-        console.log("No grading app");
-        return;
-    }
     updatePenSettings();
     document.querySelectorAll(".content-scroll-container .content-bg .content-detail").forEach(detail => {
         detail.style.minWidth = "372px";
@@ -187,40 +227,10 @@ function initHD() {
         i.style.height = "612px";
         i.style.width = "370px";
     });
-
-    if (typeof(_hdmo) === "undefined") {
-        _hdmo = new MutationObserver((mutationList, _) => {
-            // console.log("Mutation");
-            // console.log(mutationList);
-            for (const mutation of mutationList) {
-                if (mutation.target.classList.contains("selected")) {
-                    StampLib.makeHD(mutation.target);
-                } else {
-                    // reset non-selected page to SD
-                    // because selecting an already HD page with the pen tool selected
-                    // makes things really messed up
-                    StampLib.makeSD(mutation.target);
-                }
-            }
-        });
-    }
-    _hdmo.disconnect();
-    document.querySelectorAll(".ATD0020P-worksheet-container").forEach(page => {
-        // console.log("Observing page");
-        // console.log(page);
-        _hdmo.observe(page, {attributeFilter:["class"]});
-    });
-    StampLib.makeHD(document.querySelector(".ATD0020P-worksheet-container.selected"));
 }
 
 function disableHD() {
-    if (typeof(_hdmo) !== "undefined") {
-        _hdmo.disconnect();
-    }
-    if (typeof(_hdmo2) !== "undefined") {
-        _hdmo2.disconnect();
-    }
-    StampLib.makeSD(document.querySelector(".ATD0020P-worksheet-container.selected"));
+    hdMode.disable();
 }
 
 // makebtn("textbtn squarebtn", "abc", "", drawtab, () => {
@@ -321,6 +331,7 @@ function getScale() {
 const pencolorbtn = document.createElement("input");
 pencolorbtn.type = "color";
 pencolorbtn.value = "#ff2200";
+drawbtn.style.fill = pencolorbtn.value;
 pencolorbtn.className = "pencolorbtn";
 function updatePenColor() {
     textarea.style.color = this.value;
@@ -754,62 +765,14 @@ togglesleft.appendChild(toggleleft2);
 toggleleft2.appendChild(kbbtn);
 toggleleft2.appendChild(kbbtnlabel);
 
-var _kbmo;
-var _kbmo2;
-function enableMarkboxKeys() {
-    if (typeof(_kbmo2) === "undefined") {
-        _kbmo2 = new MutationObserver((mutationList, _) => {
-            for (const mutation of mutationList) {
-                if (mutation.target.nodeName == "LOADING-SPINNER" && mutation.removedNodes.length) {
-                    console.log("SPINNER DONE");
-                    console.log(mutation);
-                    initMarkboxKeys();
-                    break;
-                }
-            }
-        });
-    }
-    _kbmo2.observe(document.querySelector("app-root"), {childList: true, subtree: true});
-    initMarkboxKeys();
-}
-
-function initMarkboxKeys() {
-    if (!document.querySelector("app-atd0020p")) {
-        console.log("No grading app");
-        return;
-    }
-
-    if (typeof(_kbmo) === "undefined") {
-        _kbmo = new MutationObserver((mutationList, _) => {
-            // console.log("Mutation");
-            // console.log(mutationList);
-            for (const mutation of mutationList) {
-                if (mutation.target.classList.contains("selected")) {
-                    addMarkboxKeys(mutation.target);
-                } else {
-                    removeMarkboxKeys(mutation.target);
-                }
-            }
-        });
-    }
-    _kbmo.disconnect();
-    document.querySelectorAll(".ATD0020P-worksheet-container").forEach(page => {
-        // console.log("Observing page");
-        // console.log(page);
-        _kbmo.observe(page, {attributeFilter:["class"]});
-    });
-    addMarkboxKeys(document.querySelector(".ATD0020P-worksheet-container.selected"));
-}
-
-function disableMarkboxKeys() {
-    if (typeof(_kbmo) !== "undefined") {
-        _kbmo.disconnect();
-    }
-    if (typeof(_kbmo2) !== "undefined") {
-        _kbmo2.disconnect();
-    }
-    removeMarkboxKeys(document.querySelector(".ATD0020P-worksheet-container.selected"));
-}
+let autoPenSetter = onPageChange(
+    () => {},
+    () => {
+        if (document.querySelector(".grading-toolbar .pen.active")) {
+            updatePenSettings();
+        }
+    },
+);
 
 var markboxMap = {};
 
@@ -879,6 +842,8 @@ function removeMarkboxKeys(page) {
         markboxs.removeChild(markboxkey);
     });
 }
+
+let markboxKeys;
 
 function keyboardModeHandler(e) {
     if (e.repeat && ["j", "J", "k", "K", "l", "L", "h", "H"].includes(e.key)) return;
@@ -1198,13 +1163,19 @@ function keyboardModeKeyUp(e) {
 function enableKeyboardMode() {
     document.addEventListener("keydown", keyboardModeHandler);
     document.addEventListener("keyup", keyboardModeKeyUp);
-    enableMarkboxKeys();
+    markboxKeys = onPageChange(
+        () => {},
+        addMarkboxKeys,
+        removeMarkboxKeys,
+        removeMarkboxKeys,
+    );
 }
 function disableKeyboardMode() {
     document.removeEventListener("keydown", keyboardModeHandler);
     document.removeEventListener("keyup", keyboardModeKeyUp);
     stopScrolling();
-    disableMarkboxKeys();
+    markboxKeys?.disable();
+    markboxKeys = null;
 }
 function isPulldownOpen() {
     return document.querySelector("#customPulldown")?.checkVisibility() ?? false;
