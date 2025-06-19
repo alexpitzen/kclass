@@ -3968,7 +3968,7 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
 
 .drawtab {
   position: absolute;
-  top: -60px;
+  top: -45px;
   border: 1px solid;
   width: 405px;
   z-index: 253;
