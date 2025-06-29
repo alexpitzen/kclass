@@ -3505,10 +3505,12 @@ function keyboardModeHandler(e) {
         switch(e.key) {
             case "R":
                 if (document.querySelector("loading-spinner div")) return;
+                document.querySelector(".btn-close")?.click();
                 clickReading();
                 break;
             case "M":
                 if (document.querySelector("loading-spinner div")) return;
+                document.querySelector(".btn-close")?.click();
                 clickMath();
                 break;
             case "S":
