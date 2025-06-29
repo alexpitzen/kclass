@@ -731,6 +731,9 @@ R: switch to reading
 M: switch to math
 h: cycle pen/highlighter type
 e: toggle pen/eraser
+u: undo
+r: redo
+U: undo stamp
 H: header dropdown
 p: pause marking (when bottom pause button is visible)
 p: start replay / pause replay
@@ -991,6 +994,23 @@ function keyboardModeHandler(e) {
                 break;
             case "s":
                 doS();
+                break;
+            case "u":
+            {
+                let atd = StampLib.getAtd();
+                atd.undoInk();
+                atd.penUpFunc(atd); // updates the models in angular
+            }
+                break;
+            case "U":
+                StampLib.undoLastWriteAll();
+                break;
+            case "r":
+            {
+                let atd = StampLib.getAtd();
+                atd.redoInk();
+                atd.penUpFunc(atd); // updates the models in angular
+            }
                 break;
             case "2":
                 do2();
