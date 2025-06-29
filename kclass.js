@@ -768,7 +768,8 @@ toggleleft2.appendChild(kbbtnlabel);
 let autoPenSetter = onPageChange(
     () => {},
     () => {
-        if (document.querySelector(".grading-toolbar .pen.active")) {
+        let atd = StampLib.getAtd();
+        if (atd?.drawingMode) {
             updatePenSettings();
         }
     },
@@ -882,8 +883,14 @@ function keyboardModeHandler(e) {
         // marking list
         switch (e.key) {
             case "f":
-                document.querySelector("input.search-input").focus();
+            {
+                let searchInput = document.querySelector("input.search-input");
+                searchInput.focus();
+                searchInput.value = "";
+                searchInput.setAttribute("value", "");
+                searchInput.dispatchEvent(new Event("input"), {});
                 e.preventDefault();
+            }
                 break;
             case "c":
                 clearSearch();
@@ -921,8 +928,14 @@ function keyboardModeHandler(e) {
     } else if (document.querySelector(".studentList.tabActive")) {
         switch (e.key) {
             case "f":
-                document.querySelector("input.search-input").focus();
+            {
+                let searchInput = document.querySelector("input.search-input");
+                searchInput.focus();
+                searchInput.value = "";
+                searchInput.setAttribute("value", "");
+                searchInput.dispatchEvent(new Event("input"), {});
                 e.preventDefault();
+            }
                 break;
             case "c":
                 clearSearch();
@@ -1072,9 +1085,11 @@ function keyboardModeHandler(e) {
     } else if (document.querySelector(".student-profile")) {
         switch(e.key) {
             case "R":
+                if (document.querySelector("loading-spinner div")) return;
                 clickReading();
                 break;
             case "M":
+                if (document.querySelector("loading-spinner div")) return;
                 clickMath();
                 break;
             case "S":
