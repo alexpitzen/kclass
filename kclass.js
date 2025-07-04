@@ -715,41 +715,48 @@ const kbbtn = document.createElement("input");
 kbbtn.type = "checkbox";
 kbbtn.id = "kbbtn";
 kbbtn.className = "kbbtn";
-kbbtn.title = `Keyboard mode:
+kbbtn.title = `Navigation:
 j: down
 k: up
 g: top
 G: bottom
-x: match previous markings or x all
-X: x all
-c: clear x's
 n: next active page
 N: previous active page
-d: open the draw tab
 D: go to next set
 R: switch to reading
 M: switch to math
+H: header dropdown
+p: pause marking (when bottom pause button is visible)
+J (hold): scroll answer key down
+K (hold): scroll answer key up
+
+Marking (⇧ means shift):
+x: match previous markings or x all
+X: x all
+c: clear x's
+A: toggle answers
+P: start replay / pause replay
+(during replay):
+s: stop replay
+p: pause / resume replay
+2/⇧2: replay 2x speed
+8/⇧8: replay 8x speed
+
+Drawing:
+d: open the draw tab
+p: select pen/highlighter
 h: cycle pen/highlighter type
-e: toggle pen/eraser
+e: select eraser
 u: undo
 r: redo
 U: undo stamp
-H: header dropdown
-p: pause marking (when bottom pause button is visible)
-p: start replay / pause replay
-s: stop replay
-2: replay 2x speed
-8: replay 8x speed
-A: toggle answers
-J (hold): scroll answer key down
-K (hold): scroll answer key up
 -: decrease stamp size
-+: increase stamp size
-=: increase stamp size
++/=: increase stamp size
+
+General:
 escape: close dialog
 backspace: exit/cancel
 enter: submit/accept dialog
-⇧1: shift 1
 `;
 kbbtn.addEventListener("change", function() {
     keyboardMode(kbbtn.checked);
@@ -886,6 +893,7 @@ function keyboardModeHandler(e) {
         // marking list
         switch (e.key) {
             case "f":
+            case "/":
             {
                 let searchInput = document.querySelector("input.search-input");
                 searchInput.focus();
@@ -931,6 +939,7 @@ function keyboardModeHandler(e) {
     } else if (document.querySelector(".studentList.tabActive")) {
         switch (e.key) {
             case "f":
+            case "/":
             {
                 let searchInput = document.querySelector("input.search-input");
                 searchInput.focus();
@@ -992,6 +1001,18 @@ function keyboardModeHandler(e) {
             case "p":
                 doP();
                 break;
+            case "P":
+            {
+                let playbackControl = getPlaybackControl();
+                if (playbackControl) {
+                    playbackControl.querySelector(".play,.pause").click();
+                    return;
+                }
+                StampLib.expandToolbar();
+                document.querySelector(".grading-toolbar-box .grading-toolbar .play").click();
+                StampLib.collapseToolbar();
+            }
+                break;
             case "s":
                 doS();
                 break;
@@ -1013,10 +1034,12 @@ function keyboardModeHandler(e) {
             }
                 break;
             case "2":
-                do2();
+            case "@":
+                do2(e.key);
                 break;
             case "8":
-                do8();
+            case "*":
+                do8(e.key);
                 break;
             case "A":
                 document.querySelector("#AnswerDisplayButton")?.click();
@@ -1044,11 +1067,7 @@ function keyboardModeHandler(e) {
                 }
                 break;
             case "e":
-                if (document.querySelector(".grading-toolbar .pen.active")) {
-                    selectEraser();
-                } else {
-                    updatePenSettings();
-                }
+                selectEraser();
                 break;
             case "R":
                 clickReading();
@@ -1331,9 +1350,7 @@ function doP() {
         playbackControl.querySelector(".play,.pause").click();
         return;
     }
-    StampLib.expandToolbar();
-    document.querySelector(".grading-toolbar-box .grading-toolbar .play").click();
-    StampLib.collapseToolbar();
+    updatePenSettings();
 }
 
 function doS() {
@@ -1344,22 +1361,22 @@ function doS() {
     }
 }
 
-function do2() {
+function do2(key) {
     let playbackControl = getPlaybackControl();
     if (playbackControl) {
         playbackControl.querySelector(".speed-2").click();
         return;
     }
-    doKeyboardDefault("2");
+    doKeyboardDefault(key);
 }
 
-function do8() {
+function do8(key) {
     let playbackControl = getPlaybackControl();
     if (playbackControl) {
         playbackControl.querySelector(".speed-8").click();
         return;
     }
-    doKeyboardDefault("8");
+    doKeyboardDefault(key);
 }
 
 function doEnter() {
