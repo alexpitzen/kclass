@@ -1245,10 +1245,11 @@ function doEscape(e) {
     }
     if (isPulldownOpen()) {
         document.querySelector("#studentInfoPullDown").click();
-        let header = document.getElementsByClassName("grading-header")[0];
-        if (header.classList.contains("z300")) {
-            header.classList.remove("z300");
-        }
+        document.querySelector("#studentInfoPullDown").blur();
+        document.querySelectorAll("#customPulldown > .kbfocus").forEach((p) => {
+            p.classList.remove("kbfocus");
+        });
+        showHeader(false);
         return;
     }
     if (drawtab.checkVisibility()) {
