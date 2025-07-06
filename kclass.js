@@ -139,8 +139,8 @@ const drawbtn = makebtn(
     customToolbar,
     () => {
         hideDrawTab(false);
-        textarea.focus();
-        textarea.select();
+        // textarea.focus();
+        // textarea.select();
         updateTextAreaSize();
         updatePenSettings();
     }
