@@ -874,9 +874,7 @@ function keyboardModeHandler(e) {
                     let searchBtn = e.target.parentElement.querySelector(".search-btn");
                     if (searchBtn) {
                         e.preventDefault();
-                        console.log("Clicked");
                         searchBtn.click();
-                        // TODO
                         searchBtn.focus();
                     }
                 }
@@ -1170,11 +1168,17 @@ function keyboardModeHandler(e) {
                 document.querySelector(".dashboard-progress-chart .finally > .icon")?.click();
                 document.body.scroll(0, document.body.offsetHeight);
                 break;
+            case "e":
+                Array.from(document.querySelectorAll(".dashboard-menu-right .options-btn .options-btn")).find((btn) => btn.innerHTML?.trim() == "Edit")?.click();
+                break;
             case "Backspace":
                 doBackspace();
                 break;
             case "Escape":
-                document.querySelector(".btn-close")?.click();
+                doEscape(e);
+                break;
+            case "Enter":
+                doEnter();
                 break;
         }
     } else if (document.querySelector(".ATD0010P-root")) {
@@ -1253,6 +1257,8 @@ function clickMath() {
 function doBackspace() {
     (
         document.querySelector(".btn-dialog-cancel")
+        || document.querySelector(".close-btn")
+        || document.querySelector(".btn-close")
         || document.querySelector("app-page-back-button")
     )?.click();
 }
@@ -1263,6 +1269,8 @@ function doEscape(e) {
         document.querySelector(".btn-dialog-cancel")
         || document.querySelector(".end-scoring-area")
         || document.querySelector(".playback-control .close")
+        || document.querySelector(".btn-close")
+        || document.querySelector(".close-btn")
     );
     if (escapable) {
         escapable.click();
