@@ -75,8 +75,7 @@ const xallbtn = makebtn("xallbtn", "x all", "Click every grading box on the page
 });
 
 const drawtab = document.createElement("div");
-drawtab.className = "drawtab";
-drawtab.style.display = "none";
+drawtab.className = "drawtab hidden";
 customToolbar.appendChild(drawtab);
 
 drawtab.addEventListener("mouseleave", (e) => {
@@ -93,9 +92,9 @@ drawtab.addEventListener("mouseleave", (e) => {
 
 function hideDrawTab(hide) {
     if (hide) {
-        drawtab.style.display = "none";
+        drawtab.classList.add("hidden");
     } else {
-        drawtab.style.display = "unset";
+        drawtab.classList.remove("hidden");
     }
     return true;
 }
@@ -331,6 +330,10 @@ function getScale() {
     return sizeslider.value / 100;
 }
 
+const buttonsleft2 = document.createElement("span");
+buttonsleft2.className = "stackedButtons";
+drawheader.appendChild(buttonsleft2);
+
 const pencolorbtn = document.createElement("input");
 pencolorbtn.type = "color";
 pencolorbtn.value = "#ff2200";
@@ -343,7 +346,7 @@ function updatePenColor() {
 pencolorbtn.addEventListener("input", updatePenColor);
 pencolorbtn.addEventListener("change", updatePenColor);
 pencolorbtn.addEventListener("blur", updatePenColor);
-drawheader.appendChild(pencolorbtn);
+buttonsleft2.appendChild(pencolorbtn);
 
 const penTypeContainer = document.createElement("fieldset");
 const penTypeLegend = document.createElement("legend");
@@ -378,11 +381,19 @@ penTypeContainer.appendChild(eraserPenType);
 
 drawheader.appendChild(penTypeContainer);
 
-makebtn("undoLast squarebtn", "&#11148;", "Undo last stamp", drawheader, () => {
+makebtn("undoLast squarebtn", "&#11148;", "Undo last stamp", buttonsleft2, () => {
     StampLib.undoLastWriteAll();
 });
 
-makebtn("clearAll", "clear", "Clear the entire page (can't be undone)", drawheader, () => {
+const buttonsright = document.createElement("span");
+buttonsright.className = "stackedButtons right";
+drawheader.appendChild(buttonsright);
+
+makebtn("closeDrawTab squarebtn", "x", "Close the draw tab", buttonsright, () => {
+    hideDrawTab(true);
+});
+
+makebtn("clearAll", "clear", "Clear the entire page (can't be undone)", buttonsright, () => {
     StampLib.clearPage();
 });
 

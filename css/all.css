@@ -79,6 +79,9 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
   overflow: auto;
   --sizeslider: 0.25;
 }
+.drawtab.hidden {
+  display: none !important;
+}
 .drawtab .buttonsleft {
   width: 129px;
   display: inline-table;
@@ -136,6 +139,15 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
 }
 .drawtab .header > input[type=checkbox] {
   margin-right: 3px;
+}
+.drawtab .header .stackedButtons {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+.drawtab .header .stackedButtons.right {
+  float: right;
+  padding-right: 10px;
 }
 .drawtab .undoLast {
   padding-top: 3px;

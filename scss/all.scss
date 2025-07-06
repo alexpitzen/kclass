@@ -88,6 +88,10 @@ body:has(.worksheet-container.selected .full-score-mark) {
     height: calc(-20px + 100vh);
     overflow: auto;
 
+    &.hidden {
+        display: none !important;
+    }
+
     --sizeslider: 0.25;
 
     .buttonsleft {
@@ -151,6 +155,16 @@ body:has(.worksheet-container.selected .full-score-mark) {
             margin: 7px;
             &[type='checkbox'] {
                 margin-right: 3px;
+            }
+        }
+
+        .stackedButtons {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            &.right {
+                float: right;
+                padding-right: 10px;
             }
         }
     }

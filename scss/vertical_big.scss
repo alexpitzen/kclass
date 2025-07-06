@@ -261,5 +261,13 @@
         min-width: unset !important;
       }
     }
+        .drawtab {
+            display: flex;
+            flex-direction: column;
+
+            .stamps {
+                overflow: auto;
+            }
+        }
   }
 }

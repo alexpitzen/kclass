@@ -231,6 +231,13 @@
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .student-info-left {
     min-width: unset !important;
   }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .drawtab {
+    display: flex;
+    flex-direction: column;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .drawtab .stamps {
+    overflow: auto;
+  }
 }
 
 /*# sourceMappingURL=vertical_big.css.map */
