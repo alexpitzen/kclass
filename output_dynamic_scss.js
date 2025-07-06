@@ -2482,9 +2482,9 @@ drawtab.addEventListener("mouseleave", (e) => {
     let rect = drawtab.getBoundingClientRect();
     if (
         e.x <= rect.left
-        || e.x >= rect.right
+        || e.x >= rect.right - 2
         || e.y <= rect.top
-        || e.y >= e.bottom
+        || e.y >= rect.bottom - 2
     ) {
         hideDrawTab(true);
     }
@@ -2890,7 +2890,8 @@ const textareadiv = document.createElement("div");
 drawheader.appendChild(textareadiv);
 
 const textarea = document.createElement("textarea");
-textarea.value = "Text";
+textarea.value = "";
+textarea.name = "stampTextArea";
 textareadiv.appendChild(textarea);
 textarea.style.color = "#ff2200";
 function updateTextAreaSize() {
@@ -4035,12 +4036,12 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
 }
 
 .drawtab {
-  position: absolute;
-  top: -45px;
+  position: fixed;
+  top: 20px;
+  left: 1px;
   border: 1px solid;
-  width: 405px;
+  width: calc(100vw - 50px);
   z-index: 253;
-  right: 0px;
   background-color: rgb(240, 240, 247);
   max-height: calc(-20px + 100vh);
   height: calc(-20px + 100vh);
@@ -4079,15 +4080,25 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
   display: inline-grid;
 }
 .drawtab textarea {
-  max-width: calc(100% - 5px);
+  max-width: 370px;
   width: calc(100% - 50px);
   margin-bottom: -6px;
   font-size: calc(var(--sizeslider) * 57px);
 }
+.drawtab details summary {
+  position: sticky;
+  top: 0px;
+  background-color: rgb(220, 220, 227);
+  max-width: fit-content;
+  padding: 1px 5px;
+  border: 1px solid;
+}
 .drawtab .header {
   position: sticky;
   top: 0px;
-  background-color: rgb(240, 240, 247);
+  background-color: rgb(220, 220, 227);
+  display: inline-block;
+  float: right;
 }
 .drawtab .header > input {
   margin: 7px;

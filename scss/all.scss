@@ -77,12 +77,12 @@ body:has(.worksheet-container.selected .full-score-mark) {
 }
 
 .drawtab {
-    position: absolute;
-    top: -45px;
+    position: fixed;
+    top: 20px;
+    left: 1px;
     border: 1px solid;
-    width: 405px;
+    width: calc(100vw - 50px);
     z-index: 253;
-    right: 0px;
     background-color: rgb(240, 240, 247);
     max-height: calc(-20px + 100vh);
     height: calc(-20px + 100vh);
@@ -126,16 +126,27 @@ body:has(.worksheet-container.selected .full-score-mark) {
     }
 
     textarea {
-        max-width: calc(100% - 5px);
+        max-width: 370px;
         width: calc(100% - 50px);
         margin-bottom: -6px;
         font-size: calc(var(--sizeslider) * 57px);
     }
 
+    details summary {
+        position: sticky;
+        top: 0px;
+        background-color: rgb(220, 220, 227);
+        max-width: fit-content;
+        padding: 1px 5px;
+        border: 1px solid;
+    }
+
     .header {
         position: sticky;
         top: 0px;
-        background-color: rgb(240, 240, 247);
+        background-color: rgb(220, 220, 227);
+        display: inline-block;
+        float: right;
         > input {
             margin: 7px;
             &[type='checkbox'] {

@@ -83,9 +83,9 @@ drawtab.addEventListener("mouseleave", (e) => {
     let rect = drawtab.getBoundingClientRect();
     if (
         e.x <= rect.left
-        || e.x >= rect.right
+        || e.x >= rect.right - 2
         || e.y <= rect.top
-        || e.y >= e.bottom
+        || e.y >= rect.bottom - 2
     ) {
         hideDrawTab(true);
     }
@@ -491,7 +491,8 @@ const textareadiv = document.createElement("div");
 drawheader.appendChild(textareadiv);
 
 const textarea = document.createElement("textarea");
-textarea.value = "Text";
+textarea.value = "";
+textarea.name = "stampTextArea";
 textareadiv.appendChild(textarea);
 textarea.style.color = "#ff2200";
 function updateTextAreaSize() {
