@@ -3732,13 +3732,9 @@ function doUp() {
 }
 
 function selectEraser() {
-    if (document.querySelector(".grading-toolbar .active.eraser")) {
-        return;
-    }
     StampLib.expandToolbar();
     document.querySelector(".grading-toolbar-box .grading-toolbar .eraser").click();
     StampLib.collapseToolbar();
-
     document.querySelector("input[name=penType][value=eraser]")?.click();
 }
 
