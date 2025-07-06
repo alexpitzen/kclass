@@ -99,10 +99,6 @@ body:has(.worksheet-container.selected .full-score-mark) {
         display: inline-table;
     }
 
-    .stamps {
-        touch-action: none !important;
-    }
-
     button {
         height: 30px;
         &.stampbtn {
