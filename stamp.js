@@ -1185,7 +1185,7 @@
     }
 
     function makeSD(target) {
-        target.querySelectorAll("stroke .stroke").forEach(stroke => {
+        target?.querySelectorAll("stroke .stroke")?.forEach(stroke => {
             let atd = InkTool.InkCanvasLib.List[stroke.id];
             target.querySelectorAll(`canvas#inktool_${stroke.id}_back, #inktool_${stroke.id}_draw`).forEach(canvas => {
                 canvas.setAttribute("width", "370");
