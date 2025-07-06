@@ -4726,22 +4726,8 @@ body:has(.markingList.tabActive) .studentRow .gradeColumn {
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header-title {
     display: none;
   }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header {
-    min-height: unset !important;
-    padding: 0px !important;
-  }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .backBtnWrap {
-    height: unset !important;
-  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .btn-subject {
-    border: none !important;
-    height: unset !important;
-    line-height: 20px !important;
     min-width: unset !important;
-    padding: 0px 10px !important;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .full-name {
     line-height: 20px !important;
@@ -4762,14 +4748,11 @@ body:has(.markingList.tabActive) .studentRow .gradeColumn {
     min-width: 20px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .student-pulldown-root {
-    min-height: unset !important;
     min-width: unset !important;
     margin-left: 0px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header #studentInfoPullDown {
-    min-height: unset;
     min-width: unset !important;
-    border: 0px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header .student-info-left {
     min-width: unset !important;
