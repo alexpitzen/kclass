@@ -4002,7 +4002,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   top: 65px;
   width: 30px;
   height: 150px;
-  z-index: 252;
+  z-index: 301;
   display: none;
 }
 .customToolbar > button {
@@ -4010,7 +4010,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   left: 0px;
   height: 30px;
   width: 30px;
-  z-index: 252;
+  z-index: 1;
   padding: 0;
 }
 
@@ -4052,7 +4052,7 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
   left: 1px;
   border: 1px solid;
   width: calc(100vw - 50px);
-  z-index: 253;
+  z-index: 2;
   background-color: rgb(240, 240, 247);
   max-height: calc(-20px + 100dvh);
   height: calc(-20px + 100dvh);
