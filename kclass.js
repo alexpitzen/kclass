@@ -76,7 +76,7 @@ const xallbtn = makebtn("xallbtn", "x all", "Click every grading box on the page
 
 const drawtab = document.createElement("div");
 drawtab.className = "drawtab hidden";
-customToolbar.appendChild(drawtab);
+document.body.appendChild(drawtab);
 
 drawtab.addEventListener("mouseleave", (e) => {
     let rect = drawtab.getBoundingClientRect();

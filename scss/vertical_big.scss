@@ -149,6 +149,7 @@
 
     /* adjust sidebar width */
     .content-menu-scroll {
+            z-index: 302;
       width: 251px !important;
       &.close {
         width: 50px !important;
@@ -162,6 +163,10 @@
       }
     }
 
+        .grading-toolbar-container {
+            top: 0px;
+        }
+
     /* Show worksheet tool */
     .worksheet-tool {
         margin-left: 371px !important;
@@ -170,9 +175,10 @@
     .worksheet-container {
         outline-width: 1px !important;
     }
-    .customToolbar {
-      left: 376px;
-    }
+        .customToolbar {
+            left: 376px;
+            top: 107px;
+        }
     /* Show H button, x all button, and toolbar */
     .headerZindexBtn, .xallbtn, .customToolbar {
         display: unset !important;

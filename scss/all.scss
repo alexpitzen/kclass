@@ -78,14 +78,14 @@ body:has(.worksheet-container.selected .full-score-mark) {
 
 .drawtab {
     position: fixed;
-    top: 20px;
+    top: 1px;
     left: 1px;
     border: 1px solid;
-    width: calc(100vw - 50px);
-    z-index: 2;
+    width: calc(100vw - 2px);
+    z-index: 302;
     background-color: rgb(240, 240, 247);
-    max-height: calc(-20px + 100dvh);
-    height: calc(-20px + 100dvh);
+    max-height: calc(-2px + 100dvh);
+    height: calc(-2px + 100dvh);
     overflow: auto;
 
     &.hidden {

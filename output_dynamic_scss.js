@@ -2475,7 +2475,7 @@ const xallbtn = makebtn("xallbtn", "x all", "Click every grading box on the page
 
 const drawtab = document.createElement("div");
 drawtab.className = "drawtab hidden";
-customToolbar.appendChild(drawtab);
+document.body.appendChild(drawtab);
 
 drawtab.addEventListener("mouseleave", (e) => {
     let rect = drawtab.getBoundingClientRect();
@@ -4048,14 +4048,14 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
 
 .drawtab {
   position: fixed;
-  top: 20px;
+  top: 1px;
   left: 1px;
   border: 1px solid;
-  width: calc(100vw - 50px);
-  z-index: 2;
+  width: calc(100vw - 2px);
+  z-index: 302;
   background-color: rgb(240, 240, 247);
-  max-height: calc(-20px + 100dvh);
-  height: calc(-20px + 100dvh);
+  max-height: calc(-2px + 100dvh);
+  height: calc(-2px + 100dvh);
   overflow: auto;
   --sizeslider: 0.25;
 }
@@ -4672,6 +4672,7 @@ body:has(.markingList.tabActive) .studentRow .gradeColumn {
     overflow-x: auto !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-menu-scroll {
+    z-index: 302;
     width: 251px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-menu-scroll.close {
@@ -4684,6 +4685,9 @@ body:has(.markingList.tabActive) .studentRow .gradeColumn {
     padding-left: 49px !important;
     width: 242px !important;
   }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-toolbar-container {
+    top: 0px;
+  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-tool {
     margin-left: 371px !important;
     z-index: 252 !important;
@@ -4693,6 +4697,7 @@ body:has(.markingList.tabActive) .studentRow .gradeColumn {
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .customToolbar {
     left: 376px;
+    top: 107px;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .headerZindexBtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .xallbtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .customToolbar {
     display: unset !important;
