@@ -136,6 +136,12 @@
     }
   }
 
+    body:has(.content-menu-scroll.close) {
+        .content-menu-open-close {
+            right: 0px !important;
+        }
+    }
+
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
     .container {
       min-width: unset !important;
@@ -146,16 +152,25 @@
     .scroll-content {
       overflow-x: auto !important;
     }
+        .content-scroll-container {
+            margin-right: 0px !important;
+        }
 
     /* adjust sidebar width */
     .content-menu-scroll {
             z-index: 302;
       width: 251px !important;
       &.close {
-        width: 50px !important;
+        width: 0px !important;
       }
       .content-menu-open-close {
         width: 41px !important;
+                height: 50px;
+                position: fixed;
+                top: 500px;
+                left: unset;
+                right: 200px;
+                transition: right .3s;
       }
       .content-menu {
         padding-left: 49px !important;

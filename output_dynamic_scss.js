@@ -3058,7 +3058,7 @@ let pinchDisablerDisabler = setInterval(() => {
         document.removeEventListener("touchstart", pinchDisabler);
         clearInterval(pinchDisablerDisabler);
         // document.querySelector("meta[content*='user-scalable']").content = "width=device-width, initial-scale=1";
-        document.querySelector("meta[content*='user-scalable']").content = "width=450px, initial-scale=1";
+        document.querySelector("meta[content*='user-scalable']").content = "width=400px, initial-scale=1";
     }
 }, 1000);
 
@@ -4692,6 +4692,9 @@ body:has(.markingList.tabActive) .studentRow .gradeColumn {
   .filterHeader app-student-list-filter-capsule div {
     min-width: unset !important;
   }
+  body:has(.content-menu-scroll.close) .content-menu-open-close {
+    right: 0px !important;
+  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
     /* adjust sidebar width */
     /* Show worksheet tool */
@@ -4709,15 +4712,24 @@ body:has(.markingList.tabActive) .studentRow .gradeColumn {
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .scroll-content {
     overflow-x: auto !important;
   }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-scroll-container {
+    margin-right: 0px !important;
+  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-menu-scroll {
     z-index: 302;
     width: 251px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-menu-scroll.close {
-    width: 50px !important;
+    width: 0px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-menu-scroll .content-menu-open-close {
     width: 41px !important;
+    height: 50px;
+    position: fixed;
+    top: 500px;
+    left: unset;
+    right: 200px;
+    transition: right 0.3s;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-menu-scroll .content-menu {
     padding-left: 49px !important;
