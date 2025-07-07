@@ -84,8 +84,8 @@ body:has(.worksheet-container.selected .full-score-mark) {
     width: calc(100vw - 50px);
     z-index: 253;
     background-color: rgb(240, 240, 247);
-    max-height: calc(-20px + 100vh);
-    height: calc(-20px + 100vh);
+    max-height: calc(-20px + 100dvh);
+    height: calc(-20px + 100dvh);
     overflow: auto;
 
     &.hidden {
