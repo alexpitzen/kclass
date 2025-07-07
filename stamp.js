@@ -975,7 +975,7 @@
     }
 
     function getAtd() {
-        return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-red-comment-']").id];
+        return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-red-comment-']")?.id];
     }
 
     function unlockPage() {
@@ -1122,6 +1122,7 @@
 
     function setPenSettings(settings) {
         let atd = getAtd();
+        if (!atd) return;
         selectPen();
         if (settings.color) {
             _setPenColorHex(atd, settings.color);

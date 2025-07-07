@@ -82,7 +82,7 @@ body:has(.worksheet-container.selected .full-score-mark) {
     left: 1px;
     border: 1px solid;
     width: calc(100vw - 2px);
-    z-index: 302;
+    z-index: 501;
     background-color: rgb(240, 240, 247);
     max-height: calc(-2px + 100dvh);
     height: calc(-2px + 100dvh);
@@ -158,15 +158,29 @@ body:has(.worksheet-container.selected .full-score-mark) {
             display: inline-flex;
             flex-direction: column;
             align-items: center;
+            padding: 5px 15px;
             &.right {
                 float: right;
                 padding-right: 10px;
             }
         }
+        .closeDrawTab {
+            margin-bottom: 8px;
+        }
+        .clearAll {
+            font-size: 10px;
+            width: 50px;
+            word-break: normal;
+            padding: 0;
+        }
     }
 
     .undoLast {
-        padding-top: 3px;
+        font-size: 10px;
+        width: 50px;
+        height: 35px;
+        word-break: normal;
+        margin-top: 5px;
     }
 
     .textprintbtn {

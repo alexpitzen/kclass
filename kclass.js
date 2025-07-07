@@ -138,11 +138,16 @@ const drawbtn = makebtn(
     "Show the draw tab",
     customToolbar,
     () => {
-        hideDrawTab(false);
-        // textarea.focus();
-        // textarea.select();
-        updateTextAreaSize();
-        updatePenSettings();
+        if (drawtab.classList.contains("hidden")) {
+            hideDrawTab(false);
+            // make the textarea next in line for focus when pressing tab
+            clearBtn.focus();
+            clearBtn.blur();
+            updateTextAreaSize();
+            updatePenSettings();
+        } else {
+            hideDrawTab(true);
+        }
     }
 );
 drawbtn.accessKey = "d";
@@ -381,7 +386,7 @@ penTypeContainer.appendChild(eraserPenType);
 
 drawheader.appendChild(penTypeContainer);
 
-makebtn("undoLast squarebtn", "&#11148;", "Undo last stamp", buttonsleft2, () => {
+makebtn("undoLast", "Undo stamp", "Undo last stamp", buttonsleft2, () => {
     StampLib.undoLastWriteAll();
 });
 
@@ -393,7 +398,7 @@ makebtn("closeDrawTab squarebtn", "x", "Close the draw tab", buttonsright, () =>
     hideDrawTab(true);
 });
 
-makebtn("clearAll", "clear", "Clear the entire page (can't be undone)", buttonsright, () => {
+const clearBtn = makebtn("clearAll", "Clear all drawings", "Clear the entire page (can't be undone)", buttonsright, () => {
     StampLib.clearPage();
 });
 
@@ -905,7 +910,25 @@ function keyboardModeHandler(e) {
     if (e.altKey || e.ctrlKey || e.metaKey) {
         return;
     }
-    if (document.querySelector(".markingList.tabActive")) {
+    if (!drawtab.classList.contains("hidden")) {
+        // drawtab is open, disable most buttons
+        switch (e.key) {
+            case "d":
+            case "Escape":
+                hideDrawTab(true);
+                break;
+            case "-":
+                sizeslider.value--;
+                changeSizeSlider();
+                break;
+            case "+":
+            case "=":
+                sizeslider.value++;
+                changeSizeSlider();
+                break;
+        }
+    }
+    else if (document.querySelector(".markingList.tabActive")) {
         // marking list
         switch (e.key) {
             case "f":

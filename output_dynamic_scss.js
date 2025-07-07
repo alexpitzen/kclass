@@ -989,7 +989,7 @@
     }
 
     function getAtd() {
-        return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-red-comment-']").id];
+        return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-red-comment-']")?.id];
     }
 
     function unlockPage() {
@@ -1136,6 +1136,7 @@
 
     function setPenSettings(settings) {
         let atd = getAtd();
+        if (!atd) return;
         selectPen();
         if (settings.color) {
             _setPenColorHex(atd, settings.color);
@@ -2537,11 +2538,16 @@ const drawbtn = makebtn(
     "Show the draw tab",
     customToolbar,
     () => {
-        hideDrawTab(false);
-        // textarea.focus();
-        // textarea.select();
-        updateTextAreaSize();
-        updatePenSettings();
+        if (drawtab.classList.contains("hidden")) {
+            hideDrawTab(false);
+            // make the textarea next in line for focus when pressing tab
+            clearBtn.focus();
+            clearBtn.blur();
+            updateTextAreaSize();
+            updatePenSettings();
+        } else {
+            hideDrawTab(true);
+        }
     }
 );
 drawbtn.accessKey = "d";
@@ -2780,7 +2786,7 @@ penTypeContainer.appendChild(eraserPenType);
 
 drawheader.appendChild(penTypeContainer);
 
-makebtn("undoLast squarebtn", "&#11148;", "Undo last stamp", buttonsleft2, () => {
+makebtn("undoLast", "Undo stamp", "Undo last stamp", buttonsleft2, () => {
     StampLib.undoLastWriteAll();
 });
 
@@ -2792,7 +2798,7 @@ makebtn("closeDrawTab squarebtn", "x", "Close the draw tab", buttonsright, () =>
     hideDrawTab(true);
 });
 
-makebtn("clearAll", "clear", "Clear the entire page (can't be undone)", buttonsright, () => {
+const clearBtn = makebtn("clearAll", "Clear all drawings", "Clear the entire page (can't be undone)", buttonsright, () => {
     StampLib.clearPage();
 });
 
@@ -3304,7 +3310,25 @@ function keyboardModeHandler(e) {
     if (e.altKey || e.ctrlKey || e.metaKey) {
         return;
     }
-    if (document.querySelector(".markingList.tabActive")) {
+    if (!drawtab.classList.contains("hidden")) {
+        // drawtab is open, disable most buttons
+        switch (e.key) {
+            case "d":
+            case "Escape":
+                hideDrawTab(true);
+                break;
+            case "-":
+                sizeslider.value--;
+                changeSizeSlider();
+                break;
+            case "+":
+            case "=":
+                sizeslider.value++;
+                changeSizeSlider();
+                break;
+        }
+    }
+    else if (document.querySelector(".markingList.tabActive")) {
         // marking list
         switch (e.key) {
             case "f":
@@ -4052,7 +4076,7 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
   left: 1px;
   border: 1px solid;
   width: calc(100vw - 2px);
-  z-index: 302;
+  z-index: 501;
   background-color: rgb(240, 240, 247);
   max-height: calc(-2px + 100dvh);
   height: calc(-2px + 100dvh);
@@ -4121,13 +4145,27 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
+  padding: 5px 15px;
 }
 .drawtab .header .stackedButtons.right {
   float: right;
   padding-right: 10px;
 }
+.drawtab .header .closeDrawTab {
+  margin-bottom: 8px;
+}
+.drawtab .header .clearAll {
+  font-size: 10px;
+  width: 50px;
+  word-break: normal;
+  padding: 0;
+}
 .drawtab .undoLast {
-  padding-top: 3px;
+  font-size: 10px;
+  width: 50px;
+  height: 35px;
+  word-break: normal;
+  margin-top: 5px;
 }
 .drawtab .textprintbtn {
   vertical-align: top;
