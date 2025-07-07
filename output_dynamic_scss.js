@@ -4026,7 +4026,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   top: 65px;
   width: 30px;
   height: 150px;
-  z-index: 301;
+  z-index: 299;
   display: none;
 }
 .customToolbar > button {
