@@ -3371,6 +3371,15 @@ function keyboardModeHandler(e) {
             case "r":
                 document.querySelector(".studentListUpdateButton").click();
                 break;
+            case "A":
+                document.querySelector("app-student-list-filter-capsule .all")?.click();
+                break;
+            case "M":
+                document.querySelector("app-student-list-filter-capsule .math")?.click();
+                break;
+            case "R":
+                document.querySelector("app-student-list-filter-capsule .KNA")?.click();
+                break;
             case "Enter":
                 doEnter();
                 break;
