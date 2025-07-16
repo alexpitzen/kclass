@@ -2143,6 +2143,7 @@
                 halloweenCuteCatHat,
                 halloweenCuteCatHat3,
                 halloweenCuteCatHat2,
+                koala,
                 adelineCatGreatJob,
                 adelineStar,
                 karthikaBootifulWorkGhost,
@@ -2236,6 +2237,7 @@
                 halloweenCuteCatHat,
                 halloweenCuteCatHat3,
                 halloweenCuteCatHat2,
+                koala,
             ],
             "Student-drawn": [
                 adelineCatGreatJob,

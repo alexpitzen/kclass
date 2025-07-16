@@ -6,6 +6,10 @@ app-scroll-to-top-button {
     display: none;
 }
 
+/* stop wasting cpu cycles */
+loading-spinner .loading-icon, .other-worksheet-button .loading {
+    animation: none !important;
+}
 
 .dashboard-progress-chart .container.plan.isFloating {
     width: 100% !important;
