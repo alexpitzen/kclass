@@ -152,6 +152,22 @@ const drawbtn = makebtn(
 );
 drawbtn.accessKey = "d";
 
+const mobileUpBtn = makebtn(
+    "mobileUpBtn",
+    `<svg width="15px" height="15px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12 21L12 3L17 8M12 3L7 8" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+    "Previous marking page",
+    customToolbar,
+    goPrevCorrectionPage,
+);
+
+const mobileDownBtn = makebtn(
+    "mobileDownBtn",
+    `<svg width="15px" height="15px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12 3L12 21L7 16M12 21L17 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+    "Next marking page",
+    customToolbar,
+    goNextCorrectionPage,
+);
+
 function onPageChange(onEnable, onPageEnter=()=>{}, onPageLeave=()=>{}, onDisable=()=>{}) {
     let loadObserver = new MutationObserver((mutationList, _) => {
         for (const mutation of mutationList) {
@@ -636,6 +652,7 @@ for (let stampCategory in StampLib.stamps) {
     }
     drawstamps.appendChild(stampSection);
 }
+drawstamps.children[0].setAttribute("open", "");
 
 const printoverlay = document.createElement("div");
 printoverlay.className = "printoverlay";

@@ -2555,6 +2555,22 @@ const drawbtn = makebtn(
 );
 drawbtn.accessKey = "d";
 
+const mobileUpBtn = makebtn(
+    "mobileUpBtn",
+    `<svg width="15px" height="15px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12 21L12 3L17 8M12 3L7 8" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+    "Previous marking page",
+    customToolbar,
+    goPrevCorrectionPage,
+);
+
+const mobileDownBtn = makebtn(
+    "mobileDownBtn",
+    `<svg width="15px" height="15px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12 3L12 21L7 16M12 21L17 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+    "Next marking page",
+    customToolbar,
+    goNextCorrectionPage,
+);
+
 function onPageChange(onEnable, onPageEnter=()=>{}, onPageLeave=()=>{}, onDisable=()=>{}) {
     let loadObserver = new MutationObserver((mutationList, _) => {
         for (const mutation of mutationList) {
@@ -3039,6 +3055,7 @@ for (let stampCategory in StampLib.stamps) {
     }
     drawstamps.appendChild(stampSection);
 }
+drawstamps.children[0].setAttribute("open", "");
 
 const printoverlay = document.createElement("div");
 printoverlay.className = "printoverlay";
@@ -4064,6 +4081,10 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
   display: unset;
 }
 
+.customToolbar {
+  /* Don't show these except on mobile */
+  /* TODO check where these should actually go */
+}
 .customToolbar > button {
   position: relative;
 }
@@ -4085,6 +4106,15 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
 .customToolbar .drawbtn {
   top: 20px;
   padding-top: 4px !important;
+}
+.customToolbar .mobileUpBtn, .customToolbar .mobileDownBtn {
+  display: none;
+}
+.customToolbar .mobileUpBtn {
+  top: 80px;
+}
+.customToolbar .mobileDownBtn {
+  top: 85px;
 }
 
 .drawtab {
@@ -4113,7 +4143,7 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
 .drawtab button.stampbtn {
   background: white;
   height: 100%;
-  width: calc(var(--sizeslider) * var(--height-limiter) * 370px);
+  width: calc(0.25 * var(--height-limiter) * 370px);
   margin: 4px;
   padding: 0px;
   border-width: 1px;
@@ -4597,6 +4627,22 @@ body:has(.markingList.tabActive) .studentRow .gradeColumn {
 /*# sourceMappingURL=horizontal_dynamic_small.css.map */
 
 @media screen and (orientation: portrait) and (max-width: 977px) {
+  /* narrow login screen */
+  app-root .root {
+    min-width: unset !important;
+  }
+  app-root .logo {
+    margin-top: 0px !important;
+  }
+  app-root .sub-logo {
+    margin: 0 !important;
+  }
+  app-root button.login-btn {
+    margin-top: 0 !important;
+  }
+  app-root button.btn-pulldown-language {
+    margin-top: 0 !important;
+  }
   /* Less space on grade column */
   .studentRowHeader .gradeColumn {
     width: unset !important;
@@ -4768,6 +4814,9 @@ body:has(.markingList.tabActive) .studentRow .gradeColumn {
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .headerZindexBtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .xallbtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .customToolbar {
     display: unset !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .mobileUpBtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .mobileDownBtn {
+    display: unset;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .z300 {
     z-index: 300 !important;

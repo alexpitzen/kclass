@@ -78,6 +78,20 @@ body:has(.worksheet-container.selected .full-score-mark) {
         top: 20px;
         padding-top: 4px !important;
     }
+
+    /* Don't show these except on mobile */
+    .mobileUpBtn, .mobileDownBtn {
+        display: none;
+    }
+
+    /* TODO check where these should actually go */
+    .mobileUpBtn {
+        top: 80px;
+    }
+
+    .mobileDownBtn {
+        top: 85px;
+    }
 }
 
 .drawtab {
@@ -108,7 +122,7 @@ body:has(.worksheet-container.selected .full-score-mark) {
         &.stampbtn {
             background: white;
             height: 100%;
-            width: calc(var(--sizeslider) * var(--height-limiter) * 370px);
+            width: calc(0.25 * var(--height-limiter) * 370px);
             margin: 4px;
             padding: 0px;
             border-width: 1px;

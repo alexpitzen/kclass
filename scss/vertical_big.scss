@@ -1,140 +1,158 @@
 @media screen and (orientation:portrait) and (max-width:977px) {
-  /* Less space on grade column */
-  .studentRowHeader {
-    .gradeColumn {
-      width: unset !important;
-      min-width: unset !important;
-      padding-left: 0px !important;
-      i {
-        margin: 0px !important;
-      }
-    }
-
-    .checkboxColumn {
-      width: unset !important;
-      padding-right: 10px !important;
-
-      i {
-        margin-left: 5px !important;
-      }
-    }
-
-    .nameColumn {
-      padding: 0px !important;
-      width: unset !important;
-    }
-
-    .subjectColumn {
-      width: unset !important;
-      padding: 0px !important;
-    }
-
-    .fromDateColumn {
-      display: none !important;
-    }
-  }
-  .studentList {
-    app-score-list-filler-item {
-      &[type="footer"], &[type="header"] {
-        display: none !important;
-      }
-    }
-  }
-  /* less width on marking list */
-  .studentRow {
-    .gradeColumn {
-      flex: none !important;
-      min-width: unset !important;
-      width: unset !important;
-      span {
-        margin-left: 0 !important;
-      }
-    }
-
-    .checkboxColumn {
-      width: unset !important;
-      padding-right: 10px !important;
-
-      i {
-        margin-left: 5px !important;
-      }
-    }
-
-    .nameColumn {
-      width: unset !important;
-      padding: 0 10px !important;
-      flex-basis: unset !important;
-
-      span {
-        width: unset !important;
-      }
-    }
-
-    .subjectColumn {
-      width: unset !important;
-      padding-left: 0px !important;
-      padding-right: 0px !important;
-
-      .worksheetBar {
-        padding: 0 !important;
-        span {
-          text-wrap-mode: nowrap;
+    /* narrow login screen */
+    app-root {
+        .root {
+            min-width: unset !important;
         }
-        .barWrap {
-          width: unset !important;
-          &>span {
-            padding: 0px 5px !important;
-          }
+        .logo {
+            margin-top: 0px !important;
         }
-        .time {
-          width: unset !important;
+        .sub-logo {
+            margin: 0 !important;
         }
-      }
-      .subjectStatus {
-        width: unset !important;
-        .worksheetwrap {
-          width: unset !important;
+        button.login-btn {
+            margin-top: 0 !important;
         }
-        .correctionWrap {
-          display: none !important;
+        button.btn-pulldown-language {
+            margin-top: 0 !important;
         }
-      }
-      .setIcon, .markingIcon {
-        margin: 0 !important;
-        width: 19px !important;
-      }
-      .statusIcon {
-        margin: 0 !important;
-        width: 21px !important;
-      }
     }
+    /* Less space on grade column */
+    .studentRowHeader {
+        .gradeColumn {
+            width: unset !important;
+            min-width: unset !important;
+            padding-left: 0px !important;
+            i {
+                margin: 0px !important;
+            }
+        }
 
-    .lastStudyColumn, .messageColumn, .fromDateColumn {
-      flex-basis: unset !important;
+        .checkboxColumn {
+            width: unset !important;
+            padding-right: 10px !important;
+
+            i {
+                margin-left: 5px !important;
+            }
+        }
+
+        .nameColumn {
+            padding: 0px !important;
+            width: unset !important;
+        }
+
+        .subjectColumn {
+            width: unset !important;
+            padding: 0px !important;
+        }
+
+        .fromDateColumn {
+            display: none !important;
+        }
     }
-    .fromDateColumn {
-      display: none !important;
+    .studentList {
+        app-score-list-filler-item {
+            &[type="footer"], &[type="header"] {
+                display: none !important;
+            }
+        }
     }
-  }
-  .navHeader {
-    .logoWrap {
-      display: none;
+    /* less width on marking list */
+    .studentRow {
+        .gradeColumn {
+            flex: none !important;
+            min-width: unset !important;
+            width: unset !important;
+            span {
+                margin-left: 0 !important;
+            }
+        }
+
+        .checkboxColumn {
+            width: unset !important;
+            padding-right: 10px !important;
+
+            i {
+                margin-left: 5px !important;
+            }
+        }
+
+        .nameColumn {
+            width: unset !important;
+            padding: 0 10px !important;
+            flex-basis: unset !important;
+
+            span {
+                width: unset !important;
+            }
+        }
+
+        .subjectColumn {
+            width: unset !important;
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+
+            .worksheetBar {
+                padding: 0 !important;
+                span {
+                    text-wrap-mode: nowrap;
+                }
+                .barWrap {
+                    width: unset !important;
+                    &>span {
+                        padding: 0px 5px !important;
+                    }
+                }
+                .time {
+                    width: unset !important;
+                }
+            }
+            .subjectStatus {
+                width: unset !important;
+                .worksheetwrap {
+                    width: unset !important;
+                }
+                .correctionWrap {
+                    display: none !important;
+                }
+            }
+            .setIcon, .markingIcon {
+                margin: 0 !important;
+                width: 19px !important;
+            }
+            .statusIcon {
+                margin: 0 !important;
+                width: 21px !important;
+            }
+        }
+
+        .lastStudyColumn, .messageColumn, .fromDateColumn {
+            flex-basis: unset !important;
+        }
+        .fromDateColumn {
+            display: none !important;
+        }
     }
-    .tabItem {
-      padding: 18px 0 !important;
+    .navHeader {
+        .logoWrap {
+            display: none;
+        }
+        .tabItem {
+            padding: 18px 0 !important;
+        }
     }
-  }
-  .filterHeader {
-    .selectFilter {
-      display: none !important;
+    .filterHeader {
+        .selectFilter {
+            display: none !important;
+        }
+        app-student-list-filter-capsule {
+            margin: 0px !important;
+            div {
+                min-width: unset !important;
+            }
+        }
     }
-    app-student-list-filter-capsule {
-      margin: 0px !important;
-      div {
-        min-width: unset !important;
-      }
-    }
-  }
 
     body:has(.content-menu-scroll.close) {
         .content-menu-open-close {
@@ -142,130 +160,133 @@
         }
     }
 
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
-    .container {
-      min-width: unset !important;
-    }
-    .content-bg {
-      padding: 0px !important;
-    }
-    .scroll-content {
-      overflow-x: auto !important;
-    }
+    body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
+        .container {
+            min-width: unset !important;
+        }
+        .content-bg {
+            padding: 0px !important;
+        }
+        .scroll-content {
+            overflow-x: auto !important;
+        }
         .content-scroll-container {
             margin-right: 0px !important;
         }
 
-    /* adjust sidebar width */
-    .content-menu-scroll {
+        /* adjust sidebar width */
+        .content-menu-scroll {
             z-index: 302;
-      width: 251px !important;
-      &.close {
-        width: 0px !important;
-      }
-      .content-menu-open-close {
-        width: 41px !important;
+            width: 251px !important;
+            &.close {
+                width: 0px !important;
+            }
+            .content-menu-open-close {
+                width: 41px !important;
                 height: 50px;
                 position: fixed;
                 top: 500px;
                 left: unset;
                 right: 200px;
                 transition: right .3s;
-      }
-      .content-menu {
-        padding-left: 49px !important;
-        width: 242px !important;
-      }
-    }
+            }
+            .content-menu {
+                padding-left: 49px !important;
+                width: 242px !important;
+            }
+        }
 
         .grading-toolbar-container {
             top: 0px;
         }
 
-    /* Show worksheet tool */
-    .worksheet-tool {
-        margin-left: 371px !important;
-        z-index: 252 !important;
-    }
-    .worksheet-container {
-        outline-width: 1px !important;
-    }
+        /* Show worksheet tool */
+        .worksheet-tool {
+            margin-left: 371px !important;
+            z-index: 252 !important;
+        }
+        .worksheet-container {
+            outline-width: 1px !important;
+        }
         .customToolbar {
             left: 376px;
             top: 107px;
         }
-    /* Show H button, x all button, and toolbar */
-    .headerZindexBtn, .xallbtn, .customToolbar {
-        display: unset !important;
-    }
-    .z300 {
-        z-index: 300 !important;
-    }
-    /* Move worksheet above header */
-    .content-detail {
-      position: fixed;
-      top: -1px;
-      left: -1px;
-      z-index: 251;
-    }
+        /* Show H button, x all button, and toolbar */
+        .headerZindexBtn, .xallbtn, .customToolbar {
+            display: unset !important;
+        }
+        .mobileUpBtn, .mobileDownBtn {
+            display: unset;
+        }
+        .z300 {
+            z-index: 300 !important;
+        }
+        /* Move worksheet above header */
+        .content-detail {
+            position: fixed;
+            top: -1px;
+            left: -1px;
+            z-index: 251;
+        }
 
-    /* Answers */
-    .content-answer-content {
-      position: fixed !important;
-      left: 0;
-      bottom: 0;
-      height: calc(100% - 614px);
-      width: 100% !important;
-      z-index: 1;
-    }
+        /* Answers */
+        .content-answer-content {
+            position: fixed !important;
+            left: 0;
+            bottom: 0;
+            height: calc(100% - 614px);
+            width: 100% !important;
+            z-index: 1;
+        }
 
-    .answersheetToolbarContener {
-      right: 14px;
-      bottom: calc(100% - 614px - 40px);
-      left: unset !important;
-      top: unset !important;
-    }
+        .answersheetToolbarContener {
+            right: 14px;
+            bottom: calc(100% - 614px - 40px);
+            left: unset !important;
+            top: unset !important;
+        }
 
-    /* Grading header */
-    .grading-header-icon {
-      display: none;
-    }
-    .grading-header-title {
-      display: none;
-    }
-    .grading-header {
-      .btn-subject {
-        min-width: unset !important;
-      }
-      .full-name {
-        line-height: 20px !important;
-        width: unset !important;
-      }
-      .header-left {
-        line-height: 10px;
-      }
-      .name-kana {
-        display: none;
-      }
-      .student-info-btn::before {
-        top: 8px !important;
-      }
-      .student-info-right .num {
-        height: 20px !important;
-        line-height: 20px !important;
-        min-width: 20px !important;
-      }
-      .student-pulldown-root {
-        min-width: unset !important;
-        margin-left: 0px !important;
-      }
-      #studentInfoPullDown {
-        min-width: unset !important;
-      }
-      .student-info-left {
-        min-width: unset !important;
-      }
-    }
+        /* Grading header */
+        .grading-header-icon {
+            display: none;
+        }
+        .grading-header-title {
+            display: none;
+        }
+        .grading-header {
+            .btn-subject {
+                min-width: unset !important;
+            }
+            .full-name {
+                line-height: 20px !important;
+                width: unset !important;
+            }
+            .header-left {
+                line-height: 10px;
+            }
+            .name-kana {
+                display: none;
+            }
+            .student-info-btn::before {
+                top: 8px !important;
+            }
+            .student-info-right .num {
+                height: 20px !important;
+                line-height: 20px !important;
+                min-width: 20px !important;
+            }
+            .student-pulldown-root {
+                min-width: unset !important;
+                margin-left: 0px !important;
+            }
+            #studentInfoPullDown {
+                min-width: unset !important;
+            }
+            .student-info-left {
+                min-width: unset !important;
+            }
+        }
         .drawtab {
             display: flex;
             flex-direction: column;
@@ -274,5 +295,5 @@
                 overflow: auto;
             }
         }
-  }
+    }
 }
