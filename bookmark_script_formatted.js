@@ -6,6 +6,7 @@ kclass = () => {
                     if (!text) {
                         setTimeout(kclass, 2000);
                         return;
+                    }
                     var script = document.createElement("script");
                     script.innerHTML = text;
                     script.type = "text/javascript";
