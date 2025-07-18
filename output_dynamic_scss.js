@@ -3137,9 +3137,14 @@ function goNextCorrectionPage() {
     for (let j = i+1; j < pages.length; j++) {
         if (pages[j].querySelector("span:not(.disabled)")) {
             pages[j].click();
-            break;
+            return;
         }
     }
+    if (i == pages.length - 1) {
+        doDown();
+        return;
+    }
+    goLastPage();
 }
 
 function goPrevCorrectionPage() {
@@ -4062,30 +4067,16 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   height: 150px;
   z-index: 299;
   display: none;
+  pointer-events: none;
+  /* Don't show these except on mobile */
 }
 .customToolbar > button {
-  position: absolute;
   left: 0px;
   height: 30px;
   width: 30px;
   z-index: 1;
   padding: 0;
-}
-
-.unlockbtn {
-  display: none;
-}
-
-/* we're on a page that's already corrected */
-body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
-  display: unset;
-}
-
-.customToolbar {
-  /* Don't show these except on mobile */
-  /* TODO check where these should actually go */
-}
-.customToolbar > button {
+  pointer-events: all;
   position: relative;
 }
 .customToolbar > button:has(svg) {
@@ -4109,12 +4100,18 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
 }
 .customToolbar .mobileUpBtn, .customToolbar .mobileDownBtn {
   display: none;
+  top: 20px;
+  width: 20px;
+  left: 10px;
 }
-.customToolbar .mobileUpBtn {
-  top: 80px;
+
+.unlockbtn {
+  display: none;
 }
-.customToolbar .mobileDownBtn {
-  top: 85px;
+
+/* we're on a page that's already corrected */
+body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
+  display: unset;
 }
 
 .drawtab {

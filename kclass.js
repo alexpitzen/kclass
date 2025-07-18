@@ -734,9 +734,14 @@ function goNextCorrectionPage() {
     for (let j = i+1; j < pages.length; j++) {
         if (pages[j].querySelector("span:not(.disabled)")) {
             pages[j].click();
-            break;
+            return;
         }
     }
+    if (i == pages.length - 1) {
+        doDown();
+        return;
+    }
+    goLastPage();
 }
 
 function goPrevCorrectionPage() {

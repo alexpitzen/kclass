@@ -28,31 +28,16 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     height: 150px;
     z-index: 299;
     display: none;
+    pointer-events: none;
     > button {
-        // display: none;
-        position: absolute;
         left: 0px;
         height: 30px;
         width: 30px;
         z-index: 1;
         padding: 0;
-    }
-}
-
-.unlockbtn {
-    display: none;
-}
-
-/* we're on a page that's already corrected */
-body:has(.worksheet-container.selected .full-score-mark) {
-    .unlockbtn {
-        display: unset;
-    }
-}
-
-.customToolbar {
-    & > button {
+        pointer-events: all;
         position: relative;
+
         &:has(svg) {
             padding-top: 3px;
         }
@@ -82,15 +67,20 @@ body:has(.worksheet-container.selected .full-score-mark) {
     /* Don't show these except on mobile */
     .mobileUpBtn, .mobileDownBtn {
         display: none;
+        top: 20px;
+        width: 20px;
+        left: 10px;
     }
+}
 
-    /* TODO check where these should actually go */
-    .mobileUpBtn {
-        top: 80px;
-    }
+.unlockbtn {
+    display: none;
+}
 
-    .mobileDownBtn {
-        top: 85px;
+/* we're on a page that's already corrected */
+body:has(.worksheet-container.selected .full-score-mark) {
+    .unlockbtn {
+        display: unset;
     }
 }
 
