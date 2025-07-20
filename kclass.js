@@ -948,6 +948,31 @@ function keyboardModeHandler(e) {
                 sizeslider.value++;
                 changeSizeSlider();
                 break;
+            case "J":
+                startScrolling(1, ".drawtab");
+                break;
+            case "K":
+                startScrolling(-1, ".drawtab");
+                break;
+            case "h":
+                cycleHighlighter();
+                break;
+            case "p":
+                document.querySelector("input[name=penType][value=pen]")?.click();
+                break;
+            case "r":
+                if (stampColorType.value == "Rainbow") {
+                    stampColorType.value = "Rainbow Fill";
+                } else {
+                    stampColorType.value = "Rainbow";
+                }
+                break;
+            case "u":
+                stampColorType.value = "Unchanged";
+                break;
+            case "c":
+                stampColorType.value = "Color Picker";
+                break;
         }
     }
     else if (document.querySelector(".markingList.tabActive")) {
@@ -982,10 +1007,10 @@ function keyboardModeHandler(e) {
             }
                 break;
             case "J":
-                scrollStudentsDown();
+                scrollStudents(DOWN);
                 break;
             case "K":
-                scrollStudentsUp();
+                scrollStudents(UP);
                 break;
             case "S":
                 document.querySelector(".studentList.tabItem").click();
@@ -1026,10 +1051,10 @@ function keyboardModeHandler(e) {
                 document.querySelector(".markingList.tabItem").click();
                 break;
             case "J":
-                scrollStudentsDown();
+                scrollStudents(DOWN);
                 break;
             case "K":
-                scrollStudentsUp();
+                scrollStudents(UP);
                 break;
             case "r":
                 document.querySelector(".studentListUpdateButton").click();
@@ -1128,13 +1153,7 @@ function keyboardModeHandler(e) {
                 document.querySelector(".other-worksheet-button")?.click();
                 break;
             case "h":
-                {
-                    if (document.querySelector("input[name=penType]:checked")?.value == "thick-highlighter") {
-                        document.querySelector("input[name=penType][value=thin-highlighter]")?.click();
-                    } else {
-                        document.querySelector("input[name=penType][value=thick-highlighter]")?.click();
-                    }
-                }
+                cycleHighlighter();
                 break;
             case "e":
                 selectEraser();
@@ -1165,10 +1184,10 @@ function keyboardModeHandler(e) {
                 }
                 break;
             case "J":
-                scrollAnswerDown();
+                scrollAnswer(DOWN);
                 break;
             case "K":
-                scrollAnswerUp();
+                scrollAnswer(UP);
                 break;
             case "-":
                 if (drawtab.checkVisibility() || printoverlay.checkVisibility()) {
@@ -1208,26 +1227,26 @@ function keyboardModeHandler(e) {
                 break;
             case "J":
                 if (document.querySelector(".dashboard-progress-chart.isFloating")) {
-                    scrollProgressChartDown();
+                    scrollProgressChart(DOWN);
                 } else {
-                    scrollDashboardDown();
+                    scrollDashboard(DOWN);
                 }
                 break;
             case "K":
                 if (document.querySelector(".dashboard-progress-chart.isFloating")) {
-                    scrollProgressChartUp();
+                    scrollProgressChart(UP);
                 } else {
-                    scrollDashboardUp();
+                    scrollDashboard(UP);
                 }
                 break;
             case "H":
                 if (document.querySelector(".dashboard-progress-chart.isFloating")) {
-                    scrollProgressChartLeft();
+                    sideScrollProgressChart(LEFT);
                 }
                 break;
             case "L":
                 if (document.querySelector(".dashboard-progress-chart.isFloating")) {
-                    scrollProgressChartRight();
+                    sideScrollProgressChart(RIGHT);
                 }
                 break;
             case "p":
@@ -1259,10 +1278,10 @@ function keyboardModeHandler(e) {
                 doBackspace();
                 break;
             case "J":
-                scrollScoreDown();
+                scrollScore(DOWN);
                 break;
             case "K":
-                scrollScoreUp();
+                scrollScore(UP);
                 break;
             case "G":
                 {
@@ -1406,6 +1425,15 @@ function doUp() {
     document.querySelector("button.pager-button.up")?.click();
 }
 
+function cycleHighlighter() {
+    if (document.querySelector("input[name=penType]:checked")?.value == "thick-highlighter") {
+        document.querySelector("input[name=penType][value=thin-highlighter]")?.click();
+    } else {
+        document.querySelector("input[name=penType][value=thick-highlighter]")?.click();
+    }
+}
+
+
 function selectEraser() {
     StampLib.expandToolbar();
     document.querySelector(".grading-toolbar-box .grading-toolbar .eraser").click();
@@ -1533,42 +1561,10 @@ let pageScrollingStartTime;
 let pageScrollingStartPos;
 let pageSideScrolling = false;
 
-function scrollAnswerUp() {
-    scrollAnswer(-1);
-}
-function scrollAnswerDown() {
-    scrollAnswer(1);
-}
-function scrollStudentsUp() {
-    scrollStudents(-1);
-}
-function scrollStudentsDown() {
-    scrollStudents(1);
-}
-function scrollDashboardUp() {
-    scrollDashboard(-1);
-}
-function scrollDashboardDown() {
-    scrollDashboard(1);
-}
-function scrollProgressChartUp() {
-    scrollProgressChart(-1);
-}
-function scrollProgressChartDown() {
-    scrollProgressChart(1);
-}
-function scrollProgressChartLeft() {
-    sideScrollProgressChart(-1);
-}
-function scrollProgressChartRight() {
-    sideScrollProgressChart(1);
-}
-function scrollScoreUp() {
-    scrollScore(-1);
-}
-function scrollScoreDown() {
-    scrollScore(1);
-}
+const DOWN = 1;
+const UP = -1;
+const RIGHT = 1;
+const LEFT = -1;
 function scrollStudents(direction) {
     startScrolling(direction, ".studentList:not(.tabItem)");
 }
