@@ -1628,4 +1628,35 @@ function stopScrolling() {
     pageScrolling = false;
 }
 
+makebtn(
+    "loginRefreshBtn",
+    "refresh",
+    "refresh",
+    document.body,
+    () => {
+        window.location.href = window.location.href
+    }
+);
+
+const loginAssistantsList = document.createElement("details");
+loginAssistantsList.className = "loginAssistantsList";
+if (!/[Aa]ndroid/.test(navigator.userAgent)) {
+    loginAssistantsList.setAttribute("open", "");
+}
+loginAssistantsList.innerHTML = `<summary>Logins</summary>
+<ul>
+    <li>1: Dhanya</li>
+    <li>2: Gowri</li>
+    <li>3: Gautham</li>
+    <li>4: Alex</li>
+    <li>5: Ibrahim</li>
+    <li>6: Neethi</li>
+    <li>7: Ridhima</li>
+    <li>8: Samarth</li>
+    <li>9: Shennie</li>
+    <li>10: Vaishnavi</li>
+    <li>11: Bryanna</li>
+</ul>`;
+document.body.appendChild(loginAssistantsList);
+
 ;

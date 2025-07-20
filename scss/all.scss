@@ -280,12 +280,27 @@ body:has(.markingList.tabActive) {
     }
 }
 
-/* doesn't help */
-/*
-.loading-icon {
+.loginRefreshBtn {
+    display: none;
+    position: fixed;
+    top: 0px;
+    margin: 10px;
+}
+body:has(app-atx0010p):not(:has(.btn-pulldown-language .option)) {
+    .loginRefreshBtn {
+        display: unset;
+    }
+}
+
+.loginAssistantsList {
     display: none;
 }
-*/
+body:has(app-atx0010p) .loginAssistantsList {
+    display: unset;
+    position: fixed;
+    top: 20px;
+    margin: 10px;
+}
 
 /* EXPERIMENTAL */
 /*

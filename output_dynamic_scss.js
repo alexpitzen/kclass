@@ -4031,6 +4031,37 @@ function stopScrolling() {
     pageScrolling = false;
 }
 
+makebtn(
+    "loginRefreshBtn",
+    "refresh",
+    "refresh",
+    document.body,
+    () => {
+        window.location.href = window.location.href
+    }
+);
+
+const loginAssistantsList = document.createElement("details");
+loginAssistantsList.className = "loginAssistantsList";
+if (!/[Aa]ndroid/.test(navigator.userAgent)) {
+    loginAssistantsList.setAttribute("open", "");
+}
+loginAssistantsList.innerHTML = `<summary>Logins</summary>
+<ul>
+    <li>1: Dhanya</li>
+    <li>2: Gowri</li>
+    <li>3: Gautham</li>
+    <li>4: Alex</li>
+    <li>5: Ibrahim</li>
+    <li>6: Neethi</li>
+    <li>7: Ridhima</li>
+    <li>8: Samarth</li>
+    <li>9: Shennie</li>
+    <li>10: Vaishnavi</li>
+    <li>11: Bryanna</li>
+</ul>`;
+document.body.appendChild(loginAssistantsList);
+
 ;
     //*/
 
@@ -4288,12 +4319,28 @@ body:has(.markingList.tabActive) .studentRow .gradeColumn {
   padding-top: 24px;
 }
 
-/* doesn't help */
-/*
-.loading-icon {
-    display: none;
+.loginRefreshBtn {
+  display: none;
+  position: fixed;
+  top: 0px;
+  margin: 10px;
 }
-*/
+
+body:has(app-atx0010p):not(:has(.btn-pulldown-language .option)) .loginRefreshBtn {
+  display: unset;
+}
+
+.loginAssistantsList {
+  display: none;
+}
+
+body:has(app-atx0010p) .loginAssistantsList {
+  display: unset;
+  position: fixed;
+  top: 20px;
+  margin: 10px;
+}
+
 /* EXPERIMENTAL */
 /*
 @media screen and (orientation:landscape) and (min-height:1300px) and (min-width:1300px) {
