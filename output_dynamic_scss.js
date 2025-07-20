@@ -3318,6 +3318,11 @@ function keyboardModeHandler(e) {
                         e.preventDefault();
                         searchBtn.click();
                         searchBtn.focus();
+                        if (document.querySelector(".markingList.tabActive")) {
+                            if (!document.querySelector(".studentList i.kbfocus")) {
+                                doMarkingListJK(DOWN);
+                            }
+                        }
                     }
                 }
                 break;
@@ -3415,6 +3420,18 @@ function keyboardModeHandler(e) {
             case "K":
                 scrollStudents(UP);
                 break;
+            case "j":
+                doMarkingListJK(DOWN);
+                break;
+            case "k":
+                doMarkingListJK(UP);
+                break;
+            case " ":
+            {
+                let kbfocus = document.querySelector(".studentList .checkbox.kbfocus");
+                kbfocus?.click();
+            }
+                break;
             case "S":
                 document.querySelector(".studentList.tabItem").click();
                 break;
@@ -3435,6 +3452,7 @@ function keyboardModeHandler(e) {
                 break;
         }
     } else if (document.querySelector(".studentList.tabActive")) {
+        // student list
         switch (e.key) {
             case "f":
             case "/":
@@ -3614,6 +3632,7 @@ function keyboardModeHandler(e) {
                 break;
         }
     } else if (document.querySelector(".student-profile")) {
+        // student profile
         switch(e.key) {
             case "R":
                 if (document.querySelector("loading-spinner div")) return;
@@ -3670,6 +3689,7 @@ function keyboardModeHandler(e) {
                 break;
         }
     } else if (document.querySelector(".ATD0010P-root")) {
+        // study records
         switch(e.key) {
             case "R":
                 clickReading();
@@ -3790,6 +3810,57 @@ function clearSearch() {
     searchInput.setAttribute("value", "");
     searchInput.dispatchEvent(new Event("input"), {});
     document.querySelector(".search-bar .search-btn").click();
+}
+
+function doMarkingListJK(direction) {
+    // current student focus
+    let studentList = document.querySelector(".studentList:not(.tabItem)");
+    let kbfocus = studentList.querySelector("app-score-list-item .checkbox.kbfocus");
+    let toFocus;
+    let focusHeader = false;
+    if (!kbfocus) {
+        // header checkbox focused
+        let headerCheckbox = studentList.querySelector("app-score-list-header .checkbox");
+        if (headerCheckbox.classList.contains("kbfocus")) {
+            kbfocus = headerCheckbox;
+            if (direction == DOWN) {
+                // select the first student
+                toFocus = studentList.querySelector("app-score-list-item .checkbox");
+            } else {
+                let items = studentList.querySelectorAll("app-score-list-item .checkbox");
+                toFocus = items[items.length - 1];
+            }
+        } else {
+            // Nothing focused
+            if (direction == DOWN) {
+                toFocus = studentList.querySelector("app-score-list-item .checkbox");
+            } else {
+                toFocus = studentList.querySelector("app-score-list-header .checkbox");
+                focusHeader = true;
+            }
+        }
+    } else {
+        let items = Array.from(studentList.querySelectorAll("app-score-list-item .checkbox"));
+        let i = items.indexOf(kbfocus);
+        if (direction == UP && i == 0 || direction == DOWN && i == items.length - 1) {
+            // select the header checkbox
+            toFocus = studentList.querySelector("app-score-list-header .checkbox");
+            focusHeader = true;
+        } else {
+            toFocus = items[i + direction];
+        }
+    }
+    kbfocus?.classList.remove("kbfocus");
+    toFocus?.classList.add("kbfocus");
+    if (focusHeader) {
+        studentList.scrollTop = 0;
+    } else if (!focusHeader && toFocus) {
+        toFocus.scrollIntoViewIfNeeded();
+        let firstCheckbox = studentList.querySelector("app-score-list-item .checkbox");
+        if (studentList.scrollTop > toFocus.offsetTop - firstCheckbox.offsetTop) {
+            studentList.scrollTop = toFocus.offsetTop - firstCheckbox.offsetTop;
+        }
+    }
 }
 
 function doDown() {
@@ -4296,6 +4367,11 @@ div.barWrap[aria-describedby] {
 
 #customPulldown .kbfocus {
   border: 1px solid !important;
+}
+
+.studentList i.kbfocus {
+  border: 1px solid;
+  padding: 8px;
 }
 
 .score-item.end-not-perfect .score-item-content {

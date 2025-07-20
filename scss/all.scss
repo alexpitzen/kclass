@@ -257,6 +257,11 @@ div.barWrap[aria-describedby] {
     }
 }
 
+.studentList i.kbfocus {
+    border: 1px solid;
+    padding: 8px;
+}
+
 .score-item.end-not-perfect .score-item-content {
     border: 2px solid red;
 }
