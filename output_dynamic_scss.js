@@ -3317,7 +3317,7 @@ function keyboardModeHandler(e) {
                     if (searchBtn) {
                         e.preventDefault();
                         searchBtn.click();
-                        searchBtn.focus();
+                        e.target.blur();
                         if (document.querySelector(".markingList.tabActive")) {
                             if (!document.querySelector(".studentList i.kbfocus")) {
                                 doMarkingListJK(DOWN);
@@ -4369,8 +4369,14 @@ div.barWrap[aria-describedby] {
 }
 
 .studentList i.kbfocus {
-  border: 1px solid;
+  border: 3px solid;
   padding: 8px;
+}
+.studentList .studentRowHeader i.kbfocus {
+  margin-left: 48px !important;
+}
+.studentList .studentRow i.kbfocus {
+  margin-left: 38px !important;
 }
 
 .score-item.end-not-perfect .score-item-content {

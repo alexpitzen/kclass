@@ -914,7 +914,7 @@ function keyboardModeHandler(e) {
                     if (searchBtn) {
                         e.preventDefault();
                         searchBtn.click();
-                        searchBtn.focus();
+                        e.target.blur();
                         if (document.querySelector(".markingList.tabActive")) {
                             if (!document.querySelector(".studentList i.kbfocus")) {
                                 doMarkingListJK(DOWN);
