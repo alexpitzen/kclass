@@ -3404,7 +3404,7 @@ function keyboardModeHandler(e) {
                 document.querySelectorAll(".studentRow .checkbox.checked").forEach((checkbox) => {
                     checkbox.click();
                 });
-                document.querySelector(".studentList i.kbfocus")?.classList.remove("kbfocus");
+                document.querySelector(".studentList .kbfocus")?.classList.remove("kbfocus");
                 break;
             case "g":
                 document.querySelector(".studentList:not(.tabItem)").scrollTo(0, 0);
@@ -3427,10 +3427,17 @@ function keyboardModeHandler(e) {
             case "k":
                 doMarkingListJK(UP);
                 break;
+            case "h":
+                doMarkingListHL(LEFT);
+                break;
+            case "l":
+                doMarkingListHL(RIGHT);
+                break;
             case " ":
             {
                 let kbfocus = document.querySelector(".studentList .checkbox.kbfocus");
                 kbfocus?.click();
+                e.preventDefault();
             }
                 break;
             case "S":
@@ -3449,7 +3456,14 @@ function keyboardModeHandler(e) {
                 document.querySelector("app-student-list-filter-capsule .KNA")?.click();
                 break;
             case "Enter":
-                doEnter();
+            {
+                let focusedSet = document.querySelector(".studyBarWrap.kbfocus");
+                if (focusedSet) {
+                    focusedSet.querySelector(".barWrap")?.click();
+                } else {
+                    doEnter();
+                }
+            }
                 break;
         }
     } else if (document.querySelector(".studentList.tabActive")) {
@@ -3813,52 +3827,172 @@ function clearSearch() {
     document.querySelector(".search-bar .search-btn").click();
 }
 
-function doMarkingListJK(direction) {
-    // current student focus
+function doMarkingListHL(direction) {
     let studentList = document.querySelector(".studentList:not(.tabItem)");
-    let kbfocus = studentList.querySelector("app-score-list-item .checkbox.kbfocus");
-    let toFocus;
-    let focusHeader = false;
-    if (!kbfocus) {
-        // header checkbox focused
-        let headerCheckbox = studentList.querySelector("app-score-list-header .checkbox");
-        if (headerCheckbox.classList.contains("kbfocus")) {
-            kbfocus = headerCheckbox;
-            if (direction == DOWN) {
-                // select the first student
-                toFocus = studentList.querySelector("app-score-list-item .checkbox");
-            } else {
-                let items = studentList.querySelectorAll("app-score-list-item .checkbox");
-                toFocus = items[items.length - 1];
-            }
-        } else {
-            // Nothing focused
-            if (direction == DOWN) {
-                toFocus = studentList.querySelector("app-score-list-item .checkbox");
-            } else {
-                toFocus = studentList.querySelector("app-score-list-header .checkbox");
-                focusHeader = true;
-            }
-        }
-    } else {
-        let items = Array.from(studentList.querySelectorAll("app-score-list-item .checkbox"));
-        let i = items.indexOf(kbfocus);
-        if (direction == UP && i == 0 || direction == DOWN && i == items.length - 1) {
-            // select the header checkbox
-            toFocus = studentList.querySelector("app-score-list-header .checkbox");
-            focusHeader = true;
-        } else {
-            toFocus = items[i + direction];
-        }
+    // current student checkbox focus
+    let focusedStudent = studentList.querySelector("app-score-list-item .checkbox.kbfocus");
+    if (focusedStudent) {
+        if (direction == LEFT) return;
+        doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item:has(.kbfocus) .studyBarWrap"));
+        return;
     }
-    kbfocus?.classList.remove("kbfocus");
-    toFocus?.classList.add("kbfocus");
-    if (focusHeader) {
-        studentList.scrollTop = 0;
-    } else if (!focusHeader && toFocus) {
-        toFocus.scrollIntoViewIfNeeded();
-        let firstCheckbox = studentList.querySelector("app-score-list-item .checkbox");
+
+    let focusedSet = studentList.querySelector(".studyBarWrap.kbfocus");
+    if (focusedSet) {
+        let subject = getFocusedSetSubject(focusedSet);
+        if (direction == RIGHT) {
+            if (subject == "KNA") return;
+            moveMarkingListSetFocusLeftRight(studentList, focusedSet, subject);
+        } else if (direction == LEFT) {
+            if (subject == "math") {
+                selectStudentCheckboxFromSet(studentList, focusedSet);
+            } else {
+                if (!moveMarkingListSetFocusLeftRight(studentList, focusedSet, subject)) {
+                    selectStudentCheckboxFromSet(studentList, focusedSet);
+                }
+            }
+        }
+        return;
+    }
+
+    // If header checkbox is focused, do nothing
+    if (studentList.querySelector("app-score-list-header .checkbox.kbfocus")) return;
+
+    // Nothing selected
+    if (direction == LEFT) {
+        // select first student checkbox
+        doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item .checkbox"));
+    } else {
+        // select first set
+        doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item .studyBarWrap"));
+    }
+}
+
+function selectStudentCheckboxFromSet(studentList, focusedSet) {
+    doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item:has(.kbfocus) i.checkbox"));
+}
+
+function moveMarkingListSetFocusLeftRight(studentList, focusedSet, subject) {
+    let otherSubjectSets = studentList.querySelectorAll(`app-score-list-item:has(.kbfocus) .subjectCellWrapColumn:has(.studyBarWrap.${subject == "math" ? "KNA" : "math"}) .studyBarWrap`);
+    if (!otherSubjectSets.length) return false;
+
+    let sameSubjectSets = studentList.querySelectorAll(`app-score-list-item:has(.kbfocus) .subjectCellWrapColumn:has(.studyBarWrap.${subject}) .studyBarWrap`);
+
+    let i = Array.from(sameSubjectSets).indexOf(focusedSet);
+
+    doMarkingListFocusAndScroll(studentList, otherSubjectSets[Math.min(i, otherSubjectSets.length - 1)]);
+    return true;
+}
+
+function doMarkingListJK(direction) {
+    let studentList = document.querySelector(".studentList:not(.tabItem)");
+    // current student checkbox focus
+    let focusedStudent = studentList.querySelector("app-score-list-item .checkbox.kbfocus");
+    if (focusedStudent) {
+        moveMarkingListCheckboxFocus(studentList, focusedStudent, direction);
+        return;
+    }
+
+    let focusedSet = studentList.querySelector(".studyBarWrap.kbfocus");
+    if (focusedSet) {
+        moveMarkingListSetFocusUpDown(studentList, focusedSet, direction);
+        return;
+    }
+
+    let headerCheckbox = studentList.querySelector("app-score-list-header .checkbox");
+    if (headerCheckbox.classList.contains("kbfocus")) {
+        if (direction == DOWN) {
+            // select the first student
+            doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item .checkbox"));
+        } else {
+            // select the last student
+            let items = studentList.querySelectorAll("app-score-list-item .checkbox");
+            doMarkingListFocusAndScroll(studentList, items[items.length - 1]);
+        }
+        return;
+    }
+
+    // nothing selected
+    if (direction == DOWN) {
+        // select the first student
+        doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item .checkbox"));
+    } else {
+        // select the header checkbox
+        markingListSelectHeaderCheckbox(studentList);
+    }
+}
+
+function getFocusedSetSubject(focusedSet) {
+    return focusedSet.classList.entries().find((a) => a[1] == "math" || a[1] == "KNA")[1];
+}
+
+function moveMarkingListSetFocusUpDown(studentList, focusedSet, direction) {
+    let currentStudentSets = Array.from(studentList.querySelectorAll(".subjectCellWrapColumn:has(.kbfocus) .studyBarWrap"));
+    let i = currentStudentSets.indexOf(focusedSet);
+    let subject = getFocusedSetSubject(focusedSet);
+    if (direction == UP && i == 0) {
+        // Select previous student's last set
+        let student = getMarkingListStudent(studentList, direction);
+        let subjectColumn = getMarkingListStudentSubjectColumn(student, subject);
+        let sets = subjectColumn.querySelectorAll(".studyBarWrap");
+        doMarkingListFocusAndScroll(studentList, sets[sets.length - 1]);
+    } else if (direction == DOWN && i == currentStudentSets.length - 1) {
+        // Select next student's first set
+        let student = getMarkingListStudent(studentList, direction);
+        let subjectColumn = getMarkingListStudentSubjectColumn(student, subject);
+        doMarkingListFocusAndScroll(studentList, subjectColumn.querySelector(".studyBarWrap"));
+    } else {
+        doMarkingListFocusAndScroll(studentList, currentStudentSets[i + direction]);
+    }
+
+}
+
+function getMarkingListStudent(studentList, direction) {
+    let students = Array.from(studentList.querySelectorAll("app-score-list-item"))
+    let i = students.indexOf(studentList.querySelector("app-score-list-item:has(.kbfocus)"));
+    if (direction == UP && i == 0) {
+        return students[students.length - 1];
+    } else if (direction == DOWN && i == students.length - 1) {
+        return students[0];
+    }
+    return students[i + direction];
+}
+
+function getMarkingListStudentSubjectColumn(student, subject) {
+    return (
+        student.querySelector(`.subjectCellWrapColumn:has(.studyBarWrap.${subject})`)
+        || student.querySelector(".subjectCellWrapColumn:has(.studyBarWrap)")
+    );
+}
+
+function moveMarkingListCheckboxFocus(studentList, focusedStudent, direction) {
+    let items = Array.from(studentList.querySelectorAll("app-score-list-item .checkbox"));
+    let i = items.indexOf(focusedStudent);
+    if (direction == UP && i == 0 || direction == DOWN && i == items.length - 1) {
+        // select the header checkbox
+        focusedStudent.classList.remove("kbfocus");
+        markingListSelectHeaderCheckbox(studentList);
+    } else {
+        doMarkingListFocusAndScroll(studentList, items[i + direction]);
+    }
+}
+function markingListSelectHeaderCheckbox(studentList) {
+    studentList.querySelector("app-score-list-header .checkbox").classList.add("kbfocus");
+    studentList.scrollTop = 0;
+}
+
+function doMarkingListFocusAndScroll(studentList, toFocus) {
+    studentList.querySelector(".kbfocus")?.classList.remove("kbfocus");
+    toFocus.classList.add("kbfocus");
+    let firstCheckbox = studentList.querySelector("app-score-list-item .checkbox");
+    if (toFocus.classList.contains("checkbox")) {
+        // Keep checkboxes at the top when focusing
         studentList.scrollTop = toFocus.offsetTop - firstCheckbox.offsetTop;
+    } else {
+        toFocus.scrollIntoViewIfNeeded();
+        if (studentList.scrollTop > toFocus.offsetTop - firstCheckbox.offsetTop) {
+            studentList.scrollTop = toFocus.offsetTop - firstCheckbox.offsetTop;
+        }
     }
 }
 
@@ -4377,6 +4511,9 @@ div.barWrap[aria-describedby] {
 }
 .studentList .studentRow i.kbfocus {
   margin-left: 38px !important;
+}
+.studentList .studyBarWrap.kbfocus {
+  border: 3px solid;
 }
 
 .score-item.end-not-perfect .score-item-content {
