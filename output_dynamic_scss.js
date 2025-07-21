@@ -3738,13 +3738,27 @@ function keyboardModeKeyUp(e) {
     switch(e.key) {
         case "J":
         case "j":
+            if (!pageSideScrolling && pageScrollingDirection == DOWN) {
+                stopScrolling();
+            }
+            break;
         case "K":
         case "k":
+            if (!pageSideScrolling && pageScrollingDirection == UP) {
+                stopScrolling();
+            }
+            break;
         case "H":
         case "h":
+            if (pageSideScrolling && pageScrollingDirection == LEFT) {
+                stopScrolling();
+            }
+            break;
         case "L":
         case "l":
-            stopScrolling();
+            if (pageSideScrolling && pageScrollingDirection == RIGHT) {
+                stopScrolling();
+            }
             break;
     }
 }
