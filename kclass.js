@@ -1001,6 +1001,7 @@ function keyboardModeHandler(e) {
                 document.querySelectorAll(".studentRow .checkbox.checked").forEach((checkbox) => {
                     checkbox.click();
                 });
+                document.querySelector(".studentList i.kbfocus")?.classList.remove("kbfocus");
                 break;
             case "g":
                 document.querySelector(".studentList:not(.tabItem)").scrollTo(0, 0);
@@ -1454,9 +1455,7 @@ function doMarkingListJK(direction) {
     } else if (!focusHeader && toFocus) {
         toFocus.scrollIntoViewIfNeeded();
         let firstCheckbox = studentList.querySelector("app-score-list-item .checkbox");
-        if (studentList.scrollTop > toFocus.offsetTop - firstCheckbox.offsetTop) {
-            studentList.scrollTop = toFocus.offsetTop - firstCheckbox.offsetTop;
-        }
+        studentList.scrollTop = toFocus.offsetTop - firstCheckbox.offsetTop;
     }
 }
 
