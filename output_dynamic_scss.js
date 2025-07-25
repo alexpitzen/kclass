@@ -4273,6 +4273,9 @@ loginAssistantsList.innerHTML = `<summary>Logins</summary>
     <li>9: Shennie</li>
     <li>10: Vaishnavi</li>
     <li>11: Bryanna</li>
+    <li>12: Nainika</li>
+    <li>13: Arsheen</li>
+    <li>14: Parthini</li>
 </ul>`;
 document.body.appendChild(loginAssistantsList);
 
