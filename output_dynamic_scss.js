@@ -2763,6 +2763,7 @@ pencolorbtn.type = "color";
 pencolorbtn.value = "#ff2200";
 drawbtn.style.fill = pencolorbtn.value;
 pencolorbtn.className = "pencolorbtn";
+pencolorbtn.accessKey = "c";
 function updatePenColor() {
     textarea.style.color = this.value;
     updatePenSettings();
