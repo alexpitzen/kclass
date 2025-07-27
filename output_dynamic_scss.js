@@ -4361,8 +4361,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 .customToolbar .mobileUpBtn, .customToolbar .mobileDownBtn {
   display: none;
   top: 20px;
-  width: 20px;
-  left: 10px;
+  width: 30px;
 }
 
 .unlockbtn {
