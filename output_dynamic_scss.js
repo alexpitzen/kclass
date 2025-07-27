@@ -2543,9 +2543,12 @@ const drawbtn = makebtn(
     () => {
         if (drawtab.classList.contains("hidden")) {
             hideDrawTab(false);
-            // make the textarea next in line for focus when pressing tab
-            clearBtn.focus();
-            clearBtn.blur();
+            if (!isAndroid()) {
+                textarea.focus();
+            } else {
+                clearBtn.focus();
+                clearBtn.blur();
+            }
             updateTextAreaSize();
             updatePenSettings();
         } else {
@@ -3829,7 +3832,6 @@ function doEscape(e) {
     }
     if (e.target.classList.contains("search-input")) {
         clearSearch();
-        // TODO kb focus
         e.target.parentElement.querySelector(".search-btn")?.focus();
     }
 
@@ -3840,6 +3842,7 @@ function clearSearch() {
     searchInput.setAttribute("value", "");
     searchInput.dispatchEvent(new Event("input"), {});
     document.querySelector(".search-bar .search-btn").click();
+    document.querySelector(".studentList .kbfocus")?.classList.remove("kbfocus");
 }
 
 function doMarkingListHL(direction) {
@@ -4256,9 +4259,13 @@ makebtn(
     }
 );
 
+function isAndroid() {
+    return /[Aa]ndroid/.test(navigator.userAgent);
+}
+
 const loginAssistantsList = document.createElement("details");
 loginAssistantsList.className = "loginAssistantsList";
-if (!/[Aa]ndroid/.test(navigator.userAgent)) {
+if (!isAndroid()) {
     loginAssistantsList.setAttribute("open", "");
 }
 loginAssistantsList.innerHTML = `<summary>Logins</summary>
