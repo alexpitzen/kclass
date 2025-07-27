@@ -3469,6 +3469,9 @@ function keyboardModeHandler(e) {
                 }
             }
                 break;
+            case "Escape":
+                doEscape(e);
+                break;
         }
     } else if (document.querySelector(".studentList.tabActive")) {
         // student list
@@ -3835,6 +3838,7 @@ function doEscape(e) {
         e.target.parentElement.querySelector(".search-btn")?.focus();
     }
 
+    document.querySelector(".studentList .kbfocus")?.classList.remove("kbfocus");
 }
 function clearSearch() {
     let searchInput = document.querySelector("input.search-input");
