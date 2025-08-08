@@ -978,6 +978,10 @@
         return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-red-comment-']")?.id];
     }
 
+    function getStudentDrawing() {
+        return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-study-stroke-']")?.id].currentDrawing.is;
+    }
+
     function unlockPage() {
         let atd = getAtd();
         atd.drawingMode = 1;
@@ -2080,6 +2084,7 @@
 
     global.StampLib = {
         getAtd: getAtd,
+        getStudentDrawing: getStudentDrawing,
         writeAllAt: writeAllAt,
         undoLastWriteAll: undoLastWriteAll,
         clearPage: clearPage,
@@ -2150,6 +2155,8 @@
                 karthikaBananamon,
                 karthikaEggcellentWork,
                 karthikaAmazingHeart,
+                willowHi,
+                willowAlex,
                 faboolousWork,
                 bootifulWork,
                 zombie,
@@ -2247,6 +2254,8 @@
                 karthikaEggcellentWork,
                 karthikaAmazingHeart,
                 karthikaPurrfect,
+                willowHi,
+                willowAlex,
             ],
             "Christmas": [
                 christmasCat,
