@@ -140,12 +140,8 @@ const drawbtn = makebtn(
     () => {
         if (drawtab.classList.contains("hidden")) {
             hideDrawTab(false);
-            if (!isAndroid()) {
-                textarea.focus();
-            } else {
-                clearBtn.focus();
-                clearBtn.blur();
-            }
+            clearBtn.focus();
+            clearBtn.blur();
             updateTextAreaSize();
             updatePenSettings();
         } else {
@@ -920,7 +916,7 @@ function keyboardModeHandler(e) {
                         searchBtn.click();
                         e.target.blur();
                         if (document.querySelector(".markingList.tabActive")) {
-                            if (!document.querySelector(".studentList i.kbfocus")) {
+                            if (!document.querySelector(".studentList .kbfocus")) {
                                 doMarkingListJK(DOWN);
                             }
                         }
@@ -975,12 +971,20 @@ function keyboardModeHandler(e) {
                 } else {
                     stampColorType.value = "Rainbow";
                 }
+                stampColorType.dispatchEvent(new Event("change"));
                 break;
             case "u":
                 stampColorType.value = "Unchanged";
+                stampColorType.dispatchEvent(new Event("change"));
                 break;
             case "c":
                 stampColorType.value = "Color Picker";
+                stampColorType.dispatchEvent(new Event("change"));
+                break;
+            case "t":
+                textarea.focus();
+                textarea.select();
+                e.preventDefault();
                 break;
         }
     }
