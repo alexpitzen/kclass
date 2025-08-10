@@ -2150,6 +2150,7 @@
                 halloweenCuteCatHat2,
                 koala,
                 axolotlWizardGreenHead,
+                axolotlWizardGreenNormal,
                 adelineCatGreatJob,
                 adelineStar,
                 karthikaBootifulWorkGhost,
@@ -2247,6 +2248,7 @@
                 halloweenCuteCatHat2,
                 koala,
                 axolotlWizardGreenHead,
+                axolotlWizardGreenNormal,
             ],
             "Student-drawn": [
                 adelineCatGreatJob,
