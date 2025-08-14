@@ -2151,6 +2151,7 @@
                 koala,
                 axolotlWizardGreenHead,
                 axolotlWizardGreenNormal,
+                axolotlWizardGreen,
                 adelineCatGreatJob,
                 adelineStar,
                 karthikaBootifulWorkGhost,
@@ -2249,6 +2250,7 @@
                 koala,
                 axolotlWizardGreenHead,
                 axolotlWizardGreenNormal,
+                axolotlWizardGreen,
             ],
             "Student-drawn": [
                 adelineCatGreatJob,
