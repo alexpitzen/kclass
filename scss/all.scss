@@ -47,6 +47,18 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
         top: 0px;
     }
 
+    .timestampBox {
+        left: 30px;
+        top: 8px;
+        position: absolute;
+        width: max-content;
+        background-color: white;
+        border: 1px solid black;
+        padding: 1px;
+        font-size: 10px;
+        display: none;
+    }
+
     .headerZindexBtn {
         top: 5px;
     }

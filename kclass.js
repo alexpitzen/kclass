@@ -597,7 +597,6 @@ const textbtn = makebtn("textprintbtn squarebtn", "T", "Stamp the contents of th
     printoverlay.addEventListener("click", printclickhandler);
     printoverlay.style.display = "unset";
 });
-textbtn.accessKey = "t";
 
 const stampColorTypeLabel = document.createElement("label");
 stampColorTypeLabel.setAttribute("for", "stampColorType");
@@ -930,6 +929,13 @@ function keyboardModeHandler(e) {
         switch (e.key) {
             case "d":
                 drawbtn.click();
+                break;
+            case "t":
+                if (timestampUpdater) {
+                    disableTimestampDisplay();
+                } else {
+                    enableTimestampDisplay();
+                }
                 break;
         }
         return;
@@ -1388,6 +1394,41 @@ function disableKeyboardMode() {
     markboxKeys?.disable();
     markboxKeys = null;
 }
+
+const timestampBox = document.createElement("div");
+timestampBox.className = "timestampBox";
+customToolbar.appendChild(timestampBox);
+let timestampUpdater;
+function enableTimestampDisplay() {
+    function updateTimestamp() {
+        let is = stamp.getStudentDrawing();
+        if (is) {
+            let d = new Date(is[is.length-1].cs[0].t);
+            timestampBox.innerHTML = `Last change:<br>${d.toString()}`;
+        } else {
+            timestampBox.innerHTML = "";
+        }
+    }
+
+    timestampUpdater = onPageChange(
+        () => {
+            updateTimestamp();
+            timestampBox.style.display = "unset";
+        },
+        updateTimestamp,
+        () => {},
+        () => {
+            timestampBox.innerHTML = "";
+            timestampBox.style.display = "";
+        }
+    );
+}
+
+function disableTimestampDisplay() {
+    timestampUpdater?.disable();
+    timestampUpdater = null;
+}
+
 function isPulldownOpen() {
     return document.querySelector("#customPulldown")?.checkVisibility() ?? false;
 }
