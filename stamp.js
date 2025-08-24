@@ -979,7 +979,7 @@
     }
 
     function getStudentDrawing() {
-        return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-study-stroke-']")?.id].currentDrawing.is;
+        return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-study-stroke-']")?.id]?.currentDrawing?.is;
     }
 
     function unlockPage() {

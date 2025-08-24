@@ -167,12 +167,17 @@ const mobileDownBtn = makebtn(
     goNextCorrectionPage,
 );
 
-function onPageChange(onEnable, onPageEnter=()=>{}, onPageLeave=()=>{}, onDisable=()=>{}) {
+function onPageChange(onEnable, onPageEnter=()=>{}, onPageLeave=()=>{}, onDisable=()=>{}, onStartLoading=()=>{}) {
     let loadObserver = new MutationObserver((mutationList, _) => {
         for (const mutation of mutationList) {
-            if (mutation.target.nodeName == "LOADING-SPINNER" && mutation.removedNodes.length) {
-                pageLoad();
-                break;
+            if (mutation.target.nodeName == "LOADING-SPINNER") {
+                if (mutation.removedNodes.length) {
+                    pageLoad();
+                    break;
+                } else {
+                    onStartLoading();
+                    break;
+                }
             }
         }
     });
@@ -1417,24 +1422,29 @@ function enableTimestampDisplay() {
                 let lastStroke = new Date(is[is.length-1].cs[0].t);
                 timestampBox.innerHTML = `Last change:<br>${lastStroke.toString()}`;
 
-                let page = kclass.ng.context._contentsManagerService.paging._currentPage.gradingWaitingSet;
-                if (page.GradingStartTime && page.StudyFinishTime) {
-                    let lastGraded = new Date(page.GradingStartTime + "Z");
-                    let submitted = new Date(page.StudyFinishTime + "Z");
-                    if (lastGraded > submitted) {
-                        // This was paused, so we don't know
-                        timestampBoxNeutral();
-                    } else {
-                        if (lastStroke > lastGraded) {
-                            // They did something on the page since the last grading
-                            timestampBoxGreen();
-                        } else {
-                            // They haven't touched the page since we last graded it
-                            timestampBoxRed();
-                        }
-                    }
-                } else {
+                if (document.querySelector(".worksheet-navigator-page.active .text.disabled")) {
+                    // We're not on a page we need to grade
                     timestampBoxNeutral();
+                } else {
+                    let page = kclass.ng.context._contentsManagerService.paging._currentPage.gradingWaitingSet;
+                    if (page.GradingStartTime && page.StudyFinishTime) {
+                        let lastGraded = new Date(page.GradingStartTime + "Z");
+                        let submitted = new Date(page.StudyFinishTime + "Z");
+                        if (lastGraded > submitted) {
+                            // This was paused, so we don't know
+                            timestampBoxNeutral();
+                        } else {
+                            if (lastStroke > lastGraded) {
+                                // They did something on the page since the last grading
+                                timestampBoxGreen();
+                            } else {
+                                // They haven't touched the page since we last graded it
+                                timestampBoxRed();
+                            }
+                        }
+                    } else {
+                        timestampBoxNeutral();
+                    }
                 }
             } catch {
                 timestampBox.innerHTML = "";
@@ -1453,6 +1463,10 @@ function enableTimestampDisplay() {
         },
         updateTimestamp,
         () => {},
+        () => {
+            timestampBox.innerHTML = "";
+            timestampBox.style.display = "";
+        },
         () => {
             timestampBox.innerHTML = "";
             timestampBox.style.display = "";
