@@ -137,4 +137,92 @@
             }
         }
     }
+
+    /* student info page */
+    app-ate0020p {
+        .student-profile {
+            min-width: unset !important;
+        }
+
+        .dashboard {
+            overflow-x: auto !important;
+            padding-left: 10px !important;
+
+            .dashboard-menu {
+                width: unset !important;
+
+                .dashboard-menu-left {
+                    flex-shrink: 0;
+                }
+            }
+
+            .dashboard-progress {
+                justify-content: left !important;
+
+                .dashboard-progress-circle {
+                    width: 220px !important;
+
+                    app-progress-circle {
+                        .dictionary {
+                            width: 190px !important;
+                            span {
+                                margin-left: 0px !important;
+
+                                &.label {
+                                    flex: 1.4;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .dashboard-progress-chart {
+                    width: calc(100vw - 246px) !important;
+
+                    .set-btn .btn-primary {
+                        left: calc(100vw - 332px) !important;
+                    }
+                }
+            }
+
+            .dashboard-set {
+                padding: 10px !important;
+
+                .dashboard-set-left {
+                    width: 169px !important;
+                }
+                .dashboard-set-right.studyUnitEditorContainer {
+                    transform: scaleX(calc(tan(atan2(100vw - 200px, 810px))));
+                    transform-origin: left;
+
+                    .gridContentOuter {
+                        overflow: hidden !important;
+                    }
+                }
+            }
+
+            &.disabled {
+                .dashboard-progress {
+                    .dashboard-progress-chart .edit-btn button {
+                        bottom: 0px !important;
+
+                        &.btn-primary {
+                            left: calc(100vw - 352px) !important;
+                        }
+                        &.btn-secondary {
+                            left: calc(100vw - 562px) !important;
+                        }
+                    }
+                    app-plan-chart .container {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        transform: none;
+                    }
+                }
+            }
+        }
+    }
 }

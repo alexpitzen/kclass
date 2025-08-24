@@ -4943,6 +4943,71 @@ body:has(app-atx0010p) .loginAssistantsList {
   div.worksheet-group.landscape.selected) .worksheet-tool {
     margin-left: 510px !important;
   }
+  /* student info page */
+  app-ate0020p .student-profile {
+    min-width: unset !important;
+  }
+  app-ate0020p .dashboard {
+    overflow-x: auto !important;
+    padding-left: 10px !important;
+  }
+  app-ate0020p .dashboard .dashboard-menu {
+    width: unset !important;
+  }
+  app-ate0020p .dashboard .dashboard-menu .dashboard-menu-left {
+    flex-shrink: 0;
+  }
+  app-ate0020p .dashboard .dashboard-progress {
+    justify-content: left !important;
+  }
+  app-ate0020p .dashboard .dashboard-progress .dashboard-progress-circle {
+    width: 220px !important;
+  }
+  app-ate0020p .dashboard .dashboard-progress .dashboard-progress-circle app-progress-circle .dictionary {
+    width: 190px !important;
+  }
+  app-ate0020p .dashboard .dashboard-progress .dashboard-progress-circle app-progress-circle .dictionary span {
+    margin-left: 0px !important;
+  }
+  app-ate0020p .dashboard .dashboard-progress .dashboard-progress-circle app-progress-circle .dictionary span.label {
+    flex: 1.4;
+  }
+  app-ate0020p .dashboard .dashboard-progress .dashboard-progress-chart {
+    width: calc(100vw - 246px) !important;
+  }
+  app-ate0020p .dashboard .dashboard-progress .dashboard-progress-chart .set-btn .btn-primary {
+    left: calc(100vw - 332px) !important;
+  }
+  app-ate0020p .dashboard .dashboard-set {
+    padding: 10px !important;
+  }
+  app-ate0020p .dashboard .dashboard-set .dashboard-set-left {
+    width: 169px !important;
+  }
+  app-ate0020p .dashboard .dashboard-set .dashboard-set-right.studyUnitEditorContainer {
+    transform: scaleX(tan(atan2(100vw - 200px, 810px)));
+    transform-origin: left;
+  }
+  app-ate0020p .dashboard .dashboard-set .dashboard-set-right.studyUnitEditorContainer .gridContentOuter {
+    overflow: hidden !important;
+  }
+  app-ate0020p .dashboard.disabled .dashboard-progress .dashboard-progress-chart .edit-btn button {
+    bottom: 0px !important;
+  }
+  app-ate0020p .dashboard.disabled .dashboard-progress .dashboard-progress-chart .edit-btn button.btn-primary {
+    left: calc(100vw - 352px) !important;
+  }
+  app-ate0020p .dashboard.disabled .dashboard-progress .dashboard-progress-chart .edit-btn button.btn-secondary {
+    left: calc(100vw - 562px) !important;
+  }
+  app-ate0020p .dashboard.disabled .dashboard-progress app-plan-chart .container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+  }
 }
 
 /*# sourceMappingURL=horizontal_dynamic_big.css.map */
