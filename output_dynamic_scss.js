@@ -3206,7 +3206,7 @@ N: previous active page
 D: go to next set
 R: switch to reading
 M: switch to math
-H: header dropdown
+H: header dropdown or show/hide header
 p: pause marking (when bottom pause button is visible)
 J (hold): scroll answer key down
 K (hold): scroll answer key up
@@ -3216,13 +3216,13 @@ x: match previous markings or x all
 X: x all
 c: clear x's
 A: toggle answers
+alt+t: show timestamp of when the page was last changed. *TIMEZONE IS ASSUMED*. Red means the page hasn't been changed since it was last graded (this can be wrong if the student's timezone is different or their clock is wrong)
 P: start replay / pause replay
 (during replay):
 s: stop replay
 p: pause / resume replay
 2/⇧2: replay 2x speed
 8/⇧8: replay 8x speed
-alt+t: show timestamp of when the page was last changed. *TIMEZONE IS ASSUMED*. Red means the page hasn't been changed since it was last graded (this can be wrong if the student's timezone is different or their clock is wrong)
 
 Drawing:
 d: open the draw tab
@@ -3234,6 +3234,19 @@ r: redo
 U: undo stamp
 -: decrease stamp size
 +/=: increase stamp size
+
+With draw tab open:
+t: focus the text area
+u: set Stamp Color to "Unchanged"
+r: set Stamp Color to "Rainbow" / "Rainbow Fill"
+c: set Stamp Color to "Color Picker"
+p: select pen
+h: select highlighter / cycle highlighter type
+-: decrease stamp size
++/=: increase stamp size
+J (hold): scroll stamps down
+K (hold): scroll stamps up
+escape: close draw tab
 
 General:
 escape: close dialog
