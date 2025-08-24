@@ -57,6 +57,14 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
         padding: 1px;
         font-size: 10px;
         display: none;
+
+        &.green {
+            border: 2px solid lightgreen;
+        }
+
+        &.red {
+            border: 2px solid red;
+        }
     }
 
     .headerZindexBtn {

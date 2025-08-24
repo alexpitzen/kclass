@@ -3831,14 +3831,50 @@ const timestampBox = document.createElement("div");
 timestampBox.className = "timestampBox";
 customToolbar.appendChild(timestampBox);
 let timestampUpdater;
+function timestampBoxNeutral() {
+    timestampBox.className = "timestampBox";
+}
+function timestampBoxGreen() {
+    timestampBox.className = "timestampBox green";
+}
+function timestampBoxRed() {
+    timestampBox.className = "timestampBox red";
+}
+
 function enableTimestampDisplay() {
     function updateTimestamp() {
         let is = stamp.getStudentDrawing();
         if (is) {
-            let d = new Date(is[is.length-1].cs[0].t);
-            timestampBox.innerHTML = `Last change:<br>${d.toString()}`;
+            try {
+                let lastStroke = new Date(is[is.length-1].cs[0].t);
+                timestampBox.innerHTML = `Last change:<br>${lastStroke.toString()}`;
+
+                let page = kclass.ng.context._contentsManagerService.paging._currentPage.gradingWaitingSet;
+                if (page.GradingStartTime && page.StudyFinishTime) {
+                    let lastGraded = new Date(page.GradingStartTime + "Z");
+                    let submitted = new Date(page.StudyFinishTime + "Z");
+                    if (lastGraded > submitted) {
+                        // This was paused, so we don't know
+                        timestampBoxNeutral();
+                    } else {
+                        if (lastStroke > lastGraded) {
+                            // They did something on the page since the last grading
+                            timestampBoxGreen();
+                        } else {
+                            // They haven't touched the page since we last graded it
+                            timestampBoxRed();
+                        }
+                    }
+                } else {
+                    timestampBoxNeutral();
+                }
+            } catch {
+                timestampBox.innerHTML = "";
+                timestampBoxNeutral();
+            }
         } else {
             timestampBox.innerHTML = "";
+            timestampBoxNeutral();
         }
     }
 
@@ -4365,6 +4401,17 @@ loginAssistantsList.innerHTML = `<summary>Logins</summary>
 </ul>`;
 document.body.appendChild(loginAssistantsList);
 
+
+window.kclass = {};
+
+let ngc = document.querySelector("app-root").__ngContext__
+for (let i = ngc.length; i >= 0; i--) {
+    if (ngc[i]?.context) {
+        kclass.ng = ngc[i];
+        break;
+    }
+}
+
 ;
     //*/
 
@@ -4429,6 +4476,12 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   padding: 1px;
   font-size: 10px;
   display: none;
+}
+.customToolbar .timestampBox.green {
+  border: 2px solid lightgreen;
+}
+.customToolbar .timestampBox.red {
+  border: 2px solid red;
 }
 .customToolbar .headerZindexBtn {
   top: 5px;
