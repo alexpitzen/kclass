@@ -1073,12 +1073,17 @@ function keyboardModeHandler(e) {
                 break;
             case "Enter":
             {
+                let btn = document.querySelector(".bottomSheet.open .scoreBtn");
+                if (btn) {
+                    btn.click();
+                    break;
+                }
                 let focusedSet = document.querySelector(".studyBarWrap.kbfocus");
                 if (focusedSet) {
                     focusedSet.querySelector(".barWrap")?.click();
-                } else {
-                    doEnter();
+                    break;
                 }
+                doEnter();
             }
                 break;
             case "Escape":
