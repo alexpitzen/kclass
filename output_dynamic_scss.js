@@ -3222,6 +3222,7 @@ s: stop replay
 p: pause / resume replay
 2/⇧2: replay 2x speed
 8/⇧8: replay 8x speed
+alt+t: show timestamp of when the page was last changed. *TIMEZONE IS ASSUMED*. Red means the page hasn't been changed since it was last graded (this can be wrong if the student's timezone is different or their clock is wrong)
 
 Drawing:
 d: open the draw tab
