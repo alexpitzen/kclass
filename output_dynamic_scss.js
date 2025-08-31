@@ -3855,18 +3855,30 @@ const timestampBox = document.createElement("div");
 timestampBox.className = "timestampBox";
 customToolbar.appendChild(timestampBox);
 let timestampUpdater;
-function timestampBoxNeutral() {
+function timestampBoxNeutral(page) {
     timestampBox.className = "timestampBox";
+    timestampPageNeutral(page);
 }
-function timestampBoxGreen() {
+function timestampBoxGreen(page) {
     timestampBox.className = "timestampBox green";
+    if (page) {
+        page.style.outlineColor = "lightgreen";
+    }
 }
-function timestampBoxRed() {
+function timestampBoxRed(page) {
     timestampBox.className = "timestampBox red";
+    if (page) {
+        page.style.outlineColor = "red";
+    }
+}
+function timestampPageNeutral(page) {
+    if (page) {
+        page.style.outlineColor = "";
+    }
 }
 
 function enableTimestampDisplay() {
-    function updateTimestamp() {
+    function updateTimestamp(activePage) {
         let is = stamp.getStudentDrawing();
         if (is) {
             try {
@@ -3875,7 +3887,7 @@ function enableTimestampDisplay() {
 
                 if (document.querySelector(".worksheet-navigator-page.active .text.disabled")) {
                     // We're not on a page we need to grade
-                    timestampBoxNeutral();
+                    timestampBoxNeutral(activePage);
                 } else {
                     let page = kclass.ng.context._contentsManagerService.paging._currentPage.gradingWaitingSet;
                     if (page.GradingStartTime && page.StudyFinishTime) {
@@ -3883,38 +3895,39 @@ function enableTimestampDisplay() {
                         let submitted = new Date(page.StudyFinishTime + "Z");
                         if (lastGraded > submitted) {
                             // This was paused, so we don't know
-                            timestampBoxNeutral();
+                            timestampBoxNeutral(activePage);
                         } else {
                             if (lastStroke > lastGraded) {
                                 // They did something on the page since the last grading
-                                timestampBoxGreen();
+                                timestampBoxGreen(activePage);
                             } else {
                                 // They haven't touched the page since we last graded it
-                                timestampBoxRed();
+                                timestampBoxRed(activePage);
                             }
                         }
                     } else {
-                        timestampBoxNeutral();
+                        timestampBoxNeutral(activePage);
                     }
                 }
             } catch {
                 timestampBox.innerHTML = "";
-                timestampBoxNeutral();
+                timestampBoxNeutral(activePage);
             }
         } else {
             timestampBox.innerHTML = "";
-            timestampBoxNeutral();
+            timestampBoxNeutral(activePage);
         }
     }
 
     timestampUpdater = onPageChange(
         () => {
-            updateTimestamp();
+            // updateTimestamp();
             timestampBox.style.display = "unset";
         },
         updateTimestamp,
-        () => {},
-        () => {
+        timestampPageNeutral,
+        (activePage) => {
+            timestampBoxNeutral(activePage);
             timestampBox.innerHTML = "";
             timestampBox.style.display = "";
         },
@@ -5114,7 +5127,6 @@ body:has(app-atx0010p) .loginAssistantsList {
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-container {
     margin: 1px 0px !important;
-    outline-width: 1px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-container > .worksheet-group.single:last-child .worksheet-group-page:last-child .worksheet-container > div {
     margin-top: -1px;
