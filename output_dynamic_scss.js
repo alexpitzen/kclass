@@ -3881,6 +3881,11 @@ function enableTimestampDisplay() {
     function updateTimestamp(activePage) {
         let is = stamp.getStudentDrawing();
         if (is) {
+            if (is.length == 0) {
+                timestampBox.innerHTML = "None";
+                timestampBoxRed(activePage);
+                return;
+            }
             try {
                 let lastStroke = new Date(is[is.length-1].cs[0].t);
                 timestampBox.innerHTML = `Last change:<br>${lastStroke.toString()}`;
@@ -4440,10 +4445,10 @@ loginAssistantsList.innerHTML = `<summary>Logins</summary>
     <li>8: Samarth</li>
     <li>9: Shennie</li>
     <li>10: Vaishnavi</li>
-    <li>11: Bryanna</li>
     <li>12: Nainika</li>
     <li>13: Arsheen</li>
     <li>14: Parthini</li>
+    <li>15: Parvathy</li>
 </ul>`;
 document.body.appendChild(loginAssistantsList);
 
