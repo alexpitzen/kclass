@@ -1039,6 +1039,9 @@
             x: pos.x - stampDimensions.min.x,
             y: pos.y - stampDimensions.min.y,
         };
+        console.log("stampDimensions:");
+        console.log(stampDimensions);
+        let penScale = getPenScale(stampDimensions);
         if (!dryRun) {
             atd.pen.col.A = alpha;
             atd.pen.w = width;
@@ -1047,6 +1050,7 @@
                     usePredefinedColor: usePredefinedColor,
                     rainbowSpeed: rainbow && rainbowSpeed,
                     rainbowFill: rainbowFill,
+                    penScale: penScale,
                 }
             );
             saveDrawing(atd, pointer);
@@ -1061,6 +1065,21 @@
             width: (stampDimensions.max.x - stampDimensions.min.x) * zoomRatio,
             height: (stampDimensions.max.y - stampDimensions.min.y) * zoomRatio,
         };
+    }
+
+    function getPenScale(stampDimensions) {
+        let smallerDimension = Math.min(
+            stampDimensions.max.x - stampDimensions.min.x,
+            stampDimensions.max.y - stampDimensions.min.y,
+        );
+        let largerDimension = Math.max(
+            stampDimensions.max.x - stampDimensions.min.x,
+            stampDimensions.max.y - stampDimensions.min.y,
+        );
+        let dimension = 2*smallerDimension/3 + largerDimension/3;
+        let penScale = Math.max(1, Math.floor(dimension / 55)) / 2;
+        console.log(`penScale: ${penScale}`);
+        return penScale;
     }
 
     function writeAllAt(text, pos, scale, options, dryRun = false) {
@@ -1410,7 +1429,8 @@
     function writeAt(letter, pos, scale, atd, pointer, options) {
         let usePredefinedColor = options.usePredefinedColor || false,
             rainbowSpeed = options.rainbowSpeed || 0,
-            rainbowFill = options.rainbowFill || false;
+            rainbowFill = options.rainbowFill || false,
+            penScale = options.penScale || 1;
         if (rainbowSpeed > 0) {
             var rainbowInfo = getRainbowStart(atd);
             if (rainbowInfo == null) {
@@ -1422,6 +1442,7 @@
         let prev_b = atd.pen.col.B;
         let changedColor = false;
 
+        atd.pen.w *= penScale;
         for (let stroke of letter.strokes) {
             let lastPoint = null;
             // console.log(`stroke: ${stroke}`);
@@ -1519,6 +1540,7 @@
                 }
             }
         }
+        atd.pen.w /= penScale;
         if (changedColor) {
             atd.pen.col.R = prev_r;
             atd.pen.col.G = prev_g;
