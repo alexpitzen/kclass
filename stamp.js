@@ -1270,6 +1270,9 @@
         atd.pen.drawEnd(atd.drawingContext);
         atd.arrayCopy.push(cell);
         atd.currentLayer.Drawing.is.push(atd.currentStroke);
+        if (atd.operateBuffer != null) {
+            atd.operateBuffer.addDrawItem(atd.currentStroke);
+        }
 
         // Doesn't look important
         atd.drawingBuffer = atd.currentLayer.Drawing.clone();
@@ -1475,6 +1478,9 @@
                     // finishing point
                     drawCell(pos, points[points.length - 1], 2, atd, pointer);
                     atd.currentLayer.Drawing.is.push(atd.currentStroke);
+                    if (atd.operateBuffer != null) {
+                        atd.operateBuffer.addDrawItem(atd.currentStroke);
+                    }
 
                     newDrawCounter++;
                 }
@@ -1517,6 +1523,9 @@
                     drawCell(pos, lastPoint, 2, atd, pointer);
                     // finishing point
                     atd.currentLayer.Drawing.is.push(atd.currentStroke);
+                    if (atd.operateBuffer != null) {
+                        atd.operateBuffer.addDrawItem(atd.currentStroke);
+                    }
 
                     newDrawCounter++;
                     if (rainbowSpeed > 0) {
