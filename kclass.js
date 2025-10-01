@@ -778,6 +778,7 @@ H: header dropdown or show/hide header
 p: pause marking (when bottom pause button is visible)
 J (hold): scroll answer key down
 K (hold): scroll answer key up
+s: display one side of page (instead of 2)
 
 Marking (⇧ means shift):
 x: match previous markings or x all
@@ -1824,6 +1825,8 @@ function doS() {
         playbackControl.querySelector(".stop").click();
         return;
     }
+
+    document.querySelector("button#OneSideDisplayButton")?.click();
 }
 
 function do2(key) {
@@ -1863,6 +1866,7 @@ function doEnter() {
                 bubbles: true,
             },
         );
+        showHeader(false)
         return;
     }
 }

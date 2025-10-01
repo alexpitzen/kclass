@@ -989,6 +989,8 @@
 
     // map[atd:list[{startIndex, numLines}]]
     var writeStrokes = {}
+    // map[atd:list[{startIndex, numLines}]]
+    var operateBufferStrokes = {}
     // TODO Why isn't this just using atd.countDrawItems at the end of the draw?
     var newDrawCounter = 0;
 
@@ -1003,6 +1005,7 @@
 
         let atd = null;
         let currentDrawIndex = 0;
+        let currentOperateBufferIndex = 0;
         newDrawCounter = 0;
         let previousAlpha = 0;
         let previousWidth = 0;
@@ -1016,6 +1019,7 @@
         if (!dryRun) {
             atd = getAtd();
             currentDrawIndex = atd.countDrawItems();
+            currentOperateBufferIndex = atd.operateBuffer.countDrawItems();
             setPenColorHex(color);
             previousAlpha = atd.pen.col.A;
             previousWidth = atd.pen.w;
@@ -1043,7 +1047,11 @@
             if (!(atd in writeStrokes)) {
                 writeStrokes[atd] = []
             }
+            if (!(atd in operateBufferStrokes)) {
+                operateBufferStrokes[atd] = []
+            }
             writeStrokes[atd].push({startIndex: currentDrawIndex, numLines: newDrawCounter});
+            operateBufferStrokes[atd].push({startIndex: currentOperateBufferIndex, numLines: newDrawCounter + 2});
             atd.pen.col.A = previousAlpha;
             atd.pen.w = previousWidth;
         }
@@ -1077,6 +1085,7 @@
         let current_pos = {x: pos.x, y: pos.y};
         let atd = getAtd();
         let currentDrawIndex = atd.countDrawItems();
+        let currentOperateBufferIndex = atd.operateBuffer.countDrawItems();
         newDrawCounter = 0;
         let maxwidth = 0, currentwidth = 0, height = 100 * scale;
 
@@ -1128,7 +1137,11 @@
             if (!(atd in writeStrokes)) {
                 writeStrokes[atd] = []
             }
+            if (!(atd in operateBufferStrokes)) {
+                operateBufferStrokes[atd] = []
+            }
             writeStrokes[atd].push({startIndex: currentDrawIndex, numLines: newDrawCounter});
+            operateBufferStrokes[atd].push({startIndex: currentOperateBufferIndex, numLines: newDrawCounter + 2});
             atd.pen.col.A = previousAlpha;
             atd.pen.w = previousWidth;
         }
@@ -1242,6 +1255,11 @@
         for (let i = lastWriteInfo.startIndex; i < Math.min(lastWriteInfo.startIndex + lastWriteInfo.numLines, numItems); i++) {
             undoInk(atd, lastWriteInfo.startIndex);
         }
+        let lastOperateBufferWriteInfo = operateBufferStrokes[atd].pop();
+        let numOperateBufferItems = atd.operateBuffer.countDrawItems()
+        for (let i = lastOperateBufferWriteInfo.startIndex; i < Math.min(lastOperateBufferWriteInfo.startIndex + lastOperateBufferWriteInfo.numLines, numOperateBufferItems); i++) {
+            removeFromOperateBuffer(atd, lastOperateBufferWriteInfo.startIndex);
+        }
         atd.redrawCurrentLayerByInk();
         atd.penUpFunc(atd); // updates the models in angular
     }
@@ -1252,6 +1270,13 @@
             return false;
         }
         atd.currentLayer.Drawing.deleteDrawItem(index);
+        return true;
+    }
+
+    function removeFromOperateBuffer(atd, index) {
+        var maxnum = atd.operateBuffer.countDrawItems();
+        if (maxnum <= index) return false;
+        atd.operateBuffer.deleteDrawItem(index);
         return true;
     }
 
@@ -2351,6 +2376,7 @@
             LETTERS: LETTERS,
             HELVETICANT: HELVETICANT,
             getWriteStrokes: function() {return writeStrokes;},
+            getOperateBufferStrokes: function() {return operateBufferStrokes;},
             getNewDrawCounter: function() {return newDrawCounter;},
             undoInk: undoInk,
             saveDrawing: saveDrawing,
