@@ -3237,11 +3237,7 @@ function goNextCorrectionPage() {
             return;
         }
     }
-    if (i == pages.length - 1) {
-        doDown();
-        return;
-    }
-    goLastPage();
+    document.querySelector(".navigator-header-top button.grading-btn")?.click();
 }
 
 function goPrevCorrectionPage() {
