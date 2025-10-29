@@ -100,6 +100,7 @@
             this.height = height;
             this.svg = svg;
             this.xmlstring = xmlstring;
+            this.hasFill = this.strokes.some((stroke) => stroke.doFill());
         }
 
         toString() {
@@ -1045,7 +1046,7 @@
         };
         console.log("stampDimensions:");
         console.log(stampDimensions);
-        let penScale = getPenScale(stampDimensions);
+        let penScale = stamp.hasFill ? getPenScale(stampDimensions) : 1;
         if (!dryRun) {
             atd.pen.col.A = alpha;
             atd.pen.w = width;
@@ -1408,7 +1409,7 @@
     }
 
     function getStrokeFillLines(pointsLists, strokeWidth) {
-        strokeWidth /= 2;
+        strokeWidth /= 1.1;
         let minX = null, minY = null, maxX = null, maxY = null;
         for (let pointsList of pointsLists) {
             for (let point of pointsList) {
