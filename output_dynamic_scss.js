@@ -1086,7 +1086,7 @@
             stampDimensions.max.y - stampDimensions.min.y,
         );
         let dimension = 2*smallerDimension/3 + largerDimension/3;
-        let penScale = Math.max(1, Math.floor(dimension / 55)) / 2;
+        let penScale = Math.max(1, Math.floor(dimension / 45)) / 2;
         console.log(`penScale: ${penScale}`);
         return penScale;
     }
