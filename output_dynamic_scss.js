@@ -4543,13 +4543,20 @@ document.body.appendChild(loginAssistantsList);
 
 window.kclass = {};
 
-let ngc = document.querySelector("app-root").__ngContext__;
-for (let i = ngc.length; i >= 0; i--) {
-    if (ngc[i]?.context) {
-        kclass.ng = ngc[i];
-        break;
+function getngc() {
+    let ngc = document.querySelector("app-root")?.__ngContext__;
+    if (!ngc) {
+        setTimeout(getngc, 1000);
+        return;
+    }
+    for (let i = ngc.length; i >= 0; i--) {
+        if (ngc[i]?.context) {
+            kclass.ng = ngc[i];
+            break;
+        }
     }
 }
+getngc();
 
 ;
     //*/
