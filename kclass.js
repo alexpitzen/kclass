@@ -838,10 +838,12 @@ toggleleft2.appendChild(kbbtnlabel);
 let autoPenSetter = onPageChange(
     () => {},
     () => {
-        let atd = StampLib.getAtd();
-        if (atd?.drawingMode) {
-            updatePenSettings();
-        }
+        setTimeout(() => {
+            let atd = StampLib.getAtd();
+            if (atd?.drawingMode) {
+                updatePenSettings();
+            }
+        }, 300);
     },
 );
 
