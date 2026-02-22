@@ -1,6 +1,6 @@
 all: .env
-	sass --update scss:css
-	.env/bin/python3 build.py
+	sass --update assets/scss:css
+	.env/bin/python3 tooling/build.py
 
 .env:
 	python3 -m venv .env

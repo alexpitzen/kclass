@@ -8,7 +8,7 @@ import jinja2
 
 def get_local_stamps():
     local_stamps = {}
-    for f in Path("images").rglob("output_*.svg"):
+    for f in Path("assets/images").rglob("output_*.svg"):
         if not f.is_file():
             continue
         name = f.name[len("output_") : -len(".svg")]
@@ -41,16 +41,16 @@ def get_css():
 
 if __name__ == "__main__":
 
-    with open("all_stamps.json", "r") as f:
+    with open("assets/all_stamps.json", "r") as f:
         all_stamps = json.loads("".join(f.readlines()))
 
     local_stamps = get_local_stamps()
     all_stamps.update(local_stamps)
 
-    with open("helveticant.svg", "r") as f:
+    with open("assets/helveticant.svg", "r") as f:
         helveticant = "".join(f.readlines()).replace("\n", " ")
 
-    templates = jinja2.Environment(loader=jinja2.loaders.FileSystemLoader("."))
+    templates = jinja2.Environment(loader=jinja2.loaders.FileSystemLoader(["templates", "src"]))
     main_template = templates.get_template("tampermonkey_info.js")
 
     output = main_template.render(
@@ -61,8 +61,8 @@ if __name__ == "__main__":
         }
     )
 
-    with open("output_dynamic_scss.js", "w") as f:
+    with open("output/output_dynamic_scss.js", "w") as f:
         f.write(output)
 
-    with open("all_stamps.json", "w") as f:
+    with open("assets/all_stamps.json", "w") as f:
         f.write(json.dumps(all_stamps, indent=4))
