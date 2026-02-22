@@ -1,0 +1,353 @@
+import { useEffect } from 'preact/hooks';
+import { DOWN, UP, LEFT, RIGHT } from '../helpers/constants.js';
+import { goLastPage, goNextCorrectionPage, goPrevCorrectionPage } from '../helpers/navigation.js';
+import { doEnter, doEscape, doBackspace, clearSearch, cycleHighlighter, selectEraser, getPlaybackControl, doP, doS, do2, do8, isPulldownOpen, matchPreviousMarkings, clearMarkboxs, clickReading, clickMath } from '../helpers/actions.js';
+import { doMarkingListJK, doMarkingListHL } from '../helpers/marking.js';
+import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sideScrollProgressChart, scrollScore, stopScrolling, startScrolling } from '../helpers/scrolling.js';
+import { doDown, doUp } from '../helpers/actions.js';
+
+const keyboardHelp = `Navigation:
+j: down
+k: up
+g: top
+G: bottom
+n: next active page
+N: previous active page
+D: go to next set
+R: switch to reading
+M: switch to math
+H: header dropdown or show/hide header
+p: pause marking (when bottom pause button is visible)
+J (hold): scroll answer key down
+K (hold): scroll answer key up
+s: display one side of page (instead of 2)
+
+Marking (⇧ means shift):
+x: match previous markings or x all
+X: x all
+c: clear x's
+A: toggle answers
+alt+t: show timestamp of when the page was last changed. *TIMEZONE IS ASSUMED*. Red means the page hasn't been changed since it was last graded (this can be wrong if the student's timezone is different or their clock is wrong)
+P: start replay / pause replay
+(during replay):
+s: stop replay
+p: pause / resume replay
+2/⇧2: replay 2x speed
+8/⇧8: replay 8x speed
+
+Drawing:
+d: open the draw tab
+p: select pen
+h: select highlighter / cycle highlighter type
+e: select eraser
+u: undo
+r: redo
+U: undo stamp
+-: decrease stamp size
++/=: increase stamp size
+
+With draw tab open:
+t: focus the text area
+u: set Stamp Color to "Unchanged"
+r: set Stamp Color to "Rainbow" / "Rainbow Fill"
+c: set Stamp Color to "Color Picker"
+p: select pen
+h: select highlighter / cycle highlighter type
+-: decrease stamp size
++/= : increase stamp size
+J (hold): scroll stamps down
+K (hold): scroll stamps up
+escape: close draw tab
+
+General:
+escape: close dialog
+backspace: exit/cancel
+enter: submit/accept dialog`;
+
+export const keyboardHelpText = keyboardHelp;
+
+export const useKeyboardMode = (enabled, drawTabRef) => {
+    useEffect(() => {
+        if (!enabled) return;
+
+        const handleKeyDown = (e) => {
+            if (e.repeat && ["j", "J", "k", "K", "l", "L", "h", "H"].includes(e.key)) return;
+            if (e.target.nodeName === "INPUT" || e.target.nodeName === "TEXTAREA") {
+                if (e.key === "Escape") {
+                    doEscape?.(e);
+                } else if (e.key === "Enter" && e.target.classList.contains("search-input")) {
+                    const searchBtn = e.target.parentElement?.querySelector(".search-btn");
+                    if (searchBtn) {
+                        e.preventDefault();
+                        searchBtn.click();
+                        e.target.blur();
+                        if (document.querySelector(".markingList.tabActive")) {
+                            if (!document.querySelector(".studentList .kbfocus")) {
+                                doMarkingListJK?.(DOWN);
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+
+            if (e.altKey && !e.ctrlKey && !e.metaKey) {
+                if (e.key === "d") {
+                    drawTabRef.current?.click();
+                } else if (e.key === "t") {
+                    if (window.timestampUpdater) {
+                        disableTimestampDisplay?.();
+                    } else {
+                        enableTimestampDisplay?.();
+                    }
+                }
+                return;
+            }
+
+            if (e.altKey || e.ctrlKey || e.metaKey) return;
+
+            const drawtab = drawTabRef.current;
+            const isDrawTabOpen = drawtab && !drawtab.classList.contains("hidden");
+
+            if (isDrawTabOpen) {
+                switch (e.key) {
+                    case "d":
+                    case "Escape":
+                        drawtab.classList.add("hidden");
+                        break;
+                    case "-":
+                    case "+":
+                    case "=":
+                        const slider = drawtab.querySelector(".sizeslider");
+                        if (slider) {
+                            e.key === "-" ? slider.value-- : slider.value++;
+                            slider.dispatchEvent(new Event("input"));
+                        }
+                        break;
+                    case "J":
+                    case "K":
+                        startScrolling?.(e.key === "J" ? 1 : -1, ".drawtab");
+                        break;
+                    case "h":
+                        cycleHighlighter?.();
+                        break;
+                    case "p":
+                        document.querySelector("input[name=penType][value=pen]")?.click();
+                        break;
+                    case "r":
+                    case "u":
+                    case "c": {
+                        const select = drawtab.querySelector("select#stampColorType");
+                        if (select) {
+                            if (e.key === "r") select.value = select.value === "Rainbow" ? "Rainbow Fill" : "Rainbow";
+                            else if (e.key === "u") select.value = "Unchanged";
+                            else if (e.key === "c") select.value = "Color Picker";
+                            select.dispatchEvent(new Event("change"));
+                        }
+                        break;
+                    }
+                    case "t":
+                        const textarea = drawtab.querySelector("textarea");
+                        if (textarea) {
+                            textarea.focus();
+                            textarea.select();
+                            e.preventDefault();
+                        }
+                        break;
+                }
+                return;
+            }
+
+            const markingList = document.querySelector(".markingList.tabActive");
+            const studentList = document.querySelector(".studentList.tabActive");
+            const worksheet = document.querySelector(".ATD0020P-worksheet-container.selected");
+            const studentProfile = document.querySelector(".student-profile");
+            const studyRecords = document.querySelector(".ATD0010P-root");
+
+            if (markingList) {
+                switch (e.key) {
+                    case "f":
+                    case "/":
+                        const searchInput1 = document.querySelector("input.search-input");
+                        searchInput1?.focus();
+                        break;
+                    case "c":
+                        clearSearch?.();
+                        break;
+                    case "C":
+                        document.querySelectorAll(".studentRow .checkbox.checked").forEach(c => c.click());
+                        break;
+                    case "g":
+                        document.querySelector(".studentList:not(.tabItem)")?.scrollTo(0, 0);
+                        break;
+                    case "G":
+                        const sl1 = document.querySelector(".studentList:not(.tabItem)");
+                        sl1?.scrollTo(0, sl1.scrollHeight);
+                        break;
+                    case "J": scrollStudents?.(DOWN); break;
+                    case "K": scrollStudents?.(UP); break;
+                    case "j": doMarkingListJK?.(DOWN); break;
+                    case "k": doMarkingListJK?.(UP); break;
+                    case "h": doMarkingListHL?.(LEFT); break;
+                    case "l": doMarkingListHL?.(RIGHT); break;
+                    case " ":
+                        document.querySelector(".studentList .checkbox.kbfocus")?.click();
+                        e.preventDefault();
+                        break;
+                    case "S": document.querySelector(".studentList.tabItem")?.click(); break;
+                    case "r": document.querySelector(".studentListUpdateButton")?.click(); break;
+                    case "A": document.querySelector("app-student-list-filter-capsule .all")?.click(); break;
+                    case "M": document.querySelector("app-student-list-filter-capsule .math")?.click(); break;
+                    case "R": document.querySelector("app-student-list-filter-capsule .KNA")?.click(); break;
+                    case "Enter":
+                        document.querySelector(".bottomSheet.open .scoreBtn")?.click();
+                        document.querySelector(".studyBarWrap.kbfocus .barWrap")?.click();
+                        doEnter?.();
+                        break;
+                    case "Escape": doEscape?.(e); break;
+                }
+            } else if (studentList) {
+                switch (e.key) {
+                    case "f":
+                    case "/":
+                        document.querySelector("input.search-input")?.focus();
+                        break;
+                    case "c": clearSearch?.(); break;
+                    case "M": document.querySelector(".markingList.tabItem")?.click(); break;
+                    case "J": scrollStudents?.(DOWN); break;
+                    case "K": scrollStudents?.(UP); break;
+                    case "r": document.querySelector(".studentListUpdateButton")?.click(); break;
+                }
+            } else if (worksheet) {
+                switch (e.key) {
+                    case "j": doDown?.(); break;
+                    case "k": doUp?.(); break;
+                    case "g": document.querySelectorAll(".worksheet-navigator-page span:not(.disabled)")[0]?.click(); break;
+                    case "G": goLastPage?.(); break;
+                    case "X": document.querySelector(".xallbtn")?.click(); break;
+                    case "x": matchPreviousMarkings?.(); break;
+                    case "c": clearMarkboxs?.(); break;
+                    case "Backspace": doBackspace?.(); break;
+                    case "n": goNextCorrectionPage?.(); break;
+                    case "N": goPrevCorrectionPage?.(); break;
+                    case "p": doP?.(); break;
+                    case "P":
+                        const playback = getPlaybackControl?.();
+                        if (playback) {
+                            playback.querySelector(".play,.pause")?.click();
+                        } else {
+                            StampLib.expandToolbar();
+                            document.querySelector(".grading-toolbar-box .grading-toolbar .play")?.click();
+                            StampLib.collapseToolbar();
+                        }
+                        break;
+                    case "s": doS?.(); break;
+                    case "u":
+                        const atd = StampLib.getAtd?.();
+                        atd?.undoInk();
+                        atd?.penUpFunc(atd);
+                        break;
+                    case "U": StampLib.undoLastWriteAll?.(); break;
+                    case "r":
+                        const atd2 = StampLib.getAtd?.();
+                        atd2?.redoInk();
+                        atd2?.penUpFunc(atd2);
+                        break;
+                    case "2":
+                    case "@": do2?.(e.key); break;
+                    case "8":
+                    case "*": do8?.(e.key); break;
+                    case "A": document.querySelector("#AnswerDisplayButton")?.click(); break;
+                    case "Enter": doEnter?.(); break;
+                    case "Escape": doEscape?.(e); break;
+                    case "d":
+                        e.preventDefault();
+                        drawtab?.classList.remove("hidden");
+                        break;
+                    case "D": document.querySelector(".other-worksheet-button")?.click(); break;
+                    case "h": cycleHighlighter?.(); break;
+                    case "e": selectEraser?.(); break;
+                    case "R": clickReading?.(); break;
+                    case "M": clickMath?.(); break;
+                    case "H":
+                        const wasPulldownOpen = isPulldownOpen?.();
+                        const pulldownExists = !!document.querySelector("#studentInfoPullDown.student-info-btn");
+                        document.querySelector("#studentInfoPullDown")?.click();
+                        document.querySelector("#studentInfoPullDown")?.blur();
+                        document.querySelectorAll("#customPulldown > .kbfocus").forEach(p => p.classList.remove("kbfocus"));
+                        if (pulldownExists) {
+                            if (!wasPulldownOpen) {
+                                document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
+                            }
+                        } else {
+                            const header = document.querySelector(".grading-header");
+                            header?.classList.toggle("z300");
+                        }
+                        break;
+                    case "J": scrollAnswer?.(DOWN); break;
+                    case "K": scrollAnswer?.(UP); break;
+                    case "-":
+                    case "+":
+                    case "=":
+                        const slider2 = drawtab?.querySelector(".sizeslider");
+                        if (slider2) {
+                            e.key === "-" ? slider2.value-- : slider2.value++;
+                            slider2.dispatchEvent(new Event("input"));
+                        } else {
+                            doKeyboardDefault?.(e.key);
+                        }
+                        break;
+                    default: doKeyboardDefault?.(e.key); break;
+                }
+            } else if (studentProfile) {
+                switch (e.key) {
+                    case "R":
+                        if (!document.querySelector("loading-spinner div")) {
+                            document.querySelector(".btn-close")?.click();
+                            clickReading?.();
+                        }
+                        break;
+                    case "M":
+                        if (!document.querySelector("loading-spinner div")) {
+                            document.querySelector(".btn-close")?.click();
+                            clickMath?.();
+                        }
+                        break;
+                    case "S": document.querySelector(".dashboard-set-left .btn-primary")?.click(); break;
+                    case "J": scrollProgressChart?.(DOWN) || scrollDashboard?.(DOWN); break;
+                    case "K": scrollProgressChart?.(UP) || scrollDashboard?.(UP); break;
+                    case "H": sideScrollProgressChart?.(LEFT); break;
+                    case "L": sideScrollProgressChart?.(RIGHT); break;
+                    case "p": document.querySelector(".dashboard-progress-chart .finally > .icon")?.click(); break;
+                    case "e": Array.from(document.querySelectorAll(".dashboard-menu-right .options-btn")).find(b => b.innerHTML?.trim() === "Edit")?.click(); break;
+                    case "Backspace": doBackspace?.(); break;
+                    case "Escape": doEscape?.(e); break;
+                    case "Enter": doEnter?.(); break;
+                }
+            } else if (studyRecords) {
+                switch (e.key) {
+                    case "R": clickReading?.(); break;
+                    case "M": clickMath?.(); break;
+                    case "Backspace": doBackspace?.(); break;
+                    case "J": scrollScore?.(DOWN); break;
+                    case "K": scrollScore?.(UP); break;
+                    case "G": document.querySelector(".score-grid-all")?.scrollIntoView(); break;
+                }
+            }
+        };
+
+        const handleKeyUp = (e) => {
+            if (["J", "j", "K", "k", "H", "h", "L", "l"].includes(e.key)) {
+                stopScrolling?.();
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        document.addEventListener("keyup", handleKeyUp);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+            document.removeEventListener("keyup", handleKeyUp);
+        };
+    }, [enabled, drawTabRef]);
+};

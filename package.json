@@ -1,0 +1,15 @@
+{
+  "name": "kclass",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch"
+  },
+  "dependencies": {
+    "preact": "^10.19.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  }
+}
