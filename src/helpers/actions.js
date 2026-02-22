@@ -1,4 +1,23 @@
 import { DOWN, UP, LEFT, RIGHT } from './constants.js';
+import { penIcons, penSettings } from '../components/constants.js';
+
+export function updatePenSettings() {
+    const penType = document.querySelector("input[name=penType]:checked")?.value || "pen";
+    const pencolorbtn = document.querySelector(".pencolorbtn");
+    if (penType !== "eraser") {
+        StampLib.setPenSettings({
+            color: pencolorbtn?.value,
+            ...penSettings[penType]
+        });
+    }
+    const drawbtn = document.querySelector(".drawbtn");
+    if (drawbtn) {
+        drawbtn.innerHTML = penIcons[penType];
+        if (pencolorbtn) {
+            drawbtn.style.fill = pencolorbtn.value;
+        }
+    }
+}
 
 function clickReading() {
     document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
@@ -18,9 +37,25 @@ function doBackspace() {
 }
 
 function doEnter() {
-    const btn = document.querySelector(".bottomSheet.open .scoreBtn");
-    if (btn) {
-        btn.click();
+    const mainBtn = (
+        document.querySelector("#EndScoringButton")
+        || document.querySelector(".btn-dialog-navy")
+        || document.querySelector(".bottomSheet.open .scoreBtn")
+    );
+    if (mainBtn) {
+        mainBtn.click();
+        return;
+    }
+    const studentPulldownKbfocus = document.querySelector("#customPulldown:not([hidden]) > .kbfocus");
+    if (studentPulldownKbfocus) {
+        studentPulldownKbfocus.dispatchEvent(
+            new MouseEvent("mousedown"),
+            {
+                button: 0,
+                bubbles: true,
+            },
+        );
+        showHeader(false);
         return;
     }
     const focusedSet = document.querySelector(".studyBarWrap.kbfocus");
@@ -118,21 +153,7 @@ function doP() {
         return;
     }
     document.querySelector("input[name=penType][value=pen]")?.click();
-    const sizeslider = document.querySelector(".sizeslider");
-    const penType = document.querySelector("input[name=penType]:checked")?.value || "pen";
-    const pencolorbtn = document.querySelector(".pencolorbtn");
-
-    if (penType !== "eraser" && pencolorbtn) {
-        const penSettings = {
-            pen: { width: 2, alpha: 255 },
-            "thick-highlighter": { width: 25, alpha: 50 },
-            "thin-highlighter": { width: 5, alpha: 50 },
-        };
-        StampLib.setPenSettings({
-            color: pencolorbtn.value,
-            ...penSettings[penType],
-        });
-    }
+    updatePenSettings();
 }
 
 function doDown() {
@@ -172,12 +193,12 @@ function doUp() {
 }
 
 function doS() {
-    const atd = StampLib.getAtd();
-    if (atd?.singlePageMode) {
-        atd.doublePageMode();
-    } else {
-        atd?.singlePageMode();
+    const playbackControl = getPlaybackControl();
+    if (playbackControl) {
+        playbackControl.querySelector(".stop")?.click();
+        return;
     }
+    document.querySelector("button#OneSideDisplayButton")?.click();
 }
 
 function do2(key) {
@@ -203,8 +224,10 @@ function do8(key) {
 }
 
 function doKeyboardDefault(key) {
-    const atd = StampLib.getAtd();
-    atd?.keyDown(key);
+    const worksheet = document.querySelector(".ATD0020P-worksheet-container.selected");
+    if (!worksheet) return;
+    const markboxMap = window.__markboxMap || {};
+    worksheet.querySelectorAll(".mark-box")[markboxMap[key]]?.click();
 }
 
 function matchPreviousMarkings() {
@@ -212,11 +235,15 @@ function matchPreviousMarkings() {
 }
 
 function clearMarkboxs() {
-    document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-selected").forEach((box) => {
-        if (box.classList.contains("mark-box-selected")) {
-            box.click();
-        }
-    });
+    for (let i = 0; i < 2; i++) {
+        document.querySelectorAll(
+            ".worksheet-container .worksheet-container.selected .mark-boxs .mark-box"
+        ).forEach((markbox) => {
+            if (!markbox.querySelector(`.default`)) {
+                markbox.click();
+            }
+        });
+    }
 }
 
 export {

@@ -49,12 +49,14 @@ export const useMarkboxKeys = (enabled) => {
         
         window.__addMarkboxKeys = addMarkboxKeys;
         window.__removeMarkboxKeys = removeMarkboxKeys;
+        window.__markboxMap = markboxMap;
 
         return () => {
             delete window.__addMarkboxKeys;
             delete window.__removeMarkboxKeys;
+            delete window.__markboxMap;
         };
-    }, [enabled, addMarkboxKeys, removeMarkboxKeys]);
+    }, [enabled, addMarkboxKeys, removeMarkboxKeys, markboxMap]);
 
     return { markboxMap };
 };
