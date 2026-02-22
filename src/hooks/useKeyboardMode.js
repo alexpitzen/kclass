@@ -1,7 +1,7 @@
 import { useEffect } from 'preact/hooks';
 import { DOWN, UP, LEFT, RIGHT } from '../helpers/constants.js';
 import { goLastPage, goNextCorrectionPage, goPrevCorrectionPage } from '../helpers/navigation.js';
-import { doEnter, doEscape, doBackspace, clearSearch, cycleHighlighter, selectEraser, getPlaybackControl, doP, doS, do2, do8, isPulldownOpen, matchPreviousMarkings, clearMarkboxs, clickReading, clickMath } from '../helpers/actions.js';
+import { doEnter, doEscape, doBackspace, clearSearch, cycleHighlighter, selectEraser, getPlaybackControl, doP, doS, do2, do8, isPulldownOpen, matchPreviousMarkings, clearMarkboxs, clickReading, clickMath, doKeyboardDefault } from '../helpers/actions.js';
 import { doMarkingListJK, doMarkingListHL } from '../helpers/marking.js';
 import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sideScrollProgressChart, scrollScore, stopScrolling, startScrolling } from '../helpers/scrolling.js';
 import { doDown, doUp } from '../helpers/actions.js';
@@ -95,11 +95,7 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                 if (e.key === "d") {
                     drawTabRef.current?.click();
                 } else if (e.key === "t") {
-                    if (window.timestampUpdater) {
-                        disableTimestampDisplay?.();
-                    } else {
-                        enableTimestampDisplay?.();
-                    }
+                    window.__setTimestampEnabled?.((prev) => !prev);
                 }
                 return;
             }
@@ -113,7 +109,7 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                 switch (e.key) {
                     case "d":
                     case "Escape":
-                        drawtab.classList.add("hidden");
+                        window.__hideDrawTab?.();
                         break;
                     case "-":
                     case "+":
@@ -262,7 +258,7 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                     case "Escape": doEscape?.(e); break;
                     case "d":
                         e.preventDefault();
-                        drawtab?.classList.remove("hidden");
+                        window.__showDrawTab?.();
                         break;
                     case "D": document.querySelector(".other-worksheet-button")?.click(); break;
                     case "h": cycleHighlighter?.(); break;

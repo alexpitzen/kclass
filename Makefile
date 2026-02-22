@@ -1,4 +1,5 @@
 all: .env
+	npm run build
 	sass --update assets/scss:css
 	.env/bin/python3 tooling/build.py
 

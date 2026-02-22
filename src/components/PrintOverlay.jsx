@@ -131,7 +131,12 @@ export const PrintOverlay = () => {
     if (!visible) return null;
 
     return (
-        <div ref={overlayRef} class="printoverlay" style={{ display: 'unset' }}>
+        <div 
+            ref={overlayRef} 
+            class="printoverlay" 
+            style={{ display: 'unset' }}
+            onMouseOver={(e) => e.stopPropagation()}
+        >
             <div
                 class={mode === 'stamp' ? 'stampPrintPreviewDiv' : 'printPreviewDiv'}
                 style={previewStyle}

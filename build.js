@@ -10,18 +10,11 @@ const commonOptions = {
     sourcemap: false,
 };
 
-// Build the helpers + kclass.js (the remaining imperative code)
-await esbuild.build({
-    ...commonOptions,
-    entryPoints: ['src/helpers.js'],
-    outfile: 'output/helpers.js',
-});
-
 // Build the Preact UI components
 await esbuild.build({
     ...commonOptions,
     entryPoints: ['src/kclass.jsx'],
-    outfile: 'output/kclass_preact.js',
+    outfile: 'templates/kclass_preact.js',
     loader: { '.js': 'jsx' },
     jsx: 'automatic',
     jsxImportSource: 'preact',
@@ -30,8 +23,8 @@ await esbuild.build({
 if (isWatch) {
     const ctx = await esbuild.context({
         ...commonOptions,
-        entryPoints: ['src/helpers.js'],
-        outdir: 'output',
+        entryPoints: ['src/kclass.jsx'],
+        outfile: 'templates/kclass_preact.js',
         loader: { '.js': 'jsx' },
         jsx: 'automatic',
         jsxImportSource: 'preact',

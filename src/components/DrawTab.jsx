@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { penTypes } from './constants.js';
 import { usePrintOverlay } from './PrintOverlay.jsx';
+import { useKeyboardMode, keyboardHelpText } from '../hooks/useKeyboardMode.js';
+import { updatePenSettings } from '../helpers/actions.js';
 
 export const DrawTab = ({ stamps: _stamps }) => {
     const [hidden, setHidden] = useState(true);
@@ -11,10 +13,15 @@ export const DrawTab = ({ stamps: _stamps }) => {
     const [text, setText] = useState('');
     const [stampColorType, setStampColorType] = useState('Unchanged');
     const [rainbowSpeed, setRainbowSpeed] = useState(1);
+    const [keyboardMode, setKeyboardMode] = useState(false);
 
     const { showStampPreview, showTextPreview } = usePrintOverlay();
     const textareaRef = useRef(null);
     const stampsRef = useRef(null);
+    const rootRef = useRef(null);
+    const drawTabRef = { current: null };
+
+    useKeyboardMode(keyboardMode, drawTabRef);
 
     const stamps = window.StampLib?.stamps || {};
 
@@ -30,11 +37,39 @@ export const DrawTab = ({ stamps: _stamps }) => {
     }, [hidden]);
 
     const hide = () => setHidden(true);
-    const show = () => setHidden(false);
+    const show = () => {
+        setHidden(false);
+        updatePenSettings();
+    };
+    const toggle = () => {
+        if (hidden) {
+            show();
+        } else {
+            hide();
+        }
+    };
+
+    // Expose show/hide/toggle globally for CustomToolbar
+    useEffect(() => {
+        window.__toggleDrawTab = toggle;
+        window.__showDrawTab = show;
+        window.__hideDrawTab = hide;
+        return () => {
+            delete window.__toggleDrawTab;
+            delete window.__showDrawTab;
+            delete window.__hideDrawTab;
+        };
+    }, [toggle, show, hide]);
 
     const handleSizeChange = (e) => setSize(e.target.value);
-    const handleColorChange = (e) => setPenColor(e.target.value);
-    const handlePenTypeChange = (e) => setPenType(e.target.value);
+    const handleColorChange = (e) => {
+        setPenColor(e.target.value);
+        updatePenSettings();
+    };
+    const handlePenTypeChange = (e) => {
+        setPenType(e.target.value);
+        updatePenSettings();
+    };
     const handleStampColorChange = (e) => setStampColorType(e.target.value);
     const handleRainbowSpeedChange = (e) => setRainbowSpeed(e.target.value);
 
@@ -70,8 +105,71 @@ export const DrawTab = ({ stamps: _stamps }) => {
         showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, penColor, svg);
     };
 
+    // Expose drawTabRef for keyboard handler
+    useEffect(() => {
+        drawTabRef.current = rootRef.current;
+    }, []);
+
+    // Pointer scroll for touch dragging
+    useEffect(() => {
+        const parent = rootRef.current;
+        const draggable = stampsRef.current;
+        if (!parent || !draggable) return;
+
+        let dragging = false;
+        let startY = 0;
+        let scrollStart = 0;
+        let dragged = 0;
+
+        const dragStart = (ev) => {
+            dragging = true;
+            startY = ev.clientY;
+            scrollStart = parent.scrollTop;
+            dragged = 0;
+        };
+
+        const dragEnd = (ev) => {
+            dragging = false;
+            if (draggable.hasPointerCapture(ev.pointerId)) {
+                draggable.releasePointerCapture(ev.pointerId);
+            }
+        };
+
+        const drag = (ev) => {
+            if (dragging) {
+                dragged++;
+                parent.scrollTop = scrollStart - (ev.clientY - startY);
+                if (dragged === 40) {
+                    draggable.setPointerCapture(ev.pointerId);
+                }
+            }
+        };
+
+        draggable.addEventListener('pointerdown', dragStart);
+        draggable.addEventListener('pointerup', dragEnd);
+        draggable.addEventListener('pointermove', drag);
+
+        return () => {
+            draggable.removeEventListener('pointerdown', dragStart);
+            draggable.removeEventListener('pointerup', dragEnd);
+            draggable.removeEventListener('pointermove', drag);
+        };
+    }, []);
+
+    const handleMouseLeave = (e) => {
+        const rect = rootRef.current.getBoundingClientRect();
+        if (
+            e.clientX <= rect.left
+            || e.clientX >= rect.right - 2
+            || e.clientY <= rect.top
+            || e.clientY >= rect.bottom - 2
+        ) {
+            hide();
+        }
+    };
+
     return (
-        <div class={`drawtab ${hidden ? 'hidden' : ''}`}>
+        <div ref={rootRef} class={`drawtab ${hidden ? 'hidden' : ''}`} onMouseLeave={handleMouseLeave}>
             <div class="header">
                 <div class="buttonsleft">
                     <input
@@ -98,6 +196,7 @@ export const DrawTab = ({ stamps: _stamps }) => {
                             id="hdbtn"
                             checked={hdMode}
                             onChange={toggleHdMode}
+                            accessKey="h"
                         />
                         <label for="hdbtn">HD mode</label>
                     </div>
@@ -109,6 +208,7 @@ export const DrawTab = ({ stamps: _stamps }) => {
                         class="pencolorbtn"
                         value={penColor}
                         onInput={handleColorChange}
+                        accessKey="c"
                     />
 
                     <fieldset>
@@ -172,6 +272,18 @@ export const DrawTab = ({ stamps: _stamps }) => {
                     onInput={handleRainbowSpeedChange}
                     disabled={stampColorType !== 'Rainbow' && stampColorType !== 'Rainbow Fill'}
                 />
+
+                <div class="toggle">
+                    <input
+                        type="checkbox"
+                        id="kbbtn"
+                        checked={keyboardMode}
+                        onChange={(e) => setKeyboardMode(e.target.checked)}
+                        title={keyboardHelpText}
+                        accessKey="k"
+                    />
+                    <label for="kbbtn" title={keyboardHelpText}>Keyboard mode</label>
+                </div>
             </div>
 
             <div class="stamps" ref={stampsRef}>
@@ -182,6 +294,7 @@ export const DrawTab = ({ stamps: _stamps }) => {
                             <button
                                 key={stamp.name}
                                 class="stampbtn"
+                                onMouseOver={(e) => e.stopPropagation()}
                                 onClick={() => handleStampClick(stamp)}
                             >
                                 {typeof stamp.svg === 'string' ? stamp.svg : stamp.svg}

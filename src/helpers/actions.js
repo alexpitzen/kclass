@@ -101,7 +101,7 @@ function doEscape(e) {
     }
     const drawtab = document.querySelector(".drawtab");
     if (drawtab?.checkVisibility()) {
-        drawtab.classList.add("hidden");
+        window.__hideDrawTab?.();
         return;
     }
     if (e.target.classList.contains("search-input")) {
@@ -202,25 +202,21 @@ function doS() {
 }
 
 function do2(key) {
-    const atd = StampLib.getAtd();
-    if (!atd) return;
-    if (key === "@") {
-        atd.setPlaybackSpeed(2);
-    } else {
-        atd.setPlaybackSpeed(2);
-        atd.playbackGoToEnd();
+    const playbackControl = getPlaybackControl();
+    if (playbackControl) {
+        playbackControl.querySelector(".speed-2")?.click();
+        return;
     }
+    doKeyboardDefault(key);
 }
 
 function do8(key) {
-    const atd = StampLib.getAtd();
-    if (!atd) return;
-    if (key === "*") {
-        atd.setPlaybackSpeed(8);
-    } else {
-        atd.setPlaybackSpeed(8);
-        atd.playbackGoToEnd();
+    const playbackControl = getPlaybackControl();
+    if (playbackControl) {
+        playbackControl.querySelector(".speed-8")?.click();
+        return;
     }
+    doKeyboardDefault(key);
 }
 
 function doKeyboardDefault(key) {

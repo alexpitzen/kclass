@@ -18,7 +18,7 @@
 
     // {# 
     /* #}
-    {% include 'kclass.js' %}
+    {% include 'kclass_preact.js' %}
     //*/
 
     let z = document.createElement("style");
