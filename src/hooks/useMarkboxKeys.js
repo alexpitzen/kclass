@@ -1,12 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from 'preact/hooks';
+import { useState, useEffect, useCallback } from 'preact/hooks';
 import { keyindexmap, keyindexdisplay } from '../helpers/constants.js';
 import { usePageChange } from './usePageChange.js';
 
-export const useMarkboxKeys = () => {
+export const useMarkboxKeys = (enabled = false) => {
     const [markboxMap, setMarkboxMap] = useState({});
-    const [enabled, setEnabled] = useState(false);
-    const enabledRef = useRef(false);
-    enabledRef.current = enabled;
 
     const addMarkboxKeys = useCallback((page) => {
         if (!page) return;
@@ -53,10 +50,10 @@ export const useMarkboxKeys = () => {
     }, []);
 
     const onPageEnter = useCallback((page) => {
-        if (enabledRef.current) {
+        if (enabled) {
             addMarkboxKeys(page);
         }
-    }, [addMarkboxKeys]);
+    }, [addMarkboxKeys, enabled]);
 
     const onPageLeave = useCallback((page) => {
         removeMarkboxKeys(page);
@@ -67,7 +64,7 @@ export const useMarkboxKeys = () => {
     }, [removeMarkboxKeys]);
 
     usePageChange({
-        enabled: enabledRef.current,
+        enabled,
         onEnable: () => {},
         onPageEnter,
         onPageLeave,
@@ -78,14 +75,12 @@ export const useMarkboxKeys = () => {
     useEffect(() => {
         window.__addMarkboxKeys = addMarkboxKeys;
         window.__removeMarkboxKeys = removeMarkboxKeys;
-        window.__setMarkboxKeysEnabled = setEnabled;
 
         return () => {
             delete window.__addMarkboxKeys;
             delete window.__removeMarkboxKeys;
-            delete window.__setMarkboxKeysEnabled;
         };
-    }, [addMarkboxKeys, removeMarkboxKeys, setEnabled]);
+    }, [addMarkboxKeys, removeMarkboxKeys]);
 
     return { markboxMap };
 };

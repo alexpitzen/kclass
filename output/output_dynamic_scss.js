@@ -3109,6 +3109,7 @@
     (document.querySelector(".btn-dialog-cancel") || document.querySelector(".close-btn") || document.querySelector(".btn-close") || document.querySelector("app-page-back-button"))?.click();
   }
   function doEnter() {
+    console.log("Called doEnter");
     const mainBtn = document.querySelector("#EndScoringButton") || document.querySelector(".btn-dialog-navy") || document.querySelector(".bottomSheet.open .scoreBtn");
     if (mainBtn) {
       mainBtn.click();
@@ -4277,8 +4278,6 @@ enter: submit/accept dialog`;
               document.querySelector("app-student-list-filter-capsule .KNA")?.click();
               break;
             case "Enter":
-              document.querySelector(".bottomSheet.open .scoreBtn")?.click();
-              document.querySelector(".studyBarWrap.kbfocus .barWrap")?.click();
               doEnter?.();
               break;
             case "Escape":
@@ -4939,11 +4938,8 @@ enter: submit/accept dialog`;
   };
 
   // src/hooks/useMarkboxKeys.js
-  var useMarkboxKeys = () => {
+  var useMarkboxKeys = (enabled = false) => {
     const [markboxMap, setMarkboxMap] = d2({});
-    const [enabled, setEnabled] = d2(false);
-    const enabledRef = A2(false);
-    enabledRef.current = enabled;
     const addMarkboxKeys = q2((page) => {
       if (!page)
         return;
@@ -4983,10 +4979,10 @@ enter: submit/accept dialog`;
       boxparent?.querySelectorAll(".markboxkey").forEach((el) => el.remove());
     }, []);
     const onPageEnter = q2((page) => {
-      if (enabledRef.current) {
+      if (enabled) {
         addMarkboxKeys(page);
       }
-    }, [addMarkboxKeys]);
+    }, [addMarkboxKeys, enabled]);
     const onPageLeave = q2((page) => {
       removeMarkboxKeys(page);
     }, [removeMarkboxKeys]);
@@ -4994,7 +4990,7 @@ enter: submit/accept dialog`;
       removeMarkboxKeys(page);
     }, [removeMarkboxKeys]);
     usePageChange({
-      enabled: enabledRef.current,
+      enabled,
       onEnable: () => {
       },
       onPageEnter,
@@ -5004,13 +5000,11 @@ enter: submit/accept dialog`;
     y2(() => {
       window.__addMarkboxKeys = addMarkboxKeys;
       window.__removeMarkboxKeys = removeMarkboxKeys;
-      window.__setMarkboxKeysEnabled = setEnabled;
       return () => {
         delete window.__addMarkboxKeys;
         delete window.__removeMarkboxKeys;
-        delete window.__setMarkboxKeysEnabled;
       };
-    }, [addMarkboxKeys, removeMarkboxKeys, setEnabled]);
+    }, [addMarkboxKeys, removeMarkboxKeys]);
     return { markboxMap };
   };
 

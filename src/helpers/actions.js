@@ -37,6 +37,7 @@ function doBackspace() {
 }
 
 function doEnter() {
+    console.log("Called doEnter");
     const mainBtn = (
         document.querySelector("#EndScoringButton")
         || document.querySelector(".btn-dialog-navy")

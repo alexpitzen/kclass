@@ -200,8 +200,6 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
                     case "M": document.querySelector("app-student-list-filter-capsule .math")?.click(); break;
                     case "R": document.querySelector("app-student-list-filter-capsule .KNA")?.click(); break;
                     case "Enter":
-                        document.querySelector(".bottomSheet.open .scoreBtn")?.click();
-                        document.querySelector(".studyBarWrap.kbfocus .barWrap")?.click();
                         doEnter?.();
                         break;
                     case "Escape": doEscape?.(e); break;
