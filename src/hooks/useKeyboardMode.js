@@ -296,8 +296,16 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
                         if (pulldownExists) {
                             if (!wasPulldownOpen) {
                                 document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
+                                // Open pulldown → show header
+                                const header = document.querySelector(".grading-header");
+                                header?.classList.add("z300");
+                            } else {
+                                // Close pulldown → hide header
+                                const header = document.querySelector(".grading-header");
+                                header?.classList.remove("z300");
                             }
                         } else {
+                            // No pulldown → toggle header
                             const header = document.querySelector(".grading-header");
                             header?.classList.toggle("z300");
                         }

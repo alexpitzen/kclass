@@ -4427,6 +4427,11 @@ enter: submit/accept dialog`;
               if (pulldownExists) {
                 if (!wasPulldownOpen) {
                   document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
+                  const header = document.querySelector(".grading-header");
+                  header?.classList.add("z300");
+                } else {
+                  const header = document.querySelector(".grading-header");
+                  header?.classList.remove("z300");
                 }
               } else {
                 const header = document.querySelector(".grading-header");
