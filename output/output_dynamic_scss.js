@@ -3309,6 +3309,7 @@
   // src/hooks/usePageChange.js
   var usePageChange = (options = {}) => {
     const {
+      enabled = true,
       onEnable = () => {
       },
       onPageEnter = () => {
@@ -3323,10 +3324,14 @@
     const loadObserverRef = A2(null);
     const pageChangeObserverRef = A2(null);
     const callbacksRef = A2({ onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading });
+    const enabledRef = A2(enabled);
     callbacksRef.current = { onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading };
+    enabledRef.current = enabled;
     const setupPageObserver = q2(() => {
       if (!pageChangeObserverRef.current) {
         pageChangeObserverRef.current = new MutationObserver((ml) => {
+          if (!enabledRef.current)
+            return;
           for (const m3 of ml) {
             if (m3.target.classList.contains("selected")) {
               callbacksRef.current.onPageEnter(m3.target);
@@ -3340,14 +3345,24 @@
       document.querySelectorAll(".ATD0020P-worksheet-container").forEach((page) => {
         pageChangeObserverRef.current.observe(page, { attributeFilter: ["class"] });
       });
-      callbacksRef.current.onPageEnter(document.querySelector(".ATD0020P-worksheet-container.selected"));
+      if (enabledRef.current) {
+        callbacksRef.current.onPageEnter(document.querySelector(".ATD0020P-worksheet-container.selected"));
+      }
     }, []);
     y2(() => {
+      if (!enabled) {
+        loadObserverRef.current?.disconnect();
+        pageChangeObserverRef.current?.disconnect();
+        const activePage = document.querySelector(".ATD0020P-worksheet-container.selected");
+        callbacksRef.current.onDisable(activePage);
+        return;
+      }
       const appRoot = document.querySelector("app-root");
       if (!appRoot)
         return;
-      const { onEnable: onEnable2, onPageEnter: onPageEnter2, onPageLeave: onPageLeave2, onStartLoading: onStartLoading2 } = callbacksRef.current;
       loadObserverRef.current = new MutationObserver((mutationList) => {
+        if (!enabledRef.current)
+          return;
         for (const mutation of mutationList) {
           if (mutation.target.nodeName === "LOADING-SPINNER") {
             if (mutation.removedNodes.length) {
@@ -3373,7 +3388,7 @@
         const activePage = document.querySelector(".ATD0020P-worksheet-container.selected");
         callbacksRef.current.onDisable(activePage);
       };
-    }, []);
+    }, [enabled, setupPageObserver]);
     const disable = q2(() => {
       loadObserverRef.current?.disconnect();
       pageChangeObserverRef.current?.disconnect();
@@ -3463,7 +3478,9 @@
       setTimestamp("");
       setColorClass("");
     }, [clearPageTimestamp]);
+    console.log("****** useTimestamp setup");
     usePageChange({
+      enabled,
       onEnable,
       onPageEnter,
       onPageLeave,
@@ -4520,6 +4537,7 @@ enter: submit/accept dialog`;
     useKeyboardMode(keyboardMode, drawTabRef);
     y2(() => {
       window.__keyboardModeEnabled = keyboardMode;
+      window.__setMarkboxKeysEnabled?.(keyboardMode);
       const currentPage = document.querySelector(".ATD0020P-worksheet-container.selected");
       if (keyboardMode) {
         window.__addMarkboxKeys?.(currentPage);
@@ -4865,6 +4883,7 @@ enter: submit/accept dialog`;
       StampLib.makeSD();
     }, []);
     const { disable } = usePageChange({
+      enabled,
       onEnable: initHD,
       onPageEnter: makeHD,
       onPageLeave: makeSD,
@@ -4900,6 +4919,7 @@ enter: submit/accept dialog`;
   // src/hooks/useAutoPen.js
   var useAutoPen = () => {
     usePageChange({
+      enabled: true,
       onPageEnter: () => {
         setTimeout(() => {
           const atd = StampLib.getAtd();
@@ -4926,6 +4946,9 @@ enter: submit/accept dialog`;
   // src/hooks/useMarkboxKeys.js
   var useMarkboxKeys = () => {
     const [markboxMap, setMarkboxMap] = d2({});
+    const [enabled, setEnabled] = d2(false);
+    const enabledRef = A2(false);
+    enabledRef.current = enabled;
     const addMarkboxKeys = q2((page) => {
       if (!page)
         return;
@@ -4965,7 +4988,7 @@ enter: submit/accept dialog`;
       boxparent?.querySelectorAll(".markboxkey").forEach((el) => el.remove());
     }, []);
     const onPageEnter = q2((page) => {
-      if (window.__keyboardModeEnabled) {
+      if (enabledRef.current) {
         addMarkboxKeys(page);
       }
     }, [addMarkboxKeys]);
@@ -4976,6 +4999,7 @@ enter: submit/accept dialog`;
       removeMarkboxKeys(page);
     }, [removeMarkboxKeys]);
     usePageChange({
+      enabled: enabledRef.current,
       onEnable: () => {
       },
       onPageEnter,
@@ -4985,11 +5009,13 @@ enter: submit/accept dialog`;
     y2(() => {
       window.__addMarkboxKeys = addMarkboxKeys;
       window.__removeMarkboxKeys = removeMarkboxKeys;
+      window.__setMarkboxKeysEnabled = setEnabled;
       return () => {
         delete window.__addMarkboxKeys;
         delete window.__removeMarkboxKeys;
+        delete window.__setMarkboxKeysEnabled;
       };
-    }, [addMarkboxKeys, removeMarkboxKeys]);
+    }, [addMarkboxKeys, removeMarkboxKeys, setEnabled]);
     return { markboxMap };
   };
 

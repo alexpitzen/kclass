@@ -2,6 +2,7 @@ import { usePageChange } from './usePageChange.js';
 
 export const useAutoPen = () => {
     usePageChange({
+        enabled: true,
         onPageEnter: () => {
             setTimeout(() => {
                 const atd = StampLib.getAtd();

@@ -45,6 +45,7 @@ export const useHDMode = () => {
     }, []);
 
     const { disable } = usePageChange({
+        enabled,
         onEnable: initHD,
         onPageEnter: makeHD,
         onPageLeave: makeSD,

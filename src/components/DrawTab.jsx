@@ -26,6 +26,7 @@ export const DrawTab = ({ stamps: _stamps }) => {
     // Expose keyboard mode state globally for useMarkboxKeys
     useEffect(() => {
         window.__keyboardModeEnabled = keyboardMode;
+        window.__setMarkboxKeysEnabled?.(keyboardMode);
         const currentPage = document.querySelector('.ATD0020P-worksheet-container.selected');
         if (keyboardMode) {
             window.__addMarkboxKeys?.(currentPage);
