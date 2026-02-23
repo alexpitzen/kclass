@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect, useRef, useCallback } from 'preact/hooks';
 
 export const usePageChange = (options = {}) => {
     const {
@@ -11,40 +11,46 @@ export const usePageChange = (options = {}) => {
 
     const loadObserverRef = useRef(null);
     const pageChangeObserverRef = useRef(null);
-    const enabledRef = useRef(false);
+    const callbacksRef = useRef({ onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading });
+    
+    // Update refs when callbacks change
+    callbacksRef.current = { onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading };
+
+    const setupPageObserver = useCallback(() => {
+        if (!pageChangeObserverRef.current) {
+            pageChangeObserverRef.current = new MutationObserver((ml) => {
+                for (const m of ml) {
+                    if (m.target.classList.contains('selected')) {
+                        callbacksRef.current.onPageEnter(m.target);
+                    } else {
+                        callbacksRef.current.onPageLeave(m.target);
+                    }
+                }
+            });
+        }
+        
+        pageChangeObserverRef.current.disconnect();
+        document.querySelectorAll('.ATD0020P-worksheet-container').forEach(page => {
+            pageChangeObserverRef.current.observe(page, { attributeFilter: ['class'] });
+        });
+        callbacksRef.current.onPageEnter(document.querySelector('.ATD0020P-worksheet-container.selected'));
+    }, []);
 
     useEffect(() => {
-        enabledRef.current = true;
-
         const appRoot = document.querySelector('app-root');
         if (!appRoot) return;
+
+        const { onEnable, onPageEnter, onPageLeave, onStartLoading } = callbacksRef.current;
 
         loadObserverRef.current = new MutationObserver((mutationList) => {
             for (const mutation of mutationList) {
                 if (mutation.target.nodeName === 'LOADING-SPINNER') {
                     if (mutation.removedNodes.length) {
                         if (!document.querySelector('app-atd0020p')) return;
-                        onEnable();
-                        
-                        if (!pageChangeObserverRef.current) {
-                            pageChangeObserverRef.current = new MutationObserver((ml) => {
-                                for (const m of ml) {
-                                    if (m.target.classList.contains('selected')) {
-                                        onPageEnter(m.target);
-                                    } else {
-                                        onPageLeave(m.target);
-                                    }
-                                }
-                            });
-                        }
-                        
-                        pageChangeObserverRef.current.disconnect();
-                        document.querySelectorAll('.ATD0020P-worksheet-container').forEach(page => {
-                            pageChangeObserverRef.current.observe(page, { attributeFilter: ['class'] });
-                        });
-                        onPageEnter(document.querySelector('.ATD0020P-worksheet-container.selected'));
+                        callbacksRef.current.onEnable();
+                        setupPageObserver();
                     } else {
-                        onStartLoading();
+                        callbacksRef.current.onStartLoading();
                     }
                     break;
                 }
@@ -54,23 +60,22 @@ export const usePageChange = (options = {}) => {
         loadObserverRef.current.observe(appRoot, { childList: true, subtree: true });
 
         if (document.querySelector('app-atd0020p')) {
-            onEnable();
+            callbacksRef.current.onEnable();
+            setupPageObserver();
         }
 
         return () => {
-            enabledRef.current = false;
             loadObserverRef.current?.disconnect();
             pageChangeObserverRef.current?.disconnect();
             const activePage = document.querySelector('.ATD0020P-worksheet-container.selected');
-            onDisable(activePage);
+            callbacksRef.current.onDisable(activePage);
         };
-    }, [onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading]);
+    }, []); // Empty deps - use refs for callbacks
 
-    return {
-        disable: () => {
-            enabledRef.current = false;
-            loadObserverRef.current?.disconnect();
-            pageChangeObserverRef.current?.disconnect();
-        },
-    };
+    const disable = useCallback(() => {
+        loadObserverRef.current?.disconnect();
+        pageChangeObserverRef.current?.disconnect();
+    }, []);
+
+    return { disable };
 };

@@ -4,14 +4,12 @@ import { usePageChange } from './usePageChange.js';
 export const useTimestampDisplay = (enabled) => {
     const [timestamp, setTimestamp] = useState('');
     const [colorClass, setColorClass] = useState('');
-    const [activePage, setActivePage] = useState(null);
 
     const clearPageTimestamp = useCallback((page) => {
         if (page) page.style.outlineColor = '';
     }, []);
 
     const updateTimestamp = useCallback((page) => {
-        setActivePage(page);
         const is = stamp?.getStudentDrawing();
         if (is) {
             if (is.length === 0) {
@@ -63,7 +61,9 @@ export const useTimestampDisplay = (enabled) => {
 
     const onEnable = useCallback(() => {
         if (!enabled) return;
-    }, [enabled]);
+        const activePage = document.querySelector('.ATD0020P-worksheet-container.selected');
+        setTimeout(() => updateTimestamp(activePage), 100);
+    }, [enabled, updateTimestamp]);
 
     const onPageEnter = useCallback((page) => {
         if (!enabled) return;
@@ -86,20 +86,6 @@ export const useTimestampDisplay = (enabled) => {
         onPageLeave,
         onDisable,
     });
-
-    useEffect(() => {
-        if (!enabled) {
-            setTimestamp('');
-            setColorClass('');
-            clearPageTimestamp(activePage);
-            return;
-        }
-
-        window.__timestampUpdater = { updateTimestamp };
-        return () => {
-            delete window.__timestampUpdater;
-        };
-    }, [enabled, updateTimestamp, activePage, clearPageTimestamp]);
 
     return { timestamp, colorClass };
 };

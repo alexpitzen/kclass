@@ -11,7 +11,7 @@ import { useMarkboxKeys } from './hooks/useMarkboxKeys.js';
 const PageChangeManager = ({ keyboardEnabled }) => {
     useHDModeExposed();
     useAutoPen();
-    useMarkboxKeys(keyboardEnabled);
+    useMarkboxKeys();
     return null;
 };
 

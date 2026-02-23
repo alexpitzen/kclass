@@ -1,13 +1,17 @@
 import { useState, useEffect, useCallback } from 'preact/hooks';
 import { keyindexmap, keyindexdisplay } from '../helpers/constants.js';
+import { usePageChange } from './usePageChange.js';
 
-export const useMarkboxKeys = (enabled) => {
+export const useMarkboxKeys = () => {
     const [markboxMap, setMarkboxMap] = useState({});
 
     const addMarkboxKeys = useCallback((page) => {
         if (!page) return;
         const boxparent = page.querySelector('.mark-boxs');
         if (!boxparent) return;
+
+        // Remove existing keys first (in case page was revisited)
+        boxparent.querySelectorAll('.markboxkey').forEach(el => el.remove());
 
         const parentWidth = boxparent.offsetWidth;
         const newMap = {};
@@ -35,28 +39,47 @@ export const useMarkboxKeys = (enabled) => {
         });
 
         setMarkboxMap(newMap);
+        window.__markboxMap = newMap;
     }, []);
 
     const removeMarkboxKeys = useCallback((page) => {
         if (!page) return;
         const boxparent = page.querySelector('.mark-boxs');
         boxparent?.querySelectorAll('.markboxkey').forEach(el => el.remove());
-        setMarkboxMap({});
+        // Don't clear markboxMap - let addMarkboxKeys handle it
     }, []);
 
+    const onPageEnter = useCallback((page) => {
+        if (window.__keyboardModeEnabled) {
+            addMarkboxKeys(page);
+        }
+    }, [addMarkboxKeys]);
+
+    const onPageLeave = useCallback((page) => {
+        removeMarkboxKeys(page);
+    }, [removeMarkboxKeys]);
+
+    const onDisable = useCallback((page) => {
+        removeMarkboxKeys(page);
+    }, [removeMarkboxKeys]);
+
+    usePageChange({
+        onEnable: () => {},
+        onPageEnter,
+        onPageLeave,
+        onDisable,
+    });
+
+    // Set up globals immediately (not dependent on state)
     useEffect(() => {
-        if (!enabled) return;
-        
         window.__addMarkboxKeys = addMarkboxKeys;
         window.__removeMarkboxKeys = removeMarkboxKeys;
-        window.__markboxMap = markboxMap;
 
         return () => {
             delete window.__addMarkboxKeys;
             delete window.__removeMarkboxKeys;
-            delete window.__markboxMap;
         };
-    }, [enabled, addMarkboxKeys, removeMarkboxKeys, markboxMap]);
+    }, [addMarkboxKeys, removeMarkboxKeys]);
 
     return { markboxMap };
 };

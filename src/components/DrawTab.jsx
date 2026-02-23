@@ -23,6 +23,17 @@ export const DrawTab = ({ stamps: _stamps }) => {
 
     useKeyboardMode(keyboardMode, drawTabRef);
 
+    // Expose keyboard mode state globally for useMarkboxKeys
+    useEffect(() => {
+        window.__keyboardModeEnabled = keyboardMode;
+        const currentPage = document.querySelector('.ATD0020P-worksheet-container.selected');
+        if (keyboardMode) {
+            window.__addMarkboxKeys?.(currentPage);
+        } else {
+            window.__removeMarkboxKeys?.(currentPage);
+        }
+    }, [keyboardMode]);
+
     const stamps = window.StampLib?.stamps || {};
 
     useEffect(() => {

@@ -165,7 +165,13 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                     case "f":
                     case "/":
                         const searchInput1 = document.querySelector("input.search-input");
-                        searchInput1?.focus();
+                        if (searchInput1) {
+                            searchInput1.focus();
+                            searchInput1.value = "";
+                            searchInput1.setAttribute("value", "");
+                            searchInput1.dispatchEvent(new Event("input"), {});
+                        }
+                        e.preventDefault();
                         break;
                     case "c":
                         clearSearch?.();
@@ -178,7 +184,7 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                         break;
                     case "G":
                         const sl1 = document.querySelector(".studentList:not(.tabItem)");
-                        sl1?.scrollTo(0, sl1.scrollHeight);
+                        sl1?.scrollTo(0, sl1.scrollHeight - sl1.clientHeight);
                         break;
                     case "J": scrollStudents?.(DOWN); break;
                     case "K": scrollStudents?.(UP); break;
@@ -206,7 +212,14 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                 switch (e.key) {
                     case "f":
                     case "/":
-                        document.querySelector("input.search-input")?.focus();
+                        const searchInput2 = document.querySelector("input.search-input");
+                        if (searchInput2) {
+                            searchInput2.focus();
+                            searchInput2.value = "";
+                            searchInput2.setAttribute("value", "");
+                            searchInput2.dispatchEvent(new Event("input"), {});
+                        }
+                        e.preventDefault();
                         break;
                     case "c": clearSearch?.(); break;
                     case "M": document.querySelector(".markingList.tabItem")?.click(); break;
@@ -220,7 +233,11 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                     case "k": doUp?.(); break;
                     case "g": document.querySelectorAll(".worksheet-navigator-page span:not(.disabled)")[0]?.click(); break;
                     case "G": goLastPage?.(); break;
-                    case "X": document.querySelector(".xallbtn")?.click(); break;
+                    case "X": 
+                        const xallbtn = document.querySelector(".xallbtn");
+                        xallbtn?.click();
+                        xallbtn?.blur();
+                        break;
                     case "x": matchPreviousMarkings?.(); break;
                     case "c": clearMarkboxs?.(); break;
                     case "Backspace": doBackspace?.(); break;
@@ -231,6 +248,7 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                         const playback = getPlaybackControl?.();
                         if (playback) {
                             playback.querySelector(".play,.pause")?.click();
+                            return;
                         } else {
                             StampLib.expandToolbar();
                             document.querySelector(".grading-toolbar-box .grading-toolbar .play")?.click();
@@ -239,16 +257,24 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                         break;
                     case "s": doS?.(); break;
                     case "u":
-                        const atd = StampLib.getAtd?.();
-                        atd?.undoInk();
-                        atd?.penUpFunc(atd);
+                    {
+                        const atd = StampLib.getAtd();
+                        if (atd) {
+                            atd.undoInk();
+                            atd.penUpFunc(atd);
+                        }
                         break;
+                    }
                     case "U": StampLib.undoLastWriteAll?.(); break;
                     case "r":
-                        const atd2 = StampLib.getAtd?.();
-                        atd2?.redoInk();
-                        atd2?.penUpFunc(atd2);
+                    {
+                        const atd = StampLib.getAtd();
+                        if (atd) {
+                            atd.redoInk();
+                            atd.penUpFunc(atd);
+                        }
                         break;
+                    }
                     case "2":
                     case "@": do2?.(e.key); break;
                     case "8":

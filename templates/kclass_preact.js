@@ -780,37 +780,41 @@ var kclass = (() => {
     } = options;
     const loadObserverRef = A2(null);
     const pageChangeObserverRef = A2(null);
-    const enabledRef = A2(false);
+    const callbacksRef = A2({ onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading });
+    callbacksRef.current = { onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading };
+    const setupPageObserver = q2(() => {
+      if (!pageChangeObserverRef.current) {
+        pageChangeObserverRef.current = new MutationObserver((ml) => {
+          for (const m3 of ml) {
+            if (m3.target.classList.contains("selected")) {
+              callbacksRef.current.onPageEnter(m3.target);
+            } else {
+              callbacksRef.current.onPageLeave(m3.target);
+            }
+          }
+        });
+      }
+      pageChangeObserverRef.current.disconnect();
+      document.querySelectorAll(".ATD0020P-worksheet-container").forEach((page) => {
+        pageChangeObserverRef.current.observe(page, { attributeFilter: ["class"] });
+      });
+      callbacksRef.current.onPageEnter(document.querySelector(".ATD0020P-worksheet-container.selected"));
+    }, []);
     y2(() => {
-      enabledRef.current = true;
       const appRoot = document.querySelector("app-root");
       if (!appRoot)
         return;
+      const { onEnable: onEnable2, onPageEnter: onPageEnter2, onPageLeave: onPageLeave2, onStartLoading: onStartLoading2 } = callbacksRef.current;
       loadObserverRef.current = new MutationObserver((mutationList) => {
         for (const mutation of mutationList) {
           if (mutation.target.nodeName === "LOADING-SPINNER") {
             if (mutation.removedNodes.length) {
               if (!document.querySelector("app-atd0020p"))
                 return;
-              onEnable();
-              if (!pageChangeObserverRef.current) {
-                pageChangeObserverRef.current = new MutationObserver((ml) => {
-                  for (const m3 of ml) {
-                    if (m3.target.classList.contains("selected")) {
-                      onPageEnter(m3.target);
-                    } else {
-                      onPageLeave(m3.target);
-                    }
-                  }
-                });
-              }
-              pageChangeObserverRef.current.disconnect();
-              document.querySelectorAll(".ATD0020P-worksheet-container").forEach((page) => {
-                pageChangeObserverRef.current.observe(page, { attributeFilter: ["class"] });
-              });
-              onPageEnter(document.querySelector(".ATD0020P-worksheet-container.selected"));
+              callbacksRef.current.onEnable();
+              setupPageObserver();
             } else {
-              onStartLoading();
+              callbacksRef.current.onStartLoading();
             }
             break;
           }
@@ -818,36 +822,32 @@ var kclass = (() => {
       });
       loadObserverRef.current.observe(appRoot, { childList: true, subtree: true });
       if (document.querySelector("app-atd0020p")) {
-        onEnable();
+        callbacksRef.current.onEnable();
+        setupPageObserver();
       }
       return () => {
-        enabledRef.current = false;
         loadObserverRef.current?.disconnect();
         pageChangeObserverRef.current?.disconnect();
         const activePage = document.querySelector(".ATD0020P-worksheet-container.selected");
-        onDisable(activePage);
+        callbacksRef.current.onDisable(activePage);
       };
-    }, [onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading]);
-    return {
-      disable: () => {
-        enabledRef.current = false;
-        loadObserverRef.current?.disconnect();
-        pageChangeObserverRef.current?.disconnect();
-      }
-    };
+    }, []);
+    const disable = q2(() => {
+      loadObserverRef.current?.disconnect();
+      pageChangeObserverRef.current?.disconnect();
+    }, []);
+    return { disable };
   };
 
   // src/hooks/useTimestamp.js
   var useTimestampDisplay = (enabled) => {
     const [timestamp, setTimestamp] = d2("");
     const [colorClass, setColorClass] = d2("");
-    const [activePage, setActivePage] = d2(null);
     const clearPageTimestamp = q2((page) => {
       if (page)
         page.style.outlineColor = "";
     }, []);
     const updateTimestamp = q2((page) => {
-      setActivePage(page);
       const is = stamp?.getStudentDrawing();
       if (is) {
         if (is.length === 0) {
@@ -905,7 +905,9 @@ var kclass = (() => {
     const onEnable = q2(() => {
       if (!enabled)
         return;
-    }, [enabled]);
+      const activePage = document.querySelector(".ATD0020P-worksheet-container.selected");
+      setTimeout(() => updateTimestamp(activePage), 100);
+    }, [enabled, updateTimestamp]);
     const onPageEnter = q2((page) => {
       if (!enabled)
         return;
@@ -925,18 +927,6 @@ var kclass = (() => {
       onPageLeave,
       onDisable
     });
-    y2(() => {
-      if (!enabled) {
-        setTimestamp("");
-        setColorClass("");
-        clearPageTimestamp(activePage);
-        return;
-      }
-      window.__timestampUpdater = { updateTimestamp };
-      return () => {
-        delete window.__timestampUpdater;
-      };
-    }, [enabled, updateTimestamp, activePage, clearPageTimestamp]);
     return { timestamp, colorClass };
   };
 
@@ -1616,7 +1606,13 @@ enter: submit/accept dialog`;
             case "f":
             case "/":
               const searchInput1 = document.querySelector("input.search-input");
-              searchInput1?.focus();
+              if (searchInput1) {
+                searchInput1.focus();
+                searchInput1.value = "";
+                searchInput1.setAttribute("value", "");
+                searchInput1.dispatchEvent(new Event("input"), {});
+              }
+              e3.preventDefault();
               break;
             case "c":
               clearSearch?.();
@@ -1629,7 +1625,7 @@ enter: submit/accept dialog`;
               break;
             case "G":
               const sl1 = document.querySelector(".studentList:not(.tabItem)");
-              sl1?.scrollTo(0, sl1.scrollHeight);
+              sl1?.scrollTo(0, sl1.scrollHeight - sl1.clientHeight);
               break;
             case "J":
               scrollStudents?.(DOWN);
@@ -1681,7 +1677,14 @@ enter: submit/accept dialog`;
           switch (e3.key) {
             case "f":
             case "/":
-              document.querySelector("input.search-input")?.focus();
+              const searchInput2 = document.querySelector("input.search-input");
+              if (searchInput2) {
+                searchInput2.focus();
+                searchInput2.value = "";
+                searchInput2.setAttribute("value", "");
+                searchInput2.dispatchEvent(new Event("input"), {});
+              }
+              e3.preventDefault();
               break;
             case "c":
               clearSearch?.();
@@ -1714,7 +1717,9 @@ enter: submit/accept dialog`;
               goLastPage?.();
               break;
             case "X":
-              document.querySelector(".xallbtn")?.click();
+              const xallbtn = document.querySelector(".xallbtn");
+              xallbtn?.click();
+              xallbtn?.blur();
               break;
             case "x":
               matchPreviousMarkings?.();
@@ -1738,6 +1743,7 @@ enter: submit/accept dialog`;
               const playback = getPlaybackControl?.();
               if (playback) {
                 playback.querySelector(".play,.pause")?.click();
+                return;
               } else {
                 StampLib.expandToolbar();
                 document.querySelector(".grading-toolbar-box .grading-toolbar .play")?.click();
@@ -1747,19 +1753,25 @@ enter: submit/accept dialog`;
             case "s":
               doS?.();
               break;
-            case "u":
-              const atd = StampLib.getAtd?.();
-              atd?.undoInk();
-              atd?.penUpFunc(atd);
+            case "u": {
+              const atd = StampLib.getAtd();
+              if (atd) {
+                atd.undoInk();
+                atd.penUpFunc(atd);
+              }
               break;
+            }
             case "U":
               StampLib.undoLastWriteAll?.();
               break;
-            case "r":
-              const atd2 = StampLib.getAtd?.();
-              atd2?.redoInk();
-              atd2?.penUpFunc(atd2);
+            case "r": {
+              const atd = StampLib.getAtd();
+              if (atd) {
+                atd.redoInk();
+                atd.penUpFunc(atd);
+              }
               break;
+            }
             case "2":
             case "@":
               do2?.(e3.key);
@@ -1931,6 +1943,15 @@ enter: submit/accept dialog`;
     const rootRef = A2(null);
     const drawTabRef = { current: null };
     useKeyboardMode(keyboardMode, drawTabRef);
+    y2(() => {
+      window.__keyboardModeEnabled = keyboardMode;
+      const currentPage = document.querySelector(".ATD0020P-worksheet-container.selected");
+      if (keyboardMode) {
+        window.__addMarkboxKeys?.(currentPage);
+      } else {
+        window.__removeMarkboxKeys?.(currentPage);
+      }
+    }, [keyboardMode]);
     const stamps = window.StampLib?.stamps || {};
     y2(() => {
       if (!hidden && textareaRef.current) {
@@ -2094,7 +2115,8 @@ enter: submit/accept dialog`;
               type: "color",
               class: "pencolorbtn",
               value: penColor,
-              onInput: handleColorChange
+              onInput: handleColorChange,
+              accessKey: "c"
             }
           ),
           /* @__PURE__ */ u3("fieldset", { children: [
@@ -2227,7 +2249,6 @@ enter: submit/accept dialog`;
   // src/hooks/useHDMode.js
   var useHDMode = () => {
     const [enabled, setEnabled] = d2(false);
-    const [controller, setController] = d2(null);
     const initHD = q2(() => {
       const penType = document.querySelector('input[name="penType"]:checked')?.value || "pen";
       const pencolorbtn = document.querySelector(".pencolorbtn");
@@ -2257,23 +2278,33 @@ enter: submit/accept dialog`;
         i4.style.width = "370px";
       });
     }, []);
+    const makeHD = q2(() => {
+      if (enabled)
+        StampLib.makeHD();
+    }, [enabled]);
+    const makeSD = q2(() => {
+      StampLib.makeSD();
+    }, []);
+    const { disable } = usePageChange({
+      onEnable: initHD,
+      onPageEnter: makeHD,
+      onPageLeave: makeSD,
+      onDisable: makeSD
+    });
     y2(() => {
-      if (!enabled) {
-        if (controller) {
-          controller.disable();
-          setController(null);
+      if (enabled) {
+        const appRoot = document.querySelector("app-root");
+        if (appRoot && document.querySelector("app-atd0020p")) {
+          initHD();
+          const selectedPage = document.querySelector(".ATD0020P-worksheet-container.selected");
+          if (selectedPage) {
+            makeHD(selectedPage);
+          }
         }
-        return;
+      } else {
+        disable();
       }
-      const ctrl = usePageChange({
-        onEnable: initHD,
-        onPageEnter: () => StampLib.makeHD(),
-        onPageLeave: () => StampLib.makeSD(),
-        onDisable: () => StampLib.makeSD()
-      });
-      setController(ctrl);
-      return () => ctrl.disable();
-    }, [enabled, initHD]);
+    }, [enabled, initHD, makeHD, makeSD, disable]);
     return [enabled, setEnabled];
   };
   var useHDModeExposed = () => {
@@ -2314,7 +2345,7 @@ enter: submit/accept dialog`;
   };
 
   // src/hooks/useMarkboxKeys.js
-  var useMarkboxKeys = (enabled) => {
+  var useMarkboxKeys = () => {
     const [markboxMap, setMarkboxMap] = d2({});
     const addMarkboxKeys = q2((page) => {
       if (!page)
@@ -2322,6 +2353,7 @@ enter: submit/accept dialog`;
       const boxparent = page.querySelector(".mark-boxs");
       if (!boxparent)
         return;
+      boxparent.querySelectorAll(".markboxkey").forEach((el) => el.remove());
       const parentWidth = boxparent.offsetWidth;
       const newMap = {};
       page.querySelectorAll(".mark-box").forEach((box, index) => {
@@ -2345,26 +2377,40 @@ enter: submit/accept dialog`;
         boxparent.appendChild(markboxkey);
       });
       setMarkboxMap(newMap);
+      window.__markboxMap = newMap;
     }, []);
     const removeMarkboxKeys = q2((page) => {
       if (!page)
         return;
       const boxparent = page.querySelector(".mark-boxs");
       boxparent?.querySelectorAll(".markboxkey").forEach((el) => el.remove());
-      setMarkboxMap({});
     }, []);
+    const onPageEnter = q2((page) => {
+      if (window.__keyboardModeEnabled) {
+        addMarkboxKeys(page);
+      }
+    }, [addMarkboxKeys]);
+    const onPageLeave = q2((page) => {
+      removeMarkboxKeys(page);
+    }, [removeMarkboxKeys]);
+    const onDisable = q2((page) => {
+      removeMarkboxKeys(page);
+    }, [removeMarkboxKeys]);
+    usePageChange({
+      onEnable: () => {
+      },
+      onPageEnter,
+      onPageLeave,
+      onDisable
+    });
     y2(() => {
-      if (!enabled)
-        return;
       window.__addMarkboxKeys = addMarkboxKeys;
       window.__removeMarkboxKeys = removeMarkboxKeys;
-      window.__markboxMap = markboxMap;
       return () => {
         delete window.__addMarkboxKeys;
         delete window.__removeMarkboxKeys;
-        delete window.__markboxMap;
       };
-    }, [enabled, addMarkboxKeys, removeMarkboxKeys, markboxMap]);
+    }, [addMarkboxKeys, removeMarkboxKeys]);
     return { markboxMap };
   };
 
@@ -2372,7 +2418,7 @@ enter: submit/accept dialog`;
   var PageChangeManager = ({ keyboardEnabled }) => {
     useHDModeExposed();
     useAutoPen();
-    useMarkboxKeys(keyboardEnabled);
+    useMarkboxKeys();
     return null;
   };
   var PrintOverlayWrapper = () => {

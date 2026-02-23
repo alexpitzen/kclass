@@ -1,9 +1,8 @@
-import { useState, useEffect, useCallback } from 'preact/hooks';
+import { useState, useEffect, useCallback, useRef } from 'preact/hooks';
 import { usePageChange } from './usePageChange.js';
 
 export const useHDMode = () => {
     const [enabled, setEnabled] = useState(false);
-    const [controller, setController] = useState(null);
 
     const initHD = useCallback(() => {
         const penType = document.querySelector('input[name="penType"]:checked')?.value || 'pen';
@@ -37,25 +36,35 @@ export const useHDMode = () => {
         });
     }, []);
 
+    const makeHD = useCallback(() => {
+        if (enabled) StampLib.makeHD();
+    }, [enabled]);
+
+    const makeSD = useCallback(() => {
+        StampLib.makeSD();
+    }, []);
+
+    const { disable } = usePageChange({
+        onEnable: initHD,
+        onPageEnter: makeHD,
+        onPageLeave: makeSD,
+        onDisable: makeSD,
+    });
+
     useEffect(() => {
-        if (!enabled) {
-            if (controller) {
-                controller.disable();
-                setController(null);
+        if (enabled) {
+            const appRoot = document.querySelector('app-root');
+            if (appRoot && document.querySelector('app-atd0020p')) {
+                initHD();
+                const selectedPage = document.querySelector('.ATD0020P-worksheet-container.selected');
+                if (selectedPage) {
+                    makeHD(selectedPage);
+                }
             }
-            return;
+        } else {
+            disable();
         }
-
-        const ctrl = usePageChange({
-            onEnable: initHD,
-            onPageEnter: () => StampLib.makeHD(),
-            onPageLeave: () => StampLib.makeSD(),
-            onDisable: () => StampLib.makeSD(),
-        });
-        setController(ctrl);
-
-        return () => ctrl.disable();
-    }, [enabled, initHD]);
+    }, [enabled, initHD, makeHD, makeSD, disable]);
 
     return [enabled, setEnabled];
 };
