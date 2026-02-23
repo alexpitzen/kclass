@@ -589,7 +589,6 @@ var kclass = (() => {
     (document.querySelector(".btn-dialog-cancel") || document.querySelector(".close-btn") || document.querySelector(".btn-close") || document.querySelector("app-page-back-button"))?.click();
   }
   function doEnter() {
-    console.log("Called doEnter");
     const mainBtn = document.querySelector("#EndScoringButton") || document.querySelector(".btn-dialog-navy") || document.querySelector(".bottomSheet.open .scoreBtn");
     if (mainBtn) {
       mainBtn.click();
