@@ -3145,6 +3145,11 @@
     }
   }
   function doEscape(e3) {
+    const printoverlay = document.querySelector(".printoverlay");
+    if (printoverlay?.checkVisibility()) {
+      window.__hidePrintPreview?.();
+      return;
+    }
     let escapable = document.querySelector(".btn-dialog-cancel") || document.querySelector(".end-scoring-area") || document.querySelector(".playback-control .close") || document.querySelector(".btn-close") || document.querySelector(".close-btn");
     if (escapable) {
       escapable.click();
@@ -3774,8 +3779,10 @@
       };
       const handleClick = (e3) => {
         const atd = StampLib.getAtd();
-        if (!atd?.bcanvas)
+        if (!atd?.bcanvas) {
+          hidePreview();
           return;
+        }
         const canvasRect = atd.bcanvas.getBoundingClientRect();
         const zoomRatio = atd.bcanvas.clientHeight / atd.inkHeight;
         let x3 = e3.clientX, y3 = e3.clientY;

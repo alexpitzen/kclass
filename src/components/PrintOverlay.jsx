@@ -103,7 +103,10 @@ export const PrintOverlay = () => {
 
         const handleClick = (e) => {
             const atd = StampLib.getAtd();
-            if (!atd?.bcanvas) return;
+            if (!atd?.bcanvas) {
+                hidePreview();
+                return;
+            }
 
             const canvasRect = atd.bcanvas.getBoundingClientRect();
             const zoomRatio = atd.bcanvas.clientHeight / atd.inkHeight;

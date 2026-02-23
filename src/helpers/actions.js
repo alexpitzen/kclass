@@ -79,6 +79,12 @@ function showHeader(show) {
 }
 
 function doEscape(e) {
+    // Check print overlay first
+    const printoverlay = document.querySelector(".printoverlay");
+    if (printoverlay?.checkVisibility()) {
+        window.__hidePrintPreview?.();
+        return;
+    }
     let escapable = (
         document.querySelector(".btn-dialog-cancel")
         || document.querySelector(".end-scoring-area")
