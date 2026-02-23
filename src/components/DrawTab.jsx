@@ -100,20 +100,20 @@ export const DrawTab = ({ stamps: _stamps }) => {
     const handleUndo = () => StampLib.undoLastWriteAll();
     const handleClear = () => StampLib.clearPage();
 
-    const handleTextStamp = () => {
+    const handleTextStamp = (e) => {
         hide();
         const scale = size / 100;
         const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
-        showTextPreview(text, writeDimensions, scale, penColor);
+        showTextPreview(text, writeDimensions, scale, penColor, { x: e.clientX, y: e.clientY });
     };
 
-    const handleStampClick = (stamp) => {
+    const handleStampClick = (stamp, e) => {
         hide();
-        const stampDimensions = StampLib.getWriteStampDimensions(stamp, 1);
+        const stampDimensions = stamp._cachedDimensions || StampLib.getWriteStampDimensions(stamp, 1);
         const maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
         const scale = (size / 100) * maxScaleFactor;
         const svg = typeof stamp.svg === 'string' ? stamp.svg : stamp.svg.outerHTML;
-        showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, penColor, svg);
+        showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, penColor, svg, { x: e.clientX, y: e.clientY });
     };
 
     // Expose drawTabRef for keyboard handler
@@ -260,7 +260,7 @@ export const DrawTab = ({ stamps: _stamps }) => {
                         onInput={(e) => setText(e.target.value)}
                         style={{ color: penColor }}
                     />
-                    <button class="textprintbtn" onClick={handleTextStamp}>
+                    <button class="textprintbtn" onClick={(e) => handleTextStamp(e)}>
                         T
                     </button>
                 </div>
@@ -306,9 +306,13 @@ export const DrawTab = ({ stamps: _stamps }) => {
                                 key={stamp.name}
                                 class="stampbtn"
                                 onMouseOver={(e) => e.stopPropagation()}
-                                onClick={() => handleStampClick(stamp)}
+                                onClick={(e) => handleStampClick(stamp, e)}
+                                style={{ '--height-limiter': (() => {
+                                    const dims = stamp._cachedDimensions || StampLib.getWriteStampDimensions(stamp, 1);
+                                    return dims.height <= dims.width ? 1 : dims.width / dims.height;
+                                })() }}
                             >
-                                {typeof stamp.svg === 'string' ? stamp.svg : stamp.svg}
+                                <span dangerouslySetInnerHTML={{ __html: stamp.svg.outerHTML }} />
                             </button>
                         ))}
                     </details>

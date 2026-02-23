@@ -227,7 +227,29 @@ function doKeyboardDefault(key) {
 }
 
 function matchPreviousMarkings() {
-    document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
+    const resultMapping = {
+        "check": "check",
+        "check-double": "check",
+        "check-triangle": "check",
+        "triangle": "triangle",
+        "triangle-double": "triangle",
+        "triangle-check": "triangle",
+    };
+    const resultBoxes = document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-result-boxs .result-box:not(.right) .result-box-type");
+    if (!resultBoxes.length) {
+        document.querySelector(".xallbtn")?.click();
+        return;
+    }
+    for (let i = 0; i < 2; i++) {
+        const markboxes = document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-boxs .mark-box");
+        resultBoxes.forEach((resultBox, index) => {
+            const required = resultMapping[resultBox.classList[1]];
+            const markbox = markboxes[index];
+            if (markbox && !markbox.querySelector(`.${required}`)) {
+                markbox.click();
+            }
+        });
+    }
 }
 
 function clearMarkboxs() {

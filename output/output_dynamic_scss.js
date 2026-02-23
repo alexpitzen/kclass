@@ -3270,7 +3270,29 @@
     worksheet.querySelectorAll(".mark-box")[markboxMap[key]]?.click();
   }
   function matchPreviousMarkings() {
-    document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
+    const resultMapping = {
+      "check": "check",
+      "check-double": "check",
+      "check-triangle": "check",
+      "triangle": "triangle",
+      "triangle-double": "triangle",
+      "triangle-check": "triangle"
+    };
+    const resultBoxes = document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-result-boxs .result-box:not(.right) .result-box-type");
+    if (!resultBoxes.length) {
+      document.querySelector(".xallbtn")?.click();
+      return;
+    }
+    for (let i4 = 0; i4 < 2; i4++) {
+      const markboxes = document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-boxs .mark-box");
+      resultBoxes.forEach((resultBox, index) => {
+        const required = resultMapping[resultBox.classList[1]];
+        const markbox = markboxes[index];
+        if (markbox && !markbox.querySelector(`.${required}`)) {
+          markbox.click();
+        }
+      });
+    }
   }
   function clearMarkboxs() {
     for (let i4 = 0; i4 < 2; i4++) {
@@ -3629,7 +3651,7 @@
     return context;
   };
   var PrintOverlayProvider = ({ children }) => {
-    const [state, setState2] = d2({
+    const [state, setState] = d2({
       visible: false,
       mode: null,
       previewStyle: {},
@@ -3638,30 +3660,34 @@
       textValue: "",
       color: "#ff2200"
     });
-    const showStampPreview = (stamp2, stampDimensions, maxScaleFactor, scale, borderColor, svg) => {
-      setState2({
+    const showStampPreview = (stamp2, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos) => {
+      setState({
         visible: true,
         mode: "stamp",
         stampData: { stamp: stamp2, maxScaleFactor },
         previewStyle: {
           height: `${stampDimensions.height * scale}px`,
           width: `${stampDimensions.width * scale}px`,
-          "border-color": borderColor
+          "border-color": borderColor,
+          left: initialPos ? `${initialPos.x}px` : "0px",
+          top: initialPos ? `${initialPos.y}px` : "0px"
         },
         previewContent: svg,
         textValue: "",
         color: borderColor
       });
     };
-    const showTextPreview = (text, writeDimensions, scale, borderColor) => {
-      setState2({
+    const showTextPreview = (text, writeDimensions, scale, borderColor, initialPos) => {
+      setState({
         visible: true,
         mode: "text",
         stampData: null,
         previewStyle: {
           height: `${writeDimensions.height}px`,
           width: `${writeDimensions.width}px`,
-          "border-color": borderColor
+          "border-color": borderColor,
+          left: initialPos ? `${initialPos.x}px` : "0px",
+          top: initialPos ? `${initialPos.y}px` : "0px"
         },
         previewContent: text,
         textValue: text,
@@ -3669,7 +3695,7 @@
       });
     };
     const hidePreview = () => {
-      setState2((prev) => ({ ...prev, visible: false }));
+      setState((prev) => ({ ...prev, visible: false }));
     };
     return /* @__PURE__ */ u3(PrintOverlayContext.Provider, { value: { state, showStampPreview, showTextPreview, hidePreview }, children });
   };
@@ -3677,17 +3703,19 @@
     const { state, hidePreview } = usePrintOverlay();
     const { visible, mode, previewStyle, previewContent, stampData, textValue, color } = state;
     const overlayRef = A2(null);
+    const previewRef = A2(null);
     y2(() => {
       if (!visible)
         return;
       const overlay = overlayRef.current;
-      if (!overlay)
+      const preview = previewRef.current;
+      if (!overlay || !preview)
         return;
       const handlePMove = (e3) => {
-        setState((prev) => ({
-          ...prev,
-          previewStyle: { ...prev.previewStyle, left: `${e3.clientX}px`, top: `${e3.clientY}px` }
-        }));
+        preview.animate({
+          left: `${e3.clientX}px`,
+          top: `${e3.clientY}px`
+        }, { duration: 100, fill: "forwards" });
       };
       const handleClick = (e3) => {
         const atd = StampLib.getAtd();
@@ -3741,10 +3769,10 @@
         children: /* @__PURE__ */ u3(
           "div",
           {
+            ref: previewRef,
             class: mode === "stamp" ? "stampPrintPreviewDiv" : "printPreviewDiv",
             style: previewStyle,
-            dangerouslySetInnerHTML: { __html: mode === "stamp" ? previewContent : void 0 },
-            children: mode === "text" ? previewContent : null
+            dangerouslySetInnerHTML: mode === "stamp" ? { __html: previewContent } : void 0
           }
         )
       }
@@ -3931,6 +3959,7 @@
     pageScrollingItem = document.querySelector(item);
     pageScrollingStartPos = pageScrollingItem?.scrollTop || 0;
     pageScrollingStartTime = void 0;
+    window.__scrollingState = { pageScrollingDirection, pageSideScrolling };
     if (pageScrollingItem) {
       requestAnimationFrame(scrollPage);
     }
@@ -3942,6 +3971,7 @@
     pageScrollingItem = document.querySelector(item);
     pageScrollingStartPos = pageScrollingItem?.scrollLeft || 0;
     pageScrollingStartTime = void 0;
+    window.__scrollingState = { pageScrollingDirection, pageSideScrolling };
     if (pageScrollingItem) {
       requestAnimationFrame(scrollPage);
     }
@@ -3967,6 +3997,7 @@
   }
   function stopScrolling() {
     pageScrolling = false;
+    window.__scrollingState = null;
   }
 
   // src/hooks/useKeyboardMode.js
@@ -4433,8 +4464,32 @@ enter: submit/accept dialog`;
         }
       };
       const handleKeyUp = (e3) => {
-        if (["J", "j", "K", "k", "H", "h", "L", "l"].includes(e3.key)) {
-          stopScrolling?.();
+        const { pageSideScrolling: pageSideScrolling2, pageScrollingDirection: pageScrollingDirection2 } = window.__scrollingState || {};
+        switch (e3.key) {
+          case "J":
+          case "j":
+            if (!pageSideScrolling2 && pageScrollingDirection2 == DOWN) {
+              stopScrolling?.();
+            }
+            break;
+          case "K":
+          case "k":
+            if (!pageSideScrolling2 && pageScrollingDirection2 == UP) {
+              stopScrolling?.();
+            }
+            break;
+          case "H":
+          case "h":
+            if (pageSideScrolling2 && pageScrollingDirection2 == LEFT) {
+              stopScrolling?.();
+            }
+            break;
+          case "L":
+          case "l":
+            if (pageSideScrolling2 && pageScrollingDirection2 == RIGHT) {
+              stopScrolling?.();
+            }
+            break;
         }
       };
       document.addEventListener("keydown", handleKeyDown);
@@ -4528,19 +4583,19 @@ enter: submit/accept dialog`;
     };
     const handleUndo = () => StampLib.undoLastWriteAll();
     const handleClear = () => StampLib.clearPage();
-    const handleTextStamp = () => {
+    const handleTextStamp = (e3) => {
       hide();
       const scale = size / 100;
       const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
-      showTextPreview(text, writeDimensions, scale, penColor);
+      showTextPreview(text, writeDimensions, scale, penColor, { x: e3.clientX, y: e3.clientY });
     };
-    const handleStampClick = (stamp2) => {
+    const handleStampClick = (stamp2, e3) => {
       hide();
-      const stampDimensions = StampLib.getWriteStampDimensions(stamp2, 1);
+      const stampDimensions = stamp2._cachedDimensions || StampLib.getWriteStampDimensions(stamp2, 1);
       const maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
       const scale = size / 100 * maxScaleFactor;
       const svg = typeof stamp2.svg === "string" ? stamp2.svg : stamp2.svg.outerHTML;
-      showStampPreview(stamp2, stampDimensions, maxScaleFactor, scale, penColor, svg);
+      showStampPreview(stamp2, stampDimensions, maxScaleFactor, scale, penColor, svg, { x: e3.clientX, y: e3.clientY });
     };
     y2(() => {
       drawTabRef.current = rootRef.current;
@@ -4672,7 +4727,7 @@ enter: submit/accept dialog`;
               style: { color: penColor }
             }
           ),
-          /* @__PURE__ */ u3("button", { class: "textprintbtn", onClick: handleTextStamp, children: "T" })
+          /* @__PURE__ */ u3("button", { class: "textprintbtn", onClick: (e3) => handleTextStamp(e3), children: "T" })
         ] }),
         /* @__PURE__ */ u3("label", { children: [
           "Stamp Color:",
@@ -4717,8 +4772,12 @@ enter: submit/accept dialog`;
           {
             class: "stampbtn",
             onMouseOver: (e3) => e3.stopPropagation(),
-            onClick: () => handleStampClick(stamp2),
-            children: typeof stamp2.svg === "string" ? stamp2.svg : stamp2.svg
+            onClick: (e3) => handleStampClick(stamp2, e3),
+            style: { "--height-limiter": (() => {
+              const dims = stamp2._cachedDimensions || StampLib.getWriteStampDimensions(stamp2, 1);
+              return dims.height <= dims.width ? 1 : dims.width / dims.height;
+            })() },
+            children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp2.svg.outerHTML } })
           },
           stamp2.name
         ))
@@ -4944,11 +5003,11 @@ enter: submit/accept dialog`;
   var PrintOverlayWrapper = () => {
     const printOverlay = usePrintOverlay();
     y2(() => {
-      window.__showStampPreview = (stamp2, dims, maxScale, scale, color, svg) => {
-        printOverlay.showStampPreview(stamp2, dims, maxScale, scale, color, svg);
+      window.__showStampPreview = (stamp2, dims, maxScale, scale, color, svg, pos) => {
+        printOverlay.showStampPreview(stamp2, dims, maxScale, scale, color, svg, pos);
       };
-      window.__showTextPreview = (text, dims, scale, color) => {
-        printOverlay.showTextPreview(text, dims, scale, color);
+      window.__showTextPreview = (text, dims, scale, color, pos) => {
+        printOverlay.showTextPreview(text, dims, scale, color, pos);
       };
       window.__hidePrintPreview = () => {
         printOverlay.hidePreview();
@@ -4978,6 +5037,21 @@ enter: submit/accept dialog`;
     /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(App, {}) }),
     appContainer
   );
+  var initStampDimensions = () => {
+    const stamps = window.StampLib?.stamps;
+    if (!stamps) {
+      setTimeout(initStampDimensions, 1e3);
+      return;
+    }
+    for (const category in stamps) {
+      for (const stamp2 of stamps[category]) {
+        if (!stamp2._cachedDimensions) {
+          stamp2._cachedDimensions = StampLib.getWriteStampDimensions(stamp2, 1);
+        }
+      }
+    }
+  };
+  initStampDimensions();
   function findPinchDisabler() {
     for (let listener of document.eventListeners("touchstart")) {
       if (listener.toString().indexOf("disable pinch zoom") > -1) {

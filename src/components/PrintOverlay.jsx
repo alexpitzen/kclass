@@ -22,7 +22,7 @@ export const PrintOverlayProvider = ({ children }) => {
         color: '#ff2200',
     });
 
-    const showStampPreview = (stamp, stampDimensions, maxScaleFactor, scale, borderColor, svg) => {
+    const showStampPreview = (stamp, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos) => {
         setState({
             visible: true,
             mode: 'stamp',
@@ -31,6 +31,8 @@ export const PrintOverlayProvider = ({ children }) => {
                 height: `${stampDimensions.height * scale}px`,
                 width: `${stampDimensions.width * scale}px`,
                 'border-color': borderColor,
+                left: initialPos ? `${initialPos.x}px` : '0px',
+                top: initialPos ? `${initialPos.y}px` : '0px',
             },
             previewContent: svg,
             textValue: '',
@@ -38,7 +40,7 @@ export const PrintOverlayProvider = ({ children }) => {
         });
     };
 
-    const showTextPreview = (text, writeDimensions, scale, borderColor) => {
+    const showTextPreview = (text, writeDimensions, scale, borderColor, initialPos) => {
         setState({
             visible: true,
             mode: 'text',
@@ -47,6 +49,8 @@ export const PrintOverlayProvider = ({ children }) => {
                 height: `${writeDimensions.height}px`,
                 width: `${writeDimensions.width}px`,
                 'border-color': borderColor,
+                left: initialPos ? `${initialPos.x}px` : '0px',
+                top: initialPos ? `${initialPos.y}px` : '0px',
             },
             previewContent: text,
             textValue: text,
@@ -69,18 +73,20 @@ export const PrintOverlay = () => {
     const { state, hidePreview } = usePrintOverlay();
     const { visible, mode, previewStyle, previewContent, stampData, textValue, color } = state;
     const overlayRef = useRef(null);
+    const previewRef = useRef(null);
 
     useEffect(() => {
         if (!visible) return;
 
         const overlay = overlayRef.current;
-        if (!overlay) return;
+        const preview = previewRef.current;
+        if (!overlay || !preview) return;
 
         const handlePMove = (e) => {
-            setState(prev => ({
-                ...prev,
-                previewStyle: { ...prev.previewStyle, left: `${e.clientX}px`, top: `${e.clientY}px` }
-            }));
+            preview.animate({
+                left: `${e.clientX}px`,
+                top: `${e.clientY}px`,
+            }, { duration: 100, fill: "forwards" });
         };
 
         const handleClick = (e) => {
@@ -138,12 +144,11 @@ export const PrintOverlay = () => {
             onMouseOver={(e) => e.stopPropagation()}
         >
             <div
+                ref={previewRef}
                 class={mode === 'stamp' ? 'stampPrintPreviewDiv' : 'printPreviewDiv'}
                 style={previewStyle}
-                dangerouslySetInnerHTML={{ __html: mode === 'stamp' ? previewContent : undefined }}
-            >
-                {mode === 'text' ? previewContent : null}
-            </div>
+                dangerouslySetInnerHTML={mode === 'stamp' ? { __html: previewContent } : undefined}
+            />
         </div>
     );
 };

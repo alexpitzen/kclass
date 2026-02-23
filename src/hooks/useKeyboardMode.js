@@ -359,8 +359,32 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
         };
 
         const handleKeyUp = (e) => {
-            if (["J", "j", "K", "k", "H", "h", "L", "l"].includes(e.key)) {
-                stopScrolling?.();
+            const { pageSideScrolling, pageScrollingDirection } = window.__scrollingState || {};
+            switch(e.key) {
+                case "J":
+                case "j":
+                    if (!pageSideScrolling && pageScrollingDirection == DOWN) {
+                        stopScrolling?.();
+                    }
+                    break;
+                case "K":
+                case "k":
+                    if (!pageSideScrolling && pageScrollingDirection == UP) {
+                        stopScrolling?.();
+                    }
+                    break;
+                case "H":
+                case "h":
+                    if (pageSideScrolling && pageScrollingDirection == LEFT) {
+                        stopScrolling?.();
+                    }
+                    break;
+                case "L":
+                case "l":
+                    if (pageSideScrolling && pageScrollingDirection == RIGHT) {
+                        stopScrolling?.();
+                    }
+                    break;
             }
         };
 

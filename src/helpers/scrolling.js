@@ -38,6 +38,7 @@ function startScrolling(direction, item) {
     pageScrollingItem = document.querySelector(item);
     pageScrollingStartPos = pageScrollingItem?.scrollTop || 0;
     pageScrollingStartTime = undefined;
+    window.__scrollingState = { pageScrollingDirection, pageSideScrolling };
     if (pageScrollingItem) {
         requestAnimationFrame(scrollPage);
     }
@@ -50,6 +51,7 @@ function startSideScrolling(direction, item) {
     pageScrollingItem = document.querySelector(item);
     pageScrollingStartPos = pageScrollingItem?.scrollLeft || 0;
     pageScrollingStartTime = undefined;
+    window.__scrollingState = { pageScrollingDirection, pageSideScrolling };
     if (pageScrollingItem) {
         requestAnimationFrame(scrollPage);
     }
@@ -76,6 +78,7 @@ function scrollPage(timestamp) {
 
 function stopScrolling() {
     pageScrolling = false;
+    window.__scrollingState = null;
 }
 
 function pointerScroll(parent, draggable) {

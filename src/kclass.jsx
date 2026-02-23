@@ -20,11 +20,11 @@ const PrintOverlayWrapper = () => {
     const printOverlay = usePrintOverlay();
 
     useEffect(() => {
-        window.__showStampPreview = (stamp, dims, maxScale, scale, color, svg) => {
-            printOverlay.showStampPreview(stamp, dims, maxScale, scale, color, svg);
+        window.__showStampPreview = (stamp, dims, maxScale, scale, color, svg, pos) => {
+            printOverlay.showStampPreview(stamp, dims, maxScale, scale, color, svg, pos);
         };
-        window.__showTextPreview = (text, dims, scale, color) => {
-            printOverlay.showTextPreview(text, dims, scale, color);
+        window.__showTextPreview = (text, dims, scale, color, pos) => {
+            printOverlay.showTextPreview(text, dims, scale, color, pos);
         };
         window.__hidePrintPreview = () => {
             printOverlay.hidePreview();
@@ -65,6 +65,23 @@ render(
     </PrintOverlayProvider>,
     appContainer
 );
+
+// Cache stamp dimensions once at startup
+const initStampDimensions = () => {
+    const stamps = window.StampLib?.stamps;
+    if (!stamps) {
+        setTimeout(initStampDimensions, 1000);
+        return;
+    }
+    for (const category in stamps) {
+        for (const stamp of stamps[category]) {
+            if (!stamp._cachedDimensions) {
+                stamp._cachedDimensions = StampLib.getWriteStampDimensions(stamp, 1);
+            }
+        }
+    }
+};
+initStampDimensions();
 
 // Disable pinch zoom disabler
 function findPinchDisabler() {
