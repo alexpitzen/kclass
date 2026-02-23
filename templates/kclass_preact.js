@@ -2487,9 +2487,71 @@ enter: submit/accept dialog`;
     return { markboxMap };
   };
 
+  // src/hooks/useHDMode.js
+  var useHDMode = (enabled = false) => {
+    const internalEnabledRef = A2(enabled);
+    internalEnabledRef.current = enabled;
+    const initHD = q2(() => {
+      const penType = document.querySelector('input[name="penType"]:checked')?.value || "pen";
+      const pencolorbtn = document.querySelector(".pencolorbtn");
+      if (penType !== "eraser" && pencolorbtn) {
+        const penSettings2 = {
+          pen: { width: 2, alpha: 255 },
+          "thick-highlighter": { width: 25, alpha: 50 },
+          "thin-highlighter": { width: 5, alpha: 50 }
+        };
+        StampLib.setPenSettings({
+          color: pencolorbtn.value,
+          ...penSettings2[penType]
+        });
+      }
+      document.querySelectorAll(".content-scroll-container .content-bg .content-detail").forEach((detail) => {
+        detail.style.minWidth = "372px";
+        detail.style.width = "372px";
+      });
+      document.querySelectorAll(".worksheet-group").forEach((i4) => i4.style.width = "410px");
+      document.querySelectorAll(".worksheet-group-page").forEach((i4) => i4.style.maxWidth = "410px");
+      document.querySelectorAll(".ATD0020P-worksheet-container img.worksheet-img").forEach((i4) => {
+        i4.style.height = "612px";
+        i4.style.width = "370px";
+      });
+      document.querySelectorAll(".ATD0020P-worksheet-container canvas").forEach((i4) => {
+        i4.style.height = "612px";
+        i4.style.width = "370px";
+      });
+    }, []);
+    const makeHD = q2((page) => {
+      if (internalEnabledRef.current)
+        StampLib.makeHD(page);
+    }, []);
+    const makeSD = q2((page) => {
+      StampLib.makeSD(page);
+    }, []);
+    usePageChange({
+      enabled,
+      onEnable: initHD,
+      onPageEnter: makeHD,
+      onPageLeave: makeSD,
+      onDisable: makeSD
+    });
+    y2(() => {
+      if (enabled) {
+        const appRoot = document.querySelector("app-root");
+        if (appRoot && document.querySelector("app-atd0020p")) {
+          initHD();
+          const selectedPage = document.querySelector(".ATD0020P-worksheet-container.selected");
+          if (selectedPage) {
+            makeHD(selectedPage);
+          }
+        }
+      }
+    }, [enabled, initHD, makeHD]);
+  };
+
   // src/kclass.jsx
   var PageChangeManager = () => {
     const { hdModeEnabled, keyboardModeEnabled } = useApp();
+    useHDMode(hdModeEnabled);
     useAutoPen();
     useMarkboxKeys(keyboardModeEnabled);
     return null;

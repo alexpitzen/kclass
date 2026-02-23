@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'preact/hooks';
 import { usePageChange } from './usePageChange.js';
 
-export const useHDMode = () => {
-    const [enabled, setEnabled] = useState(false);
+export const useHDMode = (enabled = false) => {
+    const internalEnabledRef = useRef(enabled);
+    internalEnabledRef.current = enabled;
 
     const initHD = useCallback(() => {
         const penType = document.querySelector('input[name="penType"]:checked')?.value || 'pen';
@@ -36,15 +37,15 @@ export const useHDMode = () => {
         });
     }, []);
 
-    const makeHD = useCallback(() => {
-        if (enabled) StampLib.makeHD();
-    }, [enabled]);
-
-    const makeSD = useCallback(() => {
-        StampLib.makeSD();
+    const makeHD = useCallback((page) => {
+        if (internalEnabledRef.current) StampLib.makeHD(page);
     }, []);
 
-    const { disable } = usePageChange({
+    const makeSD = useCallback((page) => {
+        StampLib.makeSD(page);
+    }, []);
+
+    usePageChange({
         enabled,
         onEnable: initHD,
         onPageEnter: makeHD,
@@ -62,12 +63,8 @@ export const useHDMode = () => {
                     makeHD(selectedPage);
                 }
             }
-        } else {
-            disable();
         }
-    }, [enabled, initHD, makeHD, makeSD, disable]);
-
-    return [enabled, setEnabled];
+    }, [enabled, initHD, makeHD]);
 };
 
 export const useHDModeExposed = () => {

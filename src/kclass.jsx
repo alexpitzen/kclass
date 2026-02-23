@@ -6,10 +6,12 @@ import { PrintOverlayProvider, PrintOverlay, usePrintOverlay } from './component
 import { LoginAssistantsList, RefreshButton } from './components/Misc.jsx';
 import { useAutoPen } from './hooks/useAutoPen.js';
 import { useMarkboxKeys } from './hooks/useMarkboxKeys.js';
+import { useHDMode } from './hooks/useHDMode.js';
 import { AppProvider, useApp } from './context/AppContext.jsx';
 
 const PageChangeManager = () => {
     const { hdModeEnabled, keyboardModeEnabled } = useApp();
+    useHDMode(hdModeEnabled);
     useAutoPen();
     useMarkboxKeys(keyboardModeEnabled);
     return null;
