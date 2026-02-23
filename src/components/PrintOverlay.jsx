@@ -76,6 +76,18 @@ export const PrintOverlay = () => {
     const previewRef = useRef(null);
 
     useEffect(() => {
+        if (!visible || !previewRef.current) return;
+        
+        if (mode === 'stamp' && stampData) {
+            const stampDimensions = stampData.stamp._cachedDimensions || StampLib.getWriteStampDimensions(stampData.stamp, 1);
+            previewRef.current.stampDimensions = stampDimensions;
+            previewRef.current.maxScaleFactor = stampData.maxScaleFactor;
+        } else if (mode === 'text') {
+            previewRef.current.textValue = textValue;
+        }
+    }, [visible, mode, stampData, textValue]);
+
+    useEffect(() => {
         if (!visible) return;
 
         const overlay = overlayRef.current;

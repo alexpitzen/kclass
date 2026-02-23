@@ -2,66 +2,62 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import { penTypes } from './constants.js';
 import { usePrintOverlay } from './PrintOverlay.jsx';
 import { useKeyboardMode, keyboardHelpText } from '../hooks/useKeyboardMode.js';
+import { useApp } from '../context/AppContext.jsx';
 import { updatePenSettings } from '../helpers/actions.js';
 
 export const DrawTab = ({ stamps: _stamps }) => {
-    const [hidden, setHidden] = useState(true);
-    const [size, setSize] = useState(25);
+    const { 
+        drawTabOpen, 
+        setDrawTabOpen,
+        hideDrawTab,
+        showDrawTab,
+        toggleDrawTab,
+        keyboardModeEnabled,
+        setKeyboardModeEnabled,
+        hdModeEnabled,
+        setHdModeEnabled,
+    } = useApp();
+    
     const [penColor, setPenColor] = useState('#ff2200');
     const [penType, setPenType] = useState('pen');
-    const [hdMode, setHdMode] = useState(false);
     const [text, setText] = useState('');
     const [stampColorType, setStampColorType] = useState('Unchanged');
     const [rainbowSpeed, setRainbowSpeed] = useState(1);
-    const [keyboardMode, setKeyboardMode] = useState(false);
 
     const { showStampPreview, showTextPreview } = usePrintOverlay();
     const textareaRef = useRef(null);
     const stampsRef = useRef(null);
     const rootRef = useRef(null);
-    const drawTabRef = { current: null };
 
-    useKeyboardMode(keyboardMode, drawTabRef);
-
-    // Expose keyboard mode state globally for useMarkboxKeys
-    useEffect(() => {
-        window.__keyboardModeEnabled = keyboardMode;
-        window.__setMarkboxKeysEnabled?.(keyboardMode);
-        const currentPage = document.querySelector('.ATD0020P-worksheet-container.selected');
-        if (keyboardMode) {
-            window.__addMarkboxKeys?.(currentPage);
-        } else {
-            window.__removeMarkboxKeys?.(currentPage);
-        }
-    }, [keyboardMode]);
+    useKeyboardMode(keyboardModeEnabled, drawTabOpen, toggleDrawTab);
 
     const stamps = window.StampLib?.stamps || {};
 
     useEffect(() => {
-        if (!hidden && textareaRef.current) {
+        if (drawTabOpen && textareaRef.current) {
             textareaRef.current.style.height = '';
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
         }
-    }, [text, hidden]);
+    }, [text, drawTabOpen]);
 
     useEffect(() => {
-        document.body.classList.toggle('drawtab-hidden', hidden);
-    }, [hidden]);
+        document.body.classList.toggle('drawtab-hidden', !drawTabOpen);
+    }, [drawTabOpen]);
 
-    const hide = () => setHidden(true);
+    const hide = () => setDrawTabOpen(false);
     const show = () => {
-        setHidden(false);
+        setDrawTabOpen(true);
         updatePenSettings();
     };
     const toggle = () => {
-        if (hidden) {
-            show();
-        } else {
+        if (drawTabOpen) {
             hide();
+        } else {
+            show();
         }
     };
 
-    // Expose show/hide/toggle globally for CustomToolbar
+    // Expose toggle globally for CustomToolbar
     useEffect(() => {
         window.__toggleDrawTab = toggle;
         window.__showDrawTab = show;
@@ -73,7 +69,43 @@ export const DrawTab = ({ stamps: _stamps }) => {
         };
     }, [toggle, show, hide]);
 
-    const handleSizeChange = (e) => setSize(e.target.value);
+    const handleSizeChange = (e) => {
+        const newSize = parseInt(e.target.value);
+        
+        // Update CSS variable for sizeslider
+        const drawtab = rootRef.current;
+        if (drawtab) {
+            drawtab.style.setProperty('--sizeslider', `${newSize} / 100`);
+        }
+        
+        // Update textarea size
+        const textarea = drawtab?.querySelector('textarea');
+        if (textarea) {
+            textarea.style.height = '';
+            textarea.style.height = `${textarea.scrollHeight}px`;
+        }
+        
+        // Update stamp preview if visible
+        const stampPreview = document.querySelector('.stampPrintPreviewDiv');
+        if (stampPreview?.checkVisibility()) {
+            const maxScaleFactor = stampPreview.maxScaleFactor;
+            const scale = (newSize / 100) * maxScaleFactor;
+            const dims = stampPreview.stampDimensions;
+            if (dims) {
+                stampPreview.style.height = `${dims.height * scale}px`;
+                stampPreview.style.width = `${dims.width * scale}px`;
+            }
+        }
+        
+        // Update text preview if visible
+        const textPreview = document.querySelector('.textPrintPreviewDiv');
+        if (textPreview?.checkVisibility()) {
+            const scale = newSize / 100;
+            const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
+            textPreview.style.height = `${writeDimensions.height}px`;
+            textPreview.style.width = `${writeDimensions.width}px`;
+        }
+    };
     const handleColorChange = (e) => {
         setPenColor(e.target.value);
         updatePenSettings();
@@ -91,11 +123,7 @@ export const DrawTab = ({ stamps: _stamps }) => {
     };
 
     const toggleHdMode = (e) => {
-        const enabled = e.target.checked;
-        setHdMode(enabled);
-        if (window.__hdModeSetEnabled) {
-            window.__hdModeSetEnabled(enabled);
-        }
+        setHdModeEnabled(e.target.checked);
     };
 
     const handleUndo = () => StampLib.undoLastWriteAll();
@@ -103,7 +131,9 @@ export const DrawTab = ({ stamps: _stamps }) => {
 
     const handleTextStamp = (e) => {
         hide();
-        const scale = size / 100;
+        const slider = rootRef.current?.querySelector('.sizeslider');
+        const currentSize = slider ? parseInt(slider.value) : 25;
+        const scale = currentSize / 100;
         const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
         showTextPreview(text, writeDimensions, scale, penColor, { x: e.clientX, y: e.clientY });
     };
@@ -112,15 +142,12 @@ export const DrawTab = ({ stamps: _stamps }) => {
         hide();
         const stampDimensions = stamp._cachedDimensions || StampLib.getWriteStampDimensions(stamp, 1);
         const maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
-        const scale = (size / 100) * maxScaleFactor;
+        const slider = rootRef.current?.querySelector('.sizeslider');
+        const currentSize = slider ? parseInt(slider.value) : 25;
+        const scale = (currentSize / 100) * maxScaleFactor;
         const svg = typeof stamp.svg === 'string' ? stamp.svg : stamp.svg.outerHTML;
         showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, penColor, svg, { x: e.clientX, y: e.clientY });
     };
-
-    // Expose drawTabRef for keyboard handler
-    useEffect(() => {
-        drawTabRef.current = rootRef.current;
-    }, []);
 
     // Pointer scroll for touch dragging
     useEffect(() => {
@@ -181,7 +208,7 @@ export const DrawTab = ({ stamps: _stamps }) => {
     };
 
     return (
-        <div ref={rootRef} class={`drawtab ${hidden ? 'hidden' : ''}`} onMouseLeave={handleMouseLeave}>
+        <div ref={rootRef} class={`drawtab ${drawTabOpen ? '' : 'hidden'}`} onMouseLeave={handleMouseLeave}>
             <div class="header">
                 <div class="buttonsleft">
                     <input
@@ -189,7 +216,7 @@ export const DrawTab = ({ stamps: _stamps }) => {
                         class="sizeslider"
                         min="10"
                         max="100"
-                        value={size}
+                        defaultValue="25"
                         onInput={handleSizeChange}
                         title="Adjust stamp size"
                     />
@@ -206,7 +233,7 @@ export const DrawTab = ({ stamps: _stamps }) => {
                         <input
                             type="checkbox"
                             id="hdbtn"
-                            checked={hdMode}
+                            checked={hdModeEnabled}
                             onChange={toggleHdMode}
                             accessKey="h"
                         />
@@ -268,7 +295,7 @@ export const DrawTab = ({ stamps: _stamps }) => {
 
                 <label>
                     Stamp Color:
-                    <select value={stampColorType} onChange={handleStampColorChange}>
+                    <select id="stampColorType" value={stampColorType} onChange={handleStampColorChange}>
                         <option value="Color Picker">Color Picker</option>
                         <option value="Rainbow">Rainbow</option>
                         <option value="Rainbow Fill">Rainbow Fill</option>
@@ -289,8 +316,8 @@ export const DrawTab = ({ stamps: _stamps }) => {
                     <input
                         type="checkbox"
                         id="kbbtn"
-                        checked={keyboardMode}
-                        onChange={(e) => setKeyboardMode(e.target.checked)}
+                        checked={keyboardModeEnabled}
+                        onChange={(e) => setKeyboardModeEnabled(e.target.checked)}
                         title={keyboardHelpText}
                         accessKey="k"
                     />

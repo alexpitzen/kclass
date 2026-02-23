@@ -4,14 +4,37 @@ import { CustomToolbar } from './components/CustomToolbar.jsx';
 import { DrawTab } from './components/DrawTab.jsx';
 import { PrintOverlayProvider, PrintOverlay, usePrintOverlay } from './components/PrintOverlay.jsx';
 import { LoginAssistantsList, RefreshButton } from './components/Misc.jsx';
-import { useHDModeExposed } from './hooks/useHDMode.js';
 import { useAutoPen } from './hooks/useAutoPen.js';
 import { useMarkboxKeys } from './hooks/useMarkboxKeys.js';
+import { AppProvider, useApp } from './context/AppContext.jsx';
 
-const PageChangeManager = ({ keyboardEnabled }) => {
-    useHDModeExposed();
+const PageChangeManager = () => {
+    const { hdModeEnabled, keyboardModeEnabled } = useApp();
     useAutoPen();
-    useMarkboxKeys();
+    useMarkboxKeys(keyboardModeEnabled);
+    return null;
+};
+
+// Wrapper to expose context functions to globals for keyboard shortcuts
+const GlobalExposures = () => {
+    const { setTimestampEnabled, setHdModeEnabled } = useApp();
+
+    useEffect(() => {
+        window.__setTimestampEnabled = (val) => {
+            if (typeof val === 'function') {
+                setTimestampEnabled(prev => !prev);
+            } else {
+                setTimestampEnabled(val);
+            }
+        };
+        window.__hdModeSetEnabled = setHdModeEnabled;
+
+        return () => {
+            delete window.__setTimestampEnabled;
+            delete window.__hdModeSetEnabled;
+        };
+    }, [setTimestampEnabled, setHdModeEnabled]);
+
     return null;
 };
 
@@ -44,9 +67,10 @@ const PrintOverlayWrapper = () => {
 const App = () => {
     return (
         <>
+            <GlobalExposures />
             <CustomToolbar />
             <DrawTab />
-            <PageChangeManager keyboardEnabled={false} />
+            <PageChangeManager />
             <LoginAssistantsList />
             <RefreshButton />
             <PrintOverlayWrapper />
@@ -60,9 +84,11 @@ appContainer.id = 'app-container';
 document.body.appendChild(appContainer);
 
 render(
-    <PrintOverlayProvider>
-        <App />
-    </PrintOverlayProvider>,
+    <AppProvider>
+        <PrintOverlayProvider>
+            <App />
+        </PrintOverlayProvider>
+    </AppProvider>,
     appContainer
 );
 

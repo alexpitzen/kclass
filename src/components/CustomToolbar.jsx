@@ -4,19 +4,13 @@ import { toolbarIcons } from './constants.js';
 import { goPrevCorrectionPage, goNextCorrectionPage } from '../helpers/navigation.js';
 import { updatePenSettings } from '../helpers/actions.js';
 import { useTimestampDisplay } from '../hooks/useTimestamp.js';
+import { useApp } from '../context/AppContext.jsx';
 
 export const CustomToolbar = () => {
     const [headerVisible, setHeaderVisible] = useState(true);
     const [shifted, setShifted] = useState(false);
-    const [timestampEnabled, setTimestampEnabled] = useState(false);
+    const { timestampEnabled, setTimestampEnabled } = useApp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
-
-    useEffect(() => {
-        window.__setTimestampEnabled = setTimestampEnabled;
-        return () => {
-            delete window.__setTimestampEnabled;
-        };
-    }, []);
 
     useEffect(() => {
         updatePenSettings();

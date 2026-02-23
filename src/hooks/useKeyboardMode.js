@@ -66,7 +66,7 @@ enter: submit/accept dialog`;
 
 export const keyboardHelpText = keyboardHelp;
 
-export const useKeyboardMode = (enabled, drawTabRef) => {
+export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
     useEffect(() => {
         if (!enabled) return;
 
@@ -93,7 +93,7 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
 
             if (e.altKey && !e.ctrlKey && !e.metaKey) {
                 if (e.key === "d") {
-                    drawTabRef.current?.click();
+                    toggleDrawTab?.();
                 } else if (e.key === "t") {
                     window.__setTimestampEnabled?.((prev) => !prev);
                 }
@@ -102,10 +102,8 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
 
             if (e.altKey || e.ctrlKey || e.metaKey) return;
 
-            const drawtab = drawTabRef.current;
-            const isDrawTabOpen = drawtab && !drawtab.classList.contains("hidden");
-
-            if (isDrawTabOpen) {
+            if (drawTabOpen) {
+                const drawtab = document.querySelector('.drawtab');
                 switch (e.key) {
                     case "d":
                     case "Escape":
@@ -114,7 +112,7 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                     case "-":
                     case "+":
                     case "=":
-                        const slider = drawtab.querySelector(".sizeslider");
+                        const slider = drawtab?.querySelector(".sizeslider");
                         if (slider) {
                             e.key === "-" ? slider.value-- : slider.value++;
                             slider.dispatchEvent(new Event("input"));
@@ -133,7 +131,7 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                     case "r":
                     case "u":
                     case "c": {
-                        const select = drawtab.querySelector("select#stampColorType");
+                        const select = drawtab?.querySelector("select#stampColorType");
                         if (select) {
                             if (e.key === "r") select.value = select.value === "Rainbow" ? "Rainbow Fill" : "Rainbow";
                             else if (e.key === "u") select.value = "Unchanged";
@@ -143,7 +141,7 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                         break;
                     }
                     case "t":
-                        const textarea = drawtab.querySelector("textarea");
+                        const textarea = drawtab?.querySelector("textarea");
                         if (textarea) {
                             textarea.focus();
                             textarea.select();
@@ -311,7 +309,11 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
                     case "-":
                     case "+":
                     case "=":
-                        const slider2 = drawtab?.querySelector(".sizeslider");
+                        const drawtab2 = document.querySelector('.drawtab');
+                        const printoverlay = document.querySelector('.printoverlay');
+                        const slider2 = (drawtab2?.checkVisibility() || printoverlay?.checkVisibility())
+                            ? drawtab2?.querySelector(".sizeslider")
+                            : null;
                         if (slider2) {
                             e.key === "-" ? slider2.value-- : slider2.value++;
                             slider2.dispatchEvent(new Event("input"));
@@ -395,5 +397,5 @@ export const useKeyboardMode = (enabled, drawTabRef) => {
             document.removeEventListener("keydown", handleKeyDown);
             document.removeEventListener("keyup", handleKeyUp);
         };
-    }, [enabled, drawTabRef]);
+    }, [enabled, drawTabOpen, toggleDrawTab]);
 };

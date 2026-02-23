@@ -985,18 +985,45 @@ var kclass = (() => {
     return l.vnode && l.vnode(l3), l3;
   }
 
+  // src/context/AppContext.jsx
+  var AppContext = R(null);
+  var useApp = () => {
+    const context = x2(AppContext);
+    if (!context) {
+      throw new Error("useApp must be used within AppProvider");
+    }
+    return context;
+  };
+  var AppProvider = ({ children }) => {
+    const [drawTabOpen, setDrawTabOpen] = d2(false);
+    const [timestampEnabled, setTimestampEnabled] = d2(false);
+    const [hdModeEnabled, setHdModeEnabled] = d2(false);
+    const [keyboardModeEnabled, setKeyboardModeEnabled] = d2(false);
+    const hideDrawTab = q2(() => setDrawTabOpen(false), []);
+    const showDrawTab = q2(() => setDrawTabOpen(true), []);
+    const toggleDrawTab = q2(() => setDrawTabOpen((prev) => !prev), []);
+    const value = {
+      drawTabOpen,
+      setDrawTabOpen,
+      hideDrawTab,
+      showDrawTab,
+      toggleDrawTab,
+      timestampEnabled,
+      setTimestampEnabled,
+      hdModeEnabled,
+      setHdModeEnabled,
+      keyboardModeEnabled,
+      setKeyboardModeEnabled
+    };
+    return /* @__PURE__ */ u3(AppContext.Provider, { value, children });
+  };
+
   // src/components/CustomToolbar.jsx
   var CustomToolbar = () => {
     const [headerVisible, setHeaderVisible] = d2(true);
     const [shifted, setShifted] = d2(false);
-    const [timestampEnabled, setTimestampEnabled] = d2(false);
+    const { timestampEnabled, setTimestampEnabled } = useApp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
-    y2(() => {
-      window.__setTimestampEnabled = setTimestampEnabled;
-      return () => {
-        delete window.__setTimestampEnabled;
-      };
-    }, []);
     y2(() => {
       updatePenSettings();
     }, []);
@@ -1201,6 +1228,17 @@ var kclass = (() => {
     const { visible, mode, previewStyle, previewContent, stampData, textValue, color } = state;
     const overlayRef = A2(null);
     const previewRef = A2(null);
+    y2(() => {
+      if (!visible || !previewRef.current)
+        return;
+      if (mode === "stamp" && stampData) {
+        const stampDimensions = stampData.stamp._cachedDimensions || StampLib.getWriteStampDimensions(stampData.stamp, 1);
+        previewRef.current.stampDimensions = stampDimensions;
+        previewRef.current.maxScaleFactor = stampData.maxScaleFactor;
+      } else if (mode === "text") {
+        previewRef.current.textValue = textValue;
+      }
+    }, [visible, mode, stampData, textValue]);
     y2(() => {
       if (!visible)
         return;
@@ -1556,7 +1594,7 @@ escape: close dialog
 backspace: exit/cancel
 enter: submit/accept dialog`;
   var keyboardHelpText = keyboardHelp;
-  var useKeyboardMode = (enabled, drawTabRef) => {
+  var useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
     y2(() => {
       if (!enabled)
         return;
@@ -1583,7 +1621,7 @@ enter: submit/accept dialog`;
         }
         if (e3.altKey && !e3.ctrlKey && !e3.metaKey) {
           if (e3.key === "d") {
-            drawTabRef.current?.click();
+            toggleDrawTab?.();
           } else if (e3.key === "t") {
             window.__setTimestampEnabled?.((prev) => !prev);
           }
@@ -1591,9 +1629,8 @@ enter: submit/accept dialog`;
         }
         if (e3.altKey || e3.ctrlKey || e3.metaKey)
           return;
-        const drawtab = drawTabRef.current;
-        const isDrawTabOpen = drawtab && !drawtab.classList.contains("hidden");
-        if (isDrawTabOpen) {
+        if (drawTabOpen) {
+          const drawtab = document.querySelector(".drawtab");
           switch (e3.key) {
             case "d":
             case "Escape":
@@ -1602,7 +1639,7 @@ enter: submit/accept dialog`;
             case "-":
             case "+":
             case "=":
-              const slider = drawtab.querySelector(".sizeslider");
+              const slider = drawtab?.querySelector(".sizeslider");
               if (slider) {
                 e3.key === "-" ? slider.value-- : slider.value++;
                 slider.dispatchEvent(new Event("input"));
@@ -1621,7 +1658,7 @@ enter: submit/accept dialog`;
             case "r":
             case "u":
             case "c": {
-              const select = drawtab.querySelector("select#stampColorType");
+              const select = drawtab?.querySelector("select#stampColorType");
               if (select) {
                 if (e3.key === "r")
                   select.value = select.value === "Rainbow" ? "Rainbow Fill" : "Rainbow";
@@ -1634,7 +1671,7 @@ enter: submit/accept dialog`;
               break;
             }
             case "t":
-              const textarea = drawtab.querySelector("textarea");
+              const textarea = drawtab?.querySelector("textarea");
               if (textarea) {
                 textarea.focus();
                 textarea.select();
@@ -1880,7 +1917,9 @@ enter: submit/accept dialog`;
             case "-":
             case "+":
             case "=":
-              const slider2 = drawtab?.querySelector(".sizeslider");
+              const drawtab2 = document.querySelector(".drawtab");
+              const printoverlay = document.querySelector(".printoverlay");
+              const slider2 = drawtab2?.checkVisibility() || printoverlay?.checkVisibility() ? drawtab2?.querySelector(".sizeslider") : null;
               if (slider2) {
                 e3.key === "-" ? slider2.value-- : slider2.value++;
                 slider2.dispatchEvent(new Event("input"));
@@ -1995,56 +2034,52 @@ enter: submit/accept dialog`;
         document.removeEventListener("keydown", handleKeyDown);
         document.removeEventListener("keyup", handleKeyUp);
       };
-    }, [enabled, drawTabRef]);
+    }, [enabled, drawTabOpen, toggleDrawTab]);
   };
 
   // src/components/DrawTab.jsx
   var DrawTab = ({ stamps: _stamps }) => {
-    const [hidden, setHidden] = d2(true);
-    const [size, setSize] = d2(25);
+    const {
+      drawTabOpen,
+      setDrawTabOpen,
+      hideDrawTab,
+      showDrawTab,
+      toggleDrawTab,
+      keyboardModeEnabled,
+      setKeyboardModeEnabled,
+      hdModeEnabled,
+      setHdModeEnabled
+    } = useApp();
     const [penColor, setPenColor] = d2("#ff2200");
     const [penType, setPenType] = d2("pen");
-    const [hdMode, setHdMode] = d2(false);
     const [text, setText] = d2("");
     const [stampColorType, setStampColorType] = d2("Unchanged");
     const [rainbowSpeed, setRainbowSpeed] = d2(1);
-    const [keyboardMode, setKeyboardMode] = d2(false);
     const { showStampPreview, showTextPreview } = usePrintOverlay();
     const textareaRef = A2(null);
     const stampsRef = A2(null);
     const rootRef = A2(null);
-    const drawTabRef = { current: null };
-    useKeyboardMode(keyboardMode, drawTabRef);
-    y2(() => {
-      window.__keyboardModeEnabled = keyboardMode;
-      window.__setMarkboxKeysEnabled?.(keyboardMode);
-      const currentPage = document.querySelector(".ATD0020P-worksheet-container.selected");
-      if (keyboardMode) {
-        window.__addMarkboxKeys?.(currentPage);
-      } else {
-        window.__removeMarkboxKeys?.(currentPage);
-      }
-    }, [keyboardMode]);
+    useKeyboardMode(keyboardModeEnabled, drawTabOpen, toggleDrawTab);
     const stamps = window.StampLib?.stamps || {};
     y2(() => {
-      if (!hidden && textareaRef.current) {
+      if (drawTabOpen && textareaRef.current) {
         textareaRef.current.style.height = "";
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
       }
-    }, [text, hidden]);
+    }, [text, drawTabOpen]);
     y2(() => {
-      document.body.classList.toggle("drawtab-hidden", hidden);
-    }, [hidden]);
-    const hide = () => setHidden(true);
+      document.body.classList.toggle("drawtab-hidden", !drawTabOpen);
+    }, [drawTabOpen]);
+    const hide = () => setDrawTabOpen(false);
     const show = () => {
-      setHidden(false);
+      setDrawTabOpen(true);
       updatePenSettings();
     };
     const toggle = () => {
-      if (hidden) {
-        show();
-      } else {
+      if (drawTabOpen) {
         hide();
+      } else {
+        show();
       }
     };
     y2(() => {
@@ -2057,7 +2092,35 @@ enter: submit/accept dialog`;
         delete window.__hideDrawTab;
       };
     }, [toggle, show, hide]);
-    const handleSizeChange = (e3) => setSize(e3.target.value);
+    const handleSizeChange = (e3) => {
+      const newSize = parseInt(e3.target.value);
+      const drawtab = rootRef.current;
+      if (drawtab) {
+        drawtab.style.setProperty("--sizeslider", `${newSize} / 100`);
+      }
+      const textarea = drawtab?.querySelector("textarea");
+      if (textarea) {
+        textarea.style.height = "";
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+      const stampPreview = document.querySelector(".stampPrintPreviewDiv");
+      if (stampPreview?.checkVisibility()) {
+        const maxScaleFactor = stampPreview.maxScaleFactor;
+        const scale = newSize / 100 * maxScaleFactor;
+        const dims = stampPreview.stampDimensions;
+        if (dims) {
+          stampPreview.style.height = `${dims.height * scale}px`;
+          stampPreview.style.width = `${dims.width * scale}px`;
+        }
+      }
+      const textPreview = document.querySelector(".textPrintPreviewDiv");
+      if (textPreview?.checkVisibility()) {
+        const scale = newSize / 100;
+        const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
+        textPreview.style.height = `${writeDimensions.height}px`;
+        textPreview.style.width = `${writeDimensions.width}px`;
+      }
+    };
     const handleColorChange = (e3) => {
       setPenColor(e3.target.value);
       updatePenSettings();
@@ -2073,17 +2136,15 @@ enter: submit/accept dialog`;
       hide();
     };
     const toggleHdMode = (e3) => {
-      const enabled = e3.target.checked;
-      setHdMode(enabled);
-      if (window.__hdModeSetEnabled) {
-        window.__hdModeSetEnabled(enabled);
-      }
+      setHdModeEnabled(e3.target.checked);
     };
     const handleUndo = () => StampLib.undoLastWriteAll();
     const handleClear = () => StampLib.clearPage();
     const handleTextStamp = (e3) => {
       hide();
-      const scale = size / 100;
+      const slider = rootRef.current?.querySelector(".sizeslider");
+      const currentSize = slider ? parseInt(slider.value) : 25;
+      const scale = currentSize / 100;
       const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
       showTextPreview(text, writeDimensions, scale, penColor, { x: e3.clientX, y: e3.clientY });
     };
@@ -2091,13 +2152,12 @@ enter: submit/accept dialog`;
       hide();
       const stampDimensions = stamp2._cachedDimensions || StampLib.getWriteStampDimensions(stamp2, 1);
       const maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
-      const scale = size / 100 * maxScaleFactor;
+      const slider = rootRef.current?.querySelector(".sizeslider");
+      const currentSize = slider ? parseInt(slider.value) : 25;
+      const scale = currentSize / 100 * maxScaleFactor;
       const svg = typeof stamp2.svg === "string" ? stamp2.svg : stamp2.svg.outerHTML;
       showStampPreview(stamp2, stampDimensions, maxScaleFactor, scale, penColor, svg, { x: e3.clientX, y: e3.clientY });
     };
-    y2(() => {
-      drawTabRef.current = rootRef.current;
-    }, []);
     y2(() => {
       const parent = rootRef.current;
       const draggable = stampsRef.current;
@@ -2143,7 +2203,7 @@ enter: submit/accept dialog`;
         hide();
       }
     };
-    return /* @__PURE__ */ u3("div", { ref: rootRef, class: `drawtab ${hidden ? "hidden" : ""}`, onMouseLeave: handleMouseLeave, children: [
+    return /* @__PURE__ */ u3("div", { ref: rootRef, class: `drawtab ${drawTabOpen ? "" : "hidden"}`, onMouseLeave: handleMouseLeave, children: [
       /* @__PURE__ */ u3("div", { class: "header", children: [
         /* @__PURE__ */ u3("div", { class: "buttonsleft", children: [
           /* @__PURE__ */ u3(
@@ -2153,7 +2213,7 @@ enter: submit/accept dialog`;
               class: "sizeslider",
               min: "10",
               max: "100",
-              value: size,
+              defaultValue: "25",
               onInput: handleSizeChange,
               title: "Adjust stamp size"
             }
@@ -2173,7 +2233,7 @@ enter: submit/accept dialog`;
               {
                 type: "checkbox",
                 id: "hdbtn",
-                checked: hdMode,
+                checked: hdModeEnabled,
                 onChange: toggleHdMode,
                 accessKey: "h"
               }
@@ -2229,7 +2289,7 @@ enter: submit/accept dialog`;
         ] }),
         /* @__PURE__ */ u3("label", { children: [
           "Stamp Color:",
-          /* @__PURE__ */ u3("select", { value: stampColorType, onChange: handleStampColorChange, children: [
+          /* @__PURE__ */ u3("select", { id: "stampColorType", value: stampColorType, onChange: handleStampColorChange, children: [
             /* @__PURE__ */ u3("option", { value: "Color Picker", children: "Color Picker" }),
             /* @__PURE__ */ u3("option", { value: "Rainbow", children: "Rainbow" }),
             /* @__PURE__ */ u3("option", { value: "Rainbow Fill", children: "Rainbow Fill" }),
@@ -2254,8 +2314,8 @@ enter: submit/accept dialog`;
             {
               type: "checkbox",
               id: "kbbtn",
-              checked: keyboardMode,
-              onChange: (e3) => setKeyboardMode(e3.target.checked),
+              checked: keyboardModeEnabled,
+              onChange: (e3) => setKeyboardModeEnabled(e3.target.checked),
               title: keyboardHelpText,
               accessKey: "k"
             }
@@ -2322,79 +2382,6 @@ enter: submit/accept dialog`;
       children: "refresh"
     }
   );
-
-  // src/hooks/useHDMode.js
-  var useHDMode = () => {
-    const [enabled, setEnabled] = d2(false);
-    const initHD = q2(() => {
-      const penType = document.querySelector('input[name="penType"]:checked')?.value || "pen";
-      const pencolorbtn = document.querySelector(".pencolorbtn");
-      if (penType !== "eraser" && pencolorbtn) {
-        const penSettings2 = {
-          pen: { width: 2, alpha: 255 },
-          "thick-highlighter": { width: 25, alpha: 50 },
-          "thin-highlighter": { width: 5, alpha: 50 }
-        };
-        StampLib.setPenSettings({
-          color: pencolorbtn.value,
-          ...penSettings2[penType]
-        });
-      }
-      document.querySelectorAll(".content-scroll-container .content-bg .content-detail").forEach((detail) => {
-        detail.style.minWidth = "372px";
-        detail.style.width = "372px";
-      });
-      document.querySelectorAll(".worksheet-group").forEach((i4) => i4.style.width = "410px");
-      document.querySelectorAll(".worksheet-group-page").forEach((i4) => i4.style.maxWidth = "410px");
-      document.querySelectorAll(".ATD0020P-worksheet-container img.worksheet-img").forEach((i4) => {
-        i4.style.height = "612px";
-        i4.style.width = "370px";
-      });
-      document.querySelectorAll(".ATD0020P-worksheet-container canvas").forEach((i4) => {
-        i4.style.height = "612px";
-        i4.style.width = "370px";
-      });
-    }, []);
-    const makeHD = q2(() => {
-      if (enabled)
-        StampLib.makeHD();
-    }, [enabled]);
-    const makeSD = q2(() => {
-      StampLib.makeSD();
-    }, []);
-    const { disable } = usePageChange({
-      enabled,
-      onEnable: initHD,
-      onPageEnter: makeHD,
-      onPageLeave: makeSD,
-      onDisable: makeSD
-    });
-    y2(() => {
-      if (enabled) {
-        const appRoot = document.querySelector("app-root");
-        if (appRoot && document.querySelector("app-atd0020p")) {
-          initHD();
-          const selectedPage = document.querySelector(".ATD0020P-worksheet-container.selected");
-          if (selectedPage) {
-            makeHD(selectedPage);
-          }
-        }
-      } else {
-        disable();
-      }
-    }, [enabled, initHD, makeHD, makeSD, disable]);
-    return [enabled, setEnabled];
-  };
-  var useHDModeExposed = () => {
-    const [enabled, setEnabled] = useHDMode();
-    y2(() => {
-      window.__hdModeSetEnabled = setEnabled;
-      return () => {
-        window.__hdModeSetEnabled = null;
-      };
-    }, [setEnabled]);
-    return [enabled, setEnabled];
-  };
 
   // src/hooks/useAutoPen.js
   var useAutoPen = () => {
@@ -2500,10 +2487,28 @@ enter: submit/accept dialog`;
   };
 
   // src/kclass.jsx
-  var PageChangeManager = ({ keyboardEnabled }) => {
-    useHDModeExposed();
+  var PageChangeManager = () => {
+    const { hdModeEnabled, keyboardModeEnabled } = useApp();
     useAutoPen();
-    useMarkboxKeys();
+    useMarkboxKeys(keyboardModeEnabled);
+    return null;
+  };
+  var GlobalExposures = () => {
+    const { setTimestampEnabled, setHdModeEnabled } = useApp();
+    y2(() => {
+      window.__setTimestampEnabled = (val) => {
+        if (typeof val === "function") {
+          setTimestampEnabled((prev) => !prev);
+        } else {
+          setTimestampEnabled(val);
+        }
+      };
+      window.__hdModeSetEnabled = setHdModeEnabled;
+      return () => {
+        delete window.__setTimestampEnabled;
+        delete window.__hdModeSetEnabled;
+      };
+    }, [setTimestampEnabled, setHdModeEnabled]);
     return null;
   };
   var PrintOverlayWrapper = () => {
@@ -2528,9 +2533,10 @@ enter: submit/accept dialog`;
   };
   var App = () => {
     return /* @__PURE__ */ u3(k, { children: [
+      /* @__PURE__ */ u3(GlobalExposures, {}),
       /* @__PURE__ */ u3(CustomToolbar, {}),
       /* @__PURE__ */ u3(DrawTab, {}),
-      /* @__PURE__ */ u3(PageChangeManager, { keyboardEnabled: false }),
+      /* @__PURE__ */ u3(PageChangeManager, {}),
       /* @__PURE__ */ u3(LoginAssistantsList, {}),
       /* @__PURE__ */ u3(RefreshButton, {}),
       /* @__PURE__ */ u3(PrintOverlayWrapper, {})
@@ -2540,7 +2546,7 @@ enter: submit/accept dialog`;
   appContainer.id = "app-container";
   document.body.appendChild(appContainer);
   J(
-    /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(App, {}) }),
+    /* @__PURE__ */ u3(AppProvider, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(App, {}) }) }),
     appContainer
   );
   var initStampDimensions = () => {
