@@ -4753,12 +4753,27 @@ enter: submit/accept dialog`;
               {
                 type: "checkbox",
                 id: "hdbtn",
+                class: "hdbtn",
                 checked: hdModeEnabled,
                 onChange: toggleHdMode,
                 accessKey: "h"
               }
             ),
             /* @__PURE__ */ u3("label", { for: "hdbtn", children: "HD mode" })
+          ] }),
+          /* @__PURE__ */ u3("div", { class: "toggle", children: [
+            /* @__PURE__ */ u3(
+              "input",
+              {
+                type: "checkbox",
+                id: "kbbtn",
+                checked: keyboardModeEnabled,
+                onChange: (e3) => setKeyboardModeEnabled(e3.target.checked),
+                title: keyboardHelpText,
+                accessKey: "k"
+              }
+            ),
+            /* @__PURE__ */ u3("label", { for: "kbbtn", title: keyboardHelpText, children: "Keyboard mode" })
           ] })
         ] }),
         /* @__PURE__ */ u3("span", { class: "stackedButtons", children: [
@@ -4772,27 +4787,27 @@ enter: submit/accept dialog`;
               accessKey: "c"
             }
           ),
-          /* @__PURE__ */ u3("fieldset", { children: [
-            /* @__PURE__ */ u3("legend", { children: "Pen type:" }),
-            penTypes.map((type) => /* @__PURE__ */ u3("label", { children: [
-              /* @__PURE__ */ u3(
-                "input",
-                {
-                  type: "radio",
-                  name: "penType",
-                  value: type.value,
-                  checked: penType === type.value,
-                  onChange: handlePenTypeChange
-                }
-              ),
-              type.label
-            ] }, type.value))
-          ] }),
           /* @__PURE__ */ u3("button", { class: "undoLast", onClick: handleUndo, title: "Undo last stamp", children: "Undo stamp" })
         ] }),
+        /* @__PURE__ */ u3("fieldset", { children: [
+          /* @__PURE__ */ u3("legend", { children: "Pen type:" }),
+          penTypes.map((type) => /* @__PURE__ */ u3("label", { style: type.value === "eraser" ? { display: "none" } : {}, children: [
+            /* @__PURE__ */ u3(
+              "input",
+              {
+                type: "radio",
+                name: "penType",
+                value: type.value,
+                checked: penType === type.value,
+                onChange: handlePenTypeChange
+              }
+            ),
+            type.label
+          ] }, type.value))
+        ] }),
         /* @__PURE__ */ u3("span", { class: "stackedButtons right", children: [
-          /* @__PURE__ */ u3("button", { class: "closeDrawTab", onClick: hide, title: "Close the draw tab", children: "x" }),
-          /* @__PURE__ */ u3("button", { class: "clearAll", onClick: handleClear, title: "Clear the entire page", children: "Clear all" })
+          /* @__PURE__ */ u3("button", { class: "closeDrawTab squarebtn", onClick: hide, title: "Close the draw tab", children: "x" }),
+          /* @__PURE__ */ u3("button", { class: "clearAll", onClick: handleClear, title: "Clear the entire page", children: "Clear all drawings" })
         ] }),
         /* @__PURE__ */ u3("div", { children: [
           /* @__PURE__ */ u3(
@@ -4805,7 +4820,7 @@ enter: submit/accept dialog`;
               style: { color: penColor }
             }
           ),
-          /* @__PURE__ */ u3("button", { class: "textprintbtn", onClick: (e3) => handleTextStamp(e3), children: "T" })
+          /* @__PURE__ */ u3("button", { class: "textprintbtn squarebtn", onClick: (e3) => handleTextStamp(e3), children: "T" })
         ] }),
         /* @__PURE__ */ u3("label", { children: [
           "Stamp Color:",
@@ -4827,21 +4842,7 @@ enter: submit/accept dialog`;
             onInput: handleRainbowSpeedChange,
             disabled: stampColorType !== "Rainbow" && stampColorType !== "Rainbow Fill"
           }
-        ),
-        /* @__PURE__ */ u3("div", { class: "toggle", children: [
-          /* @__PURE__ */ u3(
-            "input",
-            {
-              type: "checkbox",
-              id: "kbbtn",
-              checked: keyboardModeEnabled,
-              onChange: (e3) => setKeyboardModeEnabled(e3.target.checked),
-              title: keyboardHelpText,
-              accessKey: "k"
-            }
-          ),
-          /* @__PURE__ */ u3("label", { for: "kbbtn", title: keyboardHelpText, children: "Keyboard mode" })
-        ] })
+        )
       ] }),
       /* @__PURE__ */ u3("div", { class: "stamps", ref: stampsRef, children: Object.entries(stamps).map(([category, stampList]) => /* @__PURE__ */ u3("details", { open: category === Object.keys(stamps)[0], children: [
         /* @__PURE__ */ u3("summary", { children: category }),

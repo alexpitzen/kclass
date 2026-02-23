@@ -233,11 +233,24 @@ export const DrawTab = ({ stamps: _stamps }) => {
                         <input
                             type="checkbox"
                             id="hdbtn"
+                            class="hdbtn"
                             checked={hdModeEnabled}
                             onChange={toggleHdMode}
                             accessKey="h"
                         />
                         <label for="hdbtn">HD mode</label>
+                    </div>
+
+                    <div class="toggle">
+                        <input
+                            type="checkbox"
+                            id="kbbtn"
+                            checked={keyboardModeEnabled}
+                            onChange={(e) => setKeyboardModeEnabled(e.target.checked)}
+                            title={keyboardHelpText}
+                            accessKey="k"
+                        />
+                        <label for="kbbtn" title={keyboardHelpText}>Keyboard mode</label>
                     </div>
                 </div>
 
@@ -250,10 +263,15 @@ export const DrawTab = ({ stamps: _stamps }) => {
                         accessKey="c"
                     />
 
+                    <button class="undoLast" onClick={handleUndo} title="Undo last stamp">
+                        Undo stamp
+                    </button>
+                </span>
+
                     <fieldset>
                         <legend>Pen type:</legend>
                         {penTypes.map((type) => (
-                            <label key={type.value}>
+                            <label key={type.value} style={type.value === 'eraser' ? { display: 'none' } : {}}>
                                 <input
                                     type="radio"
                                     name="penType"
@@ -261,22 +279,17 @@ export const DrawTab = ({ stamps: _stamps }) => {
                                     checked={penType === type.value}
                                     onChange={handlePenTypeChange}
                                 />
-                                {type.label}
-                            </label>
-                        ))}
-                    </fieldset>
-
-                    <button class="undoLast" onClick={handleUndo} title="Undo last stamp">
-                        Undo stamp
-                    </button>
-                </span>
+                            {type.label}
+                        </label>
+                    ))}
+                </fieldset>
 
                 <span class="stackedButtons right">
-                    <button class="closeDrawTab" onClick={hide} title="Close the draw tab">
+                    <button class="closeDrawTab squarebtn" onClick={hide} title="Close the draw tab">
                         x
                     </button>
                     <button class="clearAll" onClick={handleClear} title="Clear the entire page">
-                        Clear all
+                        Clear all drawings
                     </button>
                 </span>
 
@@ -288,7 +301,7 @@ export const DrawTab = ({ stamps: _stamps }) => {
                         onInput={(e) => setText(e.target.value)}
                         style={{ color: penColor }}
                     />
-                    <button class="textprintbtn" onClick={(e) => handleTextStamp(e)}>
+                    <button class="textprintbtn squarebtn" onClick={(e) => handleTextStamp(e)}>
                         T
                     </button>
                 </div>
@@ -311,18 +324,6 @@ export const DrawTab = ({ stamps: _stamps }) => {
                     onInput={handleRainbowSpeedChange}
                     disabled={stampColorType !== 'Rainbow' && stampColorType !== 'Rainbow Fill'}
                 />
-
-                <div class="toggle">
-                    <input
-                        type="checkbox"
-                        id="kbbtn"
-                        checked={keyboardModeEnabled}
-                        onChange={(e) => setKeyboardModeEnabled(e.target.checked)}
-                        title={keyboardHelpText}
-                        accessKey="k"
-                    />
-                    <label for="kbbtn" title={keyboardHelpText}>Keyboard mode</label>
-                </div>
             </div>
 
             <div class="stamps" ref={stampsRef}>
