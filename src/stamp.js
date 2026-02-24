@@ -1220,6 +1220,7 @@
             container.style.height = null;
             container.style.width = null;
         });
+        document.querySelector(".content-detail.single").style["min-width"] = "fit-content";
     }
 
     function makeSD(target) {
