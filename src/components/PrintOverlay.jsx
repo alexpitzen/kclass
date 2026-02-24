@@ -75,9 +75,11 @@ export const PrintOverlay = () => {
     const overlayRef = useRef(null);
     const previewRef = useRef(null);
 
+    console.log("***** printoverlay render");
+
     useEffect(() => {
         if (!visible || !previewRef.current) return;
-        
+
         if (mode === 'stamp' && stampData) {
             const stampDimensions = stampData.stamp._cachedDimensions || StampLib.getWriteStampDimensions(stampData.stamp, 1);
             previewRef.current.stampDimensions = stampDimensions;

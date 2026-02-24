@@ -14,7 +14,7 @@ export const usePageChange = (options = {}) => {
     const pageChangeObserverRef = useRef(null);
     const callbacksRef = useRef({ onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading });
     const enabledRef = useRef(enabled);
-    
+
     // Update refs when callbacks change
     callbacksRef.current = { onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading };
     enabledRef.current = enabled;
@@ -32,7 +32,7 @@ export const usePageChange = (options = {}) => {
                 }
             });
         }
-        
+
         pageChangeObserverRef.current.disconnect();
         document.querySelectorAll('.ATD0020P-worksheet-container').forEach(page => {
             pageChangeObserverRef.current.observe(page, { attributeFilter: ['class'] });
@@ -78,6 +78,7 @@ export const usePageChange = (options = {}) => {
         }
 
         return () => {
+            console.log("****** calling usePageChange return value")
             loadObserverRef.current?.disconnect();
             pageChangeObserverRef.current?.disconnect();
             const activePage = document.querySelector('.ATD0020P-worksheet-container.selected');
@@ -86,6 +87,7 @@ export const usePageChange = (options = {}) => {
     }, [enabled, setupPageObserver]);
 
     const disable = useCallback(() => {
+        console.log("****** calling usePageChange disable")
         loadObserverRef.current?.disconnect();
         pageChangeObserverRef.current?.disconnect();
     }, []);

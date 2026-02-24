@@ -2,22 +2,14 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import { penTypes } from './constants.js';
 import { usePrintOverlay } from './PrintOverlay.jsx';
 import { useKeyboardMode, keyboardHelpText } from '../hooks/useKeyboardMode.js';
-import { useApp } from '../context/AppContext.jsx';
+import { useDrawTab, useKeyboardMode as useKeyboardModeContext, useHDMode as useHDModeContext, DrawTabProvider } from '../context/AppContext.jsx';
 import { updatePenSettings } from '../helpers/actions.js';
 
-export const DrawTab = ({ stamps: _stamps }) => {
-    const { 
-        drawTabOpen, 
-        setDrawTabOpen,
-        hideDrawTab,
-        showDrawTab,
-        toggleDrawTab,
-        keyboardModeEnabled,
-        setKeyboardModeEnabled,
-        hdModeEnabled,
-        setHdModeEnabled,
-    } = useApp();
-    
+const DrawTabContent = ({ stamps: _stamps }) => {
+    const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
+    const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardModeContext();
+    const { hdModeEnabled, setHdModeEnabled } = useHDModeContext();
+
     const [penColor, setPenColor] = useState('#ff2200');
     const [penType, setPenType] = useState('pen');
     const [text, setText] = useState('');
@@ -30,6 +22,8 @@ export const DrawTab = ({ stamps: _stamps }) => {
     const rootRef = useRef(null);
 
     useKeyboardMode(keyboardModeEnabled, drawTabOpen, toggleDrawTab);
+
+    console.log("***** drawtab render");
 
     const stamps = window.StampLib?.stamps || {};
 
@@ -350,3 +344,10 @@ export const DrawTab = ({ stamps: _stamps }) => {
         </div>
     );
 };
+
+// Export wrapped version with its own provider
+export const DrawTab = (props) => (
+    <DrawTabProvider>
+        <DrawTabContent {...props} />
+    </DrawTabProvider>
+);

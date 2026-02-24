@@ -7,10 +7,11 @@ import { LoginAssistantsList, RefreshButton } from './components/Misc.jsx';
 import { useAutoPen } from './hooks/useAutoPen.js';
 import { useMarkboxKeys } from './hooks/useMarkboxKeys.js';
 import { useHDMode } from './hooks/useHDMode.js';
-import { AppProvider, useApp } from './context/AppContext.jsx';
+import { AppProvider, DrawTabProvider, TimestampProvider, HDModeProvider, KeyboardModeProvider, useTimestamp, useHDMode as useHDModeContext, useKeyboardMode as useKeyboardModeContext } from './context/AppContext.jsx';
 
 const PageChangeManager = () => {
-    const { hdModeEnabled, keyboardModeEnabled } = useApp();
+    const { hdModeEnabled } = useHDModeContext();
+    const { keyboardModeEnabled } = useKeyboardModeContext();
     useHDMode(hdModeEnabled);
     useAutoPen();
     useMarkboxKeys(keyboardModeEnabled);
@@ -19,7 +20,8 @@ const PageChangeManager = () => {
 
 // Wrapper to expose context functions to globals for keyboard shortcuts
 const GlobalExposures = () => {
-    const { setTimestampEnabled, setHdModeEnabled } = useApp();
+    const { setTimestampEnabled } = useTimestamp();
+    const { setHdModeEnabled } = useHDModeContext();
 
     useEffect(() => {
         window.__setTimestampEnabled = (val) => {
@@ -69,28 +71,32 @@ const PrintOverlayWrapper = () => {
 const App = () => {
     return (
         <>
-            <GlobalExposures />
-            <CustomToolbar />
-            <DrawTab />
-            <PageChangeManager />
-            <LoginAssistantsList />
-            <RefreshButton />
+            <TimestampProvider>
+                <HDModeProvider>
+                    <KeyboardModeProvider>
+                        <GlobalExposures />
+                        <CustomToolbar />
+                        <PageChangeManager />
+                        <LoginAssistantsList />
+                        <RefreshButton />
+                        <DrawTab />
+                    </KeyboardModeProvider>
+                </HDModeProvider>
+            </TimestampProvider>
             <PrintOverlayWrapper />
         </>
     );
 };
 
-// Mount all components under one provider
+// Mount all components under providers
 const appContainer = document.createElement('div');
 appContainer.id = 'app-container';
 document.body.appendChild(appContainer);
 
 render(
-    <AppProvider>
-        <PrintOverlayProvider>
-            <App />
-        </PrintOverlayProvider>
-    </AppProvider>,
+    <PrintOverlayProvider>
+        <App />
+    </PrintOverlayProvider>,
     appContainer
 );
 

@@ -3405,6 +3405,7 @@
         setupPageObserver();
       }
       return () => {
+        console.log("****** calling usePageChange return value");
         loadObserverRef.current?.disconnect();
         pageChangeObserverRef.current?.disconnect();
         const activePage = document.querySelector(".ATD0020P-worksheet-container.selected");
@@ -3412,6 +3413,7 @@
       };
     }, [enabled, setupPageObserver]);
     const disable = q2(() => {
+      console.log("****** calling usePageChange disable");
       loadObserverRef.current?.disconnect();
       pageChangeObserverRef.current?.disconnect();
     }, []);
@@ -3528,46 +3530,43 @@
   }
 
   // src/context/AppContext.jsx
-  var AppContext = R(null);
-  var useApp = () => {
-    const context = x2(AppContext);
-    if (!context) {
-      throw new Error("useApp must be used within AppProvider");
-    }
-    return context;
-  };
-  var AppProvider = ({ children }) => {
+  var DrawTabContext = R(null);
+  var TimestampContext = R(null);
+  var HDModeContext = R(null);
+  var KeyboardModeContext = R(null);
+  var useDrawTab = () => x2(DrawTabContext);
+  var useTimestamp = () => x2(TimestampContext);
+  var useHDMode = () => x2(HDModeContext);
+  var useKeyboardMode = () => x2(KeyboardModeContext);
+  var DrawTabProvider = ({ children }) => {
     const [drawTabOpen, setDrawTabOpen] = d2(false);
-    const [timestampEnabled, setTimestampEnabled] = d2(true);
-    const [hdModeEnabled, setHdModeEnabled] = d2(false);
-    const [keyboardModeEnabled, setKeyboardModeEnabled] = d2(false);
     const hideDrawTab = q2(() => setDrawTabOpen(false), []);
     const showDrawTab = q2(() => setDrawTabOpen(true), []);
     const toggleDrawTab = q2(() => setDrawTabOpen((prev) => !prev), []);
-    const value = {
-      drawTabOpen,
-      setDrawTabOpen,
-      hideDrawTab,
-      showDrawTab,
-      toggleDrawTab,
-      timestampEnabled,
-      setTimestampEnabled,
-      hdModeEnabled,
-      setHdModeEnabled,
-      keyboardModeEnabled,
-      setKeyboardModeEnabled
-    };
-    return /* @__PURE__ */ u3(AppContext.Provider, { value, children });
+    return /* @__PURE__ */ u3(DrawTabContext.Provider, { value: { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab }, children });
+  };
+  var TimestampProvider = ({ children }) => {
+    const [timestampEnabled, setTimestampEnabled] = d2(true);
+    return /* @__PURE__ */ u3(TimestampContext.Provider, { value: { timestampEnabled, setTimestampEnabled }, children });
+  };
+  var HDModeProvider = ({ children }) => {
+    const [hdModeEnabled, setHdModeEnabled] = d2(false);
+    return /* @__PURE__ */ u3(HDModeContext.Provider, { value: { hdModeEnabled, setHdModeEnabled }, children });
+  };
+  var KeyboardModeProvider = ({ children }) => {
+    const [keyboardModeEnabled, setKeyboardModeEnabled] = d2(false);
+    return /* @__PURE__ */ u3(KeyboardModeContext.Provider, { value: { keyboardModeEnabled, setKeyboardModeEnabled }, children });
   };
 
   // src/components/CustomToolbar.jsx
   var CustomToolbar = () => {
     const [shifted, setShifted] = d2(false);
-    const { timestampEnabled, setTimestampEnabled } = useApp();
+    const { timestampEnabled } = useTimestamp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
     y2(() => {
       updatePenSettings();
     }, []);
+    console.log("***** customtoolbar render");
     const toggleShift = () => {
       const container = document.querySelector(".worksheet-container");
       if (!container)
@@ -3757,6 +3756,7 @@
     const { visible, mode, previewStyle, previewContent, stampData, textValue, color } = state;
     const overlayRef = A2(null);
     const previewRef = A2(null);
+    console.log("***** printoverlay render");
     y2(() => {
       if (!visible || !previewRef.current)
         return;
@@ -4128,7 +4128,7 @@ escape: close dialog
 backspace: exit/cancel
 enter: submit/accept dialog`;
   var keyboardHelpText = keyboardHelp;
-  var useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
+  var useKeyboardMode2 = (enabled, drawTabOpen, toggleDrawTab) => {
     y2(() => {
       if (!enabled)
         return;
@@ -4568,18 +4568,10 @@ enter: submit/accept dialog`;
   };
 
   // src/components/DrawTab.jsx
-  var DrawTab = ({ stamps: _stamps }) => {
-    const {
-      drawTabOpen,
-      setDrawTabOpen,
-      hideDrawTab,
-      showDrawTab,
-      toggleDrawTab,
-      keyboardModeEnabled,
-      setKeyboardModeEnabled,
-      hdModeEnabled,
-      setHdModeEnabled
-    } = useApp();
+  var DrawTabContent = ({ stamps: _stamps }) => {
+    const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
+    const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardMode();
+    const { hdModeEnabled, setHdModeEnabled } = useHDMode();
     const [penColor, setPenColor] = d2("#ff2200");
     const [penType, setPenType] = d2("pen");
     const [text, setText] = d2("");
@@ -4589,7 +4581,8 @@ enter: submit/accept dialog`;
     const textareaRef = A2(null);
     const stampsRef = A2(null);
     const rootRef = A2(null);
-    useKeyboardMode(keyboardModeEnabled, drawTabOpen, toggleDrawTab);
+    useKeyboardMode2(keyboardModeEnabled, drawTabOpen, toggleDrawTab);
+    console.log("***** drawtab render");
     const stamps = window.StampLib?.stamps || {};
     y2(() => {
       if (drawTabOpen && textareaRef.current) {
@@ -4873,6 +4866,7 @@ enter: submit/accept dialog`;
       ] }, category)) })
     ] });
   };
+  var DrawTab = (props) => /* @__PURE__ */ u3(DrawTabProvider, { children: /* @__PURE__ */ u3(DrawTabContent, { ...props }) });
 
   // src/components/Misc.jsx
   var LoginAssistantsList = () => {
@@ -5013,7 +5007,7 @@ enter: submit/accept dialog`;
   };
 
   // src/hooks/useHDMode.js
-  var useHDMode = (enabled = false) => {
+  var useHDMode2 = (enabled = false) => {
     const internalEnabledRef = A2(enabled);
     internalEnabledRef.current = enabled;
     const initHD = q2(() => {
@@ -5075,14 +5069,16 @@ enter: submit/accept dialog`;
 
   // src/kclass.jsx
   var PageChangeManager = () => {
-    const { hdModeEnabled, keyboardModeEnabled } = useApp();
-    useHDMode(hdModeEnabled);
+    const { hdModeEnabled } = useHDMode();
+    const { keyboardModeEnabled } = useKeyboardMode();
+    useHDMode2(hdModeEnabled);
     useAutoPen();
     useMarkboxKeys(keyboardModeEnabled);
     return null;
   };
   var GlobalExposures = () => {
-    const { setTimestampEnabled, setHdModeEnabled } = useApp();
+    const { setTimestampEnabled } = useTimestamp();
+    const { setHdModeEnabled } = useHDMode();
     y2(() => {
       window.__setTimestampEnabled = (val) => {
         if (typeof val === "function") {
@@ -5121,12 +5117,14 @@ enter: submit/accept dialog`;
   };
   var App = () => {
     return /* @__PURE__ */ u3(k, { children: [
-      /* @__PURE__ */ u3(GlobalExposures, {}),
-      /* @__PURE__ */ u3(CustomToolbar, {}),
-      /* @__PURE__ */ u3(DrawTab, {}),
-      /* @__PURE__ */ u3(PageChangeManager, {}),
-      /* @__PURE__ */ u3(LoginAssistantsList, {}),
-      /* @__PURE__ */ u3(RefreshButton, {}),
+      /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children: [
+        /* @__PURE__ */ u3(GlobalExposures, {}),
+        /* @__PURE__ */ u3(CustomToolbar, {}),
+        /* @__PURE__ */ u3(PageChangeManager, {}),
+        /* @__PURE__ */ u3(LoginAssistantsList, {}),
+        /* @__PURE__ */ u3(RefreshButton, {}),
+        /* @__PURE__ */ u3(DrawTab, {})
+      ] }) }) }),
       /* @__PURE__ */ u3(PrintOverlayWrapper, {})
     ] });
   };
@@ -5134,7 +5132,7 @@ enter: submit/accept dialog`;
   appContainer.id = "app-container";
   document.body.appendChild(appContainer);
   J(
-    /* @__PURE__ */ u3(AppProvider, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(App, {}) }) }),
+    /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(App, {}) }),
     appContainer
   );
   var initStampDimensions = () => {

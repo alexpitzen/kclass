@@ -4,16 +4,18 @@ import { toolbarIcons } from './constants.js';
 import { goPrevCorrectionPage, goNextCorrectionPage } from '../helpers/navigation.js';
 import { updatePenSettings, toggleHeader } from '../helpers/actions.js';
 import { useTimestampDisplay } from '../hooks/useTimestamp.js';
-import { useApp } from '../context/AppContext.jsx';
+import { useTimestamp } from '../context/AppContext.jsx';
 
 export const CustomToolbar = () => {
     const [shifted, setShifted] = useState(false);
-    const { timestampEnabled, setTimestampEnabled } = useApp();
+    const { timestampEnabled } = useTimestamp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
 
     useEffect(() => {
         updatePenSettings();
     }, []);
+
+    console.log("***** customtoolbar render");
 
     const toggleShift = () => {
         const container = document.querySelector('.worksheet-container');
@@ -39,9 +41,9 @@ export const CustomToolbar = () => {
     const handleDrawTab = () => {
         const drawtab = document.querySelector('.drawtab');
         if (!drawtab) return;
-        
+
         const isHidden = drawtab.classList.contains('hidden');
-        
+
         if (isHidden) {
             // Use Preact state to show
             window.__showDrawTab?.();
