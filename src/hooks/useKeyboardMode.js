@@ -1,9 +1,9 @@
 import { useEffect } from 'preact/hooks';
 import { DOWN, UP, LEFT, RIGHT } from '../helpers/constants.js';
 import { goLastPage, goNextCorrectionPage, goPrevCorrectionPage } from '../helpers/navigation.js';
-import { doEnter, doEscape, doBackspace, clearSearch, cycleHighlighter, selectEraser, getPlaybackControl, doP, doS, do2, do8, isPulldownOpen, matchPreviousMarkings, clearMarkboxs, clickReading, clickMath, doKeyboardDefault } from '../helpers/actions.js';
+import { doEnter, doEscape, doBackspace, clearSearch, focusSearch, cycleHighlighter, selectEraser, getPlaybackControl, doP, doS, do2, do8, isPulldownOpen, matchPreviousMarkings, clearMarkboxs, clickReading, clickMath, doKeyboardDefault, showHeader, toggleHeader } from '../helpers/actions.js';
 import { doMarkingListJK, doMarkingListHL } from '../helpers/marking.js';
-import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sideScrollProgressChart, scrollScore, stopScrolling, startScrolling } from '../helpers/scrolling.js';
+import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sideScrollProgressChart, scrollScore, stopScrolling, startScrolling, isProgressChartFloating } from '../helpers/scrolling.js';
 import { doDown, doUp } from '../helpers/actions.js';
 
 const keyboardHelp = `Navigation:
@@ -120,7 +120,7 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
                         break;
                     case "J":
                     case "K":
-                        startScrolling?.(e.key === "J" ? 1 : -1, ".drawtab");
+                        startScrolling?.(e.key === "J" ? DOWN : UP, ".drawtab");
                         break;
                     case "h":
                         cycleHighlighter?.();
@@ -133,7 +133,7 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
                     case "c": {
                         const select = drawtab?.querySelector("select#stampColorType");
                         if (select) {
-                            if (e.key === "r") select.value = select.value === "Rainbow" ? "Rainbow Fill" : "Rainbow";
+                            if (e.key === "r") select.value = select.value === "Rainbow Fill" ? "Rainbow" : "Rainbow Fill";
                             else if (e.key === "u") select.value = "Unchanged";
                             else if (e.key === "c") select.value = "Color Picker";
                             select.dispatchEvent(new Event("change"));
@@ -162,14 +162,7 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
                 switch (e.key) {
                     case "f":
                     case "/":
-                        const searchInput1 = document.querySelector("input.search-input");
-                        if (searchInput1) {
-                            searchInput1.focus();
-                            searchInput1.value = "";
-                            searchInput1.setAttribute("value", "");
-                            searchInput1.dispatchEvent(new Event("input"), {});
-                        }
-                        e.preventDefault();
+                        focusSearch?.(e);
                         break;
                     case "c":
                         clearSearch?.();
@@ -208,14 +201,7 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
                 switch (e.key) {
                     case "f":
                     case "/":
-                        const searchInput2 = document.querySelector("input.search-input");
-                        if (searchInput2) {
-                            searchInput2.focus();
-                            searchInput2.value = "";
-                            searchInput2.setAttribute("value", "");
-                            searchInput2.dispatchEvent(new Event("input"), {});
-                        }
-                        e.preventDefault();
+                        focusSearch?.(e);
                         break;
                     case "c": clearSearch?.(); break;
                     case "M": document.querySelector(".markingList.tabItem")?.click(); break;
@@ -257,7 +243,7 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
                         const atd = StampLib.getAtd();
                         if (atd) {
                             atd.undoInk();
-                            atd.penUpFunc(atd);
+                            atd.penUpFunc(atd); // updates the models in angular
                         }
                         break;
                     }
@@ -267,7 +253,7 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
                         const atd = StampLib.getAtd();
                         if (atd) {
                             atd.redoInk();
-                            atd.penUpFunc(atd);
+                            atd.penUpFunc(atd); // updates the models in angular
                         }
                         break;
                     }
@@ -296,18 +282,12 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
                         if (pulldownExists) {
                             if (!wasPulldownOpen) {
                                 document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
-                                // Open pulldown → show header
-                                const header = document.querySelector(".grading-header");
-                                header?.classList.add("z300");
+                                showHeader(true);
                             } else {
-                                // Close pulldown → hide header
-                                const header = document.querySelector(".grading-header");
-                                header?.classList.remove("z300");
+                                showHeader(false);
                             }
                         } else {
-                            // No pulldown → toggle header
-                            const header = document.querySelector(".grading-header");
-                            header?.classList.toggle("z300");
+                            toggleHeader();
                         }
                         break;
                     case "J": scrollAnswer?.(DOWN); break;
@@ -344,8 +324,20 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
                         }
                         break;
                     case "S": document.querySelector(".dashboard-set-left .btn-primary")?.click(); break;
-                    case "J": scrollProgressChart?.(DOWN) || scrollDashboard?.(DOWN); break;
-                    case "K": scrollProgressChart?.(UP) || scrollDashboard?.(UP); break;
+                    case "J":
+                        if (isProgressChartFloating()) {
+                            scrollProgressChart?.(DOWN);
+                        } else {
+                            scrollDashboard?.(DOWN);
+                        }
+                        break;
+                    case "K":
+                        if (isProgressChartFloating()) {
+                            scrollProgressChart?.(UP);
+                        } else {
+                            scrollDashboard?.(UP);
+                        }
+                        break;
                     case "H": sideScrollProgressChart?.(LEFT); break;
                     case "L": sideScrollProgressChart?.(RIGHT); break;
                     case "p": document.querySelector(".dashboard-progress-chart .finally > .icon")?.click(); break;
@@ -361,7 +353,11 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
                     case "Backspace": doBackspace?.(); break;
                     case "J": scrollScore?.(DOWN); break;
                     case "K": scrollScore?.(UP); break;
-                    case "G": document.querySelector(".score-grid-all")?.scrollIntoView(); break;
+                    case "G":
+                        const scoreGrid = document.querySelector(".score-grid-all");
+                        scoreGrid?.scrollIntoView();
+                        scoreGrid?.scroll(0, scoreGrid?.scrollHeight);
+                        break;
                 }
             }
         };

@@ -2,12 +2,11 @@ import { useState, useEffect } from 'preact/hooks';
 import { penIcons } from './constants.js';
 import { toolbarIcons } from './constants.js';
 import { goPrevCorrectionPage, goNextCorrectionPage } from '../helpers/navigation.js';
-import { updatePenSettings } from '../helpers/actions.js';
+import { updatePenSettings, toggleHeader } from '../helpers/actions.js';
 import { useTimestampDisplay } from '../hooks/useTimestamp.js';
 import { useApp } from '../context/AppContext.jsx';
 
 export const CustomToolbar = () => {
-    const [headerVisible, setHeaderVisible] = useState(true);
     const [shifted, setShifted] = useState(false);
     const { timestampEnabled, setTimestampEnabled } = useApp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
@@ -15,18 +14,6 @@ export const CustomToolbar = () => {
     useEffect(() => {
         updatePenSettings();
     }, []);
-
-    const toggleHeader = () => {
-        const header = document.querySelector('.grading-header');
-        if (!header) return;
-        const isVisible = header.classList.contains('z300');
-        if (isVisible) {
-            header.classList.remove('z300');
-        } else {
-            header.classList.add('z300');
-        }
-        setHeaderVisible(!isVisible);
-    };
 
     const toggleShift = () => {
         const container = document.querySelector('.worksheet-container');

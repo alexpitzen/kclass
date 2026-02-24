@@ -3129,6 +3129,7 @@
     const focusedSet = document.querySelector(".studyBarWrap.kbfocus");
     if (focusedSet) {
       focusedSet.querySelector(".barWrap")?.click();
+      return;
     }
   }
   function isPulldownOpen() {
@@ -3143,6 +3144,12 @@
     } else if (show && !header.classList.contains("z300")) {
       header.classList.add("z300");
     }
+  }
+  function toggleHeader() {
+    const header = document.querySelector(".grading-header");
+    if (!header)
+      return;
+    header?.classList.toggle("z300");
   }
   function doEscape(e3) {
     const printoverlay = document.querySelector(".printoverlay");
@@ -3184,6 +3191,16 @@
     searchInput.dispatchEvent(new Event("input"), {});
     document.querySelector(".search-bar .search-btn")?.click();
     document.querySelector(".studentList .kbfocus")?.classList.remove("kbfocus");
+  }
+  function focusSearch(e3) {
+    const searchInput1 = document.querySelector("input.search-input");
+    if (searchInput1) {
+      searchInput1.focus();
+      searchInput1.value = "";
+      searchInput1.setAttribute("value", "");
+      searchInput1.dispatchEvent(new Event("input"), {});
+    }
+    e3.preventDefault();
   }
   function cycleHighlighter() {
     if (document.querySelector("input[name=penType]:checked")?.value === "thick-highlighter") {
@@ -3545,25 +3562,12 @@
 
   // src/components/CustomToolbar.jsx
   var CustomToolbar = () => {
-    const [headerVisible, setHeaderVisible] = d2(true);
     const [shifted, setShifted] = d2(false);
     const { timestampEnabled, setTimestampEnabled } = useApp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
     y2(() => {
       updatePenSettings();
     }, []);
-    const toggleHeader = () => {
-      const header = document.querySelector(".grading-header");
-      if (!header)
-        return;
-      const isVisible = header.classList.contains("z300");
-      if (isVisible) {
-        header.classList.remove("z300");
-      } else {
-        header.classList.add("z300");
-      }
-      setHeaderVisible(!isVisible);
-    };
     const toggleShift = () => {
       const container = document.querySelector(".worksheet-container");
       if (!container)
@@ -4014,6 +4018,9 @@
   function scrollScore(direction) {
     startScrolling(direction, ".score-grid-all");
   }
+  function isProgressChartFloating() {
+    return !!document.querySelector(".dashboard-progress-chart.isFloating");
+  }
   function startScrolling(direction, item) {
     pageScrolling = true;
     pageSideScrolling = false;
@@ -4174,7 +4181,7 @@ enter: submit/accept dialog`;
               break;
             case "J":
             case "K":
-              startScrolling?.(e3.key === "J" ? 1 : -1, ".drawtab");
+              startScrolling?.(e3.key === "J" ? DOWN : UP, ".drawtab");
               break;
             case "h":
               cycleHighlighter?.();
@@ -4188,7 +4195,7 @@ enter: submit/accept dialog`;
               const select = drawtab?.querySelector("select#stampColorType");
               if (select) {
                 if (e3.key === "r")
-                  select.value = select.value === "Rainbow" ? "Rainbow Fill" : "Rainbow";
+                  select.value = select.value === "Rainbow Fill" ? "Rainbow" : "Rainbow Fill";
                 else if (e3.key === "u")
                   select.value = "Unchanged";
                 else if (e3.key === "c")
@@ -4217,14 +4224,7 @@ enter: submit/accept dialog`;
           switch (e3.key) {
             case "f":
             case "/":
-              const searchInput1 = document.querySelector("input.search-input");
-              if (searchInput1) {
-                searchInput1.focus();
-                searchInput1.value = "";
-                searchInput1.setAttribute("value", "");
-                searchInput1.dispatchEvent(new Event("input"), {});
-              }
-              e3.preventDefault();
+              focusSearch?.(e3);
               break;
             case "c":
               clearSearch?.();
@@ -4287,14 +4287,7 @@ enter: submit/accept dialog`;
           switch (e3.key) {
             case "f":
             case "/":
-              const searchInput2 = document.querySelector("input.search-input");
-              if (searchInput2) {
-                searchInput2.focus();
-                searchInput2.value = "";
-                searchInput2.setAttribute("value", "");
-                searchInput2.dispatchEvent(new Event("input"), {});
-              }
-              e3.preventDefault();
+              focusSearch?.(e3);
               break;
             case "c":
               clearSearch?.();
@@ -4427,15 +4420,12 @@ enter: submit/accept dialog`;
               if (pulldownExists) {
                 if (!wasPulldownOpen) {
                   document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
-                  const header = document.querySelector(".grading-header");
-                  header?.classList.add("z300");
+                  showHeader(true);
                 } else {
-                  const header = document.querySelector(".grading-header");
-                  header?.classList.remove("z300");
+                  showHeader(false);
                 }
               } else {
-                const header = document.querySelector(".grading-header");
-                header?.classList.toggle("z300");
+                toggleHeader();
               }
               break;
             case "J":
@@ -4479,10 +4469,18 @@ enter: submit/accept dialog`;
               document.querySelector(".dashboard-set-left .btn-primary")?.click();
               break;
             case "J":
-              scrollProgressChart?.(DOWN) || scrollDashboard?.(DOWN);
+              if (isProgressChartFloating()) {
+                scrollProgressChart?.(DOWN);
+              } else {
+                scrollDashboard?.(DOWN);
+              }
               break;
             case "K":
-              scrollProgressChart?.(UP) || scrollDashboard?.(UP);
+              if (isProgressChartFloating()) {
+                scrollProgressChart?.(UP);
+              } else {
+                scrollDashboard?.(UP);
+              }
               break;
             case "H":
               sideScrollProgressChart?.(LEFT);
@@ -4524,7 +4522,9 @@ enter: submit/accept dialog`;
               scrollScore?.(UP);
               break;
             case "G":
-              document.querySelector(".score-grid-all")?.scrollIntoView();
+              const scoreGrid = document.querySelector(".score-grid-all");
+              scoreGrid?.scrollIntoView();
+              scoreGrid?.scroll(0, scoreGrid?.scrollHeight);
               break;
           }
         }

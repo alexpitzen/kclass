@@ -31,6 +31,10 @@ function scrollScore(direction) {
     startScrolling(direction, ".score-grid-all");
 }
 
+function isProgressChartFloating() {
+    return !!document.querySelector(".dashboard-progress-chart.isFloating");
+}
+
 function startScrolling(direction, item) {
     pageScrolling = true;
     pageSideScrolling = false;
@@ -127,4 +131,5 @@ export {
     pageScrolling,
     pageScrollingDirection,
     pageSideScrolling,
+    isProgressChartFloating,
 };

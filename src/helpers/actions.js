@@ -61,6 +61,7 @@ function doEnter() {
     const focusedSet = document.querySelector(".studyBarWrap.kbfocus");
     if (focusedSet) {
         focusedSet.querySelector(".barWrap")?.click();
+        return;
     }
 }
 
@@ -76,6 +77,12 @@ function showHeader(show) {
     } else if (show && !header.classList.contains("z300")) {
         header.classList.add("z300");
     }
+}
+
+function toggleHeader() {
+    const header = document.querySelector('.grading-header');
+    if (!header) return;
+    header?.classList.toggle("z300");
 }
 
 function doEscape(e) {
@@ -126,6 +133,17 @@ function clearSearch() {
     searchInput.dispatchEvent(new Event("input"), {});
     document.querySelector(".search-bar .search-btn")?.click();
     document.querySelector(".studentList .kbfocus")?.classList.remove("kbfocus");
+}
+
+function focusSearch(e) {
+    const searchInput1 = document.querySelector("input.search-input");
+    if (searchInput1) {
+        searchInput1.focus();
+        searchInput1.value = "";
+        searchInput1.setAttribute("value", "");
+        searchInput1.dispatchEvent(new Event("input"), {});
+    }
+    e.preventDefault();
 }
 
 function cycleHighlighter() {
@@ -277,8 +295,10 @@ export {
     doEnter,
     isPulldownOpen,
     showHeader,
+    toggleHeader,
     doEscape,
     clearSearch,
+    focusSearch,
     cycleHighlighter,
     selectEraser,
     getPlaybackControl,
