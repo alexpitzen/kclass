@@ -98,7 +98,7 @@ export const DrawTab = ({ stamps: _stamps }) => {
         }
         
         // Update text preview if visible
-        const textPreview = document.querySelector('.textPrintPreviewDiv');
+        const textPreview = document.querySelector('.printPreviewDiv');
         if (textPreview?.checkVisibility()) {
             const scale = newSize / 100;
             const writeDimensions = StampLib.getWriteAllDimensions(text, scale);

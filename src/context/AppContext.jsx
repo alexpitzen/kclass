@@ -13,7 +13,7 @@ export const useApp = () => {
 
 export const AppProvider = ({ children }) => {
     const [drawTabOpen, setDrawTabOpen] = useState(false);
-    const [timestampEnabled, setTimestampEnabled] = useState(false);
+    const [timestampEnabled, setTimestampEnabled] = useState(true);
     const [hdModeEnabled, setHdModeEnabled] = useState(false);
     const [keyboardModeEnabled, setKeyboardModeEnabled] = useState(false);
 

@@ -3521,7 +3521,7 @@
   };
   var AppProvider = ({ children }) => {
     const [drawTabOpen, setDrawTabOpen] = d2(false);
-    const [timestampEnabled, setTimestampEnabled] = d2(false);
+    const [timestampEnabled, setTimestampEnabled] = d2(true);
     const [hdModeEnabled, setHdModeEnabled] = d2(false);
     const [keyboardModeEnabled, setKeyboardModeEnabled] = d2(false);
     const hideDrawTab = q2(() => setDrawTabOpen(false), []);
@@ -4643,7 +4643,7 @@ enter: submit/accept dialog`;
           stampPreview.style.width = `${dims.width * scale}px`;
         }
       }
-      const textPreview = document.querySelector(".textPrintPreviewDiv");
+      const textPreview = document.querySelector(".printPreviewDiv");
       if (textPreview?.checkVisibility()) {
         const scale = newSize / 100;
         const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
@@ -5774,19 +5774,6 @@ body:has(app-atx0010p) .loginAssistantsList {
     margin-top: 0 !important;
   }
   /* Grading */
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
-    /* &:has( */
-    /*     div.worksheet-container.landscape.selected, */
-    /*     div.worksheet-group.landscape.selected */
-    /* ) { */
-    /*     .customToolbar { */
-    /*         left: 676px !important; */
-    /*     } */
-    /*     .worksheet-tool { */
-    /*         margin-left: 671px !important; */
-    /*     } */
-    /* } */
-  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .answersheetToolbarContener {
     top: 23px !important;
     /* left: 386px !important; */
@@ -5849,15 +5836,25 @@ body:has(app-atx0010p) .loginAssistantsList {
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .xallbtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .customToolbar, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .headerZindexBtn {
     display: unset !important;
   }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
+    /* &:has( */
+    /*     div.worksheet-container.landscape.selected, */
+    /*     div.worksheet-group.landscape.selected */
+    /* ) { */
+    /*     .customToolbar { */
+    /*         left: 676px !important; */
+    /*     } */
+    /*     .worksheet-tool { */
+    /*         margin-left: 671px !important; */
+    /*     } */
+    /* } */
+  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .navigator-header-top button {
     padding: 10px 0px !important;
     word-break: break-word !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):not(:has(.content-answer-content)) #studentInfoPullDown {
     min-width: 372px !important;
-  }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-container {
-    margin: 1px 0px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-container > .worksheet-group.single:last-child .worksheet-group-page:last-child .worksheet-container > div {
     margin-top: -1px;
@@ -5869,7 +5866,7 @@ body:has(app-atx0010p) .loginAssistantsList {
     width: 40px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-tool {
-    margin-left: 371px !important;
+    margin-left: 373px !important;
     z-index: 252 !important;
   }
 }
