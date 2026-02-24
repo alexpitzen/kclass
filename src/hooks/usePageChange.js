@@ -78,7 +78,6 @@ export const usePageChange = (options = {}) => {
         }
 
         return () => {
-            console.log("****** calling usePageChange return value")
             loadObserverRef.current?.disconnect();
             pageChangeObserverRef.current?.disconnect();
             const activePage = document.querySelector('.ATD0020P-worksheet-container.selected');
@@ -87,7 +86,6 @@ export const usePageChange = (options = {}) => {
     }, [enabled, setupPageObserver]);
 
     const disable = useCallback(() => {
-        console.log("****** calling usePageChange disable")
         loadObserverRef.current?.disconnect();
         pageChangeObserverRef.current?.disconnect();
     }, []);

@@ -23,8 +23,6 @@ const DrawTabContent = ({ stamps: _stamps }) => {
 
     useKeyboardMode(keyboardModeEnabled, drawTabOpen, toggleDrawTab);
 
-    console.log("***** drawtab render");
-
     const stamps = window.StampLib?.stamps || {};
 
     useEffect(() => {

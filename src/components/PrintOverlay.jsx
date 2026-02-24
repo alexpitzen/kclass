@@ -75,8 +75,6 @@ export const PrintOverlay = () => {
     const overlayRef = useRef(null);
     const previewRef = useRef(null);
 
-    console.log("***** printoverlay render");
-
     useEffect(() => {
         if (!visible || !previewRef.current) return;
 

@@ -15,8 +15,6 @@ export const CustomToolbar = () => {
         updatePenSettings();
     }, []);
 
-    console.log("***** customtoolbar render");
-
     const toggleShift = () => {
         const container = document.querySelector('.worksheet-container');
         if (!container) return;

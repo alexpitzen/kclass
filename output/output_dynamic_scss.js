@@ -3406,7 +3406,6 @@
         setupPageObserver();
       }
       return () => {
-        console.log("****** calling usePageChange return value");
         loadObserverRef.current?.disconnect();
         pageChangeObserverRef.current?.disconnect();
         const activePage = document.querySelector(".ATD0020P-worksheet-container.selected");
@@ -3414,7 +3413,6 @@
       };
     }, [enabled, setupPageObserver]);
     const disable = q2(() => {
-      console.log("****** calling usePageChange disable");
       loadObserverRef.current?.disconnect();
       pageChangeObserverRef.current?.disconnect();
     }, []);
@@ -3503,7 +3501,6 @@
       setTimestamp("");
       setColorClass("");
     }, [clearPageTimestamp]);
-    console.log("****** useTimestamp setup");
     usePageChange({
       enabled,
       onEnable,
@@ -3567,7 +3564,6 @@
     y2(() => {
       updatePenSettings();
     }, []);
-    console.log("***** customtoolbar render");
     const toggleShift = () => {
       const container = document.querySelector(".worksheet-container");
       if (!container)
@@ -3757,7 +3753,6 @@
     const { visible, mode, previewStyle, previewContent, stampData, textValue, color } = state;
     const overlayRef = A2(null);
     const previewRef = A2(null);
-    console.log("***** printoverlay render");
     y2(() => {
       if (!visible || !previewRef.current)
         return;
@@ -4583,7 +4578,6 @@ enter: submit/accept dialog`;
     const stampsRef = A2(null);
     const rootRef = A2(null);
     useKeyboardMode2(keyboardModeEnabled, drawTabOpen, toggleDrawTab);
-    console.log("***** drawtab render");
     const stamps = window.StampLib?.stamps || {};
     y2(() => {
       if (drawTabOpen && textareaRef.current) {

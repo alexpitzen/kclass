@@ -80,8 +80,6 @@ export const useTimestampDisplay = (enabled) => {
         setColorClass('');
     }, [clearPageTimestamp]);
 
-    console.log("****** useTimestamp setup");
-
     usePageChange({
         enabled,
         onEnable,
