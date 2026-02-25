@@ -10,7 +10,7 @@ const DrawTabContent = ({ stamps: _stamps }) => {
     const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardModeContext();
     const { hdModeEnabled, setHdModeEnabled } = useHDModeContext();
 
-    const [penColor, setPenColor] = useState('#ff2200');
+    const penColorRef = useRef('#ff2200');
     const [penType, setPenType] = useState('pen');
     const [text, setText] = useState('');
     const [stampColorType, setStampColorType] = useState('Unchanged');
@@ -20,8 +20,11 @@ const DrawTabContent = ({ stamps: _stamps }) => {
     const textareaRef = useRef(null);
     const stampsRef = useRef(null);
     const rootRef = useRef(null);
+    const colorInputRef = useRef(null);
 
     useKeyboardMode(keyboardModeEnabled, drawTabOpen, toggleDrawTab);
+
+    const getPenColor = () => colorInputRef.current?.value || '#ff2200';
 
     const stamps = window.StampLib?.stamps || {};
 
@@ -99,7 +102,11 @@ const DrawTabContent = ({ stamps: _stamps }) => {
         }
     };
     const handleColorChange = (e) => {
-        setPenColor(e.target.value);
+        penColorRef.current = e.target.value;
+        const textarea = rootRef.current?.querySelector('textarea');
+        if (textarea) {
+            textarea.style.color = e.target.value;
+        }
         updatePenSettings();
     };
     const handlePenTypeChange = (e) => {
@@ -127,7 +134,7 @@ const DrawTabContent = ({ stamps: _stamps }) => {
         const currentSize = slider ? parseInt(slider.value) : 25;
         const scale = currentSize / 100;
         const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
-        showTextPreview(text, writeDimensions, scale, penColor, { x: e.clientX, y: e.clientY });
+        showTextPreview(text, writeDimensions, scale, getPenColor(), { x: e.clientX, y: e.clientY });
     };
 
     const handleStampClick = (stamp, e) => {
@@ -138,7 +145,7 @@ const DrawTabContent = ({ stamps: _stamps }) => {
         const currentSize = slider ? parseInt(slider.value) : 25;
         const scale = (currentSize / 100) * maxScaleFactor;
         const svg = typeof stamp.svg === 'string' ? stamp.svg : stamp.svg.outerHTML;
-        showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, penColor, svg, { x: e.clientX, y: e.clientY });
+        showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, getPenColor(), svg, { x: e.clientX, y: e.clientY });
     };
 
     // Pointer scroll for touch dragging
@@ -248,9 +255,10 @@ const DrawTabContent = ({ stamps: _stamps }) => {
 
                 <span class="stackedButtons">
                     <input
+                        ref={colorInputRef}
                         type="color"
                         class="pencolorbtn"
-                        value={penColor}
+                        defaultValue="#ff2200"
                         onInput={handleColorChange}
                         accessKey="c"
                     />
@@ -291,7 +299,6 @@ const DrawTabContent = ({ stamps: _stamps }) => {
                         name="stampTextArea"
                         value={text}
                         onInput={(e) => setText(e.target.value)}
-                        style={{ color: penColor }}
                     />
                     <button class="textprintbtn squarebtn" onClick={(e) => handleTextStamp(e)}>
                         T

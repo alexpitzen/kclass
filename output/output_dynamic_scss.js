@@ -4568,7 +4568,7 @@ enter: submit/accept dialog`;
     const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
     const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardMode();
     const { hdModeEnabled, setHdModeEnabled } = useHDMode();
-    const [penColor, setPenColor] = d2("#ff2200");
+    const penColorRef = A2("#ff2200");
     const [penType, setPenType] = d2("pen");
     const [text, setText] = d2("");
     const [stampColorType, setStampColorType] = d2("Unchanged");
@@ -4577,7 +4577,9 @@ enter: submit/accept dialog`;
     const textareaRef = A2(null);
     const stampsRef = A2(null);
     const rootRef = A2(null);
+    const colorInputRef = A2(null);
     useKeyboardMode2(keyboardModeEnabled, drawTabOpen, toggleDrawTab);
+    const getPenColor = () => colorInputRef.current?.value || "#ff2200";
     const stamps = window.StampLib?.stamps || {};
     y2(() => {
       if (drawTabOpen && textareaRef.current) {
@@ -4640,7 +4642,11 @@ enter: submit/accept dialog`;
       }
     };
     const handleColorChange = (e3) => {
-      setPenColor(e3.target.value);
+      penColorRef.current = e3.target.value;
+      const textarea = rootRef.current?.querySelector("textarea");
+      if (textarea) {
+        textarea.style.color = e3.target.value;
+      }
       updatePenSettings();
     };
     const handlePenTypeChange = (e3) => {
@@ -4664,7 +4670,7 @@ enter: submit/accept dialog`;
       const currentSize = slider ? parseInt(slider.value) : 25;
       const scale = currentSize / 100;
       const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
-      showTextPreview(text, writeDimensions, scale, penColor, { x: e3.clientX, y: e3.clientY });
+      showTextPreview(text, writeDimensions, scale, getPenColor(), { x: e3.clientX, y: e3.clientY });
     };
     const handleStampClick = (stamp2, e3) => {
       hide();
@@ -4674,7 +4680,7 @@ enter: submit/accept dialog`;
       const currentSize = slider ? parseInt(slider.value) : 25;
       const scale = currentSize / 100 * maxScaleFactor;
       const svg = typeof stamp2.svg === "string" ? stamp2.svg : stamp2.svg.outerHTML;
-      showStampPreview(stamp2, stampDimensions, maxScaleFactor, scale, penColor, svg, { x: e3.clientX, y: e3.clientY });
+      showStampPreview(stamp2, stampDimensions, maxScaleFactor, scale, getPenColor(), svg, { x: e3.clientX, y: e3.clientY });
     };
     y2(() => {
       const parent = rootRef.current;
@@ -4778,9 +4784,10 @@ enter: submit/accept dialog`;
           /* @__PURE__ */ u3(
             "input",
             {
+              ref: colorInputRef,
               type: "color",
               class: "pencolorbtn",
-              value: penColor,
+              defaultValue: "#ff2200",
               onInput: handleColorChange,
               accessKey: "c"
             }
@@ -4814,8 +4821,7 @@ enter: submit/accept dialog`;
               ref: textareaRef,
               name: "stampTextArea",
               value: text,
-              onInput: (e3) => setText(e3.target.value),
-              style: { color: penColor }
+              onInput: (e3) => setText(e3.target.value)
             }
           ),
           /* @__PURE__ */ u3("button", { class: "textprintbtn squarebtn", onClick: (e3) => handleTextStamp(e3), children: "T" })
