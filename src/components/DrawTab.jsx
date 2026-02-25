@@ -11,10 +11,9 @@ const DrawTabContent = ({ stamps: _stamps }) => {
     const { hdModeEnabled, setHdModeEnabled } = useHDModeContext();
 
     const penColorRef = useRef('#ff2200');
-    const [penType, setPenType] = useState('pen');
-    const [text, setText] = useState('');
-    const [stampColorType, setStampColorType] = useState('Unchanged');
-    const [rainbowSpeed, setRainbowSpeed] = useState(1);
+    const penTypeRef = useRef('pen');
+    const stampColorTypeRef = useRef('Unchanged');
+    const rainbowSpeedRef = useRef(1);
 
     const { showStampPreview, showTextPreview } = usePrintOverlay();
     const textareaRef = useRef(null);
@@ -33,7 +32,7 @@ const DrawTabContent = ({ stamps: _stamps }) => {
             textareaRef.current.style.height = '';
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
         }
-    }, [text, drawTabOpen]);
+    }, [drawTabOpen]);
 
     useEffect(() => {
         document.body.classList.toggle('drawtab-hidden', !drawTabOpen);
@@ -96,7 +95,8 @@ const DrawTabContent = ({ stamps: _stamps }) => {
         const textPreview = document.querySelector('.printPreviewDiv');
         if (textPreview?.checkVisibility()) {
             const scale = newSize / 100;
-            const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
+            const textareaVal = textareaRef.current?.value || '';
+            const writeDimensions = StampLib.getWriteAllDimensions(textareaVal, scale);
             textPreview.style.height = `${writeDimensions.height}px`;
             textPreview.style.width = `${writeDimensions.width}px`;
         }
@@ -110,11 +110,23 @@ const DrawTabContent = ({ stamps: _stamps }) => {
         updatePenSettings();
     };
     const handlePenTypeChange = (e) => {
-        setPenType(e.target.value);
+        penTypeRef.current = e.target.value;
+        // Update checked state manually
+        const radios = rootRef.current?.querySelectorAll('input[name="penType"]');
+        radios?.forEach(r => r.checked = r.value === e.target.value);
         updatePenSettings();
     };
-    const handleStampColorChange = (e) => setStampColorType(e.target.value);
-    const handleRainbowSpeedChange = (e) => setRainbowSpeed(e.target.value);
+    const handleStampColorChange = (e) => {
+        stampColorTypeRef.current = e.target.value;
+        // Update disabled state of rainbowspeed input
+        const rainbowSpeedInput = rootRef.current?.querySelector('.rainbowspeed');
+        if (rainbowSpeedInput) {
+            rainbowSpeedInput.disabled = e.target.value !== 'Rainbow' && e.target.value !== 'Rainbow Fill';
+        }
+    };
+    const handleRainbowSpeedChange = (e) => {
+        rainbowSpeedRef.current = parseInt(e.target.value);
+    };
 
     const handleUnlock = () => {
         stamp.unlockPage();
@@ -133,8 +145,9 @@ const DrawTabContent = ({ stamps: _stamps }) => {
         const slider = rootRef.current?.querySelector('.sizeslider');
         const currentSize = slider ? parseInt(slider.value) : 25;
         const scale = currentSize / 100;
-        const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
-        showTextPreview(text, writeDimensions, scale, getPenColor(), { x: e.clientX, y: e.clientY });
+        const textareaVal = textareaRef.current?.value || '';
+        const writeDimensions = StampLib.getWriteAllDimensions(textareaVal, scale);
+        showTextPreview(textareaVal, writeDimensions, scale, getPenColor(), { x: e.clientX, y: e.clientY });
     };
 
     const handleStampClick = (stamp, e) => {
@@ -276,13 +289,13 @@ const DrawTabContent = ({ stamps: _stamps }) => {
                                     type="radio"
                                     name="penType"
                                     value={type.value}
-                                    checked={penType === type.value}
+                                    defaultChecked={type.value === 'pen'}
                                     onChange={handlePenTypeChange}
                                 />
                             {type.label}
                         </label>
-                    ))}
-                </fieldset>
+                        ))}
+                    </fieldset>
 
                 <span class="stackedButtons right">
                     <button class="closeDrawTab squarebtn" onClick={hide} title="Close the draw tab">
@@ -297,8 +310,7 @@ const DrawTabContent = ({ stamps: _stamps }) => {
                     <textarea
                         ref={textareaRef}
                         name="stampTextArea"
-                        value={text}
-                        onInput={(e) => setText(e.target.value)}
+                        defaultValue=""
                     />
                     <button class="textprintbtn squarebtn" onClick={(e) => handleTextStamp(e)}>
                         T
@@ -307,11 +319,11 @@ const DrawTabContent = ({ stamps: _stamps }) => {
 
                 <label>
                     Stamp Color:
-                    <select id="stampColorType" value={stampColorType} onChange={handleStampColorChange}>
+                    <select id="stampColorType" onChange={handleStampColorChange}>
+                        <option value="Unchanged">Unchanged</option>
                         <option value="Color Picker">Color Picker</option>
                         <option value="Rainbow">Rainbow</option>
                         <option value="Rainbow Fill">Rainbow Fill</option>
-                        <option value="Unchanged">Unchanged</option>
                     </select>
                 </label>
                 <input
@@ -319,9 +331,9 @@ const DrawTabContent = ({ stamps: _stamps }) => {
                     class="rainbowspeed"
                     min="1"
                     max="130"
-                    value={rainbowSpeed}
+                    defaultValue="1"
                     onInput={handleRainbowSpeedChange}
-                    disabled={stampColorType !== 'Rainbow' && stampColorType !== 'Rainbow Fill'}
+                    disabled
                 />
             </div>
 

@@ -4569,10 +4569,9 @@ enter: submit/accept dialog`;
     const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardMode();
     const { hdModeEnabled, setHdModeEnabled } = useHDMode();
     const penColorRef = A2("#ff2200");
-    const [penType, setPenType] = d2("pen");
-    const [text, setText] = d2("");
-    const [stampColorType, setStampColorType] = d2("Unchanged");
-    const [rainbowSpeed, setRainbowSpeed] = d2(1);
+    const penTypeRef = A2("pen");
+    const stampColorTypeRef = A2("Unchanged");
+    const rainbowSpeedRef = A2(1);
     const { showStampPreview, showTextPreview } = usePrintOverlay();
     const textareaRef = A2(null);
     const stampsRef = A2(null);
@@ -4586,7 +4585,7 @@ enter: submit/accept dialog`;
         textareaRef.current.style.height = "";
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
       }
-    }, [text, drawTabOpen]);
+    }, [drawTabOpen]);
     y2(() => {
       document.body.classList.toggle("drawtab-hidden", !drawTabOpen);
     }, [drawTabOpen]);
@@ -4636,7 +4635,8 @@ enter: submit/accept dialog`;
       const textPreview = document.querySelector(".printPreviewDiv");
       if (textPreview?.checkVisibility()) {
         const scale = newSize / 100;
-        const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
+        const textareaVal = textareaRef.current?.value || "";
+        const writeDimensions = StampLib.getWriteAllDimensions(textareaVal, scale);
         textPreview.style.height = `${writeDimensions.height}px`;
         textPreview.style.width = `${writeDimensions.width}px`;
       }
@@ -4650,11 +4650,21 @@ enter: submit/accept dialog`;
       updatePenSettings();
     };
     const handlePenTypeChange = (e3) => {
-      setPenType(e3.target.value);
+      penTypeRef.current = e3.target.value;
+      const radios = rootRef.current?.querySelectorAll('input[name="penType"]');
+      radios?.forEach((r3) => r3.checked = r3.value === e3.target.value);
       updatePenSettings();
     };
-    const handleStampColorChange = (e3) => setStampColorType(e3.target.value);
-    const handleRainbowSpeedChange = (e3) => setRainbowSpeed(e3.target.value);
+    const handleStampColorChange = (e3) => {
+      stampColorTypeRef.current = e3.target.value;
+      const rainbowSpeedInput = rootRef.current?.querySelector(".rainbowspeed");
+      if (rainbowSpeedInput) {
+        rainbowSpeedInput.disabled = e3.target.value !== "Rainbow" && e3.target.value !== "Rainbow Fill";
+      }
+    };
+    const handleRainbowSpeedChange = (e3) => {
+      rainbowSpeedRef.current = parseInt(e3.target.value);
+    };
     const handleUnlock = () => {
       stamp.unlockPage();
       hide();
@@ -4669,8 +4679,9 @@ enter: submit/accept dialog`;
       const slider = rootRef.current?.querySelector(".sizeslider");
       const currentSize = slider ? parseInt(slider.value) : 25;
       const scale = currentSize / 100;
-      const writeDimensions = StampLib.getWriteAllDimensions(text, scale);
-      showTextPreview(text, writeDimensions, scale, getPenColor(), { x: e3.clientX, y: e3.clientY });
+      const textareaVal = textareaRef.current?.value || "";
+      const writeDimensions = StampLib.getWriteAllDimensions(textareaVal, scale);
+      showTextPreview(textareaVal, writeDimensions, scale, getPenColor(), { x: e3.clientX, y: e3.clientY });
     };
     const handleStampClick = (stamp2, e3) => {
       hide();
@@ -4803,7 +4814,7 @@ enter: submit/accept dialog`;
                 type: "radio",
                 name: "penType",
                 value: type.value,
-                checked: penType === type.value,
+                defaultChecked: type.value === "pen",
                 onChange: handlePenTypeChange
               }
             ),
@@ -4820,19 +4831,18 @@ enter: submit/accept dialog`;
             {
               ref: textareaRef,
               name: "stampTextArea",
-              value: text,
-              onInput: (e3) => setText(e3.target.value)
+              defaultValue: ""
             }
           ),
           /* @__PURE__ */ u3("button", { class: "textprintbtn squarebtn", onClick: (e3) => handleTextStamp(e3), children: "T" })
         ] }),
         /* @__PURE__ */ u3("label", { children: [
           "Stamp Color:",
-          /* @__PURE__ */ u3("select", { id: "stampColorType", value: stampColorType, onChange: handleStampColorChange, children: [
+          /* @__PURE__ */ u3("select", { id: "stampColorType", onChange: handleStampColorChange, children: [
+            /* @__PURE__ */ u3("option", { value: "Unchanged", children: "Unchanged" }),
             /* @__PURE__ */ u3("option", { value: "Color Picker", children: "Color Picker" }),
             /* @__PURE__ */ u3("option", { value: "Rainbow", children: "Rainbow" }),
-            /* @__PURE__ */ u3("option", { value: "Rainbow Fill", children: "Rainbow Fill" }),
-            /* @__PURE__ */ u3("option", { value: "Unchanged", children: "Unchanged" })
+            /* @__PURE__ */ u3("option", { value: "Rainbow Fill", children: "Rainbow Fill" })
           ] })
         ] }),
         /* @__PURE__ */ u3(
@@ -4842,9 +4852,9 @@ enter: submit/accept dialog`;
             class: "rainbowspeed",
             min: "1",
             max: "130",
-            value: rainbowSpeed,
+            defaultValue: "1",
             onInput: handleRainbowSpeedChange,
-            disabled: stampColorType !== "Rainbow" && stampColorType !== "Rainbow Fill"
+            disabled: true
           }
         )
       ] }),
