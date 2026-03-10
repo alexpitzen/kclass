@@ -123,17 +123,17 @@
             }
         }
         &:has(
-            div.worksheet-container.landscape.selected,
-            div.worksheet-group.landscape.selected
+            div.worksheet-container.landscape,
+            div.worksheet-group.landscape
         ) {
             .content-detail {
-                min-width: 550px !important;
+                min-width: 616px !important;
             }
             .customToolbar {
-                left: 515px !important;
+                left: 625px !important;
             }
             .worksheet-tool {
-                margin-left: 510px !important;
+                margin-left: 0px !important;
             }
         }
     }

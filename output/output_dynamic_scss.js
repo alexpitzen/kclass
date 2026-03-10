@@ -4882,8 +4882,6 @@ enter: submit/accept dialog`;
   // src/components/Misc.jsx
   var LoginAssistantsList = () => {
     const isAndroid = /[Aa]ndroid/.test(navigator.userAgent);
-    if (isAndroid)
-      return null;
     const logins = [
       { id: 1, name: "Dhanya" },
       { id: 2, name: "Gowri" },
@@ -4898,9 +4896,10 @@ enter: submit/accept dialog`;
       { id: 13, name: "Arsheen" },
       { id: 14, name: "Parthini" },
       { id: 15, name: "Parvathy" },
-      { id: 16, name: "Yen" }
+      { id: 16, name: "Yen" },
+      { id: 17, name: "Priya" }
     ];
-    return /* @__PURE__ */ u3("details", { class: "loginAssistantsList", open: true, children: [
+    return /* @__PURE__ */ u3("details", { class: "loginAssistantsList", open: !isAndroid, children: [
       /* @__PURE__ */ u3("summary", { children: "Logins" }),
       /* @__PURE__ */ u3("ul", { children: logins.map((login) => /* @__PURE__ */ u3("li", { children: [
         login.id,
@@ -5684,17 +5683,17 @@ body:has(app-atx0010p) .loginAssistantsList {
     /* for this size, only show if in single page mode */
     display: unset !important;
   }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
-  div.worksheet-group.landscape.selected) .content-detail {
-    min-width: 550px !important;
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape,
+  div.worksheet-group.landscape) .content-detail {
+    min-width: 616px !important;
   }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
-  div.worksheet-group.landscape.selected) .customToolbar {
-    left: 515px !important;
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape,
+  div.worksheet-group.landscape) .customToolbar {
+    left: 625px !important;
   }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape.selected,
-  div.worksheet-group.landscape.selected) .worksheet-tool {
-    margin-left: 510px !important;
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(div.worksheet-container.landscape,
+  div.worksheet-group.landscape) .worksheet-tool {
+    margin-left: 0px !important;
   }
   /* student info page */
   app-ate0020p .student-profile {
@@ -5829,6 +5828,14 @@ body:has(app-atx0010p) .loginAssistantsList {
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)) .z300 {
     z-index: 300 !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)):has(div.worksheet-container.landscape,
+  div.worksheet-group.landscape) .customToolbar {
+    left: 620px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)):has(div.worksheet-container.landscape,
+  div.worksheet-group.landscape) .worksheet-tool {
+    margin-left: 615px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-menu-scroll {
     bottom: 0 !important;

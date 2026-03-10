@@ -1,6 +1,5 @@
 export const LoginAssistantsList = () => {
     const isAndroid = /[Aa]ndroid/.test(navigator.userAgent);
-    if (isAndroid) return null;
 
     const logins = [
         { id: 1, name: 'Dhanya' },
@@ -17,10 +16,11 @@ export const LoginAssistantsList = () => {
         { id: 14, name: 'Parthini' },
         { id: 15, name: 'Parvathy' },
         { id: 16, name: 'Yen' },
+        { id: 17, name: 'Priya' },
     ];
 
     return (
-        <details class="loginAssistantsList" open>
+        <details class="loginAssistantsList" open={!isAndroid}>
             <summary>Logins</summary>
             <ul>
                 {logins.map(login => (

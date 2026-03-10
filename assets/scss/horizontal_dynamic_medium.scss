@@ -68,6 +68,17 @@
             .z300 {
                 z-index: 300 !important;
             }
+            &:has(
+                div.worksheet-container.landscape,
+                div.worksheet-group.landscape
+            ) {
+                .customToolbar {
+                    left: 620px !important;
+                }
+                .worksheet-tool {
+                    margin-left: 615px !important;
+                }
+            }
         }
         .content-menu-scroll {
             bottom: 0 !important;
