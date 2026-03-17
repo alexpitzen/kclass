@@ -29,8 +29,7 @@ const DrawTabContent = ({ stamps: _stamps }) => {
 
     useEffect(() => {
         if (drawTabOpen && textareaRef.current) {
-            textareaRef.current.style.height = '';
-            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+            updateTextAreaSize();
         }
     }, [drawTabOpen]);
 
@@ -51,6 +50,13 @@ const DrawTabContent = ({ stamps: _stamps }) => {
         }
     };
 
+    const updateTextAreaSize = () => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = '';
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
+    };
+
     // Expose toggle globally for CustomToolbar
     useEffect(() => {
         window.__toggleDrawTab = toggle;
@@ -65,20 +71,16 @@ const DrawTabContent = ({ stamps: _stamps }) => {
 
     const handleSizeChange = (e) => {
         const newSize = parseInt(e.target.value);
-        
+
         // Update CSS variable for sizeslider
         const drawtab = rootRef.current;
         if (drawtab) {
             drawtab.style.setProperty('--sizeslider', `${newSize} / 100`);
         }
-        
+
         // Update textarea size
-        const textarea = drawtab?.querySelector('textarea');
-        if (textarea) {
-            textarea.style.height = '';
-            textarea.style.height = `${textarea.scrollHeight}px`;
-        }
-        
+        updateTextAreaSize();
+
         // Update stamp preview if visible
         const stampPreview = document.querySelector('.stampPrintPreviewDiv');
         if (stampPreview?.checkVisibility()) {
@@ -90,7 +92,7 @@ const DrawTabContent = ({ stamps: _stamps }) => {
                 stampPreview.style.width = `${dims.width * scale}px`;
             }
         }
-        
+
         // Update text preview if visible
         const textPreview = document.querySelector('.printPreviewDiv');
         if (textPreview?.checkVisibility()) {
@@ -311,6 +313,8 @@ const DrawTabContent = ({ stamps: _stamps }) => {
                         ref={textareaRef}
                         name="stampTextArea"
                         defaultValue=""
+                        onInput={updateTextAreaSize}
+                        style="color:#FF2200"
                     />
                     <button class="textprintbtn squarebtn" onClick={(e) => handleTextStamp(e)}>
                         T

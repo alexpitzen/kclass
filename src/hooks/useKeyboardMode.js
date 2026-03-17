@@ -66,6 +66,267 @@ enter: submit/accept dialog`;
 
 export const keyboardHelpText = keyboardHelp;
 
+const handleDrawTabKey = (e) => {
+    const drawtab = document.querySelector('.drawtab');
+    switch (e.key) {
+        case "d":
+        case "Escape":
+            window.__hideDrawTab?.();
+            break;
+        case "-":
+        case "+":
+        case "=":
+            const slider = drawtab?.querySelector(".sizeslider");
+            if (slider) {
+                e.key === "-" ? slider.value-- : slider.value++;
+                slider.dispatchEvent(new Event("input"));
+            }
+            break;
+        case "J":
+        case "K":
+            startScrolling?.(e.key === "J" ? DOWN : UP, ".drawtab");
+            break;
+        case "h":
+            cycleHighlighter?.();
+            break;
+        case "p":
+            document.querySelector("input[name=penType][value=pen]")?.click();
+            break;
+        case "r":
+        case "u":
+        case "c": {
+            const select = drawtab?.querySelector("select#stampColorType");
+            if (select) {
+                if (e.key === "r") select.value = select.value === "Rainbow Fill" ? "Rainbow" : "Rainbow Fill";
+                else if (e.key === "u") select.value = "Unchanged";
+                else if (e.key === "c") select.value = "Color Picker";
+                select.dispatchEvent(new Event("change"));
+            }
+            break;
+        }
+        case "t":
+            const textarea = drawtab?.querySelector("textarea");
+            if (textarea) {
+                textarea.focus();
+                textarea.select();
+                e.preventDefault();
+            }
+            break;
+    }
+    return;
+};
+
+const handleMarkingListKey = (e) => {
+    switch (e.key) {
+        case "f":
+        case "/":
+            focusSearch?.(e);
+            break;
+        case "c":
+            clearSearch?.();
+            break;
+        case "C":
+            document.querySelectorAll(".studentRow .checkbox.checked").forEach(c => c.click());
+            break;
+        case "g":
+            document.querySelector(".studentList:not(.tabItem)")?.scrollTo(0, 0);
+            break;
+        case "G":
+            const sl1 = document.querySelector(".studentList:not(.tabItem)");
+            sl1?.scrollTo(0, sl1.scrollHeight - sl1.clientHeight);
+            break;
+        case "J": scrollStudents?.(DOWN); break;
+        case "K": scrollStudents?.(UP); break;
+        case "j": doMarkingListJK?.(DOWN); break;
+        case "k": doMarkingListJK?.(UP); break;
+        case "h": doMarkingListHL?.(LEFT); break;
+        case "l": doMarkingListHL?.(RIGHT); break;
+        case " ":
+            document.querySelector(".studentList .checkbox.kbfocus")?.click();
+            e.preventDefault();
+            break;
+        case "S": document.querySelector(".studentList.tabItem")?.click(); break;
+        case "r": document.querySelector(".studentListUpdateButton")?.click(); break;
+        case "A": document.querySelector("app-student-list-filter-capsule .all")?.click(); break;
+        case "M": document.querySelector("app-student-list-filter-capsule .math")?.click(); break;
+        case "R": document.querySelector("app-student-list-filter-capsule .KNA")?.click(); break;
+        case "Enter":
+            doEnter?.();
+            break;
+        case "Escape": doEscape?.(e); break;
+    }
+};
+
+const handleStudentListKey = (e) => {
+    switch (e.key) {
+        case "f":
+        case "/":
+            focusSearch?.(e);
+            break;
+        case "c": clearSearch?.(); break;
+        case "M": document.querySelector(".markingList.tabItem")?.click(); break;
+        case "J": scrollStudents?.(DOWN); break;
+        case "K": scrollStudents?.(UP); break;
+        case "r": document.querySelector(".studentListUpdateButton")?.click(); break;
+    }
+};
+
+const handleGradingKey = (e) => {
+    switch (e.key) {
+        case "j": doDown?.(); break;
+        case "k": doUp?.(); break;
+        case "g": document.querySelectorAll(".worksheet-navigator-page span:not(.disabled)")[0]?.click(); break;
+        case "G": goLastPage?.(); break;
+        case "X": 
+            const xallbtn = document.querySelector(".xallbtn");
+            xallbtn?.click();
+            xallbtn?.blur();
+            break;
+        case "x": matchPreviousMarkings?.(); break;
+        case "c": clearMarkboxs?.(); break;
+        case "Backspace": doBackspace?.(); break;
+        case "n": goNextCorrectionPage?.(); break;
+        case "N": goPrevCorrectionPage?.(); break;
+        case "p": doP?.(); break;
+        case "P":
+            const playback = getPlaybackControl?.();
+            if (playback) {
+                playback.querySelector(".play,.pause")?.click();
+                return;
+            } else {
+                StampLib.expandToolbar();
+                document.querySelector(".grading-toolbar-box .grading-toolbar .play")?.click();
+                StampLib.collapseToolbar();
+            }
+            break;
+        case "s": doS?.(); break;
+        case "u":
+        {
+            const atd = StampLib.getAtd();
+            if (atd) {
+                atd.undoInk();
+                atd.penUpFunc(atd); // updates the models in angular
+            }
+            break;
+        }
+        case "U": StampLib.undoLastWriteAll?.(); break;
+        case "r":
+        {
+            const atd = StampLib.getAtd();
+            if (atd) {
+                atd.redoInk();
+                atd.penUpFunc(atd); // updates the models in angular
+            }
+            break;
+        }
+        case "2":
+        case "@": do2?.(e.key); break;
+        case "8":
+        case "*": do8?.(e.key); break;
+        case "A": document.querySelector("#AnswerDisplayButton")?.click(); break;
+        case "Enter": doEnter?.(); break;
+        case "Escape": doEscape?.(e); break;
+        case "d":
+            e.preventDefault();
+            window.__showDrawTab?.();
+            break;
+        case "D": document.querySelector(".other-worksheet-button")?.click(); break;
+        case "h": cycleHighlighter?.(); break;
+        case "e": selectEraser?.(); break;
+        case "R": clickReading?.(); break;
+        case "M": clickMath?.(); break;
+        case "H":
+            const wasPulldownOpen = isPulldownOpen?.();
+            const pulldownExists = !!document.querySelector("#studentInfoPullDown.student-info-btn");
+            document.querySelector("#studentInfoPullDown")?.click();
+            document.querySelector("#studentInfoPullDown")?.blur();
+            document.querySelectorAll("#customPulldown > .kbfocus").forEach(p => p.classList.remove("kbfocus"));
+            if (pulldownExists) {
+                if (!wasPulldownOpen) {
+                    document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
+                    showHeader(true);
+                } else {
+                    showHeader(false);
+                }
+            } else {
+                toggleHeader();
+            }
+            break;
+        case "J": scrollAnswer?.(DOWN); break;
+        case "K": scrollAnswer?.(UP); break;
+        case "-":
+        case "+":
+        case "=":
+            const drawtab2 = document.querySelector('.drawtab');
+            const printoverlay = document.querySelector('.printoverlay');
+            const slider2 = (drawtab2?.checkVisibility() || printoverlay?.checkVisibility())
+                ? drawtab2?.querySelector(".sizeslider")
+                : null;
+            if (slider2) {
+                e.key === "-" ? slider2.value-- : slider2.value++;
+                slider2.dispatchEvent(new Event("input"));
+            } else {
+                doKeyboardDefault?.(e.key);
+            }
+            break;
+        default: doKeyboardDefault?.(e.key); break;
+    }
+};
+
+const handleStudentProfileKey = (e) => {
+    switch (e.key) {
+        case "R":
+            if (!document.querySelector("loading-spinner div")) {
+                document.querySelector(".btn-close")?.click();
+                clickReading?.();
+            }
+            break;
+        case "M":
+            if (!document.querySelector("loading-spinner div")) {
+                document.querySelector(".btn-close")?.click();
+                clickMath?.();
+            }
+            break;
+        case "S": document.querySelector(".dashboard-set-left .btn-primary")?.click(); break;
+        case "J":
+            if (isProgressChartFloating()) {
+                scrollProgressChart?.(DOWN);
+            } else {
+                scrollDashboard?.(DOWN);
+            }
+            break;
+        case "K":
+            if (isProgressChartFloating()) {
+                scrollProgressChart?.(UP);
+            } else {
+                scrollDashboard?.(UP);
+            }
+            break;
+        case "H": sideScrollProgressChart?.(LEFT); break;
+        case "L": sideScrollProgressChart?.(RIGHT); break;
+        case "p": document.querySelector(".dashboard-progress-chart .finally > .icon")?.click(); break;
+        case "e": Array.from(document.querySelectorAll(".dashboard-menu-right .options-btn")).find(b => b.innerHTML?.trim() === "Edit")?.click(); break;
+        case "Backspace": doBackspace?.(); break;
+        case "Escape": doEscape?.(e); break;
+        case "Enter": doEnter?.(); break;
+    }
+};
+
+const handleStudyRecordsKey = (e) => {
+    switch (e.key) {
+        case "R": clickReading?.(); break;
+        case "M": clickMath?.(); break;
+        case "Backspace": doBackspace?.(); break;
+        case "J": scrollScore?.(DOWN); break;
+        case "K": scrollScore?.(UP); break;
+        case "G":
+            const scoreGrid = document.querySelector(".score-grid-all");
+            scoreGrid?.scrollIntoView();
+            scoreGrid?.scroll(0, scoreGrid?.scrollHeight);
+            break;
+    }
+};
+
 export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
     useEffect(() => {
         if (!enabled) return;
@@ -103,52 +364,7 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
             if (e.altKey || e.ctrlKey || e.metaKey) return;
 
             if (drawTabOpen) {
-                const drawtab = document.querySelector('.drawtab');
-                switch (e.key) {
-                    case "d":
-                    case "Escape":
-                        window.__hideDrawTab?.();
-                        break;
-                    case "-":
-                    case "+":
-                    case "=":
-                        const slider = drawtab?.querySelector(".sizeslider");
-                        if (slider) {
-                            e.key === "-" ? slider.value-- : slider.value++;
-                            slider.dispatchEvent(new Event("input"));
-                        }
-                        break;
-                    case "J":
-                    case "K":
-                        startScrolling?.(e.key === "J" ? DOWN : UP, ".drawtab");
-                        break;
-                    case "h":
-                        cycleHighlighter?.();
-                        break;
-                    case "p":
-                        document.querySelector("input[name=penType][value=pen]")?.click();
-                        break;
-                    case "r":
-                    case "u":
-                    case "c": {
-                        const select = drawtab?.querySelector("select#stampColorType");
-                        if (select) {
-                            if (e.key === "r") select.value = select.value === "Rainbow Fill" ? "Rainbow" : "Rainbow Fill";
-                            else if (e.key === "u") select.value = "Unchanged";
-                            else if (e.key === "c") select.value = "Color Picker";
-                            select.dispatchEvent(new Event("change"));
-                        }
-                        break;
-                    }
-                    case "t":
-                        const textarea = drawtab?.querySelector("textarea");
-                        if (textarea) {
-                            textarea.focus();
-                            textarea.select();
-                            e.preventDefault();
-                        }
-                        break;
-                }
+                handleDrawTabKey(e);
                 return;
             }
 
@@ -159,206 +375,15 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
             const studyRecords = document.querySelector(".ATD0010P-root");
 
             if (markingList) {
-                switch (e.key) {
-                    case "f":
-                    case "/":
-                        focusSearch?.(e);
-                        break;
-                    case "c":
-                        clearSearch?.();
-                        break;
-                    case "C":
-                        document.querySelectorAll(".studentRow .checkbox.checked").forEach(c => c.click());
-                        break;
-                    case "g":
-                        document.querySelector(".studentList:not(.tabItem)")?.scrollTo(0, 0);
-                        break;
-                    case "G":
-                        const sl1 = document.querySelector(".studentList:not(.tabItem)");
-                        sl1?.scrollTo(0, sl1.scrollHeight - sl1.clientHeight);
-                        break;
-                    case "J": scrollStudents?.(DOWN); break;
-                    case "K": scrollStudents?.(UP); break;
-                    case "j": doMarkingListJK?.(DOWN); break;
-                    case "k": doMarkingListJK?.(UP); break;
-                    case "h": doMarkingListHL?.(LEFT); break;
-                    case "l": doMarkingListHL?.(RIGHT); break;
-                    case " ":
-                        document.querySelector(".studentList .checkbox.kbfocus")?.click();
-                        e.preventDefault();
-                        break;
-                    case "S": document.querySelector(".studentList.tabItem")?.click(); break;
-                    case "r": document.querySelector(".studentListUpdateButton")?.click(); break;
-                    case "A": document.querySelector("app-student-list-filter-capsule .all")?.click(); break;
-                    case "M": document.querySelector("app-student-list-filter-capsule .math")?.click(); break;
-                    case "R": document.querySelector("app-student-list-filter-capsule .KNA")?.click(); break;
-                    case "Enter":
-                        doEnter?.();
-                        break;
-                    case "Escape": doEscape?.(e); break;
-                }
+                handleMarkingListKey(e);
             } else if (studentList) {
-                switch (e.key) {
-                    case "f":
-                    case "/":
-                        focusSearch?.(e);
-                        break;
-                    case "c": clearSearch?.(); break;
-                    case "M": document.querySelector(".markingList.tabItem")?.click(); break;
-                    case "J": scrollStudents?.(DOWN); break;
-                    case "K": scrollStudents?.(UP); break;
-                    case "r": document.querySelector(".studentListUpdateButton")?.click(); break;
-                }
+                handleStudentListKey(e);
             } else if (worksheet) {
-                switch (e.key) {
-                    case "j": doDown?.(); break;
-                    case "k": doUp?.(); break;
-                    case "g": document.querySelectorAll(".worksheet-navigator-page span:not(.disabled)")[0]?.click(); break;
-                    case "G": goLastPage?.(); break;
-                    case "X": 
-                        const xallbtn = document.querySelector(".xallbtn");
-                        xallbtn?.click();
-                        xallbtn?.blur();
-                        break;
-                    case "x": matchPreviousMarkings?.(); break;
-                    case "c": clearMarkboxs?.(); break;
-                    case "Backspace": doBackspace?.(); break;
-                    case "n": goNextCorrectionPage?.(); break;
-                    case "N": goPrevCorrectionPage?.(); break;
-                    case "p": doP?.(); break;
-                    case "P":
-                        const playback = getPlaybackControl?.();
-                        if (playback) {
-                            playback.querySelector(".play,.pause")?.click();
-                            return;
-                        } else {
-                            StampLib.expandToolbar();
-                            document.querySelector(".grading-toolbar-box .grading-toolbar .play")?.click();
-                            StampLib.collapseToolbar();
-                        }
-                        break;
-                    case "s": doS?.(); break;
-                    case "u":
-                    {
-                        const atd = StampLib.getAtd();
-                        if (atd) {
-                            atd.undoInk();
-                            atd.penUpFunc(atd); // updates the models in angular
-                        }
-                        break;
-                    }
-                    case "U": StampLib.undoLastWriteAll?.(); break;
-                    case "r":
-                    {
-                        const atd = StampLib.getAtd();
-                        if (atd) {
-                            atd.redoInk();
-                            atd.penUpFunc(atd); // updates the models in angular
-                        }
-                        break;
-                    }
-                    case "2":
-                    case "@": do2?.(e.key); break;
-                    case "8":
-                    case "*": do8?.(e.key); break;
-                    case "A": document.querySelector("#AnswerDisplayButton")?.click(); break;
-                    case "Enter": doEnter?.(); break;
-                    case "Escape": doEscape?.(e); break;
-                    case "d":
-                        e.preventDefault();
-                        window.__showDrawTab?.();
-                        break;
-                    case "D": document.querySelector(".other-worksheet-button")?.click(); break;
-                    case "h": cycleHighlighter?.(); break;
-                    case "e": selectEraser?.(); break;
-                    case "R": clickReading?.(); break;
-                    case "M": clickMath?.(); break;
-                    case "H":
-                        const wasPulldownOpen = isPulldownOpen?.();
-                        const pulldownExists = !!document.querySelector("#studentInfoPullDown.student-info-btn");
-                        document.querySelector("#studentInfoPullDown")?.click();
-                        document.querySelector("#studentInfoPullDown")?.blur();
-                        document.querySelectorAll("#customPulldown > .kbfocus").forEach(p => p.classList.remove("kbfocus"));
-                        if (pulldownExists) {
-                            if (!wasPulldownOpen) {
-                                document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
-                                showHeader(true);
-                            } else {
-                                showHeader(false);
-                            }
-                        } else {
-                            toggleHeader();
-                        }
-                        break;
-                    case "J": scrollAnswer?.(DOWN); break;
-                    case "K": scrollAnswer?.(UP); break;
-                    case "-":
-                    case "+":
-                    case "=":
-                        const drawtab2 = document.querySelector('.drawtab');
-                        const printoverlay = document.querySelector('.printoverlay');
-                        const slider2 = (drawtab2?.checkVisibility() || printoverlay?.checkVisibility())
-                            ? drawtab2?.querySelector(".sizeslider")
-                            : null;
-                        if (slider2) {
-                            e.key === "-" ? slider2.value-- : slider2.value++;
-                            slider2.dispatchEvent(new Event("input"));
-                        } else {
-                            doKeyboardDefault?.(e.key);
-                        }
-                        break;
-                    default: doKeyboardDefault?.(e.key); break;
-                }
+                handleGradingKey(e);
             } else if (studentProfile) {
-                switch (e.key) {
-                    case "R":
-                        if (!document.querySelector("loading-spinner div")) {
-                            document.querySelector(".btn-close")?.click();
-                            clickReading?.();
-                        }
-                        break;
-                    case "M":
-                        if (!document.querySelector("loading-spinner div")) {
-                            document.querySelector(".btn-close")?.click();
-                            clickMath?.();
-                        }
-                        break;
-                    case "S": document.querySelector(".dashboard-set-left .btn-primary")?.click(); break;
-                    case "J":
-                        if (isProgressChartFloating()) {
-                            scrollProgressChart?.(DOWN);
-                        } else {
-                            scrollDashboard?.(DOWN);
-                        }
-                        break;
-                    case "K":
-                        if (isProgressChartFloating()) {
-                            scrollProgressChart?.(UP);
-                        } else {
-                            scrollDashboard?.(UP);
-                        }
-                        break;
-                    case "H": sideScrollProgressChart?.(LEFT); break;
-                    case "L": sideScrollProgressChart?.(RIGHT); break;
-                    case "p": document.querySelector(".dashboard-progress-chart .finally > .icon")?.click(); break;
-                    case "e": Array.from(document.querySelectorAll(".dashboard-menu-right .options-btn")).find(b => b.innerHTML?.trim() === "Edit")?.click(); break;
-                    case "Backspace": doBackspace?.(); break;
-                    case "Escape": doEscape?.(e); break;
-                    case "Enter": doEnter?.(); break;
-                }
+                handleStudentProfileKey(e);
             } else if (studyRecords) {
-                switch (e.key) {
-                    case "R": clickReading?.(); break;
-                    case "M": clickMath?.(); break;
-                    case "Backspace": doBackspace?.(); break;
-                    case "J": scrollScore?.(DOWN); break;
-                    case "K": scrollScore?.(UP); break;
-                    case "G":
-                        const scoreGrid = document.querySelector(".score-grid-all");
-                        scoreGrid?.scrollIntoView();
-                        scoreGrid?.scroll(0, scoreGrid?.scrollHeight);
-                        break;
-                }
+                handleStudyRecordsKey(e);
             }
         };
 
