@@ -5619,13 +5619,58 @@ body:has(app-atx0010p) .loginAssistantsList {
   .studentRowHeader .gradeColumn {
     width: unset !important;
     min-width: unset !important;
-    padding-left: 0px !important;
+    padding-left: 0 !important;
   }
   .studentRowHeader .nameColumn {
     width: 185px !important;
   }
   app-student-list-filler-item {
     display: none !important;
+  }
+  .navHeader {
+    height: 52px !important;
+  }
+  .navHeader > div {
+    padding: 0 8px !important;
+    height: 52px !important;
+  }
+  .navHeader > div.refleshItems {
+    padding: 0 !important;
+  }
+  .navHeader > div.refleshItems .refleshBtn {
+    height: 52px !important;
+  }
+  .navHeader > div.announceBtn {
+    margin-left: 10px !important;
+    padding: 0 !important;
+  }
+  .navHeader > div .icon {
+    margin: auto 0 !important;
+    flex-shrink: 0;
+  }
+  .navHeader > div p.label {
+    text-align: start !important;
+    margin: auto 0 !important;
+  }
+  .navHeader > div p.label span {
+    display: inline !important;
+    text-align: center !important;
+  }
+  .navHeader > div p.label span:nth-child(1)::after {
+    content: " ";
+  }
+  .filterHeader > div {
+    height: 36px !important;
+  }
+  .filterHeader .secondary {
+    padding: 8px 30px !important;
+    top: 52px !important;
+  }
+  .filterHeader:not(.dropdownHovered):hover .secondary {
+    top: 88px !important;
+  }
+  .studentList:not(.tabItem) {
+    height: calc(100vh - 88px) !important;
   }
   .studentRow .gradeColumn {
     flex: none !important;
