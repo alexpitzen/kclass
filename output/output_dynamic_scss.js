@@ -3439,7 +3439,7 @@
         }
         try {
           const lastStroke = new Date(is[is.length - 1].cs[0].t);
-          setTimestamp(`Last change:<br>${lastStroke.toString()}`);
+          setTimestamp(`Last change:<br>${lastStroke.toLocaleString()}`);
           const activePageEl = document.querySelector(".worksheet-navigator-page.active .text.disabled");
           if (activePageEl) {
             setColorClass("");
@@ -4097,6 +4097,7 @@ p: pause / resume replay
 
 Drawing:
 d: open the draw tab
+t: open the draw tab & focus the text area
 p: select pen
 h: select highlighter / cycle highlighter type
 e: select eraser
@@ -4356,6 +4357,18 @@ enter: submit/accept dialog`;
         break;
       case "D":
         document.querySelector(".other-worksheet-button")?.click();
+        break;
+      case "t":
+        window.__showDrawTab?.();
+        requestAnimationFrame(() => {
+          const drawtab = document.querySelector(".drawtab");
+          const textarea = drawtab?.querySelector("textarea");
+          if (textarea) {
+            textarea.focus();
+            textarea.select();
+          }
+        });
+        e3.preventDefault();
         break;
       case "h":
         cycleHighlighter?.();

@@ -20,7 +20,7 @@ export const useTimestampDisplay = (enabled) => {
             }
             try {
                 const lastStroke = new Date(is[is.length - 1].cs[0].t);
-                setTimestamp(`Last change:<br>${lastStroke.toString()}`);
+                setTimestamp(`Last change:<br>${lastStroke.toLocaleString()}`);
 
                 const activePageEl = document.querySelector('.worksheet-navigator-page.active .text.disabled');
                 if (activePageEl) {
