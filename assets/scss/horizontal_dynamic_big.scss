@@ -65,8 +65,30 @@
         }
     }
 
-    .studentList:not(.tabItem) {
+    div.studentList:not(.tabItem) {
         height: calc(100vh - 88px) !important;
+
+        app-score-list-header, app-student-list-header {
+            .studentRowHeader, .headerBlank {
+                height: 25px !important;
+            }
+        }
+
+        app-score-list-filler-item {
+            display: none !important;
+        }
+
+        app-student-list-header.listHeader div.studentRowHeader div.lastStudyColumn {
+            padding-left: 0px !important;
+
+            .lastStudy {
+                width: unset !important;
+            }
+
+            i.sortable {
+                margin-right: 0px !important;
+            }
+        }
     }
 
     .studentRow {

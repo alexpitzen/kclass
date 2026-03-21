@@ -5669,8 +5669,23 @@ body:has(app-atx0010p) .loginAssistantsList {
   .filterHeader:not(.dropdownHovered):hover .secondary {
     top: 88px !important;
   }
-  .studentList:not(.tabItem) {
+  div.studentList:not(.tabItem) {
     height: calc(100vh - 88px) !important;
+  }
+  div.studentList:not(.tabItem) app-score-list-header .studentRowHeader, div.studentList:not(.tabItem) app-score-list-header .headerBlank, div.studentList:not(.tabItem) app-student-list-header .studentRowHeader, div.studentList:not(.tabItem) app-student-list-header .headerBlank {
+    height: 25px !important;
+  }
+  div.studentList:not(.tabItem) app-score-list-filler-item {
+    display: none !important;
+  }
+  div.studentList:not(.tabItem) app-student-list-header.listHeader div.studentRowHeader div.lastStudyColumn {
+    padding-left: 0px !important;
+  }
+  div.studentList:not(.tabItem) app-student-list-header.listHeader div.studentRowHeader div.lastStudyColumn .lastStudy {
+    width: unset !important;
+  }
+  div.studentList:not(.tabItem) app-student-list-header.listHeader div.studentRowHeader div.lastStudyColumn i.sortable {
+    margin-right: 0px !important;
   }
   .studentRow .gradeColumn {
     flex: none !important;
