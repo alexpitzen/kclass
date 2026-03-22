@@ -79,12 +79,14 @@
     }
 
     class DrawStamp extends DrawThing {
-        constructor(strokes, width, height, svg, xmlstring) {
+        constructor(strokes, width, height, svg, opts, xmlstring) {
             super();
             this.strokes = strokes;
             this.width = width;
             this.height = height;
             this.svg = svg;
+            this.opts = opts;
+            this.scaleFillLines = opts?.scaleFillLines ?? true;
             this.xmlstring = xmlstring;
             this.hasFill = this.strokes.some((stroke) => stroke.doFill());
         }
@@ -1032,7 +1034,7 @@
         };
         console.log("stampDimensions:");
         console.log(stampDimensions);
-        let penScale = stamp.hasFill ? getPenScale(stampDimensions) : 1;
+        let penScale = stamp.hasFill && stamp.scaleFillLines ? getPenScale(stampDimensions) : 1;
         if (!dryRun) {
             atd.pen.col.A = alpha;
             atd.pen.w = width;
@@ -1889,7 +1891,10 @@
         for (let child of svgElem.children) {
             strokes = strokes.concat(parseChild(child, [], styleInfo));
         }
-        return new DrawStamp(strokes, width, height, svgElem, xmlstring);
+        let opts = {
+            scaleFillLines: (svgElem.getAttribute("kclass:scaleFillLines") != "false"),
+        };
+        return new DrawStamp(strokes, width, height, svgElem, opts, xmlstring);
     }
 
     function parseChild(element, transform, styleInfo) {
@@ -2216,6 +2221,7 @@
                 axolotlWizardPink,
                 axolotlWizardPinkGreen,
                 axolotlWizardBlue,
+                axolotlWizardBlueSimplified,
                 adelineCatGreatJob,
                 adelineStar,
                 karthikaBootifulWorkGhost,
