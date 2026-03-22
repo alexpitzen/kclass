@@ -8,7 +8,7 @@ import jinja2
 
 def get_local_stamps():
     local_stamps = {}
-    for f in Path("assets/images").rglob("output_*.svg"):
+    for f in Path("images").rglob("output_*.svg"):
         if not f.is_file():
             continue
         name = f.name[len("output_") : -len(".svg")]
