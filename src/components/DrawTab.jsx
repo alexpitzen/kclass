@@ -33,10 +33,6 @@ const DrawTabContent = ({ stamps: _stamps }) => {
         }
     }, [drawTabOpen]);
 
-    useEffect(() => {
-        document.body.classList.toggle('drawtab-hidden', !drawTabOpen);
-    }, [drawTabOpen]);
-
     const hide = () => setDrawTabOpen(false);
     const show = () => {
         setDrawTabOpen(true);
@@ -274,7 +270,7 @@ const DrawTabContent = ({ stamps: _stamps }) => {
                         type="color"
                         class="pencolorbtn"
                         defaultValue="#ff2200"
-                        onInput={handleColorChange}
+                        onChange={handleColorChange}
                         accessKey="c"
                     />
 

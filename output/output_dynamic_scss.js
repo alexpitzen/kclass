@@ -4617,9 +4617,6 @@ enter: submit/accept dialog`;
         updateTextAreaSize();
       }
     }, [drawTabOpen]);
-    y2(() => {
-      document.body.classList.toggle("drawtab-hidden", !drawTabOpen);
-    }, [drawTabOpen]);
     const hide = () => setDrawTabOpen(false);
     const show = () => {
       setDrawTabOpen(true);
@@ -4832,7 +4829,7 @@ enter: submit/accept dialog`;
               type: "color",
               class: "pencolorbtn",
               defaultValue: "#ff2200",
-              onInput: handleColorChange,
+              onChange: handleColorChange,
               accessKey: "c"
             }
           ),
@@ -5395,6 +5392,7 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
   background-color: rgb(220, 220, 227);
   display: inline-block;
   float: right;
+  width: 392px;
 }
 .drawtab .header > input {
   margin: 7px;

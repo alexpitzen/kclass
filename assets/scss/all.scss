@@ -173,6 +173,7 @@ body:has(.worksheet-container.selected .full-score-mark) {
         background-color: rgb(220, 220, 227);
         display: inline-block;
         float: right;
+        width: 392px;
         > input {
             margin: 7px;
             &[type='checkbox'] {
