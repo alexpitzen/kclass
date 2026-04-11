@@ -1,7 +1,7 @@
 import { DOWN, UP, LEFT, RIGHT } from './constants.js';
 import { penIcons, penSettings } from '../components/constants.js';
 
-export function updatePenSettings() {
+function updatePenSettings() {
     const penType = document.querySelector("input[name=penType]:checked")?.value || "pen";
     const pencolorbtn = document.querySelector(".pencolorbtn");
     if (penType !== "eraser") {
@@ -289,6 +289,7 @@ function clearMarkboxs() {
 }
 
 export {
+    updatePenSettings,
     clickReading,
     clickMath,
     doBackspace,

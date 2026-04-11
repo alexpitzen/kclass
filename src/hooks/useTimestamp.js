@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'preact/hooks';
 import { usePageChange } from './usePageChange.js';
+import { getGradingStartTime, getStudyFinishTime } from '../helpers/ng.js';
 
 export const useTimestampDisplay = (enabled) => {
     const [timestamp, setTimestamp] = useState('');
@@ -10,7 +11,7 @@ export const useTimestampDisplay = (enabled) => {
     }, []);
 
     const updateTimestamp = useCallback((page) => {
-        const is = stamp?.getStudentDrawing();
+        const is = StampLib?.getStudentDrawing();
         if (is) {
             if (is.length === 0) {
                 setTimestamp('None');
@@ -29,10 +30,9 @@ export const useTimestampDisplay = (enabled) => {
                     return;
                 }
 
-                const gradingPage = window.kclass?.ng?.context?._contentsManagerService?.paging?._currentPage?.gradingWaitingSet;
-                if (gradingPage?.GradingStartTime && gradingPage?.StudyFinishTime) {
-                    const lastGraded = new Date(gradingPage.GradingStartTime + 'Z');
-                    const submitted = new Date(gradingPage.StudyFinishTime + 'Z');
+                const lastGraded = getGradingStartTime();
+                const submitted = getStudyFinishTime();
+                if (lastGraded && submitted) {
                     if (lastGraded > submitted) {
                         setColorClass('');
                         if (page) page.style.outlineColor = '';
@@ -89,12 +89,4 @@ export const useTimestampDisplay = (enabled) => {
     });
 
     return { timestamp, colorClass };
-};
-
-export const enableTimestampDisplay = () => {
-    window.__timestampEnabled = true;
-};
-
-export const disableTimestampDisplay = () => {
-    window.__timestampEnabled = false;
 };

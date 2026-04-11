@@ -3434,6 +3434,25 @@
     return { disable };
   };
 
+  // src/helpers/ng.js
+  function getGradingPage() {
+    return window.kclass?.ng?.context?._contentsManagerService?.paging?._currentPage?.gradingWaitingSet;
+  }
+  function getGradingStartTime() {
+    let gradingPage = getGradingPage();
+    if (gradingPage?.GradingStartTime) {
+      return /* @__PURE__ */ new Date(gradingPage.GradingStartTime + "Z");
+    }
+    return null;
+  }
+  function getStudyFinishTime() {
+    let gradingPage = getGradingPage();
+    if (gradingPage?.StudyFinishTime) {
+      return /* @__PURE__ */ new Date(gradingPage.StudyFinishTime + "Z");
+    }
+    return null;
+  }
+
   // src/hooks/useTimestamp.js
   var useTimestampDisplay = (enabled) => {
     const [timestamp, setTimestamp] = d2("");
@@ -3443,7 +3462,7 @@
         page.style.outlineColor = "";
     }, []);
     const updateTimestamp = q2((page) => {
-      const is = stamp?.getStudentDrawing();
+      const is = StampLib?.getStudentDrawing();
       if (is) {
         if (is.length === 0) {
           setTimestamp("None");
@@ -3462,10 +3481,9 @@
               page.style.outlineColor = "";
             return;
           }
-          const gradingPage = window.kclass?.ng?.context?._contentsManagerService?.paging?._currentPage?.gradingWaitingSet;
-          if (gradingPage?.GradingStartTime && gradingPage?.StudyFinishTime) {
-            const lastGraded = /* @__PURE__ */ new Date(gradingPage.GradingStartTime + "Z");
-            const submitted = /* @__PURE__ */ new Date(gradingPage.StudyFinishTime + "Z");
+          const lastGraded = getGradingStartTime();
+          const submitted = getStudyFinishTime();
+          if (lastGraded && submitted) {
             if (lastGraded > submitted) {
               setColorClass("");
               if (page)
@@ -4370,8 +4388,10 @@ enter: submit/accept dialog`;
         e3.preventDefault();
         window.__showDrawTab?.();
         break;
-      case "D":
+      case "S":
         document.querySelector(".other-worksheet-button")?.click();
+        break;
+      case "D":
         break;
       case "t":
         window.__showDrawTab?.();
@@ -4517,6 +4537,7 @@ enter: submit/accept dialog`;
     }
   };
   var useKeyboardMode2 = (enabled, drawTabOpen, toggleDrawTab) => {
+    const { setTimestampEnabled } = useTimestamp();
     y2(() => {
       if (!enabled)
         return;
@@ -4545,7 +4566,7 @@ enter: submit/accept dialog`;
           if (e3.key === "d") {
             toggleDrawTab?.();
           } else if (e3.key === "t") {
-            window.__setTimestampEnabled?.((prev) => !prev);
+            setTimestampEnabled((prev) => !prev);
           }
           return;
         }
@@ -5134,62 +5155,31 @@ enter: submit/accept dialog`;
     return null;
   };
   var GlobalExposures = () => {
-    const { setTimestampEnabled } = useTimestamp();
     const { setHdModeEnabled } = useHDMode();
     y2(() => {
-      window.__setTimestampEnabled = (val) => {
-        if (typeof val === "function") {
-          setTimestampEnabled((prev) => !prev);
-        } else {
-          setTimestampEnabled(val);
-        }
-      };
       window.__hdModeSetEnabled = setHdModeEnabled;
       return () => {
-        delete window.__setTimestampEnabled;
         delete window.__hdModeSetEnabled;
       };
-    }, [setTimestampEnabled, setHdModeEnabled]);
+    }, [setHdModeEnabled]);
     return null;
   };
-  var PrintOverlayWrapper = () => {
-    const printOverlay = usePrintOverlay();
-    y2(() => {
-      window.__showStampPreview = (stamp2, dims, maxScale, scale, color, svg, pos) => {
-        printOverlay.showStampPreview(stamp2, dims, maxScale, scale, color, svg, pos);
-      };
-      window.__showTextPreview = (text, dims, scale, color, pos) => {
-        printOverlay.showTextPreview(text, dims, scale, color, pos);
-      };
-      window.__hidePrintPreview = () => {
-        printOverlay.hidePreview();
-      };
-      return () => {
-        delete window.__showStampPreview;
-        delete window.__showTextPreview;
-        delete window.__hidePrintPreview;
-      };
-    }, [printOverlay]);
-    return /* @__PURE__ */ u3(PrintOverlay, {});
-  };
   var App = () => {
-    return /* @__PURE__ */ u3(k, { children: [
-      /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children: [
-        /* @__PURE__ */ u3(GlobalExposures, {}),
-        /* @__PURE__ */ u3(CustomToolbar, {}),
-        /* @__PURE__ */ u3(PageChangeManager, {}),
-        /* @__PURE__ */ u3(LoginAssistantsList, {}),
-        /* @__PURE__ */ u3(RefreshButton, {}),
-        /* @__PURE__ */ u3(DrawTab, {})
-      ] }) }) }),
-      /* @__PURE__ */ u3(PrintOverlayWrapper, {})
-    ] });
+    return /* @__PURE__ */ u3(k, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children: [
+      /* @__PURE__ */ u3(GlobalExposures, {}),
+      /* @__PURE__ */ u3(CustomToolbar, {}),
+      /* @__PURE__ */ u3(PageChangeManager, {}),
+      /* @__PURE__ */ u3(LoginAssistantsList, {}),
+      /* @__PURE__ */ u3(RefreshButton, {}),
+      /* @__PURE__ */ u3(DrawTab, {}),
+      /* @__PURE__ */ u3(PrintOverlay, {})
+    ] }) }) }) }) });
   };
   var appContainer = document.createElement("div");
   appContainer.id = "app-container";
   document.body.appendChild(appContainer);
   J(
-    /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(App, {}) }),
+    /* @__PURE__ */ u3(App, {}),
     appContainer
   );
   var initStampDimensions = () => {

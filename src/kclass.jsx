@@ -2,7 +2,7 @@ import { render } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { CustomToolbar } from './components/CustomToolbar.jsx';
 import { DrawTab } from './components/DrawTab.jsx';
-import { PrintOverlayProvider, PrintOverlay, usePrintOverlay } from './components/PrintOverlay.jsx';
+import { PrintOverlayProvider, PrintOverlay } from './components/PrintOverlay.jsx';
 import { LoginAssistantsList, RefreshButton } from './components/Misc.jsx';
 import { useAutoPen } from './hooks/useAutoPen.js';
 import { useMarkboxKeys } from './hooks/useMarkboxKeys.js';
@@ -20,70 +20,38 @@ const PageChangeManager = () => {
 
 // Wrapper to expose context functions to globals for keyboard shortcuts
 const GlobalExposures = () => {
-    const { setTimestampEnabled } = useTimestamp();
     const { setHdModeEnabled } = useHDModeContext();
 
     useEffect(() => {
-        window.__setTimestampEnabled = (val) => {
-            if (typeof val === 'function') {
-                setTimestampEnabled(prev => !prev);
-            } else {
-                setTimestampEnabled(val);
-            }
-        };
         window.__hdModeSetEnabled = setHdModeEnabled;
 
         return () => {
-            delete window.__setTimestampEnabled;
             delete window.__hdModeSetEnabled;
         };
-    }, [setTimestampEnabled, setHdModeEnabled]);
+    }, [setHdModeEnabled]);
 
     return null;
-};
-
-// Wrapper component that exposes print overlay to globals
-const PrintOverlayWrapper = () => {
-    const printOverlay = usePrintOverlay();
-
-    useEffect(() => {
-        window.__showStampPreview = (stamp, dims, maxScale, scale, color, svg, pos) => {
-            printOverlay.showStampPreview(stamp, dims, maxScale, scale, color, svg, pos);
-        };
-        window.__showTextPreview = (text, dims, scale, color, pos) => {
-            printOverlay.showTextPreview(text, dims, scale, color, pos);
-        };
-        window.__hidePrintPreview = () => {
-            printOverlay.hidePreview();
-        };
-
-        return () => {
-            delete window.__showStampPreview;
-            delete window.__showTextPreview;
-            delete window.__hidePrintPreview;
-        };
-    }, [printOverlay]);
-
-    return <PrintOverlay />;
 };
 
 // Main App component that wraps all others
 const App = () => {
     return (
         <>
-            <TimestampProvider>
-                <HDModeProvider>
-                    <KeyboardModeProvider>
-                        <GlobalExposures />
-                        <CustomToolbar />
-                        <PageChangeManager />
-                        <LoginAssistantsList />
-                        <RefreshButton />
-                        <DrawTab />
-                    </KeyboardModeProvider>
-                </HDModeProvider>
-            </TimestampProvider>
-            <PrintOverlayWrapper />
+            <PrintOverlayProvider>
+                <TimestampProvider>
+                    <HDModeProvider>
+                        <KeyboardModeProvider>
+                            <GlobalExposures />
+                            <CustomToolbar />
+                            <PageChangeManager />
+                            <LoginAssistantsList />
+                            <RefreshButton />
+                            <DrawTab />
+                            <PrintOverlay />
+                        </KeyboardModeProvider>
+                    </HDModeProvider>
+                </TimestampProvider>
+            </PrintOverlayProvider>
         </>
     );
 };
@@ -94,9 +62,7 @@ appContainer.id = 'app-container';
 document.body.appendChild(appContainer);
 
 render(
-    <PrintOverlayProvider>
-        <App />
-    </PrintOverlayProvider>,
+    <App />,
     appContainer
 );
 

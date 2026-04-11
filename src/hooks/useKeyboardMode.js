@@ -5,6 +5,7 @@ import { doEnter, doEscape, doBackspace, clearSearch, focusSearch, cycleHighligh
 import { doMarkingListJK, doMarkingListHL } from '../helpers/marking.js';
 import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sideScrollProgressChart, scrollScore, stopScrolling, startScrolling, isProgressChartFloating } from '../helpers/scrolling.js';
 import { doDown, doUp } from '../helpers/actions.js';
+import { useTimestamp } from '../context/AppContext.jsx';
 
 const keyboardHelp = `Navigation:
 j: down
@@ -231,7 +232,10 @@ const handleGradingKey = (e) => {
             e.preventDefault();
             window.__showDrawTab?.();
             break;
-        case "D": document.querySelector(".other-worksheet-button")?.click(); break;
+        case "S": document.querySelector(".other-worksheet-button")?.click(); break;
+        case "D":
+            // StampLib.showDiff();
+            break;
         case "t":
             window.__showDrawTab?.();
             requestAnimationFrame(() => {
@@ -341,6 +345,7 @@ const handleStudyRecordsKey = (e) => {
 };
 
 export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
+    const { setTimestampEnabled } = useTimestamp();
     useEffect(() => {
         if (!enabled) return;
 
@@ -369,7 +374,7 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
                 if (e.key === "d") {
                     toggleDrawTab?.();
                 } else if (e.key === "t") {
-                    window.__setTimestampEnabled?.((prev) => !prev);
+                    setTimestampEnabled((prev) => !prev);
                 }
                 return;
             }
