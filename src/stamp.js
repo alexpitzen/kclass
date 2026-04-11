@@ -87,6 +87,7 @@
             this.svg = svg;
             this.opts = opts;
             this.scaleFillLines = opts?.scaleFillLines ?? true;
+            this.fillLineScaleFactor = opts?.fillLineScaleFactor ?? 1;
             this.xmlstring = xmlstring;
             this.hasFill = this.strokes.some((stroke) => stroke.doFill());
         }
@@ -1034,7 +1035,7 @@
         };
         console.log("stampDimensions:");
         console.log(stampDimensions);
-        let penScale = stamp.hasFill && stamp.scaleFillLines ? getPenScale(stampDimensions) : 1;
+        let penScale = stamp.hasFill && stamp.scaleFillLines ? getPenScale(stampDimensions, stamp.fillLineScaleFactor) : 1;
         if (!dryRun) {
             atd.pen.col.A = alpha;
             atd.pen.w = width;
@@ -1064,7 +1065,7 @@
         };
     }
 
-    function getPenScale(stampDimensions) {
+    function getPenScale(stampDimensions, scaleFactor) {
         let smallerDimension = Math.min(
             stampDimensions.max.x - stampDimensions.min.x,
             stampDimensions.max.y - stampDimensions.min.y,
@@ -1074,7 +1075,7 @@
             stampDimensions.max.y - stampDimensions.min.y,
         );
         let dimension = 2*smallerDimension/3 + largerDimension/3;
-        let penScale = Math.max(1, Math.floor(dimension / 45)) / 2;
+        let penScale = Math.max(1, Math.floor(scaleFactor * dimension / 45)) / 2;
         console.log(`penScale: ${penScale}`);
         return penScale;
     }
@@ -1893,6 +1894,7 @@
         }
         let opts = {
             scaleFillLines: (svgElem.getAttribute("kclass:scaleFillLines") != "false"),
+            fillLineScaleFactor: parseFloat(svgElem.getAttribute("kclass:fillLineScaleFactor")) || 1,
         };
         return new DrawStamp(strokes, width, height, svgElem, opts, xmlstring);
     }
@@ -2237,6 +2239,8 @@
                 chantalBear,
                 andersonDino,
                 kelseyBird,
+                aarnaGirl,
+                aarnaBoy,
                 faboolousWork,
                 bootifulWork,
                 zombie,
@@ -2352,6 +2356,8 @@
                 chantalBear,
                 andersonDino,
                 kelseyBird,
+                aarnaGirl,
+                aarnaBoy,
             ],
             "Christmas": [
                 christmasCat,
