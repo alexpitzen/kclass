@@ -112,11 +112,6 @@ function doEscape(e) {
         showHeader(false);
         return;
     }
-    const drawtab = document.querySelector(".drawtab");
-    if (drawtab?.checkVisibility()) {
-        window.__hideDrawTab?.();
-        return;
-    }
     if (e.target.classList.contains("search-input")) {
         clearSearch();
         e.target.parentElement.querySelector(".search-btn")?.focus();

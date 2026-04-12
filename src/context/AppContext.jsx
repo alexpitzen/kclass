@@ -1,5 +1,6 @@
 import { createContext } from 'preact';
 import { useContext, useState, useCallback } from 'preact/hooks';
+import { PrintOverlayProvider, PrintOverlay } from '../components/PrintOverlay.jsx';
 
 const DrawTabContext = createContext(null);
 const TimestampContext = createContext(null);
@@ -51,17 +52,18 @@ export const KeyboardModeProvider = ({ children }) => {
     );
 };
 
-// Legacy combined provider for backwards compatibility
 export const AppProvider = ({ children }) => {
     return (
         <DrawTabProvider>
-            <TimestampProvider>
-                <HDModeProvider>
-                    <KeyboardModeProvider>
-                        {children}
-                    </KeyboardModeProvider>
-                </HDModeProvider>
-            </TimestampProvider>
+            <PrintOverlayProvider>
+                <TimestampProvider>
+                    <HDModeProvider>
+                        <KeyboardModeProvider>
+                            {children}
+                        </KeyboardModeProvider>
+                    </HDModeProvider>
+                </TimestampProvider>
+            </PrintOverlayProvider>
         </DrawTabProvider>
     );
 };

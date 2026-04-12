@@ -7,7 +7,7 @@ import { LoginAssistantsList, RefreshButton } from './components/Misc.jsx';
 import { useAutoPen } from './hooks/useAutoPen.js';
 import { useMarkboxKeys } from './hooks/useMarkboxKeys.js';
 import { useHDMode } from './hooks/useHDMode.js';
-import { AppProvider, DrawTabProvider, TimestampProvider, HDModeProvider, KeyboardModeProvider, useTimestamp, useHDMode as useHDModeContext, useKeyboardMode as useKeyboardModeContext } from './context/AppContext.jsx';
+import { AppProvider, useHDMode as useHDModeContext, useKeyboardMode as useKeyboardModeContext } from './context/AppContext.jsx';
 
 const PageChangeManager = () => {
     const { hdModeEnabled } = useHDModeContext();
@@ -37,21 +37,15 @@ const GlobalExposures = () => {
 const App = () => {
     return (
         <>
-            <PrintOverlayProvider>
-                <TimestampProvider>
-                    <HDModeProvider>
-                        <KeyboardModeProvider>
-                            <GlobalExposures />
-                            <CustomToolbar />
-                            <PageChangeManager />
-                            <LoginAssistantsList />
-                            <RefreshButton />
-                            <DrawTab />
-                            <PrintOverlay />
-                        </KeyboardModeProvider>
-                    </HDModeProvider>
-                </TimestampProvider>
-            </PrintOverlayProvider>
+            <AppProvider>
+                <GlobalExposures />
+                <CustomToolbar />
+                <PageChangeManager />
+                <LoginAssistantsList />
+                <RefreshButton />
+                <DrawTab />
+                <PrintOverlay />
+            </AppProvider>
         </>
     );
 };

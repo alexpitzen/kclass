@@ -4,12 +4,14 @@ import { toolbarIcons } from './constants.js';
 import { goPrevCorrectionPage, goNextCorrectionPage } from '../helpers/navigation.js';
 import { updatePenSettings, toggleHeader } from '../helpers/actions.js';
 import { useTimestampDisplay } from '../hooks/useTimestamp.js';
-import { useTimestamp } from '../context/AppContext.jsx';
+import { useTimestamp, useDrawTab } from '../context/AppContext.jsx';
 
 export const CustomToolbar = () => {
     const [shifted, setShifted] = useState(false);
     const { timestampEnabled } = useTimestamp();
+    // TODO: this should be a component
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
+    const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
 
     useEffect(() => {
         updatePenSettings();
@@ -44,7 +46,7 @@ export const CustomToolbar = () => {
 
         if (isHidden) {
             // Use Preact state to show
-            window.__showDrawTab?.();
+            showDrawTab();
             const clearBtn = document.querySelector('.clearAll');
             if (clearBtn) {
                 clearBtn.focus();
@@ -59,7 +61,7 @@ export const CustomToolbar = () => {
             updatePenSettings();
         } else {
             // Use Preact state to hide
-            window.__hideDrawTab?.();
+            hideDrawTab();
         }
     };
 

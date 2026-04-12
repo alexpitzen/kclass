@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import { penTypes } from './constants.js';
 import { usePrintOverlay } from './PrintOverlay.jsx';
 import { useKeyboardMode, keyboardHelpText } from '../hooks/useKeyboardMode.js';
-import { useDrawTab, useKeyboardMode as useKeyboardModeContext, useHDMode as useHDModeContext, DrawTabProvider } from '../context/AppContext.jsx';
+import { useDrawTab, useKeyboardMode as useKeyboardModeContext, useHDMode as useHDModeContext } from '../context/AppContext.jsx';
 import { updatePenSettings } from '../helpers/actions.js';
 
 const DrawTabContent = ({ stamps: _stamps }) => {
@@ -21,7 +21,7 @@ const DrawTabContent = ({ stamps: _stamps }) => {
     const rootRef = useRef(null);
     const colorInputRef = useRef(null);
 
-    useKeyboardMode(keyboardModeEnabled, drawTabOpen, toggleDrawTab);
+    useKeyboardMode(keyboardModeEnabled);
 
     const getPenColor = () => colorInputRef.current?.value || '#ff2200';
 
@@ -34,17 +34,6 @@ const DrawTabContent = ({ stamps: _stamps }) => {
     }, [drawTabOpen]);
 
     const hide = () => setDrawTabOpen(false);
-    const show = () => {
-        setDrawTabOpen(true);
-        updatePenSettings();
-    };
-    const toggle = () => {
-        if (drawTabOpen) {
-            hide();
-        } else {
-            show();
-        }
-    };
 
     const updateTextAreaSize = () => {
         if (textareaRef.current) {
@@ -52,18 +41,6 @@ const DrawTabContent = ({ stamps: _stamps }) => {
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
         }
     };
-
-    // Expose toggle globally for CustomToolbar
-    useEffect(() => {
-        window.__toggleDrawTab = toggle;
-        window.__showDrawTab = show;
-        window.__hideDrawTab = hide;
-        return () => {
-            delete window.__toggleDrawTab;
-            delete window.__showDrawTab;
-            delete window.__hideDrawTab;
-        };
-    }, [toggle, show, hide]);
 
     const handleSizeChange = (e) => {
         const newSize = parseInt(e.target.value);
@@ -362,9 +339,6 @@ const DrawTabContent = ({ stamps: _stamps }) => {
     );
 };
 
-// Export wrapped version with its own provider
 export const DrawTab = (props) => (
-    <DrawTabProvider>
-        <DrawTabContent {...props} />
-    </DrawTabProvider>
+    <DrawTabContent {...props} />
 );

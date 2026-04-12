@@ -3187,11 +3187,6 @@
       showHeader(false);
       return;
     }
-    const drawtab = document.querySelector(".drawtab");
-    if (drawtab?.checkVisibility()) {
-      window.__hideDrawTab?.();
-      return;
-    }
     if (e3.target.classList.contains("search-input")) {
       clearSearch();
       e3.target.parentElement.querySelector(".search-btn")?.focus();
@@ -3560,169 +3555,6 @@
     return l.vnode && l.vnode(l3), l3;
   }
 
-  // src/context/AppContext.jsx
-  var DrawTabContext = R(null);
-  var TimestampContext = R(null);
-  var HDModeContext = R(null);
-  var KeyboardModeContext = R(null);
-  var useDrawTab = () => x2(DrawTabContext);
-  var useTimestamp = () => x2(TimestampContext);
-  var useHDMode = () => x2(HDModeContext);
-  var useKeyboardMode = () => x2(KeyboardModeContext);
-  var DrawTabProvider = ({ children }) => {
-    const [drawTabOpen, setDrawTabOpen] = d2(false);
-    const hideDrawTab = q2(() => setDrawTabOpen(false), []);
-    const showDrawTab = q2(() => setDrawTabOpen(true), []);
-    const toggleDrawTab = q2(() => setDrawTabOpen((prev) => !prev), []);
-    return /* @__PURE__ */ u3(DrawTabContext.Provider, { value: { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab }, children });
-  };
-  var TimestampProvider = ({ children }) => {
-    const [timestampEnabled, setTimestampEnabled] = d2(true);
-    return /* @__PURE__ */ u3(TimestampContext.Provider, { value: { timestampEnabled, setTimestampEnabled }, children });
-  };
-  var HDModeProvider = ({ children }) => {
-    const [hdModeEnabled, setHdModeEnabled] = d2(false);
-    return /* @__PURE__ */ u3(HDModeContext.Provider, { value: { hdModeEnabled, setHdModeEnabled }, children });
-  };
-  var KeyboardModeProvider = ({ children }) => {
-    const [keyboardModeEnabled, setKeyboardModeEnabled] = d2(false);
-    return /* @__PURE__ */ u3(KeyboardModeContext.Provider, { value: { keyboardModeEnabled, setKeyboardModeEnabled }, children });
-  };
-
-  // src/components/CustomToolbar.jsx
-  var CustomToolbar = () => {
-    const [shifted, setShifted] = d2(false);
-    const { timestampEnabled } = useTimestamp();
-    const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
-    y2(() => {
-      updatePenSettings();
-    }, []);
-    const toggleShift = () => {
-      const container = document.querySelector(".worksheet-container");
-      if (!container)
-        return;
-      if (shifted) {
-        container.classList.remove("shiftup");
-      } else {
-        container.classList.add("shiftup");
-      }
-      setShifted(!shifted);
-    };
-    const togglePenToolbar = () => {
-      const gradingToolbarBox = document.querySelector(".grading-toolbar-box");
-      if (!gradingToolbarBox)
-        return;
-      if (gradingToolbarBox.classList.contains("close")) {
-        gradingToolbarBox.querySelector(".toolbar-item")?.click();
-      } else {
-        StampLib.collapseToolbar();
-      }
-    };
-    const handleDrawTab = () => {
-      const drawtab = document.querySelector(".drawtab");
-      if (!drawtab)
-        return;
-      const isHidden = drawtab.classList.contains("hidden");
-      if (isHidden) {
-        window.__showDrawTab?.();
-        const clearBtn = document.querySelector(".clearAll");
-        if (clearBtn) {
-          clearBtn.focus();
-          clearBtn.blur();
-        }
-        const textarea = drawtab.querySelector("textarea");
-        if (textarea) {
-          textarea.style.height = "";
-          textarea.style.height = `${textarea.scrollHeight}px`;
-        }
-        updatePenSettings();
-      } else {
-        window.__hideDrawTab?.();
-      }
-    };
-    const handleXAll = () => {
-      document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
-    };
-    return /* @__PURE__ */ u3("div", { class: "customToolbar", style: { display: "none" }, children: [
-      /* @__PURE__ */ u3(
-        "button",
-        {
-          class: "hoverToolbarBtn",
-          onClick: togglePenToolbar,
-          onMouseOver: (e3) => e3.stopPropagation(),
-          title: "Toggle pen toolbar visibility",
-          dangerouslySetInnerHTML: { __html: toolbarIcons.togglePen }
-        }
-      ),
-      /* @__PURE__ */ u3(
-        "button",
-        {
-          class: "headerZindexBtn",
-          onClick: toggleHeader,
-          title: "Toggle header bar visibility",
-          children: "H"
-        }
-      ),
-      /* @__PURE__ */ u3(
-        "button",
-        {
-          class: "shiftbtn",
-          onClick: toggleShift,
-          onMouseOver: (e3) => e3.stopPropagation(),
-          title: "Toggle shifting the page up/down",
-          dangerouslySetInnerHTML: { __html: toolbarIcons.shift }
-        }
-      ),
-      /* @__PURE__ */ u3(
-        "button",
-        {
-          class: "xallbtn",
-          onClick: handleXAll,
-          title: "Click every grading box on the page",
-          children: "x all"
-        }
-      ),
-      /* @__PURE__ */ u3(
-        "button",
-        {
-          class: "drawbtn",
-          onClick: handleDrawTab,
-          onMouseOver: (e3) => e3.stopPropagation(),
-          title: "Show the draw tab",
-          accessKey: "d",
-          dangerouslySetInnerHTML: { __html: penIcons.pen }
-        }
-      ),
-      /* @__PURE__ */ u3(
-        "button",
-        {
-          class: "mobileUpBtn",
-          onClick: () => goPrevCorrectionPage?.(),
-          onMouseOver: (e3) => e3.stopPropagation(),
-          title: "Previous marking page",
-          dangerouslySetInnerHTML: { __html: toolbarIcons.prevPage }
-        }
-      ),
-      /* @__PURE__ */ u3(
-        "button",
-        {
-          class: "mobileDownBtn",
-          onClick: () => goNextCorrectionPage?.(),
-          onMouseOver: (e3) => e3.stopPropagation(),
-          title: "Next marking page",
-          dangerouslySetInnerHTML: { __html: toolbarIcons.nextPage }
-        }
-      ),
-      timestampEnabled && /* @__PURE__ */ u3(
-        "div",
-        {
-          class: `timestampBox ${colorClass}`,
-          dangerouslySetInnerHTML: { __html: timestamp }
-        }
-      )
-    ] });
-  };
-
   // src/components/PrintOverlay.jsx
   var PrintOverlayContext = R(null);
   var usePrintOverlay = () => {
@@ -3872,6 +3704,173 @@
         )
       }
     );
+  };
+
+  // src/context/AppContext.jsx
+  var DrawTabContext = R(null);
+  var TimestampContext = R(null);
+  var HDModeContext = R(null);
+  var KeyboardModeContext = R(null);
+  var useDrawTab = () => x2(DrawTabContext);
+  var useTimestamp = () => x2(TimestampContext);
+  var useHDMode = () => x2(HDModeContext);
+  var useKeyboardMode = () => x2(KeyboardModeContext);
+  var DrawTabProvider = ({ children }) => {
+    const [drawTabOpen, setDrawTabOpen] = d2(false);
+    const hideDrawTab = q2(() => setDrawTabOpen(false), []);
+    const showDrawTab = q2(() => setDrawTabOpen(true), []);
+    const toggleDrawTab = q2(() => setDrawTabOpen((prev) => !prev), []);
+    return /* @__PURE__ */ u3(DrawTabContext.Provider, { value: { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab }, children });
+  };
+  var TimestampProvider = ({ children }) => {
+    const [timestampEnabled, setTimestampEnabled] = d2(true);
+    return /* @__PURE__ */ u3(TimestampContext.Provider, { value: { timestampEnabled, setTimestampEnabled }, children });
+  };
+  var HDModeProvider = ({ children }) => {
+    const [hdModeEnabled, setHdModeEnabled] = d2(false);
+    return /* @__PURE__ */ u3(HDModeContext.Provider, { value: { hdModeEnabled, setHdModeEnabled }, children });
+  };
+  var KeyboardModeProvider = ({ children }) => {
+    const [keyboardModeEnabled, setKeyboardModeEnabled] = d2(false);
+    return /* @__PURE__ */ u3(KeyboardModeContext.Provider, { value: { keyboardModeEnabled, setKeyboardModeEnabled }, children });
+  };
+  var AppProvider = ({ children }) => {
+    return /* @__PURE__ */ u3(DrawTabProvider, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) });
+  };
+
+  // src/components/CustomToolbar.jsx
+  var CustomToolbar = () => {
+    const [shifted, setShifted] = d2(false);
+    const { timestampEnabled } = useTimestamp();
+    const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
+    const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
+    y2(() => {
+      updatePenSettings();
+    }, []);
+    const toggleShift = () => {
+      const container = document.querySelector(".worksheet-container");
+      if (!container)
+        return;
+      if (shifted) {
+        container.classList.remove("shiftup");
+      } else {
+        container.classList.add("shiftup");
+      }
+      setShifted(!shifted);
+    };
+    const togglePenToolbar = () => {
+      const gradingToolbarBox = document.querySelector(".grading-toolbar-box");
+      if (!gradingToolbarBox)
+        return;
+      if (gradingToolbarBox.classList.contains("close")) {
+        gradingToolbarBox.querySelector(".toolbar-item")?.click();
+      } else {
+        StampLib.collapseToolbar();
+      }
+    };
+    const handleDrawTab = () => {
+      const drawtab = document.querySelector(".drawtab");
+      if (!drawtab)
+        return;
+      const isHidden = drawtab.classList.contains("hidden");
+      if (isHidden) {
+        showDrawTab();
+        const clearBtn = document.querySelector(".clearAll");
+        if (clearBtn) {
+          clearBtn.focus();
+          clearBtn.blur();
+        }
+        const textarea = drawtab.querySelector("textarea");
+        if (textarea) {
+          textarea.style.height = "";
+          textarea.style.height = `${textarea.scrollHeight}px`;
+        }
+        updatePenSettings();
+      } else {
+        hideDrawTab();
+      }
+    };
+    const handleXAll = () => {
+      document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
+    };
+    return /* @__PURE__ */ u3("div", { class: "customToolbar", style: { display: "none" }, children: [
+      /* @__PURE__ */ u3(
+        "button",
+        {
+          class: "hoverToolbarBtn",
+          onClick: togglePenToolbar,
+          onMouseOver: (e3) => e3.stopPropagation(),
+          title: "Toggle pen toolbar visibility",
+          dangerouslySetInnerHTML: { __html: toolbarIcons.togglePen }
+        }
+      ),
+      /* @__PURE__ */ u3(
+        "button",
+        {
+          class: "headerZindexBtn",
+          onClick: toggleHeader,
+          title: "Toggle header bar visibility",
+          children: "H"
+        }
+      ),
+      /* @__PURE__ */ u3(
+        "button",
+        {
+          class: "shiftbtn",
+          onClick: toggleShift,
+          onMouseOver: (e3) => e3.stopPropagation(),
+          title: "Toggle shifting the page up/down",
+          dangerouslySetInnerHTML: { __html: toolbarIcons.shift }
+        }
+      ),
+      /* @__PURE__ */ u3(
+        "button",
+        {
+          class: "xallbtn",
+          onClick: handleXAll,
+          title: "Click every grading box on the page",
+          children: "x all"
+        }
+      ),
+      /* @__PURE__ */ u3(
+        "button",
+        {
+          class: "drawbtn",
+          onClick: handleDrawTab,
+          onMouseOver: (e3) => e3.stopPropagation(),
+          title: "Show the draw tab",
+          accessKey: "d",
+          dangerouslySetInnerHTML: { __html: penIcons.pen }
+        }
+      ),
+      /* @__PURE__ */ u3(
+        "button",
+        {
+          class: "mobileUpBtn",
+          onClick: () => goPrevCorrectionPage?.(),
+          onMouseOver: (e3) => e3.stopPropagation(),
+          title: "Previous marking page",
+          dangerouslySetInnerHTML: { __html: toolbarIcons.prevPage }
+        }
+      ),
+      /* @__PURE__ */ u3(
+        "button",
+        {
+          class: "mobileDownBtn",
+          onClick: () => goNextCorrectionPage?.(),
+          onMouseOver: (e3) => e3.stopPropagation(),
+          title: "Next marking page",
+          dangerouslySetInnerHTML: { __html: toolbarIcons.nextPage }
+        }
+      ),
+      timestampEnabled && /* @__PURE__ */ u3(
+        "div",
+        {
+          class: `timestampBox ${colorClass}`,
+          dangerouslySetInnerHTML: { __html: timestamp }
+        }
+      )
+    ] });
   };
 
   // src/helpers/marking.js
@@ -4158,12 +4157,12 @@ escape: close dialog
 backspace: exit/cancel
 enter: submit/accept dialog`;
   var keyboardHelpText = keyboardHelp;
-  var handleDrawTabKey = (e3) => {
+  var handleDrawTabKey = (e3, { hideDrawTab }) => {
     const drawtab = document.querySelector(".drawtab");
     switch (e3.key) {
       case "d":
       case "Escape":
-        window.__hideDrawTab?.();
+        hideDrawTab();
         break;
       case "-":
       case "+":
@@ -4297,7 +4296,7 @@ enter: submit/accept dialog`;
         break;
     }
   };
-  var handleGradingKey = (e3) => {
+  var handleGradingKey = (e3, { hideDrawTab, showDrawTab }) => {
     switch (e3.key) {
       case "j":
         doDown?.();
@@ -4386,7 +4385,7 @@ enter: submit/accept dialog`;
         break;
       case "d":
         e3.preventDefault();
-        window.__showDrawTab?.();
+        showDrawTab();
         break;
       case "S":
         document.querySelector(".other-worksheet-button")?.click();
@@ -4394,7 +4393,7 @@ enter: submit/accept dialog`;
       case "D":
         break;
       case "t":
-        window.__showDrawTab?.();
+        showDrawTab();
         requestAnimationFrame(() => {
           const drawtab = document.querySelector(".drawtab");
           const textarea = drawtab?.querySelector("textarea");
@@ -4536,8 +4535,9 @@ enter: submit/accept dialog`;
         break;
     }
   };
-  var useKeyboardMode2 = (enabled, drawTabOpen, toggleDrawTab) => {
+  var useKeyboardMode2 = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
+    const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
     y2(() => {
       if (!enabled)
         return;
@@ -4564,7 +4564,7 @@ enter: submit/accept dialog`;
         }
         if (e3.altKey && !e3.ctrlKey && !e3.metaKey) {
           if (e3.key === "d") {
-            toggleDrawTab?.();
+            toggleDrawTab();
           } else if (e3.key === "t") {
             setTimestampEnabled((prev) => !prev);
           }
@@ -4573,7 +4573,7 @@ enter: submit/accept dialog`;
         if (e3.altKey || e3.ctrlKey || e3.metaKey)
           return;
         if (drawTabOpen) {
-          handleDrawTabKey(e3);
+          handleDrawTabKey(e3, { showDrawTab, hideDrawTab });
           return;
         }
         const markingList = document.querySelector(".markingList.tabActive");
@@ -4586,7 +4586,7 @@ enter: submit/accept dialog`;
         } else if (studentList) {
           handleStudentListKey(e3);
         } else if (worksheet) {
-          handleGradingKey(e3);
+          handleGradingKey(e3, { showDrawTab, hideDrawTab });
         } else if (studentProfile) {
           handleStudentProfileKey(e3);
         } else if (studyRecords) {
@@ -4645,7 +4645,7 @@ enter: submit/accept dialog`;
     const stampsRef = A2(null);
     const rootRef = A2(null);
     const colorInputRef = A2(null);
-    useKeyboardMode2(keyboardModeEnabled, drawTabOpen, toggleDrawTab);
+    useKeyboardMode2(keyboardModeEnabled);
     const getPenColor = () => colorInputRef.current?.value || "#ff2200";
     const stamps = window.StampLib?.stamps || {};
     y2(() => {
@@ -4654,33 +4654,12 @@ enter: submit/accept dialog`;
       }
     }, [drawTabOpen]);
     const hide = () => setDrawTabOpen(false);
-    const show = () => {
-      setDrawTabOpen(true);
-      updatePenSettings();
-    };
-    const toggle = () => {
-      if (drawTabOpen) {
-        hide();
-      } else {
-        show();
-      }
-    };
     const updateTextAreaSize = () => {
       if (textareaRef.current) {
         textareaRef.current.style.height = "";
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
       }
     };
-    y2(() => {
-      window.__toggleDrawTab = toggle;
-      window.__showDrawTab = show;
-      window.__hideDrawTab = hide;
-      return () => {
-        delete window.__toggleDrawTab;
-        delete window.__showDrawTab;
-        delete window.__hideDrawTab;
-      };
-    }, [toggle, show, hide]);
     const handleSizeChange = (e3) => {
       const newSize = parseInt(e3.target.value);
       const drawtab = rootRef.current;
@@ -4945,7 +4924,7 @@ enter: submit/accept dialog`;
       ] }, category)) })
     ] });
   };
-  var DrawTab = (props) => /* @__PURE__ */ u3(DrawTabProvider, { children: /* @__PURE__ */ u3(DrawTabContent, { ...props }) });
+  var DrawTab = (props) => /* @__PURE__ */ u3(DrawTabContent, { ...props });
 
   // src/components/Misc.jsx
   var LoginAssistantsList = () => {
@@ -5165,7 +5144,7 @@ enter: submit/accept dialog`;
     return null;
   };
   var App = () => {
-    return /* @__PURE__ */ u3(k, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children: [
+    return /* @__PURE__ */ u3(k, { children: /* @__PURE__ */ u3(AppProvider, { children: [
       /* @__PURE__ */ u3(GlobalExposures, {}),
       /* @__PURE__ */ u3(CustomToolbar, {}),
       /* @__PURE__ */ u3(PageChangeManager, {}),
@@ -5173,7 +5152,7 @@ enter: submit/accept dialog`;
       /* @__PURE__ */ u3(RefreshButton, {}),
       /* @__PURE__ */ u3(DrawTab, {}),
       /* @__PURE__ */ u3(PrintOverlay, {})
-    ] }) }) }) }) });
+    ] }) });
   };
   var appContainer = document.createElement("div");
   appContainer.id = "app-container";

@@ -5,7 +5,7 @@ import { doEnter, doEscape, doBackspace, clearSearch, focusSearch, cycleHighligh
 import { doMarkingListJK, doMarkingListHL } from '../helpers/marking.js';
 import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sideScrollProgressChart, scrollScore, stopScrolling, startScrolling, isProgressChartFloating } from '../helpers/scrolling.js';
 import { doDown, doUp } from '../helpers/actions.js';
-import { useTimestamp } from '../context/AppContext.jsx';
+import { useTimestamp, useDrawTab } from '../context/AppContext.jsx';
 
 const keyboardHelp = `Navigation:
 j: down
@@ -68,12 +68,12 @@ enter: submit/accept dialog`;
 
 export const keyboardHelpText = keyboardHelp;
 
-const handleDrawTabKey = (e) => {
+const handleDrawTabKey = (e, { hideDrawTab }) => {
     const drawtab = document.querySelector('.drawtab');
     switch (e.key) {
         case "d":
         case "Escape":
-            window.__hideDrawTab?.();
+            hideDrawTab();
             break;
         case "-":
         case "+":
@@ -173,7 +173,7 @@ const handleStudentListKey = (e) => {
     }
 };
 
-const handleGradingKey = (e) => {
+const handleGradingKey = (e, { hideDrawTab, showDrawTab, }) => {
     switch (e.key) {
         case "j": doDown?.(); break;
         case "k": doUp?.(); break;
@@ -230,14 +230,14 @@ const handleGradingKey = (e) => {
         case "Escape": doEscape?.(e); break;
         case "d":
             e.preventDefault();
-            window.__showDrawTab?.();
+            showDrawTab();
             break;
         case "S": document.querySelector(".other-worksheet-button")?.click(); break;
         case "D":
             // StampLib.showDiff();
             break;
         case "t":
-            window.__showDrawTab?.();
+            showDrawTab();
             requestAnimationFrame(() => {
                 const drawtab = document.querySelector(".drawtab");
                 const textarea = drawtab?.querySelector("textarea");
@@ -344,8 +344,9 @@ const handleStudyRecordsKey = (e) => {
     }
 };
 
-export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
+export const useKeyboardMode = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
+    const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
     useEffect(() => {
         if (!enabled) return;
 
@@ -372,7 +373,7 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
 
             if (e.altKey && !e.ctrlKey && !e.metaKey) {
                 if (e.key === "d") {
-                    toggleDrawTab?.();
+                    toggleDrawTab();
                 } else if (e.key === "t") {
                     setTimestampEnabled((prev) => !prev);
                 }
@@ -382,7 +383,7 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
             if (e.altKey || e.ctrlKey || e.metaKey) return;
 
             if (drawTabOpen) {
-                handleDrawTabKey(e);
+                handleDrawTabKey(e, { showDrawTab, hideDrawTab });
                 return;
             }
 
@@ -397,7 +398,7 @@ export const useKeyboardMode = (enabled, drawTabOpen, toggleDrawTab) => {
             } else if (studentList) {
                 handleStudentListKey(e);
             } else if (worksheet) {
-                handleGradingKey(e);
+                handleGradingKey(e, { showDrawTab, hideDrawTab });
             } else if (studentProfile) {
                 handleStudentProfileKey(e);
             } else if (studyRecords) {
