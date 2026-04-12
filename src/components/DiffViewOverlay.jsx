@@ -13,24 +13,31 @@ export const useDiffViewOverlay = () => {
 };
 
 export const DiffViewOverlayProvider = ({ children }) => {
-    const [diffViewOverlayVisible, setVisible] = useState(false);
-    // const savedStrokes = useRef(null);
+    const [diffViewOverlayVisible, setVisible] = useState(0);
+    const savedStrokes = useRef(null);
     const firstMarkAfterGrading = useRef(-1);
     const atd = useRef(null);
     const fakeErasers = useRef({});
     const realErasers = useRef({});
 
     const showDiffViewOverlay = useCallback(() => {
-        onShow();
-        setVisible(true);
+        onShowDiff();
+        setVisible(1);
     }, []);
     const hideDiffViewOverlay = useCallback(() => {
-        onHide();
-        setVisible(false);
+        onHideDiff();
+        setVisible(0);
+    }, []);
+    const showBeforeViewOverlay = useCallback(() => {
+        onShowBefore();
+        setVisible(2);
+    }, []);
+    const hideBeforeViewOverlay = useCallback(() => {
+        onHideBefore();
+        setVisible(0);
     }, []);
 
-    const onShow = useCallback(() => {
-        // TODO: implement stub
+    const onShowDiff = useCallback(() => {
         let gradingStartTime = getGradingStartTime();
         let gradingStartTimeMs = gradingStartTime?.toTemporalInstant().epochMilliseconds;
         if (!gradingStartTimeMs) {
@@ -42,13 +49,11 @@ export const DiffViewOverlayProvider = ({ children }) => {
         }
         atd.current = StampLib.getStudentAtd();
         const is = atd.current.currentDrawing.is;
-        // savedStrokes.current = is;
         if (is.length > 0) {
             const lastStroke = new Date(is[is.length - 1].cs[0].t);
             if (lastStroke < gradingStartTime) {
             } else {
                 firstMarkAfterGrading.current = is.findIndex(i => i.cs[0].t > gradingStartTimeMs);
-                // drawing.is = is.slice(firstMarkAfterGrading);
                 // Make eraser marks visible
                 if (firstMarkAfterGrading.current > -1) {
                     is.slice(firstMarkAfterGrading.current).forEach(i => {
@@ -79,7 +84,7 @@ export const DiffViewOverlayProvider = ({ children }) => {
         }
     }, []);
 
-    const onHide = useCallback(() => {
+    const onHideDiff = useCallback(() => {
         if (atd.current && firstMarkAfterGrading.current > -1) {
             // Make eraser marks invisible again
             atd.current.currentDrawing.is.slice(firstMarkAfterGrading.current).forEach(i => {
@@ -95,10 +100,43 @@ export const DiffViewOverlayProvider = ({ children }) => {
                     i.st.col.B = 0;
                 }
             });
-            // atd.current.currentDrawing.is = savedStrokes.current;
             atd.current.redrawCurrentLayerByInk();
         }
-        // savedStrokes.current = null;
+        firstMarkAfterGrading.current = null;
+        atd.current = null;
+    }, []);
+
+    const onShowBefore = useCallback(() => {
+        let gradingStartTime = getGradingStartTime();
+        let gradingStartTimeMs = gradingStartTime?.toTemporalInstant().epochMilliseconds;
+        if (!gradingStartTimeMs) {
+            console.log("No gradingStartTime");
+            gradingStartTimeMs = 0;
+            // TODO: hide
+            // setVisible(false);
+            // return;
+        }
+        atd.current = StampLib.getStudentAtd();
+        const drawing = atd.current.currentDrawing;
+        const is = drawing.is;
+        savedStrokes.current = is;
+        if (is.length > 0) {
+            const lastStroke = new Date(is[is.length - 1].cs[0].t);
+            if (lastStroke < gradingStartTime) {
+            } else {
+                firstMarkAfterGrading.current = is.findIndex(i => i.cs[0].t > gradingStartTimeMs);
+                drawing.is = is.slice(0, firstMarkAfterGrading.current);
+                atd.current.redrawCurrentLayerByInk();
+            }
+        }
+    }, []);
+
+    const onHideBefore = useCallback(() => {
+        if (atd.current && firstMarkAfterGrading.current > -1) {
+            atd.current.currentDrawing.is = savedStrokes.current;
+            atd.current.redrawCurrentLayerByInk();
+        }
+        savedStrokes.current = null;
         firstMarkAfterGrading.current = null;
         atd.current = null;
     }, []);
@@ -108,6 +146,8 @@ export const DiffViewOverlayProvider = ({ children }) => {
             diffViewOverlayVisible,
             showDiffViewOverlay,
             hideDiffViewOverlay,
+            showBeforeViewOverlay,
+            hideBeforeViewOverlay,
         }}>
             {children}
         </DiffViewOverlayContext.Provider>
@@ -124,15 +164,23 @@ export const DiffViewOverlay = () => {
         const overlay = overlayRef.current;
 
         const handleKeyDown = (e) => {
-            hideDiffViewOverlay();
-            if (e.key == "Backspace" || e.key == "D" || e.key == "m") {
+            if (diffViewOverlayVisible == 1) {
+                hideDiffViewOverlay();
+                if (e.key == "Backspace" || e.key == "D" || e.key == "m") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            } else if (diffViewOverlayVisible == 2) {
+                // hideBeforeViewOverlay();
                 e.preventDefault();
                 e.stopPropagation();
             }
         };
 
         const handleClick = (e) => {
-            hideDiffViewOverlay();
+            if (diffViewOverlayVisible == 1) {
+                hideDiffViewOverlay();
+            }
         };
 
         overlay.addEventListener('keydown', handleKeyDown);

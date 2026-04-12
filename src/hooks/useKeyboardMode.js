@@ -30,6 +30,7 @@ X: x all
 c: clear x's
 A: toggle answer display
 m / D: Show what the student changed since the last grading
+b (hold): Show what the student submitted previously
 alt+t: show timestamp of when the page was last changed. *TIMEZONE IS ASSUMED*. Red means the page hasn't been changed since it was last graded (this can be wrong if the student's timezone is different or their clock is wrong)
 P: start replay / pause replay
 (during replay):
@@ -239,6 +240,9 @@ const handleGradingKey = (e, fns) => {
         case "D":
             fns.showDiffViewOverlay();
             break;
+        case "b":
+            fns.showBeforeViewOverlay();
+            break;
         case "t":
             fns.showDrawTab();
             requestAnimationFrame(() => {
@@ -350,13 +354,13 @@ const handleStudyRecordsKey = (e) => {
 export const useKeyboardMode = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
     const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
-    const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay  } = useDiffViewOverlay();
-    const fns = { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab, setTimestampEnabled, diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay };
+    const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
+    const fns = { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab, setTimestampEnabled, diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay };
     useEffect(() => {
         if (!enabled) return;
 
         const handleKeyDown = (e) => {
-            if (e.repeat && ["j", "J", "k", "K", "l", "L", "h", "H"].includes(e.key)) return;
+            if (e.repeat && ["j", "J", "k", "K", "l", "L", "h", "H", "b"].includes(e.key)) return;
             if ((e.target.nodeName === "INPUT" && e.target.type !== "checkbox") || e.target.nodeName === "TEXTAREA") {
                 if (e.key === "Escape") {
                     doEscape(e, fns);
@@ -437,6 +441,9 @@ export const useKeyboardMode = (enabled) => {
                     if (pageSideScrolling && pageScrollingDirection == RIGHT) {
                         stopScrolling?.();
                     }
+                    break;
+                case "b":
+                    hideBeforeViewOverlay();
                     break;
             }
         };

@@ -3725,20 +3725,29 @@
     return context;
   };
   var DiffViewOverlayProvider = ({ children }) => {
-    const [diffViewOverlayVisible, setVisible] = d2(false);
+    const [diffViewOverlayVisible, setVisible] = d2(0);
+    const savedStrokes = A2(null);
     const firstMarkAfterGrading = A2(-1);
     const atd = A2(null);
     const fakeErasers = A2({});
     const realErasers = A2({});
     const showDiffViewOverlay = q2(() => {
-      onShow();
-      setVisible(true);
+      onShowDiff();
+      setVisible(1);
     }, []);
     const hideDiffViewOverlay = q2(() => {
-      onHide();
-      setVisible(false);
+      onHideDiff();
+      setVisible(0);
     }, []);
-    const onShow = q2(() => {
+    const showBeforeViewOverlay = q2(() => {
+      onShowBefore();
+      setVisible(2);
+    }, []);
+    const hideBeforeViewOverlay = q2(() => {
+      onHideBefore();
+      setVisible(0);
+    }, []);
+    const onShowDiff = q2(() => {
       let gradingStartTime = getGradingStartTime();
       let gradingStartTimeMs = gradingStartTime?.toTemporalInstant().epochMilliseconds;
       if (!gradingStartTimeMs) {
@@ -3776,7 +3785,7 @@
         }
       }
     }, []);
-    const onHide = q2(() => {
+    const onHideDiff = q2(() => {
       if (atd.current && firstMarkAfterGrading.current > -1) {
         atd.current.currentDrawing.is.slice(firstMarkAfterGrading.current).forEach((i4) => {
           if (i4.st.col.R == 200) {
@@ -3795,10 +3804,42 @@
       firstMarkAfterGrading.current = null;
       atd.current = null;
     }, []);
+    const onShowBefore = q2(() => {
+      let gradingStartTime = getGradingStartTime();
+      let gradingStartTimeMs = gradingStartTime?.toTemporalInstant().epochMilliseconds;
+      if (!gradingStartTimeMs) {
+        console.log("No gradingStartTime");
+        gradingStartTimeMs = 0;
+      }
+      atd.current = StampLib.getStudentAtd();
+      const drawing = atd.current.currentDrawing;
+      const is = drawing.is;
+      savedStrokes.current = is;
+      if (is.length > 0) {
+        const lastStroke = new Date(is[is.length - 1].cs[0].t);
+        if (lastStroke < gradingStartTime) {
+        } else {
+          firstMarkAfterGrading.current = is.findIndex((i4) => i4.cs[0].t > gradingStartTimeMs);
+          drawing.is = is.slice(0, firstMarkAfterGrading.current);
+          atd.current.redrawCurrentLayerByInk();
+        }
+      }
+    }, []);
+    const onHideBefore = q2(() => {
+      if (atd.current && firstMarkAfterGrading.current > -1) {
+        atd.current.currentDrawing.is = savedStrokes.current;
+        atd.current.redrawCurrentLayerByInk();
+      }
+      savedStrokes.current = null;
+      firstMarkAfterGrading.current = null;
+      atd.current = null;
+    }, []);
     return /* @__PURE__ */ u3(DiffViewOverlayContext.Provider, { value: {
       diffViewOverlayVisible,
       showDiffViewOverlay,
-      hideDiffViewOverlay
+      hideDiffViewOverlay,
+      showBeforeViewOverlay,
+      hideBeforeViewOverlay
     }, children });
   };
   var DiffViewOverlay = () => {
@@ -3809,14 +3850,21 @@
         return;
       const overlay = overlayRef.current;
       const handleKeyDown = (e3) => {
-        hideDiffViewOverlay();
-        if (e3.key == "Backspace" || e3.key == "D" || e3.key == "m") {
+        if (diffViewOverlayVisible == 1) {
+          hideDiffViewOverlay();
+          if (e3.key == "Backspace" || e3.key == "D" || e3.key == "m") {
+            e3.preventDefault();
+            e3.stopPropagation();
+          }
+        } else if (diffViewOverlayVisible == 2) {
           e3.preventDefault();
           e3.stopPropagation();
         }
       };
       const handleClick = (e3) => {
-        hideDiffViewOverlay();
+        if (diffViewOverlayVisible == 1) {
+          hideDiffViewOverlay();
+        }
       };
       overlay.addEventListener("keydown", handleKeyDown);
       overlay.addEventListener("click", handleClick);
@@ -4261,6 +4309,7 @@ X: x all
 c: clear x's
 A: toggle answer display
 m / D: Show what the student changed since the last grading
+b (hold): Show what the student submitted previously
 alt+t: show timestamp of when the page was last changed. *TIMEZONE IS ASSUMED*. Red means the page hasn't been changed since it was last graded (this can be wrong if the student's timezone is different or their clock is wrong)
 P: start replay / pause replay
 (during replay):
@@ -4536,6 +4585,9 @@ enter: submit/accept dialog`;
       case "D":
         fns.showDiffViewOverlay();
         break;
+      case "b":
+        fns.showBeforeViewOverlay();
+        break;
       case "t":
         fns.showDrawTab();
         requestAnimationFrame(() => {
@@ -4682,13 +4734,13 @@ enter: submit/accept dialog`;
   var useKeyboardMode2 = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
     const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
-    const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay } = useDiffViewOverlay();
-    const fns = { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab, setTimestampEnabled, diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay };
+    const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
+    const fns = { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab, setTimestampEnabled, diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay };
     y2(() => {
       if (!enabled)
         return;
       const handleKeyDown = (e3) => {
-        if (e3.repeat && ["j", "J", "k", "K", "l", "L", "h", "H"].includes(e3.key))
+        if (e3.repeat && ["j", "J", "k", "K", "l", "L", "h", "H", "b"].includes(e3.key))
           return;
         if (e3.target.nodeName === "INPUT" && e3.target.type !== "checkbox" || e3.target.nodeName === "TEXTAREA") {
           if (e3.key === "Escape") {
@@ -4765,6 +4817,9 @@ enter: submit/accept dialog`;
             if (pageSideScrolling2 && pageScrollingDirection2 == RIGHT) {
               stopScrolling?.();
             }
+            break;
+          case "b":
+            hideBeforeViewOverlay();
             break;
         }
       };
