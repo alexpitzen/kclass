@@ -4109,7 +4109,7 @@ g: top
 G: bottom
 n: next active page
 N: previous active page
-D: go to next set
+S: go to next set
 R: switch to reading
 M: switch to math
 H: header dropdown or show/hide header
