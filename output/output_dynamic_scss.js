@@ -996,8 +996,12 @@
         return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-red-comment-']")?.id];
     }
 
+    function getStudentAtd() {
+        return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-study-stroke-']")?.id];
+    }
+
     function getStudentDrawing() {
-        return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-study-stroke-']")?.id]?.currentDrawing?.is;
+        return getStudentAtd()?.currentDrawing?.is;
     }
 
     function unlockPage() {
@@ -2256,6 +2260,7 @@
 
     global.StampLib = {
         getAtd: getAtd,
+        getStudentAtd: getStudentAtd,
         getStudentDrawing: getStudentDrawing,
         writeAllAt: writeAllAt,
         undoLastWriteAll: undoLastWriteAll,
@@ -3710,6 +3715,138 @@
     );
   };
 
+  // src/components/DiffViewOverlay.jsx
+  var DiffViewOverlayContext = R(null);
+  var useDiffViewOverlay = () => {
+    const context = x2(DiffViewOverlayContext);
+    if (!context) {
+      throw new Error("useDiffViewOverlay must be used within DiffViewOverlayProvider");
+    }
+    return context;
+  };
+  var DiffViewOverlayProvider = ({ children }) => {
+    const [diffViewOverlayVisible, setVisible] = d2(false);
+    const firstMarkAfterGrading = A2(-1);
+    const atd = A2(null);
+    const fakeErasers = A2({});
+    const realErasers = A2({});
+    const showDiffViewOverlay = q2(() => {
+      onShow();
+      setVisible(true);
+    }, []);
+    const hideDiffViewOverlay = q2(() => {
+      onHide();
+      setVisible(false);
+    }, []);
+    const onShow = q2(() => {
+      let gradingStartTime = getGradingStartTime();
+      let gradingStartTimeMs = gradingStartTime?.toTemporalInstant().epochMilliseconds;
+      if (!gradingStartTimeMs) {
+        console.log("No gradingStartTime");
+        gradingStartTimeMs = 0;
+      }
+      atd.current = StampLib.getStudentAtd();
+      const is = atd.current.currentDrawing.is;
+      if (is.length > 0) {
+        const lastStroke = new Date(is[is.length - 1].cs[0].t);
+        if (lastStroke < gradingStartTime) {
+        } else {
+          firstMarkAfterGrading.current = is.findIndex((i4) => i4.cs[0].t > gradingStartTimeMs);
+          if (firstMarkAfterGrading.current > -1) {
+            is.slice(firstMarkAfterGrading.current).forEach((i4) => {
+              if (i4.st.tp == 203 && i4.st.oldType == 3) {
+                if (!(i4.st.w in fakeErasers.current)) {
+                  let eraser = atd.current.createStationeryByType("hp00");
+                  eraser.w = i4.st.w;
+                  eraser.col.R = 200;
+                  eraser.col.G = 200;
+                  eraser.col.B = 255;
+                  fakeErasers.current[i4.st.w] = eraser;
+                  realErasers.current[i4.st.w] = i4.st;
+                }
+                i4.st = fakeErasers.current[i4.st.w];
+              } else {
+                i4.st.col.R = 255;
+                i4.st.col.G = 50;
+                i4.st.col.B = 50;
+              }
+            });
+          }
+          atd.current.redrawCurrentLayerByInk();
+        }
+      }
+    }, []);
+    const onHide = q2(() => {
+      if (atd.current && firstMarkAfterGrading.current > -1) {
+        atd.current.currentDrawing.is.slice(firstMarkAfterGrading.current).forEach((i4) => {
+          if (i4.st.col.R == 200) {
+            try {
+              i4.st = realErasers.current[i4.st.w];
+            } catch {
+            }
+          } else {
+            i4.st.col.R = 0;
+            i4.st.col.G = 0;
+            i4.st.col.B = 0;
+          }
+        });
+        atd.current.redrawCurrentLayerByInk();
+      }
+      firstMarkAfterGrading.current = null;
+      atd.current = null;
+    }, []);
+    return /* @__PURE__ */ u3(DiffViewOverlayContext.Provider, { value: {
+      diffViewOverlayVisible,
+      showDiffViewOverlay,
+      hideDiffViewOverlay
+    }, children });
+  };
+  var DiffViewOverlay = () => {
+    const { diffViewOverlayVisible, hideDiffViewOverlay } = useDiffViewOverlay();
+    const overlayRef = A2(null);
+    y2(() => {
+      if (!diffViewOverlayVisible || !overlayRef.current)
+        return;
+      const overlay = overlayRef.current;
+      const handleKeyDown = (e3) => {
+        hideDiffViewOverlay();
+        if (e3.key == "Backspace" || e3.key == "D") {
+          e3.preventDefault();
+          e3.stopPropagation();
+        }
+      };
+      const handleClick = (e3) => {
+        hideDiffViewOverlay();
+      };
+      overlay.addEventListener("keydown", handleKeyDown);
+      overlay.addEventListener("click", handleClick);
+      overlay.focus();
+      return () => {
+        overlay.removeEventListener("keydown", handleKeyDown);
+        overlay.removeEventListener("click", handleClick);
+      };
+    }, [diffViewOverlayVisible, hideDiffViewOverlay]);
+    if (!diffViewOverlayVisible)
+      return null;
+    return /* @__PURE__ */ u3(
+      "div",
+      {
+        ref: overlayRef,
+        class: "diffview-overlay",
+        tabIndex: -1,
+        style: {
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "rgba(0, 0, 0, 0)",
+          zIndex: 9999
+        }
+      }
+    );
+  };
+
   // src/context/AppContext.jsx
   var DrawTabContext = R(null);
   var TimestampContext = R(null);
@@ -3739,7 +3876,7 @@
     return /* @__PURE__ */ u3(KeyboardModeContext.Provider, { value: { keyboardModeEnabled, setKeyboardModeEnabled }, children });
   };
   var AppProvider = ({ children }) => {
-    return /* @__PURE__ */ u3(DrawTabProvider, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) });
+    return /* @__PURE__ */ u3(DrawTabProvider, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(DiffViewOverlayProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) }) });
   };
 
   // src/components/CustomToolbar.jsx
@@ -4122,7 +4259,8 @@ Marking (\u21E7 means shift):
 x: match previous markings or x all
 X: x all
 c: clear x's
-A: toggle answers
+A: toggle answer display
+m / D: Show what the student changed since the last grading
 alt+t: show timestamp of when the page was last changed. *TIMEZONE IS ASSUMED*. Red means the page hasn't been changed since it was last graded (this can be wrong if the student's timezone is different or their clock is wrong)
 P: start replay / pause replay
 (during replay):
@@ -4394,7 +4532,9 @@ enter: submit/accept dialog`;
       case "S":
         document.querySelector(".other-worksheet-button")?.click();
         break;
+      case "m":
       case "D":
+        fns.showDiffViewOverlay();
         break;
       case "t":
         fns.showDrawTab();
@@ -4542,7 +4682,8 @@ enter: submit/accept dialog`;
   var useKeyboardMode2 = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
     const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
-    const fns = { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab, setTimestampEnabled };
+    const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay } = useDiffViewOverlay();
+    const fns = { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab, setTimestampEnabled, diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay };
     y2(() => {
       if (!enabled)
         return;
@@ -5145,7 +5286,8 @@ enter: submit/accept dialog`;
       /* @__PURE__ */ u3(LoginAssistantsList, {}),
       /* @__PURE__ */ u3(RefreshButton, {}),
       /* @__PURE__ */ u3(DrawTab, {}),
-      /* @__PURE__ */ u3(PrintOverlay, {})
+      /* @__PURE__ */ u3(PrintOverlay, {}),
+      /* @__PURE__ */ u3(DiffViewOverlay, {})
     ] }) });
   };
   var appContainer = document.createElement("div");

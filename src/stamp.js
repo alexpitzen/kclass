@@ -982,8 +982,12 @@
         return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-red-comment-']")?.id];
     }
 
+    function getStudentAtd() {
+        return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-study-stroke-']")?.id];
+    }
+
     function getStudentDrawing() {
-        return InkTool.InkCanvasLib.List[document.querySelector(".worksheet-container.selected stroke .stroke[id*='-study-stroke-']")?.id]?.currentDrawing?.is;
+        return getStudentAtd()?.currentDrawing?.is;
     }
 
     function unlockPage() {
@@ -2149,6 +2153,7 @@
 
     global.StampLib = {
         getAtd: getAtd,
+        getStudentAtd: getStudentAtd,
         getStudentDrawing: getStudentDrawing,
         writeAllAt: writeAllAt,
         undoLastWriteAll: undoLastWriteAll,

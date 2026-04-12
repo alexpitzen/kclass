@@ -6,6 +6,7 @@ import { doMarkingListJK, doMarkingListHL } from '../helpers/marking.js';
 import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sideScrollProgressChart, scrollScore, stopScrolling, startScrolling, isProgressChartFloating } from '../helpers/scrolling.js';
 import { doDown, doUp } from '../helpers/actions.js';
 import { useTimestamp, useDrawTab } from '../context/AppContext.jsx';
+import { useDiffViewOverlay } from '../components/DiffViewOverlay.jsx';
 
 const keyboardHelp = `Navigation:
 j: down
@@ -27,7 +28,8 @@ Marking (⇧ means shift):
 x: match previous markings or x all
 X: x all
 c: clear x's
-A: toggle answers
+A: toggle answer display
+m / D: Show what the student changed since the last grading
 alt+t: show timestamp of when the page was last changed. *TIMEZONE IS ASSUMED*. Red means the page hasn't been changed since it was last graded (this can be wrong if the student's timezone is different or their clock is wrong)
 P: start replay / pause replay
 (during replay):
@@ -233,8 +235,9 @@ const handleGradingKey = (e, fns) => {
             fns.showDrawTab();
             break;
         case "S": document.querySelector(".other-worksheet-button")?.click(); break;
+        case "m":
         case "D":
-            // StampLib.showDiff();
+            fns.showDiffViewOverlay();
             break;
         case "t":
             fns.showDrawTab();
@@ -347,7 +350,8 @@ const handleStudyRecordsKey = (e) => {
 export const useKeyboardMode = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
     const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
-    const fns = { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab, setTimestampEnabled };
+    const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay  } = useDiffViewOverlay();
+    const fns = { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab, setTimestampEnabled, diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay };
     useEffect(() => {
         if (!enabled) return;
 
