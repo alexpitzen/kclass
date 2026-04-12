@@ -118,7 +118,7 @@ const handleDrawTabKey = (e, { hideDrawTab }) => {
     return;
 };
 
-const handleMarkingListKey = (e) => {
+const handleMarkingListKey = (e, fns) => {
     switch (e.key) {
         case "f":
         case "/":
@@ -155,7 +155,7 @@ const handleMarkingListKey = (e) => {
         case "Enter":
             doEnter?.();
             break;
-        case "Escape": doEscape?.(e); break;
+        case "Escape": doEscape?.(e, fns); break;
     }
 };
 
@@ -173,7 +173,7 @@ const handleStudentListKey = (e) => {
     }
 };
 
-const handleGradingKey = (e, { hideDrawTab, showDrawTab, }) => {
+const handleGradingKey = (e, fns) => {
     switch (e.key) {
         case "j": doDown?.(); break;
         case "k": doUp?.(); break;
@@ -227,17 +227,17 @@ const handleGradingKey = (e, { hideDrawTab, showDrawTab, }) => {
         case "*": do8?.(e.key); break;
         case "A": document.querySelector("#AnswerDisplayButton")?.click(); break;
         case "Enter": doEnter?.(); break;
-        case "Escape": doEscape?.(e); break;
+        case "Escape": doEscape(e, fns); break;
         case "d":
             e.preventDefault();
-            showDrawTab();
+            fns.showDrawTab();
             break;
         case "S": document.querySelector(".other-worksheet-button")?.click(); break;
         case "D":
             // StampLib.showDiff();
             break;
         case "t":
-            showDrawTab();
+            fns.showDrawTab();
             requestAnimationFrame(() => {
                 const drawtab = document.querySelector(".drawtab");
                 const textarea = drawtab?.querySelector("textarea");
@@ -290,7 +290,7 @@ const handleGradingKey = (e, { hideDrawTab, showDrawTab, }) => {
     }
 };
 
-const handleStudentProfileKey = (e) => {
+const handleStudentProfileKey = (e, fns) => {
     switch (e.key) {
         case "R":
             if (!document.querySelector("loading-spinner div")) {
@@ -324,7 +324,7 @@ const handleStudentProfileKey = (e) => {
         case "p": document.querySelector(".dashboard-progress-chart .finally > .icon")?.click(); break;
         case "e": Array.from(document.querySelectorAll(".dashboard-menu-right .options-btn")).find(b => b.innerHTML?.trim() === "Edit")?.click(); break;
         case "Backspace": doBackspace?.(); break;
-        case "Escape": doEscape?.(e); break;
+        case "Escape": doEscape?.(e, fns); break;
         case "Enter": doEnter?.(); break;
     }
 };
@@ -347,14 +347,15 @@ const handleStudyRecordsKey = (e) => {
 export const useKeyboardMode = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
     const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
+    const fns = { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab, setTimestampEnabled };
     useEffect(() => {
         if (!enabled) return;
 
         const handleKeyDown = (e) => {
             if (e.repeat && ["j", "J", "k", "K", "l", "L", "h", "H"].includes(e.key)) return;
-            if (e.target.nodeName === "INPUT" || e.target.nodeName === "TEXTAREA") {
+            if ((e.target.nodeName === "INPUT" && e.target.type !== "checkbox") || e.target.nodeName === "TEXTAREA") {
                 if (e.key === "Escape") {
-                    doEscape?.(e);
+                    doEscape(e, fns);
                 } else if (e.key === "Enter" && e.target.classList.contains("search-input")) {
                     const searchBtn = e.target.parentElement?.querySelector(".search-btn");
                     if (searchBtn) {
@@ -383,7 +384,7 @@ export const useKeyboardMode = (enabled) => {
             if (e.altKey || e.ctrlKey || e.metaKey) return;
 
             if (drawTabOpen) {
-                handleDrawTabKey(e, { showDrawTab, hideDrawTab });
+                handleDrawTabKey(e, fns);
                 return;
             }
 
@@ -394,15 +395,15 @@ export const useKeyboardMode = (enabled) => {
             const studyRecords = document.querySelector(".ATD0010P-root");
 
             if (markingList) {
-                handleMarkingListKey(e);
+                handleMarkingListKey(e, fns);
             } else if (studentList) {
-                handleStudentListKey(e);
+                handleStudentListKey(e, fns);
             } else if (worksheet) {
-                handleGradingKey(e, { showDrawTab, hideDrawTab });
+                handleGradingKey(e, fns);
             } else if (studentProfile) {
-                handleStudentProfileKey(e);
+                handleStudentProfileKey(e, fns);
             } else if (studyRecords) {
-                handleStudyRecordsKey(e);
+                handleStudyRecordsKey(e, fns);
             }
         };
 

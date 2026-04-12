@@ -66,16 +66,3 @@ export const useHDMode = (enabled = false) => {
         }
     }, [enabled, initHD, makeHD]);
 };
-
-export const useHDModeExposed = () => {
-    const [enabled, setEnabled] = useHDMode();
-    
-    useEffect(() => {
-        window.__hdModeSetEnabled = setEnabled;
-        return () => {
-            window.__hdModeSetEnabled = null;
-        };
-    }, [setEnabled]);
-    
-    return [enabled, setEnabled];
-};

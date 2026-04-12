@@ -18,27 +18,11 @@ const PageChangeManager = () => {
     return null;
 };
 
-// Wrapper to expose context functions to globals for keyboard shortcuts
-const GlobalExposures = () => {
-    const { setHdModeEnabled } = useHDModeContext();
-
-    useEffect(() => {
-        window.__hdModeSetEnabled = setHdModeEnabled;
-
-        return () => {
-            delete window.__hdModeSetEnabled;
-        };
-    }, [setHdModeEnabled]);
-
-    return null;
-};
-
 // Main App component that wraps all others
 const App = () => {
     return (
         <>
             <AppProvider>
-                <GlobalExposures />
                 <CustomToolbar />
                 <PageChangeManager />
                 <LoginAssistantsList />

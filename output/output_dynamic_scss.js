@@ -3167,7 +3167,7 @@
       return;
     header?.classList.toggle("z300");
   }
-  function doEscape(e3) {
+  function doEscape(e3, { drawTabOpen, hideDrawTab }) {
     const printoverlay = document.querySelector(".printoverlay");
     if (printoverlay?.checkVisibility()) {
       window.__hidePrintPreview?.();
@@ -3185,6 +3185,10 @@
         p3.classList.remove("kbfocus");
       });
       showHeader(false);
+      return;
+    }
+    if (drawTabOpen) {
+      hideDrawTab();
       return;
     }
     if (e3.target.classList.contains("search-input")) {
@@ -4209,7 +4213,7 @@ enter: submit/accept dialog`;
     }
     return;
   };
-  var handleMarkingListKey = (e3) => {
+  var handleMarkingListKey = (e3, fns) => {
     switch (e3.key) {
       case "f":
       case "/":
@@ -4269,7 +4273,7 @@ enter: submit/accept dialog`;
         doEnter?.();
         break;
       case "Escape":
-        doEscape?.(e3);
+        doEscape?.(e3, fns);
         break;
     }
   };
@@ -4296,7 +4300,7 @@ enter: submit/accept dialog`;
         break;
     }
   };
-  var handleGradingKey = (e3, { hideDrawTab, showDrawTab }) => {
+  var handleGradingKey = (e3, fns) => {
     switch (e3.key) {
       case "j":
         doDown?.();
@@ -4381,11 +4385,11 @@ enter: submit/accept dialog`;
         doEnter?.();
         break;
       case "Escape":
-        doEscape?.(e3);
+        doEscape(e3, fns);
         break;
       case "d":
         e3.preventDefault();
-        showDrawTab();
+        fns.showDrawTab();
         break;
       case "S":
         document.querySelector(".other-worksheet-button")?.click();
@@ -4393,7 +4397,7 @@ enter: submit/accept dialog`;
       case "D":
         break;
       case "t":
-        showDrawTab();
+        fns.showDrawTab();
         requestAnimationFrame(() => {
           const drawtab = document.querySelector(".drawtab");
           const textarea = drawtab?.querySelector("textarea");
@@ -4457,7 +4461,7 @@ enter: submit/accept dialog`;
         break;
     }
   };
-  var handleStudentProfileKey = (e3) => {
+  var handleStudentProfileKey = (e3, fns) => {
     switch (e3.key) {
       case "R":
         if (!document.querySelector("loading-spinner div")) {
@@ -4504,7 +4508,7 @@ enter: submit/accept dialog`;
         doBackspace?.();
         break;
       case "Escape":
-        doEscape?.(e3);
+        doEscape?.(e3, fns);
         break;
       case "Enter":
         doEnter?.();
@@ -4538,15 +4542,16 @@ enter: submit/accept dialog`;
   var useKeyboardMode2 = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
     const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
+    const fns = { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab, setTimestampEnabled };
     y2(() => {
       if (!enabled)
         return;
       const handleKeyDown = (e3) => {
         if (e3.repeat && ["j", "J", "k", "K", "l", "L", "h", "H"].includes(e3.key))
           return;
-        if (e3.target.nodeName === "INPUT" || e3.target.nodeName === "TEXTAREA") {
+        if (e3.target.nodeName === "INPUT" && e3.target.type !== "checkbox" || e3.target.nodeName === "TEXTAREA") {
           if (e3.key === "Escape") {
-            doEscape?.(e3);
+            doEscape(e3, fns);
           } else if (e3.key === "Enter" && e3.target.classList.contains("search-input")) {
             const searchBtn = e3.target.parentElement?.querySelector(".search-btn");
             if (searchBtn) {
@@ -4573,7 +4578,7 @@ enter: submit/accept dialog`;
         if (e3.altKey || e3.ctrlKey || e3.metaKey)
           return;
         if (drawTabOpen) {
-          handleDrawTabKey(e3, { showDrawTab, hideDrawTab });
+          handleDrawTabKey(e3, fns);
           return;
         }
         const markingList = document.querySelector(".markingList.tabActive");
@@ -4582,15 +4587,15 @@ enter: submit/accept dialog`;
         const studentProfile = document.querySelector(".student-profile");
         const studyRecords = document.querySelector(".ATD0010P-root");
         if (markingList) {
-          handleMarkingListKey(e3);
+          handleMarkingListKey(e3, fns);
         } else if (studentList) {
-          handleStudentListKey(e3);
+          handleStudentListKey(e3, fns);
         } else if (worksheet) {
-          handleGradingKey(e3, { showDrawTab, hideDrawTab });
+          handleGradingKey(e3, fns);
         } else if (studentProfile) {
-          handleStudentProfileKey(e3);
+          handleStudentProfileKey(e3, fns);
         } else if (studyRecords) {
-          handleStudyRecordsKey(e3);
+          handleStudyRecordsKey(e3, fns);
         }
       };
       const handleKeyUp = (e3) => {
@@ -5133,19 +5138,8 @@ enter: submit/accept dialog`;
     useMarkboxKeys(keyboardModeEnabled);
     return null;
   };
-  var GlobalExposures = () => {
-    const { setHdModeEnabled } = useHDMode();
-    y2(() => {
-      window.__hdModeSetEnabled = setHdModeEnabled;
-      return () => {
-        delete window.__hdModeSetEnabled;
-      };
-    }, [setHdModeEnabled]);
-    return null;
-  };
   var App = () => {
     return /* @__PURE__ */ u3(k, { children: /* @__PURE__ */ u3(AppProvider, { children: [
-      /* @__PURE__ */ u3(GlobalExposures, {}),
       /* @__PURE__ */ u3(CustomToolbar, {}),
       /* @__PURE__ */ u3(PageChangeManager, {}),
       /* @__PURE__ */ u3(LoginAssistantsList, {}),

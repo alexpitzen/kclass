@@ -85,7 +85,7 @@ function toggleHeader() {
     header?.classList.toggle("z300");
 }
 
-function doEscape(e) {
+function doEscape(e, { drawTabOpen, hideDrawTab }) {
     // Check print overlay first
     const printoverlay = document.querySelector(".printoverlay");
     if (printoverlay?.checkVisibility()) {
@@ -110,6 +110,10 @@ function doEscape(e) {
             p.classList.remove("kbfocus");
         });
         showHeader(false);
+        return;
+    }
+    if (drawTabOpen) {
+        hideDrawTab();
         return;
     }
     if (e.target.classList.contains("search-input")) {
