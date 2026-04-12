@@ -125,7 +125,7 @@ export const DiffViewOverlay = () => {
 
         const handleKeyDown = (e) => {
             hideDiffViewOverlay();
-            if (e.key == "Backspace" || e.key == "D") {
+            if (e.key == "Backspace" || e.key == "D" || e.key == "m") {
                 e.preventDefault();
                 e.stopPropagation();
             }

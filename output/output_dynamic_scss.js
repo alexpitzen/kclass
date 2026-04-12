@@ -3810,7 +3810,7 @@
       const overlay = overlayRef.current;
       const handleKeyDown = (e3) => {
         hideDiffViewOverlay();
-        if (e3.key == "Backspace" || e3.key == "D") {
+        if (e3.key == "Backspace" || e3.key == "D" || e3.key == "m") {
           e3.preventDefault();
           e3.stopPropagation();
         }
@@ -6249,14 +6249,6 @@ body:has(app-atx0010p) .loginAssistantsList {
   body:has(.content-menu-scroll.close) .content-menu-open-close {
     right: 0px !important;
   }
-  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
-    /* adjust sidebar width */
-    /* Show worksheet tool */
-    /* Show H button, x all button, and toolbar */
-    /* Move worksheet above header */
-    /* Answers */
-    /* Grading header */
-  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .container {
     min-width: unset !important;
   }
@@ -6268,6 +6260,9 @@ body:has(app-atx0010p) .loginAssistantsList {
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-scroll-container {
     margin-right: 0px !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
+    /* adjust sidebar width */
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-menu-scroll {
     z-index: 302;
@@ -6292,6 +6287,9 @@ body:has(app-atx0010p) .loginAssistantsList {
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-toolbar-container {
     top: 0px;
   }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
+    /* Show worksheet tool */
+  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .worksheet-tool {
     margin-left: 371px !important;
     z-index: 252 !important;
@@ -6303,6 +6301,9 @@ body:has(app-atx0010p) .loginAssistantsList {
     left: 376px;
     top: 107px;
   }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
+    /* Show H button, x all button, and toolbar */
+  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .headerZindexBtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .xallbtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .customToolbar {
     display: unset !important;
   }
@@ -6312,11 +6313,17 @@ body:has(app-atx0010p) .loginAssistantsList {
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .z300 {
     z-index: 300 !important;
   }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
+    /* Move worksheet above header */
+  }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-detail {
     position: fixed;
     top: -1px;
     left: -1px;
     z-index: 251;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
+    /* Answers */
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-answer-content {
     position: fixed !important;
@@ -6331,6 +6338,9 @@ body:has(app-atx0010p) .loginAssistantsList {
     bottom: calc(100% - 614px - 40px);
     left: unset !important;
     top: unset !important;
+  }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
+    /* Grading header */
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-header-icon {
     display: none;
