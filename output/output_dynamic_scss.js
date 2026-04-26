@@ -4142,19 +4142,18 @@
     }, children });
   };
   var handleKeys = (e3, { hideHelpOverlay, helpOverlayActiveTab, helpTabs, showHelpOverlay }) => {
+    e3.stopPropagation();
     switch (e3.key) {
       case "Enter":
       case "Escape":
       case "Backspace":
       case "?":
         hideHelpOverlay();
-        e3.preventDefault();
         break;
       case "Tab":
         const direction = e3.shiftKey ? -1 : 1;
         const tabIndex = ((helpTabs.findIndex((t3) => t3.id == helpOverlayActiveTab) ?? 0) + direction + helpTabs.length) % helpTabs.length;
         showHelpOverlay(helpTabs[tabIndex].id);
-        e3.preventDefault();
         break;
     }
   };

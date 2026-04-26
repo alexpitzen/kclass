@@ -245,13 +245,13 @@ export const HelpOverlayProvider = ({ children }) => {
 };
 
 const handleKeys = (e, { hideHelpOverlay, helpOverlayActiveTab, helpTabs, showHelpOverlay }) => {
+    e.stopPropagation();
     switch (e.key) {
         case "Enter":
         case "Escape":
         case "Backspace":
         case "?":
             hideHelpOverlay();
-            e.preventDefault();
             break;
         case "Tab":
             const direction = e.shiftKey ? -1 : 1;
@@ -259,7 +259,6 @@ const handleKeys = (e, { hideHelpOverlay, helpOverlayActiveTab, helpTabs, showHe
                 (helpTabs.findIndex(t => t.id == helpOverlayActiveTab) ?? 0) + direction + helpTabs.length
             ) % helpTabs.length;
             showHelpOverlay(helpTabs[tabIndex].id);
-            e.preventDefault();
             break;
     }
 };
