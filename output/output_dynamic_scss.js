@@ -6797,7 +6797,7 @@ body:has(app-atx0010p) .loginAssistantsList {
   display: flex;
   gap: 12px;
   margin-bottom: 4px;
-  font-size: 60%;
+  font-size: 75%;
 }
 .HelpOverlay_key {
   font-family: "Courier New", monospace;
