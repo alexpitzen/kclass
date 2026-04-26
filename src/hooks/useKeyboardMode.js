@@ -62,26 +62,6 @@ const handleDrawTabKey = (e, fns) => {
     return;
 };
 
-const handleHelpOverlay = (e, fns) => {
-    switch (e.key) {
-        case "Enter":
-        case "Escape":
-        case "Backspace":
-        case "?":
-            fns.hideHelpOverlay();
-            e.preventDefault();
-            break;
-        case "Tab":
-            const direction = e.shiftKey ? -1 : 1;
-            const tabIndex = (
-                (fns.helpTabs.findIndex(t => t.id == fns.helpOverlayActiveTab) ?? 0) + direction + fns.helpTabs.length
-            ) % fns.helpTabs.length;
-            fns.showHelpOverlay(fns.helpTabs[tabIndex].id);
-            e.preventDefault();
-            break;
-    }
-};
-
 const handleMarkingListKey = (e, fns) => {
     switch (e.key) {
         case "f":
@@ -395,9 +375,7 @@ export const useKeyboardMode = (enabled) => {
             const studentProfile = document.querySelector(".student-profile");
             const studyRecords = document.querySelector(".ATD0010P-root");
 
-            if (fns.helpOverlayVisible) {
-                handleHelpOverlay(e, fns);
-            } else if (drawTabOpen) {
+            if (drawTabOpen) {
                 handleDrawTabKey(e, fns);
             } else if (markingList) {
                 handleMarkingListKey(e, fns);

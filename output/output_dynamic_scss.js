@@ -4141,6 +4141,23 @@
       helpTabs: TABS
     }, children });
   };
+  var handleKeys = (e3, { hideHelpOverlay, helpOverlayActiveTab, helpTabs, showHelpOverlay }) => {
+    switch (e3.key) {
+      case "Enter":
+      case "Escape":
+      case "Backspace":
+      case "?":
+        hideHelpOverlay();
+        e3.preventDefault();
+        break;
+      case "Tab":
+        const direction = e3.shiftKey ? -1 : 1;
+        const tabIndex = ((helpTabs.findIndex((t3) => t3.id == helpOverlayActiveTab) ?? 0) + direction + helpTabs.length) % helpTabs.length;
+        showHelpOverlay(helpTabs[tabIndex].id);
+        e3.preventDefault();
+        break;
+    }
+  };
   var KeyBinding = ({ key: k3, desc, separator }) => /* @__PURE__ */ u3("div", { class: HelpOverlay_default.keyBinding, children: [
     /* @__PURE__ */ u3("span", { children: Array.isArray(k3) ? /* @__PURE__ */ u3(k, { children: k3.map((key, index) => /* @__PURE__ */ u3(k, { children: [
       /* @__PURE__ */ u3("span", { class: HelpOverlay_default.key, children: key }),
@@ -4159,7 +4176,11 @@
     const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
     if (!helpOverlayVisible)
       return null;
-    return /* @__PURE__ */ u3("div", { class: HelpOverlay_default.overlay, onClick: hideHelpOverlay, children: /* @__PURE__ */ u3("div", { class: HelpOverlay_default.content, onClick: (e3) => e3.stopPropagation(), children: [
+    const focusRef = A2(null);
+    y2(() => {
+      focusRef.current?.focus();
+    });
+    return /* @__PURE__ */ u3("div", { class: HelpOverlay_default.overlay, tabindex: "1", onClick: hideHelpOverlay, onKeyDown: (e3) => handleKeys(e3, { helpOverlayActiveTab, hideHelpOverlay, helpTabs, showHelpOverlay }), ref: focusRef, children: /* @__PURE__ */ u3("div", { class: HelpOverlay_default.content, onClick: (e3) => e3.stopPropagation(), children: [
       /* @__PURE__ */ u3("div", { class: HelpOverlay_default.tabs, children: [
         helpTabs.map((tab) => /* @__PURE__ */ u3(
           "button",
@@ -4623,23 +4644,6 @@
     }
     return;
   };
-  var handleHelpOverlay = (e3, fns) => {
-    switch (e3.key) {
-      case "Enter":
-      case "Escape":
-      case "Backspace":
-      case "?":
-        fns.hideHelpOverlay();
-        e3.preventDefault();
-        break;
-      case "Tab":
-        const direction = e3.shiftKey ? -1 : 1;
-        const tabIndex = ((fns.helpTabs.findIndex((t3) => t3.id == fns.helpOverlayActiveTab) ?? 0) + direction + fns.helpTabs.length) % fns.helpTabs.length;
-        fns.showHelpOverlay(fns.helpTabs[tabIndex].id);
-        e3.preventDefault();
-        break;
-    }
-  };
   var handleMarkingListKey = (e3, fns) => {
     switch (e3.key) {
       case "f":
@@ -5047,9 +5051,7 @@
         const worksheet = document.querySelector(".ATD0020P-worksheet-container.selected");
         const studentProfile = document.querySelector(".student-profile");
         const studyRecords = document.querySelector(".ATD0010P-root");
-        if (fns.helpOverlayVisible) {
-          handleHelpOverlay(e3, fns);
-        } else if (drawTabOpen) {
+        if (drawTabOpen) {
           handleDrawTabKey(e3, fns);
         } else if (markingList) {
           handleMarkingListKey(e3, fns);
@@ -5193,7 +5195,6 @@
     };
     const helpClick = () => {
       showHelpOverlay("drawtab");
-      document.querySelector(".kbhelpbtn")?.blur();
     };
     const handleUndo = () => StampLib.undoLastWriteAll();
     const handleClear = () => StampLib.clearPage();
@@ -6752,6 +6753,7 @@ body:has(app-atx0010p) .loginAssistantsList {
   max-height: calc(100dvh - 20px);
   overflow: auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  outline: none;
 }
 .HelpOverlay_tabs {
   display: flex;

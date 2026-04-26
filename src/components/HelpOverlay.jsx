@@ -1,5 +1,5 @@
 import { createContext } from 'preact';
-import { useContext, useState, useCallback } from 'preact/hooks';
+import { useContext, useState, useCallback, useRef, useEffect } from 'preact/hooks';
 import styles from './HelpOverlay.module.css';
 
 const HelpOverlayContext = createContext(null);
@@ -244,6 +244,26 @@ export const HelpOverlayProvider = ({ children }) => {
     );
 };
 
+const handleKeys = (e, { hideHelpOverlay, helpOverlayActiveTab, helpTabs, showHelpOverlay }) => {
+    switch (e.key) {
+        case "Enter":
+        case "Escape":
+        case "Backspace":
+        case "?":
+            hideHelpOverlay();
+            e.preventDefault();
+            break;
+        case "Tab":
+            const direction = e.shiftKey ? -1 : 1;
+            const tabIndex = (
+                (helpTabs.findIndex(t => t.id == helpOverlayActiveTab) ?? 0) + direction + helpTabs.length
+            ) % helpTabs.length;
+            showHelpOverlay(helpTabs[tabIndex].id);
+            e.preventDefault();
+            break;
+    }
+};
+
 const KeyBinding = ({ key: k, desc, separator }) => (
     <div class={styles.keyBinding}>
         <span>
@@ -287,8 +307,14 @@ export const HelpOverlay = () => {
 
     if (!helpOverlayVisible) return null;
 
+    const focusRef = useRef(null);
+
+    useEffect(() => {
+        focusRef.current?.focus();
+    });
+
     return (
-        <div class={styles.overlay} onClick={hideHelpOverlay}>
+        <div class={styles.overlay} tabindex="1" onClick={hideHelpOverlay} onKeyDown={e => handleKeys(e, { helpOverlayActiveTab, hideHelpOverlay, helpTabs, showHelpOverlay })} ref={focusRef}>
             <div class={styles.content} onClick={e => e.stopPropagation()}>
                 <div class={styles.tabs}>
                     {helpTabs.map(tab => (

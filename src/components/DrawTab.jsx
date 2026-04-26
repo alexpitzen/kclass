@@ -116,7 +116,6 @@ const DrawTabContent = ({ stamps: _stamps }) => {
 
     const helpClick = () => {
         showHelpOverlay('drawtab');
-        document.querySelector(".kbhelpbtn")?.blur();
     };
     const handleUndo = () => StampLib.undoLastWriteAll();
     const handleClear = () => StampLib.clearPage();
