@@ -11,18 +11,19 @@
 
 (function() {
     'use strict';
-    // {# 
+    //{#
     /* #}
     {% include 'stamp.js' %}
     //*/
 
-    // {# 
+    //{#
     /* #}
     {% include 'kclass_preact.js' %}
     //*/
 
     let z = document.createElement("style");
-    z.innerHTML = `{{ css }}`;
+    z.innerHTML = `{{ css }}
+    {% include 'kclass_preact.css' %}`;
 
     document.body.appendChild(z);
 

@@ -15,7 +15,7 @@ await esbuild.build({
     ...commonOptions,
     entryPoints: ['src/kclass.jsx'],
     outfile: 'templates/kclass_preact.js',
-    loader: { '.js': 'jsx' },
+    loader: { '.js': 'jsx', '.css': 'css' },
     jsx: 'automatic',
     jsxImportSource: 'preact',
 });
@@ -25,7 +25,7 @@ if (isWatch) {
         ...commonOptions,
         entryPoints: ['src/kclass.jsx'],
         outfile: 'templates/kclass_preact.js',
-        loader: { '.js': 'jsx' },
+        loader: { '.js': 'jsx', '.css': 'css' },
         jsx: 'automatic',
         jsxImportSource: 'preact',
     });
