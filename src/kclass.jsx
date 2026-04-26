@@ -4,6 +4,7 @@ import { CustomToolbar } from './components/CustomToolbar.jsx';
 import { DrawTab } from './components/DrawTab.jsx';
 import { PrintOverlayProvider, PrintOverlay } from './components/PrintOverlay.jsx';
 import { DiffViewOverlay } from './components/DiffViewOverlay.jsx';
+import { HelpOverlay } from './components/HelpOverlay.jsx';
 import { LoginAssistantsList, RefreshButton } from './components/Misc.jsx';
 import { useAutoPen } from './hooks/useAutoPen.js';
 import { useMarkboxKeys } from './hooks/useMarkboxKeys.js';
@@ -31,6 +32,7 @@ const App = () => {
                 <DrawTab />
                 <PrintOverlay />
                 <DiffViewOverlay />
+                <HelpOverlay />
             </AppProvider>
         </>
     );

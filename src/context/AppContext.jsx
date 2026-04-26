@@ -2,6 +2,7 @@ import { createContext } from 'preact';
 import { useContext, useState, useCallback } from 'preact/hooks';
 import { PrintOverlayProvider } from '../components/PrintOverlay.jsx';
 import { DiffViewOverlayProvider } from '../components/DiffViewOverlay.jsx';
+import { HelpOverlayProvider } from '../components/HelpOverlay.jsx';
 
 const DrawTabContext = createContext(null);
 const TimestampContext = createContext(null);
@@ -58,13 +59,15 @@ export const AppProvider = ({ children }) => {
         <DrawTabProvider>
             <PrintOverlayProvider>
                 <DiffViewOverlayProvider>
-                    <TimestampProvider>
-                        <HDModeProvider>
-                            <KeyboardModeProvider>
-                                {children}
-                            </KeyboardModeProvider>
-                        </HDModeProvider>
-                    </TimestampProvider>
+                    <HelpOverlayProvider>
+                        <TimestampProvider>
+                            <HDModeProvider>
+                                <KeyboardModeProvider>
+                                    {children}
+                                </KeyboardModeProvider>
+                            </HDModeProvider>
+                        </TimestampProvider>
+                    </HelpOverlayProvider>
                 </DiffViewOverlayProvider>
             </PrintOverlayProvider>
         </DrawTabProvider>

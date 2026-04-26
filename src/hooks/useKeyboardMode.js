@@ -7,6 +7,7 @@ import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sid
 import { doDown, doUp } from '../helpers/actions.js';
 import { useTimestamp, useDrawTab } from '../context/AppContext.jsx';
 import { useDiffViewOverlay } from '../components/DiffViewOverlay.jsx';
+import { useHelpOverlay } from '../components/HelpOverlay.jsx';
 
 const keyboardHelp = `Navigation:
 j: down
@@ -71,12 +72,12 @@ enter: submit/accept dialog`;
 
 export const keyboardHelpText = keyboardHelp;
 
-const handleDrawTabKey = (e, { hideDrawTab }) => {
+const handleDrawTabKey = (e, fns) => {
     const drawtab = document.querySelector('.drawtab');
     switch (e.key) {
         case "d":
         case "Escape":
-            hideDrawTab();
+            fns.hideDrawTab();
             break;
         case "-":
         case "+":
@@ -117,8 +118,28 @@ const handleDrawTabKey = (e, { hideDrawTab }) => {
                 e.preventDefault();
             }
             break;
+        case "?":
+            fns.showHelpOverlay("drawtab");
+            break;
     }
     return;
+};
+
+const handleHelpOverlay = (e, fns) => {
+    switch (e.key) {
+        case "Enter":
+        case "Escape":
+            fns.hideHelpOverlay();
+            break;
+        case "Tab":
+            const direction = e.shiftKey ? -1 : 1;
+            const tabIndex = (
+                (fns.helpTabs.findIndex(t => t.id == fns.helpOverlayActiveTab) ?? 0) + direction + fns.helpTabs.length
+            ) % fns.helpTabs.length;
+            fns.showHelpOverlay(fns.helpTabs[tabIndex].id);
+            e.preventDefault();
+            break;
+    }
 };
 
 const handleMarkingListKey = (e, fns) => {
@@ -126,6 +147,9 @@ const handleMarkingListKey = (e, fns) => {
         case "f":
         case "/":
             focusSearch?.(e);
+            break;
+        case "?":
+            fns.showHelpOverlay("studentlist");
             break;
         case "c":
             clearSearch?.();
@@ -162,11 +186,14 @@ const handleMarkingListKey = (e, fns) => {
     }
 };
 
-const handleStudentListKey = (e) => {
+const handleStudentListKey = (e, fns) => {
     switch (e.key) {
         case "f":
         case "/":
             focusSearch?.(e);
+            break;
+        case "?":
+            fns.showHelpOverlay("studentlist");
             break;
         case "c": clearSearch?.(); break;
         case "M": document.querySelector(".markingList.tabItem")?.click(); break;
@@ -182,6 +209,9 @@ const handleGradingKey = (e, fns) => {
         case "k": doUp?.(); break;
         case "g": document.querySelectorAll(".worksheet-navigator-page span:not(.disabled)")[0]?.click(); break;
         case "G": goLastPage?.(); break;
+        case "?":
+            fns.showHelpOverlay("grading");
+            break;
         case "X": 
             const xallbtn = document.querySelector(".xallbtn");
             xallbtn?.click();
@@ -333,10 +363,13 @@ const handleStudentProfileKey = (e, fns) => {
         case "Backspace": doBackspace?.(); break;
         case "Escape": doEscape?.(e, fns); break;
         case "Enter": doEnter?.(); break;
+        case "?":
+            fns.showHelpOverlay("profile");
+            break;
     }
 };
 
-const handleStudyRecordsKey = (e) => {
+const handleStudyRecordsKey = (e, fns) => {
     switch (e.key) {
         case "R": clickReading?.(); break;
         case "M": clickMath?.(); break;
@@ -348,6 +381,9 @@ const handleStudyRecordsKey = (e) => {
             scoreGrid?.scrollIntoView();
             scoreGrid?.scroll(0, scoreGrid?.scrollHeight);
             break;
+        case "?":
+            fns.showHelpOverlay("studyrecords");
+            break;
     }
 };
 
@@ -355,7 +391,24 @@ export const useKeyboardMode = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
     const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
     const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
-    const fns = { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab, setTimestampEnabled, diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay };
+    const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
+    const fns = {
+        drawTabOpen,
+        showDrawTab,
+        hideDrawTab,
+        toggleDrawTab,
+        setTimestampEnabled,
+        diffViewOverlayVisible,
+        showDiffViewOverlay,
+        hideDiffViewOverlay,
+        showBeforeViewOverlay,
+        hideBeforeViewOverlay,
+        helpOverlayVisible,
+        helpOverlayActiveTab,
+        hideHelpOverlay,
+        showHelpOverlay,
+        helpTabs,
+    };
     useEffect(() => {
         if (!enabled) return;
 
@@ -391,10 +444,6 @@ export const useKeyboardMode = (enabled) => {
 
             if (e.altKey || e.ctrlKey || e.metaKey) return;
 
-            if (drawTabOpen) {
-                handleDrawTabKey(e, fns);
-                return;
-            }
 
             const markingList = document.querySelector(".markingList.tabActive");
             const studentList = document.querySelector(".studentList.tabActive");
@@ -402,7 +451,11 @@ export const useKeyboardMode = (enabled) => {
             const studentProfile = document.querySelector(".student-profile");
             const studyRecords = document.querySelector(".ATD0010P-root");
 
-            if (markingList) {
+            if (fns.helpOverlayVisible) {
+                handleHelpOverlay(e, fns);
+            } else if (drawTabOpen) {
+                handleDrawTabKey(e, fns);
+            } else if (markingList) {
                 handleMarkingListKey(e, fns);
             } else if (studentList) {
                 handleStudentListKey(e, fns);
@@ -455,5 +508,5 @@ export const useKeyboardMode = (enabled) => {
             document.removeEventListener("keydown", handleKeyDown);
             document.removeEventListener("keyup", handleKeyUp);
         };
-    }, [enabled, drawTabOpen, toggleDrawTab]);
+    }, [enabled, drawTabOpen, toggleDrawTab, helpOverlayVisible, helpOverlayActiveTab]);
 };
