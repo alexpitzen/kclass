@@ -14,7 +14,7 @@ export const useHelpOverlay = () => {
 
 const TABS = [
     { id: 'general', label: 'General' },
-    { id: 'studentlist', label: 'Student List' },
+    { id: 'studentlist', label: 'Student List / Marking List' },
     { id: 'grading', label: 'Grading' },
     { id: 'drawtab', label: 'Draw Tab' },
     { id: 'profile', label: 'Profile' },
@@ -26,45 +26,65 @@ const TAB_CONTENT = {
         {
             title: 'Navigation',
             keys: [
-                { key: 'j', desc: 'down' },
-                { key: 'k', desc: 'up' },
-                { key: 'g', desc: 'top' },
-                { key: 'G', desc: 'bottom' },
-                { key: 'J', desc: '(hold) scroll down' },
-                { key: 'K', desc: '(hold) scroll up' },
+                { key: 'j', desc: 'Down' },
+                { key: 'k', desc: 'Up' },
+                { key: 'J', desc: '(hold) Scroll down' },
+                { key: 'K', desc: '(hold) Scroll up' },
+                { key: 'g', desc: 'Top' },
+                { key: 'G', desc: 'Bottom' },
             ],
         },
         {
             title: 'General',
             keys: [
-                { key: ['escape', 'backspace'], desc: 'close dialog / exit / cancel' },
-                { key: 'enter', desc: 'submit / accept dialog' },
+                { key: '?', desc: 'Show keyboard shortcuts' },
+                { key: ['Escape', 'Backspace'], desc: 'Close dialog / exit / cancel' },
+                { key: 'Enter', desc: 'Submit / accept dialog' },
             ],
         },
+        {
+            title: 'Always active',
+            keys: [
+                { key: ['Alt', 'k'], separator: " + ", desc: 'Toggle keyboard mode' },
+                { key: ['Alt', 'c'], separator: " + ", desc: 'Color picker' },
+            ],
+        }
     ],
     studentlist: [
         {
+            title: 'General',
+            keys: [
+                { key: ['f', '/'], desc: 'Focus search box', separator: " or " },
+                { key: 'c', desc: 'Clear search' },
+                { key: 'J', desc: '(hold) Scroll down' },
+                { key: 'K', desc: '(hold) Scroll up' },
+                { key: 'r', desc: 'Refresh' },
+                { key: 'Escape', desc: '(in search box) Clear search' },
+                { key: '?', desc: 'Show keyboard shortcuts' },
+            ],
+        },
+        {
+            title: 'Marking List',
+            keys: [
+                { key: 'j', desc: 'Focus down' },
+                { key: 'k', desc: 'Focus up' },
+                { key: 'h', desc: 'Focus left' },
+                { key: 'l', desc: 'Focus right' },
+                { key: 'Space', desc: 'Toggle checkbox' },
+                { key: 'C', desc: 'Clear all checkboxes' },
+                { key: 'g', desc: 'Scroll to top of list' },
+                { key: 'G', desc: 'Scroll to bottom of list' },
+                { key: 'S', desc: 'Go to Student List' },
+                { key: 'A', desc: 'Show all subjects' },
+                { key: 'M', desc: 'Show math' },
+                { key: 'R', desc: 'Show reading' },
+                { key: 'Enter', desc: 'Start grading' },
+            ],
+        },
+        {
             title: 'Student List',
             keys: [
-                { key: ['f', '/'], desc: 'focus search' },
-                { key: 'c', desc: 'clear search' },
-                { key: 'C', desc: 'check all students' },
-                { key: 'g', desc: 'go to top of list' },
-                { key: 'G', desc: 'go to bottom of list' },
-                { key: 'J', desc: 'scroll student list down' },
-                { key: 'K', desc: 'scroll student list up' },
-                { key: 'j', desc: 'move down in list' },
-                { key: 'k', desc: 'move up in list' },
-                { key: 'h', desc: 'move left in list' },
-                { key: 'l', desc: 'move right in list' },
-                { key: 'space', desc: 'toggle checkbox' },
-                { key: 'S', desc: 'switch to student tab' },
-                { key: 'r', desc: 'refresh student list' },
-                { key: 'A', desc: 'show all students' },
-                { key: 'M', desc: 'show math students' },
-                { key: 'R', desc: 'show KNA students' },
-                { key: 'enter', desc: 'submit' },
-                { key: 'escape', desc: 'close dialog' },
+                { key: 'M', desc: 'Go to Marking List' },
             ],
         },
     ],
@@ -72,72 +92,66 @@ const TAB_CONTENT = {
         {
             title: 'Navigation',
             keys: [
-                { key: 'j', desc: 'page down' },
-                { key: 'k', desc: 'page up' },
-                { key: 'n', desc: 'next marking page' },
-                { key: 'N', desc: 'previous marking page' },
-                { key: 'g', desc: 'go to first page' },
-                { key: 'G', desc: 'go to last page' },
-                { key: 'R', desc: 'switch to reading' },
-                { key: 'M', desc: 'switch to math' },
-                { key: 'S', desc: 'skip to the next set' },
-                // TODO: remove here or in general
-                { key: 'J', desc: '(hold) scroll answer key down' },
-                { key: 'K', desc: '(hold) scroll answer key up' },
-                { key: 'p', desc: 'pause marking (when visible)' },
-                { key: 'enter', desc: 'complete marking (when visible)' },
-                { key: 'backspace', desc: 'stop grading' },
+                { key: 'j', desc: 'Page down' },
+                { key: 'k', desc: 'Page up' },
+                { key: 'n', desc: 'Go to next marking page' },
+                { key: 'N', desc: 'Go to previous marking page' },
+                { key: 'g', desc: 'Go to first page' },
+                { key: 'G', desc: 'Go to last page' },
+                { key: 'R', desc: 'Go to reading' },
+                { key: 'M', desc: 'Go to math' },
+                { key: 'S', desc: 'Skip to the next set' },
+                { key: 'p', desc: 'Pause marking (when visible)' },
+                { key: 'Enter', desc: 'Complete marking (when visible)' },
+                { key: 'Backspace', desc: 'Exit grading' },
             ],
         },
         {
             title: 'Display',
             keys: [
-                { key: 'J', desc: '(hold) scroll answer key down' },
-                { key: 'K', desc: '(hold) scroll answer key up' },
-                { key: 'H', desc: 'header toggle' },
-                { key: 's', desc: 'display one side of page (instead of 2)' },
-                { key: 'A', desc: 'toggle answer display' },
-                { key: ['m', 'D'], desc: ['highlight what changed since last grading', "Note: doesn't work on paused sets"] },
-                { key: 'b', desc: ['(hold) show submission before last grading', "Note: doesn't work on paused sets"] },
-            ],
-        },
-        {
-            title: 'Marking',
-            keys: [
-                { key: '1-9', desc: 'click marking box' },
-                { key: 'x', desc: 'match all previous markings' },
-                { key: 'X', desc: 'x all' },
-                { key: 'c', desc: "clear x's" },
-            ],
-        },
-        {
-            title: 'Replay',
-            keys: [
-                { key: 'P', desc: 'start replay / pause replay' },
-                { key: 'p', desc: 'pause / resume replay' },
-                { key: 's', desc: 'stop replay' },
-                { key: ['2', '@'], desc: 'replay at 2x speed' },
-                { key: ['8', '*'], desc: 'replay at 8x speed' },
+                { key: 'J', desc: '(hold) Scroll answer key down' },
+                { key: 'K', desc: '(hold) Scroll answer key up' },
+                { key: 'H', desc: ['Toggle header view / dropdown', '(Use j/k/Enter to navigate dropdown)'] },
+                { key: 's', desc: 'Single page view' },
+                { key: 'A', desc: 'Toggle answer display' },
+                { key: ['m', 'D'], desc: ['Highlight changes since last grading', "Note: doesn't work on paused sets"] },
+                { key: 'b', desc: ['(hold) Show submission before last grading', "Note: doesn't work on paused sets"] },
+                { key: ['Alt', 't'], separator: " + ", desc: 'Toggle timestamp display' },
+                { key: '?', desc: 'Show keyboard shortcuts' },
             ],
         },
         {
             title: 'Drawing',
             keys: [
-                { key: 'd', desc: 'open draw tab' },
-                { key: 't', desc: 'open draw tab & focus text area' },
-                { key: 'p', desc: 'select pen' },
-                { key: 'h', desc: 'select highlighter / cycle highlighter type' },
-                { key: 'e', desc: 'select eraser' },
-                { key: 'u', desc: 'undo' },
-                { key: 'U', desc: 'undo stamp' },
-                { key: 'r', desc: 'redo' },
-                { key: '-', desc: 'decrease stamp size' },
-                { key: ['+', '='], desc: 'increase stamp size' },
+                { key: 'd', desc: 'Open draw tab' },
+                { key: 't', desc: ['Open draw tab & focus text area', '(tip: press Tab Enter after typing)'] },
+                { key: 'p', desc: 'Select pen' },
+                { key: 'h', desc: 'Select highlighter / cycle highlighter type' },
+                { key: 'e', desc: 'Select eraser' },
+                { key: 'u', desc: 'Undo' },
+                { key: 'U', desc: 'Undo stamp' },
+                { key: 'r', desc: 'Redo' },
+                { key: '-', desc: 'Decrease stamp size' },
+                { key: ['+', '='], desc: 'Increase stamp size' },
             ],
         },
         {
-            title: 'Compare',
+            title: 'Marking',
             keys: [
+                { key: '1-9', desc: 'Click marking box' },
+                { key: 'x', desc: 'Match all previous markings' },
+                { key: 'X', desc: 'x all' },
+                { key: 'c', desc: "Clear x's" },
+            ],
+        },
+        {
+            title: 'Replay',
+            keys: [
+                { key: 'P', desc: 'Start replay / pause replay' },
+                { key: 'p', desc: 'Pause / resume replay' },
+                { key: 's', desc: 'Stop replay' },
+                { key: ['2', '@'], desc: 'Replay at 2x speed' },
+                { key: ['8', '*'], desc: 'Replay at 8x speed' },
             ],
         },
     ],
@@ -145,18 +159,19 @@ const TAB_CONTENT = {
         {
             title: 'Draw Tab',
             keys: [
-                { key: 't', desc: 'focus the text area' },
-                { key: 'u', desc: 'set Stamp Color to "Unchanged"' },
-                { key: 'r', desc: 'set Stamp Color to "Rainbow" / "Rainbow Fill"' },
-                { key: 'c', desc: 'set Stamp Color to "Color Picker"' },
-                { key: 'p', desc: 'select pen' },
-                { key: 'h', desc: 'select highlighter / cycle highlighter type' },
-                { key: '-', desc: 'decrease stamp size' },
-                { key: ['+', '='], desc: 'increase stamp size' },
-                { key: 'J', desc: '(hold) scroll stamps down' },
-                { key: 'K', desc: '(hold) scroll stamps up' },
-                { key: 'd', desc: 'close draw tab' },
-                { key: 'escape', desc: 'close draw tab' },
+                { key: 't', desc: 'Focus the text area' },
+                { key: 'u', desc: 'Set Stamp Color to "Unchanged"' },
+                { key: 'r', desc: 'Set Stamp Color to "Rainbow" / "Rainbow Fill"' },
+                { key: 'c', desc: 'Set Stamp Color to "Color Picker"' },
+                { key: 'p', desc: 'Select pen' },
+                { key: 'h', desc: 'Select highlighter / cycle highlighter type' },
+                { key: '-', desc: 'Decrease stamp size' },
+                { key: ['+', '='], desc: 'Increase stamp size' },
+                { key: 'J', desc: '(hold) Scroll stamps down' },
+                { key: 'K', desc: '(hold) Scroll stamps up' },
+                { key: ['d', 'Escape'], desc: 'Close draw tab' },
+                { key: ['Alt', 'c'], separator: " + ", desc: 'Color picker' },
+                { key: '?', desc: 'Show keyboard shortcuts' },
             ],
         },
     ],
@@ -164,18 +179,18 @@ const TAB_CONTENT = {
         {
             title: 'Profile',
             keys: [
-                { key: 'R', desc: 'switch to reading' },
-                { key: 'M', desc: 'switch to math' },
-                { key: 'S', desc: 'go to set' },
-                { key: 'J', desc: 'scroll down' },
-                { key: 'K', desc: 'scroll up' },
-                { key: 'H', desc: 'scroll chart left' },
-                { key: 'L', desc: 'scroll chart right' },
-                { key: 'p', desc: 'toggle progress chart' },
-                { key: 'e', desc: 'edit' },
-                { key: 'backspace', desc: 'exit' },
-                { key: 'escape', desc: 'close' },
-                { key: 'enter', desc: 'submit' },
+                { key: 'R', desc: 'Switch to reading' },
+                { key: 'M', desc: 'Switch to math' },
+                { key: 'S', desc: 'Go to Study Records' },
+                { key: 'J', desc: '(hold) Scroll down' },
+                { key: 'K', desc: '(hold) Scroll up' },
+                { key: 'H', desc: '(hold) Scroll chart left' },
+                { key: 'L', desc: '(hold) Scroll chart right' },
+                { key: 'p', desc: 'Toggle progress chart' },
+                { key: 'e', desc: 'Edit profile' },
+                { key: 'Backspace', desc: 'Go back to Student List' },
+                { key: 'Escape', desc: 'Close progress chart' },
+                { key: '?', desc: 'Show keyboard shortcuts' },
             ],
         },
     ],
@@ -183,12 +198,13 @@ const TAB_CONTENT = {
         {
             title: 'Study Records',
             keys: [
-                { key: 'R', desc: 'switch to reading' },
-                { key: 'M', desc: 'switch to math' },
-                { key: 'backspace', desc: 'exit' },
-                { key: 'J', desc: 'scroll score down' },
-                { key: 'K', desc: 'scroll score up' },
-                { key: 'G', desc: 'scroll to bottom' },
+                { key: 'R', desc: 'Switch to reading' },
+                { key: 'M', desc: 'Switch to math' },
+                { key: 'J', desc: '(hold) Scroll score down' },
+                { key: 'K', desc: '(hold) Scroll score up' },
+                { key: 'G', desc: 'Scroll to bottom' },
+                { key: 'Backspace', desc: 'Go back to Student Profile' },
+                { key: '?', desc: 'Show keyboard shortcuts' },
             ],
         },
     ],
@@ -228,7 +244,7 @@ export const HelpOverlayProvider = ({ children }) => {
     );
 };
 
-const KeyBinding = ({ key: k, desc }) => (
+const KeyBinding = ({ key: k, desc, separator }) => (
     <div class={styles.keyBinding}>
         <span>
             {Array.isArray(k) ? (
@@ -236,7 +252,7 @@ const KeyBinding = ({ key: k, desc }) => (
                     {k.map((key, index) => (
                         <>
                             <span class={styles.key}>{key}</span>
-                            {index < k.length - 1 && " or "}
+                            {index < k.length - 1 && (separator ?? " / ")}
                         </>
                     ))}
                 </>
@@ -284,15 +300,13 @@ export const HelpOverlay = () => {
                             {tab.label}
                         </button>
                     ))}
+                    <button class={styles.close} onClick={hideHelpOverlay}>X</button>
                 </div>
                 <div class={styles.sections}>
                     {TAB_CONTENT[helpOverlayActiveTab].map((section, i) => (
                         <Section key={i} {...section} />
                     ))}
                 </div>
-                <button class={styles.close} onClick={hideHelpOverlay}>
-                    Close
-                </button>
             </div>
         </div>
     );

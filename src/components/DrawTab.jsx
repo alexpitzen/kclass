@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { penTypes } from './constants.js';
 import { usePrintOverlay } from './PrintOverlay.jsx';
-import { useKeyboardMode, keyboardHelpText } from '../hooks/useKeyboardMode.js';
+import { useKeyboardMode } from '../hooks/useKeyboardMode.js';
 import { useDrawTab, useKeyboardMode as useKeyboardModeContext, useHDMode as useHDModeContext } from '../context/AppContext.jsx';
 import { updatePenSettings } from '../helpers/actions.js';
+import { useHelpOverlay } from '../components/HelpOverlay.jsx';
 
 const DrawTabContent = ({ stamps: _stamps }) => {
     const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
@@ -16,6 +17,7 @@ const DrawTabContent = ({ stamps: _stamps }) => {
     const rainbowSpeedRef = useRef(1);
 
     const { showStampPreview, showTextPreview } = usePrintOverlay();
+    const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
     const textareaRef = useRef(null);
     const stampsRef = useRef(null);
     const rootRef = useRef(null);
@@ -112,6 +114,10 @@ const DrawTabContent = ({ stamps: _stamps }) => {
         setHdModeEnabled(e.target.checked);
     };
 
+    const helpClick = () => {
+        showHelpOverlay('drawtab');
+        document.querySelector(".kbhelpbtn")?.blur();
+    };
     const handleUndo = () => StampLib.undoLastWriteAll();
     const handleClear = () => StampLib.clearPage();
 
@@ -228,17 +234,19 @@ const DrawTabContent = ({ stamps: _stamps }) => {
                         <label for="hdbtn">HD mode</label>
                     </div>
 
-                    <div class="toggle">
-                        <input
-                            type="checkbox"
-                            id="kbbtn"
-                            checked={keyboardModeEnabled}
-                            onChange={(e) => setKeyboardModeEnabled(e.target.checked)}
-                            title={keyboardHelpText}
-                            accessKey="k"
-                        />
-                        <label for="kbbtn" title={keyboardHelpText}>Keyboard mode</label>
-                    </div>
+                    <span>
+                        <span class="toggle">
+                            <input
+                                type="checkbox"
+                                id="kbbtn"
+                                checked={keyboardModeEnabled}
+                                onChange={(e) => setKeyboardModeEnabled(e.target.checked)}
+                                accessKey="k"
+                            />
+                            <label for="kbbtn">Keyboard mode</label>
+                        </span>
+                        <button class="kbhelpbtn" onClick={helpClick}>?</button>
+                    </span>
                 </div>
 
                 <span class="stackedButtons">

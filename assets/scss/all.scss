@@ -191,6 +191,12 @@ body:has(.worksheet-container.selected .full-score-mark) {
                 padding-right: 10px;
             }
         }
+        .kbhelpbtn {
+            border-radius: 10px;
+            height: unset;
+            border: 0px;
+            margin-left: 4px;
+        }
         .closeDrawTab {
             margin-bottom: 8px;
         }

@@ -9,69 +9,6 @@ import { useTimestamp, useDrawTab } from '../context/AppContext.jsx';
 import { useDiffViewOverlay } from '../components/DiffViewOverlay.jsx';
 import { useHelpOverlay } from '../components/HelpOverlay.jsx';
 
-const keyboardHelp = `Navigation:
-j: down
-k: up
-g: top
-G: bottom
-n: next active page
-N: previous active page
-S: go to next set
-R: switch to reading
-M: switch to math
-H: header dropdown or show/hide header
-p: pause marking (when bottom pause button is visible)
-J (hold): scroll answer key down
-K (hold): scroll answer key up
-s: display one side of page (instead of 2)
-
-Marking (⇧ means shift):
-x: match previous markings or x all
-X: x all
-c: clear x's
-A: toggle answer display
-m / D: Show what the student changed since the last grading
-b (hold): Show what the student submitted previously
-alt+t: show timestamp of when the page was last changed. *TIMEZONE IS ASSUMED*. Red means the page hasn't been changed since it was last graded (this can be wrong if the student's timezone is different or their clock is wrong)
-P: start replay / pause replay
-(during replay):
-s: stop replay
-p: pause / resume replay
-2/⇧2: replay 2x speed
-8/⇧8: replay 8x speed
-
-Drawing:
-d: open the draw tab
-t: open the draw tab & focus the text area
-p: select pen
-h: select highlighter / cycle highlighter type
-e: select eraser
-u: undo
-r: redo
-U: undo stamp
--: decrease stamp size
-+/=: increase stamp size
-
-With draw tab open:
-t: focus the text area
-u: set Stamp Color to "Unchanged"
-r: set Stamp Color to "Rainbow" / "Rainbow Fill"
-c: set Stamp Color to "Color Picker"
-p: select pen
-h: select highlighter / cycle highlighter type
--: decrease stamp size
-+/= : increase stamp size
-J (hold): scroll stamps down
-K (hold): scroll stamps up
-escape: close draw tab
-
-General:
-escape: close dialog
-backspace: exit/cancel
-enter: submit/accept dialog`;
-
-export const keyboardHelpText = keyboardHelp;
-
 const handleDrawTabKey = (e, fns) => {
     const drawtab = document.querySelector('.drawtab');
     switch (e.key) {
@@ -129,7 +66,10 @@ const handleHelpOverlay = (e, fns) => {
     switch (e.key) {
         case "Enter":
         case "Escape":
+        case "Backspace":
+        case "?":
             fns.hideHelpOverlay();
+            e.preventDefault();
             break;
         case "Tab":
             const direction = e.shiftKey ? -1 : 1;
@@ -255,9 +195,13 @@ const handleGradingKey = (e, fns) => {
             break;
         }
         case "2":
-        case "@": do2?.(e.key); break;
+        case "@":
+            do2?.(e.key);
+            break;
         case "8":
-        case "*": do8?.(e.key); break;
+        case "*":
+            do8?.(e.key);
+            break;
         case "A": document.querySelector("#AnswerDisplayButton")?.click(); break;
         case "Enter": doEnter?.(); break;
         case "Escape": doEscape(e, fns); break;

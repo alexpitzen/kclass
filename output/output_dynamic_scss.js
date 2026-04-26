@@ -3922,7 +3922,7 @@
   };
   var TABS = [
     { id: "general", label: "General" },
-    { id: "studentlist", label: "Student List" },
+    { id: "studentlist", label: "Student List / Marking List" },
     { id: "grading", label: "Grading" },
     { id: "drawtab", label: "Draw Tab" },
     { id: "profile", label: "Profile" },
@@ -3933,45 +3933,65 @@
       {
         title: "Navigation",
         keys: [
-          { key: "j", desc: "down" },
-          { key: "k", desc: "up" },
-          { key: "g", desc: "top" },
-          { key: "G", desc: "bottom" },
-          { key: "J", desc: "(hold) scroll down" },
-          { key: "K", desc: "(hold) scroll up" }
+          { key: "j", desc: "Down" },
+          { key: "k", desc: "Up" },
+          { key: "J", desc: "(hold) Scroll down" },
+          { key: "K", desc: "(hold) Scroll up" },
+          { key: "g", desc: "Top" },
+          { key: "G", desc: "Bottom" }
         ]
       },
       {
         title: "General",
         keys: [
-          { key: ["escape", "backspace"], desc: "close dialog / exit / cancel" },
-          { key: "enter", desc: "submit / accept dialog" }
+          { key: "?", desc: "Show keyboard shortcuts" },
+          { key: ["Escape", "Backspace"], desc: "Close dialog / exit / cancel" },
+          { key: "Enter", desc: "Submit / accept dialog" }
+        ]
+      },
+      {
+        title: "Always active",
+        keys: [
+          { key: ["Alt", "k"], separator: " + ", desc: "Toggle keyboard mode" },
+          { key: ["Alt", "c"], separator: " + ", desc: "Color picker" }
         ]
       }
     ],
     studentlist: [
       {
+        title: "General",
+        keys: [
+          { key: ["f", "/"], desc: "Focus search box", separator: " or " },
+          { key: "c", desc: "Clear search" },
+          { key: "J", desc: "(hold) Scroll down" },
+          { key: "K", desc: "(hold) Scroll up" },
+          { key: "r", desc: "Refresh" },
+          { key: "Escape", desc: "(in search box) Clear search" },
+          { key: "?", desc: "Show keyboard shortcuts" }
+        ]
+      },
+      {
+        title: "Marking List",
+        keys: [
+          { key: "j", desc: "Focus down" },
+          { key: "k", desc: "Focus up" },
+          { key: "h", desc: "Focus left" },
+          { key: "l", desc: "Focus right" },
+          { key: "Space", desc: "Toggle checkbox" },
+          { key: "C", desc: "Clear all checkboxes" },
+          { key: "g", desc: "Scroll to top of list" },
+          { key: "G", desc: "Scroll to bottom of list" },
+          { key: "S", desc: "Go to Student List" },
+          { key: "A", desc: "Show all subjects" },
+          { key: "M", desc: "Show math" },
+          { key: "R", desc: "Show reading" },
+          { key: "Enter", desc: "Start grading" }
+        ]
+      },
+      {
         title: "Student List",
         keys: [
-          { key: ["f", "/"], desc: "focus search" },
-          { key: "c", desc: "clear search" },
-          { key: "C", desc: "check all students" },
-          { key: "g", desc: "go to top of list" },
-          { key: "G", desc: "go to bottom of list" },
-          { key: "J", desc: "scroll student list down" },
-          { key: "K", desc: "scroll student list up" },
-          { key: "j", desc: "move down in list" },
-          { key: "k", desc: "move up in list" },
-          { key: "h", desc: "move left in list" },
-          { key: "l", desc: "move right in list" },
-          { key: "space", desc: "toggle checkbox" },
-          { key: "S", desc: "switch to student tab" },
-          { key: "r", desc: "refresh student list" },
-          { key: "A", desc: "show all students" },
-          { key: "M", desc: "show math students" },
-          { key: "R", desc: "show KNA students" },
-          { key: "enter", desc: "submit" },
-          { key: "escape", desc: "close dialog" }
+          { key: "M", desc: "Go to Marking List" }
         ]
       }
     ],
@@ -3979,90 +3999,86 @@
       {
         title: "Navigation",
         keys: [
-          { key: "j", desc: "page down" },
-          { key: "k", desc: "page up" },
-          { key: "n", desc: "next marking page" },
-          { key: "N", desc: "previous marking page" },
-          { key: "g", desc: "go to first page" },
-          { key: "G", desc: "go to last page" },
-          { key: "R", desc: "switch to reading" },
-          { key: "M", desc: "switch to math" },
-          { key: "S", desc: "skip to the next set" },
-          // TODO: remove here or in general
-          { key: "J", desc: "(hold) scroll answer key down" },
-          { key: "K", desc: "(hold) scroll answer key up" },
-          { key: "p", desc: "pause marking (when visible)" },
-          { key: "enter", desc: "complete marking (when visible)" },
-          { key: "backspace", desc: "stop grading" }
+          { key: "j", desc: "Page down" },
+          { key: "k", desc: "Page up" },
+          { key: "n", desc: "Go to next marking page" },
+          { key: "N", desc: "Go to previous marking page" },
+          { key: "g", desc: "Go to first page" },
+          { key: "G", desc: "Go to last page" },
+          { key: "R", desc: "Go to reading" },
+          { key: "M", desc: "Go to math" },
+          { key: "S", desc: "Skip to the next set" },
+          { key: "p", desc: "Pause marking (when visible)" },
+          { key: "Enter", desc: "Complete marking (when visible)" },
+          { key: "Backspace", desc: "Exit grading" }
         ]
       },
       {
         title: "Display",
         keys: [
-          { key: "J", desc: "(hold) scroll answer key down" },
-          { key: "K", desc: "(hold) scroll answer key up" },
-          { key: "H", desc: "header toggle" },
-          { key: "s", desc: "display one side of page (instead of 2)" },
-          { key: "A", desc: "toggle answer display" },
-          { key: ["m", "D"], desc: ["highlight what changed since last grading", "Note: doesn't work on paused sets"] },
-          { key: "b", desc: ["(hold) show submission before last grading", "Note: doesn't work on paused sets"] }
-        ]
-      },
-      {
-        title: "Marking",
-        keys: [
-          { key: "1-9", desc: "click marking box" },
-          { key: "x", desc: "match all previous markings" },
-          { key: "X", desc: "x all" },
-          { key: "c", desc: "clear x's" }
-        ]
-      },
-      {
-        title: "Replay",
-        keys: [
-          { key: "P", desc: "start replay / pause replay" },
-          { key: "p", desc: "pause / resume replay" },
-          { key: "s", desc: "stop replay" },
-          { key: ["2", "@"], desc: "replay at 2x speed" },
-          { key: ["8", "*"], desc: "replay at 8x speed" }
+          { key: "J", desc: "(hold) Scroll answer key down" },
+          { key: "K", desc: "(hold) Scroll answer key up" },
+          { key: "H", desc: ["Toggle header view / dropdown", "(Use j/k/Enter to navigate dropdown)"] },
+          { key: "s", desc: "Single page view" },
+          { key: "A", desc: "Toggle answer display" },
+          { key: ["m", "D"], desc: ["Highlight changes since last grading", "Note: doesn't work on paused sets"] },
+          { key: "b", desc: ["(hold) Show submission before last grading", "Note: doesn't work on paused sets"] },
+          { key: ["Alt", "t"], separator: " + ", desc: "Toggle timestamp display" },
+          { key: "?", desc: "Show keyboard shortcuts" }
         ]
       },
       {
         title: "Drawing",
         keys: [
-          { key: "d", desc: "open draw tab" },
-          { key: "t", desc: "open draw tab & focus text area" },
-          { key: "p", desc: "select pen" },
-          { key: "h", desc: "select highlighter / cycle highlighter type" },
-          { key: "e", desc: "select eraser" },
-          { key: "u", desc: "undo" },
-          { key: "U", desc: "undo stamp" },
-          { key: "r", desc: "redo" },
-          { key: "-", desc: "decrease stamp size" },
-          { key: ["+", "="], desc: "increase stamp size" }
+          { key: "d", desc: "Open draw tab" },
+          { key: "t", desc: ["Open draw tab & focus text area", "(tip: press Tab Enter after typing)"] },
+          { key: "p", desc: "Select pen" },
+          { key: "h", desc: "Select highlighter / cycle highlighter type" },
+          { key: "e", desc: "Select eraser" },
+          { key: "u", desc: "Undo" },
+          { key: "U", desc: "Undo stamp" },
+          { key: "r", desc: "Redo" },
+          { key: "-", desc: "Decrease stamp size" },
+          { key: ["+", "="], desc: "Increase stamp size" }
         ]
       },
       {
-        title: "Compare",
-        keys: []
+        title: "Marking",
+        keys: [
+          { key: "1-9", desc: "Click marking box" },
+          { key: "x", desc: "Match all previous markings" },
+          { key: "X", desc: "x all" },
+          { key: "c", desc: "Clear x's" }
+        ]
+      },
+      {
+        title: "Replay",
+        keys: [
+          { key: "P", desc: "Start replay / pause replay" },
+          { key: "p", desc: "Pause / resume replay" },
+          { key: "s", desc: "Stop replay" },
+          { key: ["2", "@"], desc: "Replay at 2x speed" },
+          { key: ["8", "*"], desc: "Replay at 8x speed" }
+        ]
       }
     ],
     drawtab: [
       {
         title: "Draw Tab",
         keys: [
-          { key: "t", desc: "focus the text area" },
-          { key: "u", desc: 'set Stamp Color to "Unchanged"' },
-          { key: "r", desc: 'set Stamp Color to "Rainbow" / "Rainbow Fill"' },
-          { key: "c", desc: 'set Stamp Color to "Color Picker"' },
-          { key: "p", desc: "select pen" },
-          { key: "h", desc: "select highlighter / cycle highlighter type" },
-          { key: "-", desc: "decrease stamp size" },
-          { key: ["+", "="], desc: "increase stamp size" },
-          { key: "J", desc: "(hold) scroll stamps down" },
-          { key: "K", desc: "(hold) scroll stamps up" },
-          { key: "d", desc: "close draw tab" },
-          { key: "escape", desc: "close draw tab" }
+          { key: "t", desc: "Focus the text area" },
+          { key: "u", desc: 'Set Stamp Color to "Unchanged"' },
+          { key: "r", desc: 'Set Stamp Color to "Rainbow" / "Rainbow Fill"' },
+          { key: "c", desc: 'Set Stamp Color to "Color Picker"' },
+          { key: "p", desc: "Select pen" },
+          { key: "h", desc: "Select highlighter / cycle highlighter type" },
+          { key: "-", desc: "Decrease stamp size" },
+          { key: ["+", "="], desc: "Increase stamp size" },
+          { key: "J", desc: "(hold) Scroll stamps down" },
+          { key: "K", desc: "(hold) Scroll stamps up" },
+          { key: ["d", "Escape"], desc: "Close draw tab" },
+          { key: ["Alt", "c"], separator: " + ", desc: "Color picker" },
+          { key: "?", desc: "Show keyboard shortcuts" }
         ]
       }
     ],
@@ -4070,18 +4086,18 @@
       {
         title: "Profile",
         keys: [
-          { key: "R", desc: "switch to reading" },
-          { key: "M", desc: "switch to math" },
-          { key: "S", desc: "go to set" },
-          { key: "J", desc: "scroll down" },
-          { key: "K", desc: "scroll up" },
-          { key: "H", desc: "scroll chart left" },
-          { key: "L", desc: "scroll chart right" },
-          { key: "p", desc: "toggle progress chart" },
-          { key: "e", desc: "edit" },
-          { key: "backspace", desc: "exit" },
-          { key: "escape", desc: "close" },
-          { key: "enter", desc: "submit" }
+          { key: "R", desc: "Switch to reading" },
+          { key: "M", desc: "Switch to math" },
+          { key: "S", desc: "Go to Study Records" },
+          { key: "J", desc: "(hold) Scroll down" },
+          { key: "K", desc: "(hold) Scroll up" },
+          { key: "H", desc: "(hold) Scroll chart left" },
+          { key: "L", desc: "(hold) Scroll chart right" },
+          { key: "p", desc: "Toggle progress chart" },
+          { key: "e", desc: "Edit profile" },
+          { key: "Backspace", desc: "Go back to Student List" },
+          { key: "Escape", desc: "Close progress chart" },
+          { key: "?", desc: "Show keyboard shortcuts" }
         ]
       }
     ],
@@ -4089,12 +4105,13 @@
       {
         title: "Study Records",
         keys: [
-          { key: "R", desc: "switch to reading" },
-          { key: "M", desc: "switch to math" },
-          { key: "backspace", desc: "exit" },
-          { key: "J", desc: "scroll score down" },
-          { key: "K", desc: "scroll score up" },
-          { key: "G", desc: "scroll to bottom" }
+          { key: "R", desc: "Switch to reading" },
+          { key: "M", desc: "Switch to math" },
+          { key: "J", desc: "(hold) Scroll score down" },
+          { key: "K", desc: "(hold) Scroll score up" },
+          { key: "G", desc: "Scroll to bottom" },
+          { key: "Backspace", desc: "Go back to Student Profile" },
+          { key: "?", desc: "Show keyboard shortcuts" }
         ]
       }
     ]
@@ -4124,10 +4141,10 @@
       helpTabs: TABS
     }, children });
   };
-  var KeyBinding = ({ key: k3, desc }) => /* @__PURE__ */ u3("div", { class: HelpOverlay_default.keyBinding, children: [
+  var KeyBinding = ({ key: k3, desc, separator }) => /* @__PURE__ */ u3("div", { class: HelpOverlay_default.keyBinding, children: [
     /* @__PURE__ */ u3("span", { children: Array.isArray(k3) ? /* @__PURE__ */ u3(k, { children: k3.map((key, index) => /* @__PURE__ */ u3(k, { children: [
       /* @__PURE__ */ u3("span", { class: HelpOverlay_default.key, children: key }),
-      index < k3.length - 1 && " or "
+      index < k3.length - 1 && (separator ?? " / ")
     ] })) }) : /* @__PURE__ */ u3("span", { class: HelpOverlay_default.key, children: k3 }) }),
     Array.isArray(desc) ? /* @__PURE__ */ u3("span", { children: desc.map((d3, index) => /* @__PURE__ */ u3(k, { children: [
       /* @__PURE__ */ u3("span", { class: HelpOverlay_default.desc, children: d3 }),
@@ -4143,17 +4160,19 @@
     if (!helpOverlayVisible)
       return null;
     return /* @__PURE__ */ u3("div", { class: HelpOverlay_default.overlay, onClick: hideHelpOverlay, children: /* @__PURE__ */ u3("div", { class: HelpOverlay_default.content, onClick: (e3) => e3.stopPropagation(), children: [
-      /* @__PURE__ */ u3("div", { class: HelpOverlay_default.tabs, children: helpTabs.map((tab) => /* @__PURE__ */ u3(
-        "button",
-        {
-          onClick: () => showHelpOverlay(tab.id),
-          class: `${HelpOverlay_default.tab} ${helpOverlayActiveTab === tab.id ? HelpOverlay_default.tabActive : ""}`,
-          children: tab.label
-        },
-        tab.id
-      )) }),
-      /* @__PURE__ */ u3("div", { class: HelpOverlay_default.sections, children: TAB_CONTENT[helpOverlayActiveTab].map((section, i4) => /* @__PURE__ */ u3(Section, { ...section }, i4)) }),
-      /* @__PURE__ */ u3("button", { class: HelpOverlay_default.close, onClick: hideHelpOverlay, children: "Close" })
+      /* @__PURE__ */ u3("div", { class: HelpOverlay_default.tabs, children: [
+        helpTabs.map((tab) => /* @__PURE__ */ u3(
+          "button",
+          {
+            onClick: () => showHelpOverlay(tab.id),
+            class: `${HelpOverlay_default.tab} ${helpOverlayActiveTab === tab.id ? HelpOverlay_default.tabActive : ""}`,
+            children: tab.label
+          },
+          tab.id
+        )),
+        /* @__PURE__ */ u3("button", { class: HelpOverlay_default.close, onClick: hideHelpOverlay, children: "X" })
+      ] }),
+      /* @__PURE__ */ u3("div", { class: HelpOverlay_default.sections, children: TAB_CONTENT[helpOverlayActiveTab].map((section, i4) => /* @__PURE__ */ u3(Section, { ...section }, i4)) })
     ] }) });
   };
 
@@ -4549,67 +4568,6 @@
   }
 
   // src/hooks/useKeyboardMode.js
-  var keyboardHelp = `Navigation:
-j: down
-k: up
-g: top
-G: bottom
-n: next active page
-N: previous active page
-S: go to next set
-R: switch to reading
-M: switch to math
-H: header dropdown or show/hide header
-p: pause marking (when bottom pause button is visible)
-J (hold): scroll answer key down
-K (hold): scroll answer key up
-s: display one side of page (instead of 2)
-
-Marking (\u21E7 means shift):
-x: match previous markings or x all
-X: x all
-c: clear x's
-A: toggle answer display
-m / D: Show what the student changed since the last grading
-b (hold): Show what the student submitted previously
-alt+t: show timestamp of when the page was last changed. *TIMEZONE IS ASSUMED*. Red means the page hasn't been changed since it was last graded (this can be wrong if the student's timezone is different or their clock is wrong)
-P: start replay / pause replay
-(during replay):
-s: stop replay
-p: pause / resume replay
-2/\u21E72: replay 2x speed
-8/\u21E78: replay 8x speed
-
-Drawing:
-d: open the draw tab
-t: open the draw tab & focus the text area
-p: select pen
-h: select highlighter / cycle highlighter type
-e: select eraser
-u: undo
-r: redo
-U: undo stamp
--: decrease stamp size
-+/=: increase stamp size
-
-With draw tab open:
-t: focus the text area
-u: set Stamp Color to "Unchanged"
-r: set Stamp Color to "Rainbow" / "Rainbow Fill"
-c: set Stamp Color to "Color Picker"
-p: select pen
-h: select highlighter / cycle highlighter type
--: decrease stamp size
-+/= : increase stamp size
-J (hold): scroll stamps down
-K (hold): scroll stamps up
-escape: close draw tab
-
-General:
-escape: close dialog
-backspace: exit/cancel
-enter: submit/accept dialog`;
-  var keyboardHelpText = keyboardHelp;
   var handleDrawTabKey = (e3, fns) => {
     const drawtab = document.querySelector(".drawtab");
     switch (e3.key) {
@@ -4669,7 +4627,10 @@ enter: submit/accept dialog`;
     switch (e3.key) {
       case "Enter":
       case "Escape":
+      case "Backspace":
+      case "?":
         fns.hideHelpOverlay();
+        e3.preventDefault();
         break;
       case "Tab":
         const direction = e3.shiftKey ? -1 : 1;
@@ -5153,6 +5114,7 @@ enter: submit/accept dialog`;
     const stampColorTypeRef = A2("Unchanged");
     const rainbowSpeedRef = A2(1);
     const { showStampPreview, showTextPreview } = usePrintOverlay();
+    const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
     const textareaRef = A2(null);
     const stampsRef = A2(null);
     const rootRef = A2(null);
@@ -5228,6 +5190,10 @@ enter: submit/accept dialog`;
     };
     const toggleHdMode = (e3) => {
       setHdModeEnabled(e3.target.checked);
+    };
+    const helpClick = () => {
+      showHelpOverlay("drawtab");
+      document.querySelector(".kbhelpbtn")?.blur();
     };
     const handleUndo = () => StampLib.undoLastWriteAll();
     const handleClear = () => StampLib.clearPage();
@@ -5333,19 +5299,21 @@ enter: submit/accept dialog`;
             ),
             /* @__PURE__ */ u3("label", { for: "hdbtn", children: "HD mode" })
           ] }),
-          /* @__PURE__ */ u3("div", { class: "toggle", children: [
-            /* @__PURE__ */ u3(
-              "input",
-              {
-                type: "checkbox",
-                id: "kbbtn",
-                checked: keyboardModeEnabled,
-                onChange: (e3) => setKeyboardModeEnabled(e3.target.checked),
-                title: keyboardHelpText,
-                accessKey: "k"
-              }
-            ),
-            /* @__PURE__ */ u3("label", { for: "kbbtn", title: keyboardHelpText, children: "Keyboard mode" })
+          /* @__PURE__ */ u3("span", { children: [
+            /* @__PURE__ */ u3("span", { class: "toggle", children: [
+              /* @__PURE__ */ u3(
+                "input",
+                {
+                  type: "checkbox",
+                  id: "kbbtn",
+                  checked: keyboardModeEnabled,
+                  onChange: (e3) => setKeyboardModeEnabled(e3.target.checked),
+                  accessKey: "k"
+                }
+              ),
+              /* @__PURE__ */ u3("label", { for: "kbbtn", children: "Keyboard mode" })
+            ] }),
+            /* @__PURE__ */ u3("button", { class: "kbhelpbtn", onClick: helpClick, children: "?" })
           ] })
         ] }),
         /* @__PURE__ */ u3("span", { class: "stackedButtons", children: [
@@ -5896,6 +5864,12 @@ body:has(.worksheet-container.selected .full-score-mark) .unlockbtn {
 .drawtab .header .stackedButtons.right {
   float: right;
   padding-right: 10px;
+}
+.drawtab .header .kbhelpbtn {
+  border-radius: 10px;
+  height: unset;
+  border: 0px;
+  margin-left: 4px;
 }
 .drawtab .header .closeDrawTab {
   margin-bottom: 8px;
@@ -6773,9 +6747,9 @@ body:has(app-atx0010p) .loginAssistantsList {
 .HelpOverlay_content {
   background-color: white;
   border-radius: 8px;
-  padding: 20px;
-  width: min(800px, 90vw);
-  max-height: calc(100vh - 40px);
+  padding: 10px;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100dvh - 20px);
   overflow: auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
@@ -6784,6 +6758,7 @@ body:has(app-atx0010p) .loginAssistantsList {
   border-bottom: 1px solid #ccc;
   margin-bottom: 16px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 .HelpOverlay_tab {
   padding: 8px 16px;
@@ -6792,6 +6767,8 @@ body:has(app-atx0010p) .loginAssistantsList {
   color: #333;
   cursor: pointer;
   border-bottom: 2px solid transparent;
+  border-radius: 4px;
+  margin-bottom: 4px;
 }
 .HelpOverlay_tab:focus-visible {
   outline: none;
@@ -6804,6 +6781,7 @@ body:has(app-atx0010p) .loginAssistantsList {
 .HelpOverlay_sections {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 .HelpOverlay_section {
   margin-bottom: 16px;
@@ -6819,10 +6797,10 @@ body:has(app-atx0010p) .loginAssistantsList {
   display: flex;
   gap: 12px;
   margin-bottom: 4px;
-  font-size: 75%;
+  font-size: 60%;
 }
 .HelpOverlay_key {
-  font-family: monospace;
+  font-family: "Courier New", monospace;
   min-width: 10px;
   background-color: #eaeaea;
   padding: 2px;
@@ -6831,10 +6809,9 @@ body:has(app-atx0010p) .loginAssistantsList {
   white-space: nowrap;
 }
 .HelpOverlay_close {
-  margin-top: 16px;
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
+  margin-bottom: 7px;
+  margin-left: 7px;
+  padding: 8px 11px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
