@@ -1,6 +1,7 @@
 import { createContext } from 'preact';
 import { useContext, useState, useCallback, useRef, useEffect } from 'preact/hooks';
 import styles from './HelpOverlay.module.css';
+import xIcon from '../icons/x.svg';
 
 const HelpOverlayContext = createContext(null);
 
@@ -245,7 +246,9 @@ export const HelpOverlayProvider = ({ children }) => {
 };
 
 const handleKeys = (e, { hideHelpOverlay, helpOverlayActiveTab, helpTabs, showHelpOverlay }) => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
     e.stopPropagation();
+    e.preventDefault();
     switch (e.key) {
         case "Enter":
         case "Escape":
@@ -265,7 +268,7 @@ const handleKeys = (e, { hideHelpOverlay, helpOverlayActiveTab, helpTabs, showHe
 
 const KeyBinding = ({ key: k, desc, separator }) => (
     <div class={styles.keyBinding}>
-        <span>
+        <span class={styles.keyWrapper}>
             {Array.isArray(k) ? (
                 <>
                     {k.map((key, index) => (
@@ -315,17 +318,21 @@ export const HelpOverlay = () => {
     return (
         <div class={styles.overlay} tabindex="1" onClick={hideHelpOverlay} onKeyDown={e => handleKeys(e, { helpOverlayActiveTab, hideHelpOverlay, helpTabs, showHelpOverlay })} ref={focusRef}>
             <div class={styles.content} onClick={e => e.stopPropagation()}>
-                <div class={styles.tabs}>
-                    {helpTabs.map(tab => (
-                        <button
-                            key={tab.id}
-                            onClick={() => showHelpOverlay(tab.id)}
-                            class={`${styles.tab} ${helpOverlayActiveTab === tab.id ? styles.tabActive : ''}`}
-                        >
-                            {tab.label}
-                        </button>
-                    ))}
-                    <button class={styles.close} onClick={hideHelpOverlay}>X</button>
+                <div class={styles.header}>
+                    <div class={styles.tabs}>
+                        {helpTabs.map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => showHelpOverlay(tab.id)}
+                                class={`${styles.tab} ${helpOverlayActiveTab === tab.id ? styles.tabActive : ''}`}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+                    <button class={styles.close} onClick={hideHelpOverlay} onMouseOver={(e) => e.stopPropagation()}>
+                        <span dangerouslySetInnerHTML={{ __html: xIcon }} />
+                    </button>
                 </div>
                 <div class={styles.sections}>
                     {TAB_CONTENT[helpOverlayActiveTab].map((section, i) => (

@@ -1,10 +1,9 @@
 import { useEffect } from 'preact/hooks';
 import { DOWN, UP, LEFT, RIGHT } from '../helpers/constants.js';
 import { goLastPage, goNextCorrectionPage, goPrevCorrectionPage } from '../helpers/navigation.js';
-import { doEnter, doEscape, doBackspace, clearSearch, focusSearch, cycleHighlighter, selectEraser, getPlaybackControl, doP, doS, do2, do8, isPulldownOpen, matchPreviousMarkings, clearMarkboxs, clickReading, clickMath, doKeyboardDefault, showHeader, toggleHeader } from '../helpers/actions.js';
+import { doEnter, doEscape, doBackspace, clearSearch, focusSearch, cycleHighlighter, selectEraser, getPlaybackControl, doP, doS, do2, do8, isPulldownOpen, matchPreviousMarkings, clearMarkboxs, clickReading, clickMath, doKeyboardDefault, showHeader, toggleHeader, doDown, doUp, xAll } from '../helpers/actions.js';
 import { doMarkingListJK, doMarkingListHL } from '../helpers/marking.js';
 import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sideScrollProgressChart, scrollScore, stopScrolling, startScrolling, isProgressChartFloating } from '../helpers/scrolling.js';
-import { doDown, doUp } from '../helpers/actions.js';
 import { useTimestamp, useDrawTab } from '../context/AppContext.jsx';
 import { useDiffViewOverlay } from '../components/DiffViewOverlay.jsx';
 import { useHelpOverlay } from '../components/HelpOverlay.jsx';
@@ -133,9 +132,7 @@ const handleGradingKey = (e, fns) => {
             fns.showHelpOverlay("grading");
             break;
         case "X": 
-            const xallbtn = document.querySelector(".xallbtn");
-            xallbtn?.click();
-            xallbtn?.blur();
+            xAll();
             break;
         case "x": matchPreviousMarkings?.(); break;
         case "c": clearMarkboxs?.(); break;

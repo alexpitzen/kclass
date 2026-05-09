@@ -3322,7 +3322,7 @@
     };
     const resultBoxes = document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-result-boxs .result-box:not(.right) .result-box-type");
     if (!resultBoxes.length) {
-      document.querySelector(".xallbtn")?.click();
+      xAll();
       return;
     }
     for (let i4 = 0; i4 < 2; i4++) {
@@ -3335,6 +3335,9 @@
         }
       });
     }
+  }
+  function xAll() {
+    document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
   }
   function clearMarkboxs() {
     for (let i4 = 0; i4 < 2; i4++) {
@@ -3900,6 +3903,7 @@
     overlay: "HelpOverlay_overlay",
     content: "HelpOverlay_content",
     tabs: "HelpOverlay_tabs",
+    header: "HelpOverlay_header",
     tab: "HelpOverlay_tab",
     tabActive: "HelpOverlay_tabActive",
     sections: "HelpOverlay_sections",
@@ -3907,9 +3911,13 @@
     sectionTitle: "HelpOverlay_sectionTitle",
     keyBinding: "HelpOverlay_keyBinding",
     key: "HelpOverlay_key",
+    keyWrapper: "HelpOverlay_keyWrapper",
     desc: "HelpOverlay_desc",
     close: "HelpOverlay_close"
   };
+
+  // src/icons/x.svg
+  var x_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M18 6 6 18"/>\n  <path d="m6 6 12 12"/>\n</svg>';
 
   // src/components/HelpOverlay.jsx
   var HelpOverlayContext = R(null);
@@ -4142,7 +4150,10 @@
     }, children });
   };
   var handleKeys = (e3, { hideHelpOverlay, helpOverlayActiveTab, helpTabs, showHelpOverlay }) => {
+    if (e3.altKey || e3.ctrlKey || e3.metaKey)
+      return;
     e3.stopPropagation();
+    e3.preventDefault();
     switch (e3.key) {
       case "Enter":
       case "Escape":
@@ -4158,7 +4169,7 @@
     }
   };
   var KeyBinding = ({ key: k3, desc, separator }) => /* @__PURE__ */ u3("div", { class: HelpOverlay_default.keyBinding, children: [
-    /* @__PURE__ */ u3("span", { children: Array.isArray(k3) ? /* @__PURE__ */ u3(k, { children: k3.map((key, index) => /* @__PURE__ */ u3(k, { children: [
+    /* @__PURE__ */ u3("span", { class: HelpOverlay_default.keyWrapper, children: Array.isArray(k3) ? /* @__PURE__ */ u3(k, { children: k3.map((key, index) => /* @__PURE__ */ u3(k, { children: [
       /* @__PURE__ */ u3("span", { class: HelpOverlay_default.key, children: key }),
       index < k3.length - 1 && (separator ?? " / ")
     ] })) }) : /* @__PURE__ */ u3("span", { class: HelpOverlay_default.key, children: k3 }) }),
@@ -4180,8 +4191,8 @@
       focusRef.current?.focus();
     });
     return /* @__PURE__ */ u3("div", { class: HelpOverlay_default.overlay, tabindex: "1", onClick: hideHelpOverlay, onKeyDown: (e3) => handleKeys(e3, { helpOverlayActiveTab, hideHelpOverlay, helpTabs, showHelpOverlay }), ref: focusRef, children: /* @__PURE__ */ u3("div", { class: HelpOverlay_default.content, onClick: (e3) => e3.stopPropagation(), children: [
-      /* @__PURE__ */ u3("div", { class: HelpOverlay_default.tabs, children: [
-        helpTabs.map((tab) => /* @__PURE__ */ u3(
+      /* @__PURE__ */ u3("div", { class: HelpOverlay_default.header, children: [
+        /* @__PURE__ */ u3("div", { class: HelpOverlay_default.tabs, children: helpTabs.map((tab) => /* @__PURE__ */ u3(
           "button",
           {
             onClick: () => showHelpOverlay(tab.id),
@@ -4189,11 +4200,88 @@
             children: tab.label
           },
           tab.id
-        )),
-        /* @__PURE__ */ u3("button", { class: HelpOverlay_default.close, onClick: hideHelpOverlay, children: "X" })
+        )) }),
+        /* @__PURE__ */ u3("button", { class: HelpOverlay_default.close, onClick: hideHelpOverlay, onMouseOver: (e3) => e3.stopPropagation(), children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: x_default } }) })
       ] }),
       /* @__PURE__ */ u3("div", { class: HelpOverlay_default.sections, children: TAB_CONTENT[helpOverlayActiveTab].map((section, i4) => /* @__PURE__ */ u3(Section, { ...section }, i4)) })
     ] }) });
+  };
+
+  // src/context/DrawToolContext.jsx
+  var DrawToolContext = R(null);
+  var useDrawTool = () => {
+    const context = x2(DrawToolContext);
+    if (!context) {
+      throw new Error("useDrawTool must be used within DrawToolProvider");
+    }
+    return context;
+  };
+  var TAB_IDS = [
+    { id: "image", label: "Image Stamps" },
+    { id: "text", label: "Text Stamp" },
+    { id: "settings", label: "Settings" }
+  ];
+  var DrawToolProvider = ({ children }) => {
+    const [activeTab, setActiveTab] = d2("image");
+    const [drawToolVisible, setDrawToolVisible] = d2(false);
+    const [stampSize, setStampSize] = d2(25);
+    const [stampColorType, setStampColorType] = d2("Unchanged");
+    const [rainbowSpeed, setRainbowSpeed] = d2(1);
+    const [rainbowFillSpeed, setRainbowFillSpeed] = d2(1);
+    const [singleColor, setSingleColor] = d2("#ff2200");
+    const [textStampColor, setTextStampColor] = d2("#ff2200");
+    const [textStampText, setTextStampText] = d2("");
+    const [penColor, setPenColor] = d2("#ff2200");
+    const [penWidth, setPenWidth] = d2(2);
+    const [penAlpha, setPenAlpha] = d2(1);
+    const [penMode, setPenMode] = d2("pen");
+    const [eraserEnabled, setEraserEnabled] = d2(false);
+    const showDrawTool = q2(() => setDrawToolVisible(true), []);
+    const hideDrawTool = q2(() => setDrawToolVisible(false), []);
+    const handleUndo = q2(() => {
+      StampLib.undoLastWriteAll();
+    }, []);
+    const handleClear = q2(() => {
+      StampLib.clearPage();
+    }, []);
+    const handleUnlock = q2(() => {
+      StampLib.unlockPage();
+    }, []);
+    return /* @__PURE__ */ u3(DrawToolContext.Provider, { value: {
+      activeTab,
+      setActiveTab,
+      drawToolTabs: TAB_IDS,
+      drawToolVisible,
+      showDrawTool,
+      hideDrawTool,
+      stampSize,
+      setStampSize,
+      stampColorType,
+      setStampColorType,
+      rainbowSpeed,
+      setRainbowSpeed,
+      rainbowFillSpeed,
+      setRainbowFillSpeed,
+      singleColor,
+      setSingleColor,
+      textStampColor,
+      setTextStampColor,
+      textStampText,
+      setTextStampText,
+      penColor,
+      setPenColor,
+      penWidth,
+      setPenWidth,
+      penAlpha,
+      setPenAlpha,
+      penMode,
+      setPenMode,
+      eraserEnabled,
+      setEraserEnabled,
+      handleUndo,
+      handleClear,
+      handleUnlock
+    }, children });
   };
 
   // src/context/AppContext.jsx
@@ -4225,7 +4313,7 @@
     return /* @__PURE__ */ u3(KeyboardModeContext.Provider, { value: { keyboardModeEnabled, setKeyboardModeEnabled }, children });
   };
   var AppProvider = ({ children }) => {
-    return /* @__PURE__ */ u3(DrawTabProvider, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(DiffViewOverlayProvider, { children: /* @__PURE__ */ u3(HelpOverlayProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) }) }) });
+    return /* @__PURE__ */ u3(DrawTabProvider, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(DiffViewOverlayProvider, { children: /* @__PURE__ */ u3(HelpOverlayProvider, { children: /* @__PURE__ */ u3(DrawToolProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) }) }) }) });
   };
 
   // src/components/CustomToolbar.jsx
@@ -4234,6 +4322,7 @@
     const { timestampEnabled } = useTimestamp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
     const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
+    const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible } = useDrawTool();
     y2(() => {
       updatePenSettings();
     }, []);
@@ -4247,16 +4336,6 @@
         container.classList.add("shiftup");
       }
       setShifted(!shifted);
-    };
-    const togglePenToolbar = () => {
-      const gradingToolbarBox = document.querySelector(".grading-toolbar-box");
-      if (!gradingToolbarBox)
-        return;
-      if (gradingToolbarBox.classList.contains("close")) {
-        gradingToolbarBox.querySelector(".toolbar-item")?.click();
-      } else {
-        StampLib.collapseToolbar();
-      }
     };
     const handleDrawTab = () => {
       const drawtab = document.querySelector(".drawtab");
@@ -4280,20 +4359,18 @@
         hideDrawTab();
       }
     };
+    const handleToolTab = (tabId) => {
+      if (drawToolVisible && activeTab === tabId) {
+        hideDrawTool();
+      } else {
+        setActiveTab(tabId);
+        showDrawTool();
+      }
+    };
     const handleXAll = () => {
       document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
     };
     return /* @__PURE__ */ u3("div", { class: "customToolbar", style: { display: "none" }, children: [
-      /* @__PURE__ */ u3(
-        "button",
-        {
-          class: "hoverToolbarBtn",
-          onClick: togglePenToolbar,
-          onMouseOver: (e3) => e3.stopPropagation(),
-          title: "Toggle pen toolbar visibility",
-          dangerouslySetInnerHTML: { __html: toolbarIcons.togglePen }
-        }
-      ),
       /* @__PURE__ */ u3(
         "button",
         {
@@ -4333,6 +4410,17 @@
           dangerouslySetInnerHTML: { __html: penIcons.pen }
         }
       ),
+      drawToolTabs?.map((tab) => /* @__PURE__ */ u3(
+        "button",
+        {
+          class: "drawtool-tab-btn",
+          onMouseOver: (e3) => e3.stopPropagation(),
+          onClick: () => handleToolTab(tab.id),
+          title: tab.label,
+          children: tab.label
+        },
+        tab.id
+      )),
       /* @__PURE__ */ u3(
         "button",
         {
@@ -4754,9 +4842,7 @@
         fns.showHelpOverlay("grading");
         break;
       case "X":
-        const xallbtn = document.querySelector(".xallbtn");
-        xallbtn?.click();
-        xallbtn?.blur();
+        xAll();
         break;
       case "x":
         matchPreviousMarkings?.();
@@ -5122,7 +5208,7 @@
     const colorInputRef = A2(null);
     useKeyboardMode2(keyboardModeEnabled);
     const getPenColor = () => colorInputRef.current?.value || "#ff2200";
-    const stamps = window.StampLib?.stamps || {};
+    const stamps2 = window.StampLib?.stamps || {};
     y2(() => {
       if (drawTabOpen && textareaRef.current) {
         updateTextAreaSize();
@@ -5385,7 +5471,7 @@
           }
         )
       ] }),
-      /* @__PURE__ */ u3("div", { class: "stamps", ref: stampsRef, children: Object.entries(stamps).map(([category, stampList]) => /* @__PURE__ */ u3("details", { open: category === Object.keys(stamps)[0], children: [
+      /* @__PURE__ */ u3("div", { class: "stamps", ref: stampsRef, children: Object.entries(stamps2).map(([category, stampList]) => /* @__PURE__ */ u3("details", { open: category === Object.keys(stamps2)[0], children: [
         /* @__PURE__ */ u3("summary", { children: category }),
         stampList.map((stamp2) => /* @__PURE__ */ u3(
           "button",
@@ -5405,6 +5491,642 @@
     ] });
   };
   var DrawTab = (props) => /* @__PURE__ */ u3(DrawTabContent, { ...props });
+
+  // src/components/ImageStampTab.module.css
+  var ImageStampTab_default = {
+    tab: "ImageStampTab_tab",
+    controls: "ImageStampTab_controls",
+    mainControlRow: "ImageStampTab_mainControlRow",
+    controlGroupWrapper: "ImageStampTab_controlGroupWrapper",
+    controlGroup: "ImageStampTab_controlGroup",
+    controlRow: "ImageStampTab_controlRow",
+    buttons: "ImageStampTab_buttons",
+    stamps: "ImageStampTab_stamps",
+    stampTabs: "ImageStampTab_stampTabs",
+    stampTabBtn: "ImageStampTab_stampTabBtn",
+    stampTabBtnActive: "ImageStampTab_stampTabBtnActive",
+    stampBtn: "ImageStampTab_stampBtn"
+  };
+
+  // src/icons/undo.svg
+  var undo_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M9 14 4 9l5-5"/>\n  <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/>\n</svg>';
+
+  // src/icons/trash.svg
+  var trash_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M3 6h18"/>\n  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>\n  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>\n</svg>';
+
+  // src/components/ImageStampTab.jsx
+  var stamps = window.StampLib?.stamps || {};
+  var ImageStampTab = ({ onStampClick }) => {
+    const {
+      stampSize,
+      setStampSize,
+      stampColorType,
+      setStampColorType,
+      rainbowSpeed,
+      setRainbowSpeed,
+      rainbowFillSpeed,
+      setRainbowFillSpeed,
+      singleColor,
+      setSingleColor,
+      handleUndo,
+      handleClear
+    } = useDrawTool();
+    const { showStampPreview } = usePrintOverlay();
+    const stampsRef = A2(null);
+    const stampCategories = Object.keys(stamps);
+    const [activeStampTab, setActiveStampTab] = d2(stampCategories[0] || "");
+    y2(() => {
+      if (stampCategories.length > 0 && !stampCategories.includes(activeStampTab)) {
+        setActiveStampTab(stampCategories[0]);
+      }
+    }, [stampCategories, activeStampTab]);
+    y2(() => {
+      const parent = stampsRef.current;
+      const draggable = stampsRef.current;
+      if (!parent || !draggable)
+        return;
+      let dragging = false;
+      let startY = 0;
+      let scrollStart = 0;
+      let dragged = 0;
+      const dragStart = (ev) => {
+        dragging = true;
+        startY = ev.clientY;
+        scrollStart = parent.scrollTop;
+        dragged = 0;
+      };
+      const dragEnd = (ev) => {
+        dragging = false;
+        if (draggable.hasPointerCapture(ev.pointerId)) {
+          draggable.releasePointerCapture(ev.pointerId);
+        }
+      };
+      const drag = (ev) => {
+        if (dragging) {
+          dragged++;
+          parent.scrollTop = scrollStart - (ev.clientY - startY);
+          if (dragged === 40) {
+            draggable.setPointerCapture(ev.pointerId);
+          }
+        }
+      };
+      draggable.addEventListener("pointerdown", dragStart);
+      draggable.addEventListener("pointerup", dragEnd);
+      draggable.addEventListener("pointermove", drag);
+      return () => {
+        draggable.removeEventListener("pointerdown", dragStart);
+        draggable.removeEventListener("pointerup", dragEnd);
+        draggable.removeEventListener("pointermove", drag);
+      };
+    }, []);
+    const handleStampClick = (stamp2, e3) => {
+      const stampDimensions = stamp2._cachedDimensions || StampLib.getWriteStampDimensions(stamp2, 1);
+      const maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
+      const scale = stampSize / 100 * maxScaleFactor;
+      const svg = typeof stamp2.svg === "string" ? stamp2.svg : stamp2.svg.outerHTML;
+      showStampPreview(stamp2, stampDimensions, maxScaleFactor, scale, singleColor, svg, { x: e3.clientX, y: e3.clientY });
+      onStampClick?.();
+    };
+    const handleSizeChange = (e3) => {
+      setStampSize(parseInt(e3.target.value));
+    };
+    const handleColorTypeChange = (e3) => {
+      setStampColorType(e3.target.value);
+    };
+    const handleSpeedChange = (e3) => {
+      if (stampColorType === "Rainbow") {
+        setRainbowSpeed(parseInt(e3.target.value));
+      } else if (stampColorType === "Rainbow Fill") {
+        setRainbowFillSpeed(parseInt(e3.target.value));
+      }
+    };
+    const isRainbow = stampColorType === "Rainbow";
+    const isRainbowFill = stampColorType === "Rainbow Fill";
+    const speedValue = isRainbow ? rainbowSpeed : isRainbowFill ? rainbowFillSpeed : 1;
+    const speedMin = isRainbow ? 1 : isRainbowFill ? 1 : 0;
+    const speedMax = isRainbow ? 130 : isRainbowFill ? 100 : 0;
+    const activeStamps = stamps[activeStampTab] || [];
+    return /* @__PURE__ */ u3("div", { class: ImageStampTab_default.tab, children: [
+      /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controls, children: /* @__PURE__ */ u3("div", { class: ImageStampTab_default.mainControlRow, children: [
+        /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroup, children: [
+          /* @__PURE__ */ u3("label", { children: "Size" }),
+          /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlRow, children: [
+            /* @__PURE__ */ u3(
+              "input",
+              {
+                type: "range",
+                min: "10",
+                max: "100",
+                value: stampSize,
+                onInput: handleSizeChange
+              }
+            ),
+            /* @__PURE__ */ u3("span", { children: [
+              stampSize,
+              "%"
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroup, children: [
+          /* @__PURE__ */ u3("label", { children: "Color" }),
+          /* @__PURE__ */ u3(
+            "input",
+            {
+              type: "color",
+              value: singleColor,
+              onInput: (e3) => setSingleColor(e3.target.value)
+            }
+          )
+        ] }),
+        /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroupWrapper, children: [
+          /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroup, children: [
+            /* @__PURE__ */ u3("label", { children: "Mode" }),
+            /* @__PURE__ */ u3("select", { value: stampColorType, onChange: handleColorTypeChange, children: [
+              /* @__PURE__ */ u3("option", { value: "Unchanged", children: "Unchanged" }),
+              /* @__PURE__ */ u3("option", { value: "Color Picker", children: "Single Color" }),
+              /* @__PURE__ */ u3("option", { value: "Rainbow", children: "Rainbow" }),
+              /* @__PURE__ */ u3("option", { value: "Rainbow Fill", children: "Rainbow Fill" })
+            ] })
+          ] }),
+          (isRainbow || isRainbowFill) && /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroup, children: [
+            /* @__PURE__ */ u3("label", { children: "Rainbow Speed" }),
+            /* @__PURE__ */ u3(
+              "input",
+              {
+                type: "range",
+                min: speedMin,
+                max: speedMax,
+                value: speedValue,
+                onChange: handleSpeedChange
+              }
+            )
+          ] })
+        ] }),
+        /* @__PURE__ */ u3("div", { class: ImageStampTab_default.buttons, children: [
+          /* @__PURE__ */ u3(
+            "button",
+            {
+              onClick: handleUndo,
+              onMouseOver: (e3) => e3.stopPropagation(),
+              children: [
+                /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: undo_default } }),
+                "Undo"
+              ]
+            }
+          ),
+          /* @__PURE__ */ u3(
+            "button",
+            {
+              onClick: handleClear,
+              onMouseOver: (e3) => e3.stopPropagation(),
+              children: [
+                /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: trash_default } }),
+                "Clear"
+              ]
+            }
+          )
+        ] })
+      ] }) }),
+      /* @__PURE__ */ u3("div", { class: ImageStampTab_default.stampTabs, children: stampCategories.map((category) => /* @__PURE__ */ u3(
+        "button",
+        {
+          class: `${ImageStampTab_default.stampTabBtn} ${activeStampTab === category ? ImageStampTab_default.stampTabBtnActive : ""}`,
+          onClick: () => setActiveStampTab(category),
+          children: category
+        },
+        category
+      )) }),
+      /* @__PURE__ */ u3("div", { class: ImageStampTab_default.stamps, ref: stampsRef, children: activeStamps.map((stamp2) => /* @__PURE__ */ u3(
+        "button",
+        {
+          class: ImageStampTab_default.stampBtn,
+          onMouseOver: (e3) => e3.stopPropagation(),
+          onClick: (e3) => handleStampClick(stamp2, e3),
+          style: {
+            "--height-limiter": (() => {
+              const dims = stamp2._cachedDimensions || StampLib.getWriteStampDimensions(stamp2, 1);
+              return dims.height <= dims.width ? 1 : dims.width / dims.height;
+            })()
+          },
+          children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp2.svg.outerHTML } })
+        },
+        stamp2.name
+      )) })
+    ] });
+  };
+
+  // src/components/TextStampTab.module.css
+  var TextStampTab_default = {
+    tab: "TextStampTab_tab",
+    controls: "TextStampTab_controls",
+    mainControlRow: "TextStampTab_mainControlRow",
+    controlGroup: "TextStampTab_controlGroup",
+    controlRow: "TextStampTab_controlRow",
+    buttons: "TextStampTab_buttons",
+    textInput: "TextStampTab_textInput",
+    stampBtn: "TextStampTab_stampBtn"
+  };
+
+  // src/icons/stamp-text.svg
+  var stamp_text_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <polyline points="4 7 4 4 20 4 20 7"/>\n  <line x1="9" y1="20" x2="15" y2="20"/>\n  <line x1="12" y1="4" x2="12" y2="20"/>\n</svg>';
+
+  // src/components/TextStampTab.jsx
+  var TextStampTab = ({ onStamp }) => {
+    const {
+      textStampColor,
+      setTextStampColor,
+      textStampText,
+      setTextStampText,
+      stampSize,
+      setStampSize,
+      handleUndo
+    } = useDrawTool();
+    const { showTextPreview } = usePrintOverlay();
+    const textareaRef = A2(null);
+    y2(() => {
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "";
+        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      }
+    }, [textStampText]);
+    const handleSizeChange = (e3) => {
+      const newSize = parseInt(e3.target.value);
+      setStampSize(newSize);
+      const textPreview = document.querySelector(".printPreviewDiv");
+      if (textPreview?.checkVisibility()) {
+        const scale = newSize / 100;
+        const writeDimensions = StampLib.getWriteAllDimensions(textStampText, scale);
+        textPreview.style.height = `${writeDimensions.height}px`;
+        textPreview.style.width = `${writeDimensions.width}px`;
+      }
+    };
+    const handleTextChange = (e3) => {
+      setTextStampText(e3.target.value);
+    };
+    const handleColorChange = (e3) => {
+      setTextStampColor(e3.target.value);
+      if (textareaRef.current) {
+        textareaRef.current.style.color = e3.target.value;
+      }
+    };
+    const handleTextStamp = (e3) => {
+      const scale = stampSize / 100;
+      const writeDimensions = StampLib.getWriteAllDimensions(textStampText, scale);
+      showTextPreview(textStampText, writeDimensions, scale, textStampColor, { x: e3.clientX, y: e3.clientY });
+      onStamp?.();
+    };
+    return /* @__PURE__ */ u3("div", { class: TextStampTab_default.tab, children: [
+      /* @__PURE__ */ u3("div", { class: TextStampTab_default.controls, children: /* @__PURE__ */ u3("div", { class: TextStampTab_default.mainControlRow, children: [
+        /* @__PURE__ */ u3("div", { class: TextStampTab_default.controlGroup, children: [
+          /* @__PURE__ */ u3("label", { children: "Color" }),
+          /* @__PURE__ */ u3(
+            "input",
+            {
+              type: "color",
+              value: textStampColor,
+              onChange: handleColorChange
+            }
+          )
+        ] }),
+        /* @__PURE__ */ u3("div", { class: TextStampTab_default.controlGroup, children: [
+          /* @__PURE__ */ u3("label", { children: "Size" }),
+          /* @__PURE__ */ u3("div", { class: TextStampTab_default.controlRow, children: [
+            /* @__PURE__ */ u3(
+              "input",
+              {
+                type: "range",
+                min: "10",
+                max: "100",
+                value: stampSize,
+                onInput: handleSizeChange
+              }
+            ),
+            /* @__PURE__ */ u3("span", { children: [
+              stampSize,
+              "%"
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ u3("div", { class: TextStampTab_default.buttons, children: /* @__PURE__ */ u3(
+          "button",
+          {
+            onClick: handleUndo,
+            onMouseOver: (e3) => e3.stopPropagation(),
+            children: [
+              /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: undo_default } }),
+              "Undo"
+            ]
+          }
+        ) })
+      ] }) }),
+      /* @__PURE__ */ u3("div", { class: TextStampTab_default.textInput, children: [
+        /* @__PURE__ */ u3(
+          "textarea",
+          {
+            ref: textareaRef,
+            value: textStampText,
+            onInput: handleTextChange,
+            style: { color: textStampColor }
+          }
+        ),
+        /* @__PURE__ */ u3(
+          "button",
+          {
+            class: TextStampTab_default.stampBtn,
+            onClick: handleTextStamp,
+            onMouseOver: (e3) => e3.stopPropagation(),
+            children: [
+              /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp_text_default } }),
+              "Stamp Text"
+            ]
+          }
+        )
+      ] })
+    ] });
+  };
+
+  // src/components/SettingsTab.module.css
+  var SettingsTab_default = {
+    tab: "SettingsTab_tab",
+    controls: "SettingsTab_controls",
+    controlsSubgroup: "SettingsTab_controlsSubgroup",
+    presetsSubgroup: "SettingsTab_presetsSubgroup",
+    controlGroup: "SettingsTab_controlGroup",
+    controlRow: "SettingsTab_controlRow",
+    presetBtn: "SettingsTab_presetBtn",
+    presetBtnActive: "SettingsTab_presetBtnActive",
+    settingsSection: "SettingsTab_settingsSection",
+    actionButtons: "SettingsTab_actionButtons",
+    actionBtn: "SettingsTab_actionBtn"
+  };
+
+  // src/icons/pen.svg
+  var pen_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>\n</svg>';
+
+  // src/icons/highlighter.svg
+  var highlighter_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="m9 11-6 6v3h9l3-3"/>\n  <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>\n</svg>';
+
+  // src/icons/thin-highlighter.svg
+  var thin_highlighter_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="m9 11-6 6v3h9l3-3"/>\n  <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>\n  <line x1="19" y1="9" x2="15" y2="5"/>\n</svg>';
+
+  // src/icons/eraser.svg
+  var eraser_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/>\n  <path d="M22 21H7"/>\n  <path d="m5 11 9 9"/>\n</svg>';
+
+  // src/icons/unlock.svg
+  var unlock_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>\n  <path d="M7 11V7a5 5 0 0 1 9.9-1"/>\n</svg>';
+
+  // src/icons/help-circle.svg
+  var help_circle_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <circle cx="12" cy="12" r="10"/>\n  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>\n  <path d="M12 17h.01"/>\n</svg>';
+
+  // src/components/SettingsTab.jsx
+  var PRESET_ICONS = {
+    pen: pen_default,
+    highlighter: highlighter_default,
+    "thin-highlighter": thin_highlighter_default,
+    eraser: eraser_default
+  };
+  var PEN_PRESETS = [
+    { id: "pen", label: "Pen", width: 2, alpha: 1 },
+    { id: "highlighter", label: "Highlighter", width: 20, alpha: 0.3 },
+    { id: "thin-highlighter", label: "Thin Highlighter", width: 10, alpha: 0.5 },
+    { id: "eraser", label: "Eraser", width: 20, alpha: 1 }
+  ];
+  var getActivePresetId = (eraserEnabled, penWidth, penAlpha) => {
+    if (eraserEnabled)
+      return "eraser";
+    if (penWidth === 2 && penAlpha === 1)
+      return "pen";
+    if (penWidth === 20 && Math.abs(penAlpha - 0.3) < 0.01)
+      return "highlighter";
+    if (penWidth === 10 && Math.abs(penAlpha - 0.5) < 0.01)
+      return "thin-highlighter";
+    return null;
+  };
+  var SettingsTab = () => {
+    const {
+      penColor,
+      setPenColor,
+      penWidth,
+      setPenWidth,
+      penAlpha,
+      setPenAlpha,
+      penMode,
+      setPenMode,
+      eraserEnabled,
+      setEraserEnabled,
+      handleUnlock
+    } = useDrawTool();
+    const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardMode();
+    const { hdModeEnabled, setHdModeEnabled } = useHDMode();
+    const { showHelpOverlay } = useHelpOverlay();
+    const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
+    const handleColorChange = (e3) => {
+      setPenColor(e3.target.value);
+      updatePenSettings();
+    };
+    const handleWidthChange = (e3) => {
+      setPenWidth(parseInt(e3.target.value));
+      updatePenSettings();
+    };
+    const handleAlphaChange = (e3) => {
+      setPenAlpha(parseFloat(e3.target.value));
+      updatePenSettings();
+    };
+    const handlePenModeChange = (e3) => {
+      setPenMode(e3.target.value);
+      updatePenSettings();
+    };
+    const handleEraserToggle = (e3) => {
+      setEraserEnabled(e3.target.checked);
+      updatePenSettings();
+    };
+    const handlePreset = (preset) => {
+      if (preset.id === "eraser") {
+        setEraserEnabled(true);
+        setPenMode("eraser");
+      } else {
+        setEraserEnabled(false);
+        setPenMode("pen");
+        setPenWidth(preset.width);
+        setPenAlpha(preset.alpha);
+      }
+      updatePenSettings();
+    };
+    const handleHdToggle = (e3) => {
+      setHdModeEnabled(e3.target.checked);
+    };
+    const handleKeyboardToggle = (e3) => {
+      setKeyboardModeEnabled(e3.target.checked);
+    };
+    const handleHelp = () => {
+      showHelpOverlay("drawtab");
+    };
+    return /* @__PURE__ */ u3("div", { class: SettingsTab_default.tab, children: [
+      /* @__PURE__ */ u3("div", { class: SettingsTab_default.controls, children: [
+        /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlsSubgroup, children: [
+          /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
+            /* @__PURE__ */ u3("label", { children: "Color" }),
+            /* @__PURE__ */ u3(
+              "input",
+              {
+                type: "color",
+                value: penColor,
+                onChange: handleColorChange
+              }
+            )
+          ] }),
+          /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
+            /* @__PURE__ */ u3("label", { children: "Width" }),
+            /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlRow, children: [
+              /* @__PURE__ */ u3(
+                "input",
+                {
+                  type: "range",
+                  min: "1",
+                  max: "50",
+                  value: penWidth,
+                  onInput: handleWidthChange
+                }
+              ),
+              /* @__PURE__ */ u3("span", { children: [
+                penWidth,
+                "px"
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
+            /* @__PURE__ */ u3("label", { children: "Alpha" }),
+            /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlRow, children: [
+              /* @__PURE__ */ u3(
+                "input",
+                {
+                  type: "range",
+                  min: "0",
+                  max: "1",
+                  step: "0.1",
+                  value: penAlpha,
+                  onInput: handleAlphaChange
+                }
+              ),
+              /* @__PURE__ */ u3("span", { children: penAlpha })
+            ] })
+          ] }),
+          /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
+            /* @__PURE__ */ u3("label", { children: "Tool" }),
+            /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlRow, children: [
+              /* @__PURE__ */ u3(
+                "input",
+                {
+                  type: "checkbox",
+                  checked: eraserEnabled,
+                  onChange: handleEraserToggle
+                }
+              ),
+              /* @__PURE__ */ u3("span", { children: "Eraser" })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ u3("div", { class: SettingsTab_default.presetsSubgroup, children: PEN_PRESETS.map((preset) => /* @__PURE__ */ u3(
+          "button",
+          {
+            onClick: () => handlePreset(preset),
+            onMouseOver: (e3) => e3.stopPropagation(),
+            class: `${SettingsTab_default.presetBtn} ${preset.id === activePresetId ? SettingsTab_default.presetBtnActive : ""}`,
+            children: [
+              /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: PRESET_ICONS[preset.id] } }),
+              preset.label
+            ]
+          },
+          preset.id
+        )) })
+      ] }),
+      /* @__PURE__ */ u3("div", { class: SettingsTab_default.settingsSection, children: [
+        /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
+          /* @__PURE__ */ u3("label", { children: "HD Mode" }),
+          /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlRow, children: /* @__PURE__ */ u3(
+            "input",
+            {
+              type: "checkbox",
+              checked: hdModeEnabled,
+              onChange: handleHdToggle
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
+          /* @__PURE__ */ u3("label", { children: "Keyboard Mode" }),
+          /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlRow, children: /* @__PURE__ */ u3(
+            "input",
+            {
+              type: "checkbox",
+              checked: keyboardModeEnabled,
+              onChange: handleKeyboardToggle
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ u3("div", { class: SettingsTab_default.actionButtons, children: [
+          /* @__PURE__ */ u3(
+            "button",
+            {
+              class: SettingsTab_default.actionBtn,
+              onClick: handleHelp,
+              onMouseOver: (e3) => e3.stopPropagation(),
+              children: [
+                /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: help_circle_default } }),
+                "Help"
+              ]
+            }
+          ),
+          /* @__PURE__ */ u3(
+            "button",
+            {
+              class: SettingsTab_default.actionBtn,
+              onClick: handleUnlock,
+              onMouseOver: (e3) => e3.stopPropagation(),
+              children: [
+                /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: unlock_default } }),
+                "Unlock Page"
+              ]
+            }
+          )
+        ] })
+      ] })
+    ] });
+  };
+
+  // src/components/DrawToolOverlay.module.css
+  var DrawToolOverlay_default = {
+    overlay: "DrawToolOverlay_overlay",
+    content: "DrawToolOverlay_content",
+    header: "DrawToolOverlay_header",
+    closeBtn: "DrawToolOverlay_closeBtn",
+    body: "DrawToolOverlay_body"
+  };
+
+  // src/components/DrawToolOverlay.jsx
+  var DrawToolOverlay = () => {
+    const { activeTab, drawToolVisible, hideDrawTool } = useDrawTool();
+    if (!drawToolVisible)
+      return null;
+    return /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.overlay, onClick: hideDrawTool, children: /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.content, onClick: (e3) => e3.stopPropagation(), children: [
+      /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.header, children: [
+        /* @__PURE__ */ u3("span", {}),
+        /* @__PURE__ */ u3(
+          "button",
+          {
+            class: DrawToolOverlay_default.closeBtn,
+            onClick: hideDrawTool,
+            onMouseOver: (e3) => e3.stopPropagation(),
+            children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: x_default } })
+          }
+        )
+      ] }),
+      /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.body, children: [
+        activeTab === "image" && /* @__PURE__ */ u3(ImageStampTab, {}),
+        activeTab === "text" && /* @__PURE__ */ u3(TextStampTab, {}),
+        activeTab === "settings" && /* @__PURE__ */ u3(SettingsTab, {})
+      ] })
+    ] }) });
+  };
 
   // src/components/Misc.jsx
   var LoginAssistantsList = () => {
@@ -5622,7 +6344,8 @@
       /* @__PURE__ */ u3(DrawTab, {}),
       /* @__PURE__ */ u3(PrintOverlay, {}),
       /* @__PURE__ */ u3(DiffViewOverlay, {}),
-      /* @__PURE__ */ u3(HelpOverlay, {})
+      /* @__PURE__ */ u3(HelpOverlay, {}),
+      /* @__PURE__ */ u3(DrawToolOverlay, {})
     ] }) });
   };
   var appContainer = document.createElement("div");
@@ -5633,13 +6356,13 @@
     appContainer
   );
   var initStampDimensions = () => {
-    const stamps = window.StampLib?.stamps;
-    if (!stamps) {
+    const stamps2 = window.StampLib?.stamps;
+    if (!stamps2) {
       setTimeout(initStampDimensions, 1e3);
       return;
     }
-    for (const category in stamps) {
-      for (const stamp2 of stamps[category]) {
+    for (const category in stamps2) {
+      for (const stamp2 of stamps2[category]) {
         if (!stamp2._cachedDimensions) {
           stamp2._cachedDimensions = StampLib.getWriteStampDimensions(stamp2, 1);
         }
@@ -5731,9 +6454,6 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 .customToolbar > button:has(svg) {
   padding-top: 3px;
 }
-.customToolbar .hoverToolbarBtn {
-  top: 0px;
-}
 .customToolbar .timestampBox {
   left: 30px;
   top: 8px;
@@ -5751,16 +6471,13 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   border: 2px solid red;
 }
 .customToolbar .headerZindexBtn {
-  top: 5px;
+  top: 0px;
 }
 .customToolbar .shiftbtn {
-  top: 10px;
-}
-.customToolbar .xallbtn {
-  top: 15px;
+  top: 5px;
 }
 .customToolbar .drawbtn {
-  top: 20px;
+  top: 10px;
   padding-top: 4px !important;
 }
 .customToolbar {
@@ -6227,7 +6944,7 @@ body:has(app-atx0010p) .loginAssistantsList {
     left: calc((100vw - 410px) * 2 / 3 + 385px + 6px) !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .content-answer-content {
-    /* dynamic width answer content so our xallbtn can have "fixed" position relative to the other buttons */
+    /* dynamic width answer content so our toolbar can have "fixed" position relative to the other buttons */
     width: calc((100vw - 410px) * 2 / 3) !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool):not(:has(.content-answer-content)):has(.worksheet-group.single) .customToolbar {
@@ -6738,38 +7455,79 @@ body:has(app-atx0010p) .loginAssistantsList {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
   z-index: 9999;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  padding-top: 10px;
+  backdrop-filter: blur(2px);
 }
 .HelpOverlay_content {
   background-color: white;
-  border-radius: 8px;
-  padding: 10px;
-  max-width: calc(100vw - 20px);
+  border-radius: 12px;
+  width: calc(100vw - 20px);
   max-height: calc(100dvh - 20px);
-  overflow: auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  min-height: 500px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
   outline: none;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e8;
 }
 .HelpOverlay_tabs {
   display: flex;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  justify-content: flex-start;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  gap: 4px;
+  flex: 1;
+}
+.HelpOverlay_header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e8;
+  padding: 8px;
+  background-color: #f8f8fc;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  flex-shrink: 0;
+  gap: 8px;
+}
+.HelpOverlay_tabs::-webkit-scrollbar {
+  height: 6px;
+}
+.HelpOverlay_tabs::-webkit-scrollbar-track {
+  background: #f8f8fc;
+}
+.HelpOverlay_tabs::-webkit-scrollbar-thumb {
+  background: #c0c0c8;
+  border-radius: 3px;
+}
+.HelpOverlay_tabs::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a8;
 }
 .HelpOverlay_tab {
   padding: 8px 16px;
-  border: none;
-  background: transparent;
-  color: #333;
+  border: 1px solid #d0d0da;
+  background: #fff;
+  color: #666;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
-  border-radius: 4px;
-  margin-bottom: 4px;
+  border-radius: 6px;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 500;
+}
+.HelpOverlay_tab:hover {
+  background-color: #f0f0f5;
+  border-color: #b0b0c0;
 }
 .HelpOverlay_tab:focus-visible {
   outline: none;
@@ -6777,45 +7535,816 @@ body:has(app-atx0010p) .loginAssistantsList {
 .HelpOverlay_tabActive {
   background: #007bff;
   color: white;
-  border-bottom: 2px solid #007bff;
+  border-color: #007bff;
+}
+.HelpOverlay_tabActive:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
 }
 .HelpOverlay_sections {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
+  overflow-y: auto;
+  padding: 16px;
+  flex: 1;
+  min-height: 0;
 }
 .HelpOverlay_section {
   margin-bottom: 16px;
-  flex: 0 0 auto;
-  margin-right: 30px;
+  flex: 1 1 250px;
+  margin-right: 24px;
 }
 .HelpOverlay_sectionTitle {
-  font-weight: bold;
+  font-weight: 600;
   margin-bottom: 8px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #e0e0e8;
+  padding-bottom: 4px;
+  font-size: 14px;
+  color: #444;
 }
 .HelpOverlay_keyBinding {
   display: flex;
   gap: 12px;
   margin-bottom: 4px;
-  font-size: 75%;
+  font-size: 13px;
 }
 .HelpOverlay_key {
   font-family: "Courier New", monospace;
   min-width: 10px;
-  background-color: #eaeaea;
-  padding: 2px;
+  background-color: #f5f5fa;
+  padding: 2px 6px;
+  border: 1px solid #d0d0da;
+  border-radius: 3px;
+  font-size: 12px;
+}
+.HelpOverlay_keyWrapper {
+  white-space: nowrap;
 }
 .HelpOverlay_desc {
   white-space: nowrap;
+  color: #555;
 }
 .HelpOverlay_close {
-  margin-bottom: 7px;
-  margin-left: 7px;
-  padding: 8px 11px;
+  padding: 7px;
+  border: 1px solid #d0d0da;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #fff;
+  color: #666;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  font-weight: 500;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.HelpOverlay_close span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.HelpOverlay_close svg {
+  width: 16px;
+  height: 16px;
+}
+.HelpOverlay_close:hover {
+  background-color: #f0f0f5;
+  border-color: #b0b0c0;
+  color: #333;
+}
+
+/* src/components/ImageStampTab.module.css */
+.ImageStampTab_tab {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.ImageStampTab_controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px;
+  background-color: #f5f5fa;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid #e0e0e8;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+.ImageStampTab_mainControlRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.ImageStampTab_controlGroupWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #e8e8f0;
+}
+.ImageStampTab_controlGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.ImageStampTab_controlGroup label {
+  font-size: 10px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 500;
+}
+.ImageStampTab_controlRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ImageStampTab_controlRow span {
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+  min-width: 32px;
+  text-align: right;
+}
+.ImageStampTab_controlGroup input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 100px;
+  max-width: 120px;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  cursor: pointer;
+}
+.ImageStampTab_controlGroup input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #007bff;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.ImageStampTab_controlGroup input[type=range]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #007bff;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.ImageStampTab_controlGroup select {
+  padding: 6px 10px;
+  font-size: 12px;
+  min-width: 110px;
+  border: 1px solid #d0d0da;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.ImageStampTab_controlGroup select:hover {
+  border-color: #a0a0b0;
+}
+.ImageStampTab_controlGroup select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+.ImageStampTab_controlGroup input[type=color] {
+  width: 34px;
+  height: 30px;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  border-radius: 4px;
+  padding: 2px;
+  transition: border-color 0.2s;
+}
+.ImageStampTab_controlGroup input[type=color]:hover {
+  border-color: #a0a0b0;
+}
+.ImageStampTab_controlGroup input[type=color]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.ImageStampTab_controlGroup input[type=color]::-webkit-color-swatch {
+  border-radius: 2px;
   border: none;
+}
+.ImageStampTab_buttons {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-self: flex-start;
+}
+.ImageStampTab_buttons button {
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  background: #fff;
+  border-radius: 4px;
+  color: #444;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ImageStampTab_buttons button svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.ImageStampTab_buttons button:hover {
+  background-color: #f0f0f5;
+  border-color: #b0b0c0;
+}
+.ImageStampTab_buttons button:active {
+  background-color: #e8e8f0;
+}
+.ImageStampTab_stamps {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  min-height: 0;
+}
+.ImageStampTab_stampTabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px 8px;
+  background-color: #f0f0f5;
+  border: 1px solid #e0e0e8;
+  border-top: 0px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  flex-shrink: 0;
+  border-radius: 0 0 8px 8px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.ImageStampTab_stampTabBtn {
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  background: #fff;
+  border-radius: 4px;
+  color: #666;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  white-space: nowrap;
+}
+.ImageStampTab_stampTabBtn:hover {
+  background-color: #f8f8fc;
+  border-color: #b0b0c0;
+}
+.ImageStampTab_stampTabBtnActive {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+.ImageStampTab_stampTabBtnActive:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+.ImageStampTab_stampTabs::-webkit-scrollbar {
+  height: 6px;
+}
+.ImageStampTab_stampTabs::-webkit-scrollbar-track {
+  background: #f0f0f5;
+}
+.ImageStampTab_stampTabs::-webkit-scrollbar-thumb {
+  background: #c0c0c8;
+  border-radius: 3px;
+}
+.ImageStampTab_stampTabs::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a8;
+}
+.ImageStampTab_stamps summary {
+  position: sticky;
+  top: 0;
+  background-color: #f5f5fa;
+  max-width: fit-content;
+  padding: 4px 10px;
+  border: 1px solid #e0e0e8;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  color: #555;
+  list-style: none;
+}
+.ImageStampTab_stamps summary::-webkit-details-marker {
+  display: none;
+}
+.ImageStampTab_stamps details[open] > summary {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.ImageStampTab_stampBtn {
+  background: white;
+  width: calc(0.25 * var(--height-limiter) * 370px);
+  margin: 4px;
+  padding: 0px;
+  border-width: 1px;
+  cursor: pointer;
+}
+.ImageStampTab_stampBtn svg {
+  margin-bottom: -3px;
+}
+
+/* src/components/TextStampTab.module.css */
+.TextStampTab_tab {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 12px;
+}
+.TextStampTab_controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px;
+  background-color: #f5f5fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e8;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+.TextStampTab_mainControlRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.TextStampTab_controlGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.TextStampTab_controlGroup label {
+  font-size: 10px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 500;
+}
+.TextStampTab_controlRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.TextStampTab_controlRow span {
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+  min-width: 32px;
+  text-align: right;
+}
+.TextStampTab_controlGroup input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 100px;
+  max-width: 120px;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  cursor: pointer;
+}
+.TextStampTab_controlGroup input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #007bff;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.TextStampTab_controlGroup input[type=range]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #007bff;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.TextStampTab_controlGroup input[type=color] {
+  width: 34px;
+  height: 30px;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  border-radius: 4px;
+  padding: 2px;
+  transition: border-color 0.2s;
+}
+.TextStampTab_controlGroup input[type=color]:hover {
+  border-color: #a0a0b0;
+}
+.TextStampTab_controlGroup input[type=color]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.TextStampTab_controlGroup input[type=color]::-webkit-color-swatch {
+  border-radius: 2px;
+  border: none;
+}
+.TextStampTab_buttons {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-self: flex-start;
+}
+.TextStampTab_buttons button {
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  background: #fff;
+  border-radius: 4px;
+  color: #444;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.TextStampTab_buttons button svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.TextStampTab_buttons button:hover {
+  background-color: #f0f0f5;
+  border-color: #b0b0c0;
+}
+.TextStampTab_buttons button:active {
+  background-color: #e8e8f0;
+}
+.TextStampTab_textInput {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: #f5f5fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e8;
+}
+.TextStampTab_textInput textarea {
+  flex: 1;
+  min-height: 40px;
+  max-width: 370px;
+  font-size: calc(var(--sizeslider, 0.25) * 57px);
+  resize: none;
+  border: 1px solid #d0d0da;
+  border-radius: 4px;
+  padding: 8px;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+.TextStampTab_textInput textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+.TextStampTab_stampBtn {
+  padding: 8px 14px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  background: #fff;
+  border-radius: 4px;
+  color: #444;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+.TextStampTab_stampBtn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.TextStampTab_stampBtn:hover {
+  background-color: #f0f0f5;
+  border-color: #b0b0c0;
+}
+.TextStampTab_stampBtn:active {
+  background-color: #e8e8f0;
+}
+
+/* src/components/SettingsTab.module.css */
+.SettingsTab_tab {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 12px;
+}
+.SettingsTab_controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 14px 16px;
+  background-color: #f5f5fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e8;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+.SettingsTab_controlsSubgroup {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border-radius: 6px 6px 0 0;
+  border: 1px solid #e8e8f0;
+  border-bottom: none;
+}
+.SettingsTab_presetsSubgroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border-radius: 0 0 6px 6px;
+  border: 1px solid #e8e8f0;
+  border-top: none;
+}
+.SettingsTab_controlGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.SettingsTab_controlGroup label {
+  font-size: 10px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 500;
+}
+.SettingsTab_controlRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.SettingsTab_controlRow span {
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+  min-width: 32px;
+  text-align: right;
+}
+.SettingsTab_controlGroup input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 100px;
+  max-width: 120px;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  cursor: pointer;
+}
+.SettingsTab_controlGroup input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #007bff;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.SettingsTab_controlGroup input[type=range]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #007bff;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.SettingsTab_controlGroup input[type=color] {
+  width: 34px;
+  height: 30px;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  border-radius: 4px;
+  padding: 2px;
+  transition: border-color 0.2s;
+}
+.SettingsTab_controlGroup input[type=color]:hover {
+  border-color: #a0a0b0;
+}
+.SettingsTab_controlGroup input[type=color]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.SettingsTab_controlGroup input[type=color]::-webkit-color-swatch {
+  border-radius: 2px;
+  border: none;
+}
+.SettingsTab_controlGroup input[type=checkbox] {
+  margin: 0;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+.SettingsTab_presetBtn {
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  background: #fff;
+  border-radius: 4px;
+  color: #444;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.SettingsTab_presetBtn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.SettingsTab_presetBtn:hover {
+  background-color: #f0f0f5;
+  border-color: #b0b0c0;
+}
+.SettingsTab_presetBtnActive {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+.SettingsTab_presetBtnActive:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+.SettingsTab_settingsSection {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background-color: #f5f5fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e8;
+  flex-shrink: 0;
+}
+.SettingsTab_actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-self: flex-start;
+  margin-left: auto;
+}
+.SettingsTab_actionBtn {
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  background: #fff;
+  border-radius: 4px;
+  color: #444;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.SettingsTab_actionBtn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.SettingsTab_actionBtn:hover {
+  background-color: #f0f0f5;
+  border-color: #b0b0c0;
+}
+.SettingsTab_actionBtn:active {
+  background-color: #e8e8f0;
+}
+
+/* src/components/DrawToolOverlay.module.css */
+.DrawToolOverlay_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9998;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 20px;
+  backdrop-filter: blur(2px);
+}
+.DrawToolOverlay_content {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e8;
+  border-radius: 12px;
+  width: calc(100vw - 2px);
+  max-width: 750px;
+  max-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.DrawToolOverlay_header {
+  position: sticky;
+  top: 0;
+  background-color: #f8f8fc;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e8e8f0;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  flex-shrink: 0;
+}
+.DrawToolOverlay_closeBtn {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  border-radius: 6px;
+  background: #fff;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  padding: 4px;
+}
+.DrawToolOverlay_closeBtn span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.DrawToolOverlay_closeBtn svg {
+  width: 16px;
+  height: 16px;
+}
+.DrawToolOverlay_closeBtn:hover {
+  background-color: #f0f0f5;
+  border-color: #b0b0c0;
+  color: #333;
+}
+.DrawToolOverlay_body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 14px 14px 0 14px;
+  min-height: 0;
 }`;
 
     document.body.appendChild(z);

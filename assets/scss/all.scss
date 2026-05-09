@@ -43,10 +43,6 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
         }
     }
 
-    .hoverToolbarBtn {
-        top: 0px;
-    }
-
     .timestampBox {
         left: 30px;
         top: 8px;
@@ -67,19 +63,15 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     }
 
     .headerZindexBtn {
-        top: 5px;
+        top: 0px;
     }
 
     .shiftbtn {
-        top: 10px;
-    }
-
-    .xallbtn {
-        top: 15px;
+        top: 5px;
     }
 
     .drawbtn {
-        top: 20px;
+        top: 10px;
         padding-top: 4px !important;
     }
 

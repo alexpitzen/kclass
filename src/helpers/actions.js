@@ -260,7 +260,7 @@ function matchPreviousMarkings() {
     };
     const resultBoxes = document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-result-boxs .result-box:not(.right) .result-box-type");
     if (!resultBoxes.length) {
-        document.querySelector(".xallbtn")?.click();
+        xAll();
         return;
     }
     for (let i = 0; i < 2; i++) {
@@ -274,6 +274,11 @@ function matchPreviousMarkings() {
         });
     }
 }
+
+function xAll () {
+    document.querySelectorAll('.worksheet-container .worksheet-container.selected .mark-box-target')
+        .forEach((box) => box.click());
+};
 
 function clearMarkboxs() {
     for (let i = 0; i < 2; i++) {
@@ -310,5 +315,6 @@ export {
     do8,
     doKeyboardDefault,
     matchPreviousMarkings,
+    xAll,
     clearMarkboxs,
 };

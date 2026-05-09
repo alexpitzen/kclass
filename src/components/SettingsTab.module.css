@@ -1,0 +1,225 @@
+.tab {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    gap: 12px;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 14px 16px;
+    background-color: #f5f5fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e8;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
+}
+
+/* Top controls subgroup - rounded TOP corners */
+.controlsSubgroup {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background-color: #ffffff;
+    border-radius: 6px 6px 0 0;
+    border: 1px solid #e8e8f0;
+    border-bottom: none;
+}
+
+/* Bottom presets subgroup - rounded BOTTOM corners */
+.presetsSubgroup {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background-color: #ffffff;
+    border-radius: 0 0 6px 6px;
+    border: 1px solid #e8e8f0;
+    border-top: none;
+}
+
+.controlGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.controlGroup label {
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 500;
+}
+
+.controlRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.controlRow span {
+    font-size: 11px;
+    font-weight: 500;
+    color: #333;
+    min-width: 32px;
+    text-align: right;
+}
+
+.controlGroup input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    min-width: 100px;
+    max-width: 120px;
+    height: 6px;
+    border-radius: 3px;
+    background: #ddd;
+    cursor: pointer;
+}
+
+.controlGroup input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #007bff;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.controlGroup input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #007bff;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.controlGroup input[type="color"] {
+    width: 34px;
+    height: 30px;
+    cursor: pointer;
+    border: 1px solid #d0d0da;
+    border-radius: 4px;
+    padding: 2px;
+    transition: border-color 0.2s;
+}
+
+.controlGroup input[type="color"]:hover {
+    border-color: #a0a0b0;
+}
+
+.controlGroup input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.controlGroup input[type="color"]::-webkit-color-swatch {
+    border-radius: 2px;
+    border: none;
+}
+
+.controlGroup input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+.presetBtn {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #d0d0da;
+    background: #fff;
+    border-radius: 4px;
+    color: #444;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.presetBtn svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.presetBtn:hover {
+    background-color: #f0f0f5;
+    border-color: #b0b0c0;
+}
+
+.presetBtnActive {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.presetBtnActive:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.settingsSection {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background-color: #f5f5fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e8;
+    flex-shrink: 0;
+}
+
+.actionButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-self: flex-start;
+    margin-left: auto;
+}
+
+.actionBtn {
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #d0d0da;
+    background: #fff;
+    border-radius: 4px;
+    color: #444;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.actionBtn svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.actionBtn:hover {
+    background-color: #f0f0f5;
+    border-color: #b0b0c0;
+}
+
+.actionBtn:active {
+    background-color: #e8e8f0;
+}

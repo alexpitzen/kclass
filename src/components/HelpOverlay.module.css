@@ -4,41 +4,86 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
     z-index: 9999;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    padding-top: 10px;
+    backdrop-filter: blur(2px);
 }
 
 .content {
     background-color: white;
-    border-radius: 8px;
-    padding: 10px;
-    max-width: calc(100vw - 20px);
+    border-radius: 12px;
+    width: calc(100vw - 20px);
     max-height: calc(100dvh - 20px);
-    overflow: auto;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    min-height: 500px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12),
+                0 2px 8px rgba(0, 0, 0, 0.08);
     outline: none;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e0e0e8;
 }
 
 .tabs {
     display: flex;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    justify-content: flex-start;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    gap: 4px;
+    flex: 1;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e8;
+    padding: 8px;
+    background-color: #f8f8fc;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    flex-shrink: 0;
+    gap: 8px;
+}
+
+.tabs::-webkit-scrollbar {
+    height: 6px;
+}
+
+.tabs::-webkit-scrollbar-track {
+    background: #f8f8fc;
+}
+
+.tabs::-webkit-scrollbar-thumb {
+    background: #c0c0c8;
+    border-radius: 3px;
+}
+
+.tabs::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a8;
 }
 
 .tab {
     padding: 8px 16px;
-    border: none;
-    background: transparent;
-    color: #333;
+    border: 1px solid #d0d0da;
+    background: #fff;
+    color: #666;
     cursor: pointer;
-    border-bottom: 2px solid transparent;
-    border-radius: 4px;
-    margin-bottom: 4px;
+    border-radius: 6px;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.tab:hover {
+    background-color: #f0f0f5;
+    border-color: #b0b0c0;
 }
 
 .tab:focus-visible {
@@ -48,50 +93,93 @@
 .tabActive {
     background: #007bff;
     color: white;
-    border-bottom: 2px solid #007bff;
+    border-color: #007bff;
+}
+
+.tabActive:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
 }
 
 .sections {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding: 16px;
+    flex: 1;
+    min-height: 0;
 }
 
 .section {
     margin-bottom: 16px;
-    flex: 0 0 auto;
-    margin-right: 30px;
+    flex: 1 1 250px;
+    margin-right: 24px;
 }
 
 .sectionTitle {
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 8px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #e0e0e8;
+    padding-bottom: 4px;
+    font-size: 14px;
+    color: #444;
 }
 
 .keyBinding {
     display: flex;
     gap: 12px;
     margin-bottom: 4px;
-    font-size: 75%;
+    font-size: 13px;
 }
 
 .key {
     font-family: "Courier New", monospace;
     min-width: 10px;
-    background-color: #eaeaea;
-    padding: 2px;
+    background-color: #f5f5fa;
+    padding: 2px 6px;
+    border: 1px solid #d0d0da;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.keyWrapper {
+    white-space: nowrap;
 }
 
 .desc {
     white-space: nowrap;
+    color: #555;
 }
 
 .close {
-    margin-bottom: 7px;
-    margin-left: 7px;
-    padding: 8px 11px;
-    border: none;
-    border-radius: 4px;
+    padding: 7px;
+    border: 1px solid #d0d0da;
+    border-radius: 6px;
     cursor: pointer;
+    background: #fff;
+    color: #666;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    font-weight: 500;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close svg {
+    width: 16px;
+    height: 16px;
+}
+
+.close:hover {
+    background-color: #f0f0f5;
+    border-color: #b0b0c0;
+    color: #333;
 }

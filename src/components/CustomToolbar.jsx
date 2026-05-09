@@ -5,13 +5,14 @@ import { goPrevCorrectionPage, goNextCorrectionPage } from '../helpers/navigatio
 import { updatePenSettings, toggleHeader } from '../helpers/actions.js';
 import { useTimestampDisplay } from '../hooks/useTimestamp.js';
 import { useTimestamp, useDrawTab } from '../context/AppContext.jsx';
+import { useDrawTool } from '../context/DrawToolContext.jsx';
 
 export const CustomToolbar = () => {
     const [shifted, setShifted] = useState(false);
     const { timestampEnabled } = useTimestamp();
-    // TODO: this should be a component
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
     const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
+    const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible } = useDrawTool();
 
     useEffect(() => {
         updatePenSettings();
@@ -28,16 +29,6 @@ export const CustomToolbar = () => {
         setShifted(!shifted);
     };
 
-    const togglePenToolbar = () => {
-        const gradingToolbarBox = document.querySelector('.grading-toolbar-box');
-        if (!gradingToolbarBox) return;
-        if (gradingToolbarBox.classList.contains('close')) {
-            gradingToolbarBox.querySelector('.toolbar-item')?.click();
-        } else {
-            StampLib.collapseToolbar();
-        }
-    };
-
     const handleDrawTab = () => {
         const drawtab = document.querySelector('.drawtab');
         if (!drawtab) return;
@@ -45,14 +36,12 @@ export const CustomToolbar = () => {
         const isHidden = drawtab.classList.contains('hidden');
 
         if (isHidden) {
-            // Use Preact state to show
             showDrawTab();
             const clearBtn = document.querySelector('.clearAll');
             if (clearBtn) {
                 clearBtn.focus();
                 clearBtn.blur();
             }
-            // Update textarea size and pen settings
             const textarea = drawtab.querySelector('textarea');
             if (textarea) {
                 textarea.style.height = '';
@@ -60,8 +49,16 @@ export const CustomToolbar = () => {
             }
             updatePenSettings();
         } else {
-            // Use Preact state to hide
             hideDrawTab();
+        }
+    };
+
+    const handleToolTab = (tabId) => {
+        if (drawToolVisible && activeTab === tabId) {
+            hideDrawTool();
+        } else {
+            setActiveTab(tabId);
+            showDrawTool();
         }
     };
 
@@ -72,14 +69,6 @@ export const CustomToolbar = () => {
 
     return (
         <div class="customToolbar" style={{ display: 'none' }}>
-            <button
-                class="hoverToolbarBtn"
-                onClick={togglePenToolbar}
-                onMouseOver={(e) => e.stopPropagation()}
-                title="Toggle pen toolbar visibility"
-                dangerouslySetInnerHTML={{ __html: toolbarIcons.togglePen }}
-            />
-
             <button
                 class="headerZindexBtn"
                 onClick={toggleHeader}
@@ -108,6 +97,18 @@ export const CustomToolbar = () => {
                 accessKey="d"
                 dangerouslySetInnerHTML={{ __html: penIcons.pen }}
             />
+
+            {drawToolTabs?.map((tab) => (
+                <button
+                    key={tab.id}
+                    class="drawtool-tab-btn"
+                    onMouseOver={(e) => e.stopPropagation()}
+                    onClick={() => handleToolTab(tab.id)}
+                    title={tab.label}
+                >
+                    {tab.label}
+                </button>
+            ))}
 
             <button
                 class="mobileUpBtn"

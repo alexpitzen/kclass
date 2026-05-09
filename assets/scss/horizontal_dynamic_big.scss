@@ -182,7 +182,7 @@
             }
         }
         .content-answer-content {
-            /* dynamic width answer content so our xallbtn can have "fixed" position relative to the other buttons */
+            /* dynamic width answer content so our toolbar can have "fixed" position relative to the other buttons */
             width: calc((100vw - 410px) * 2 / 3) !important;
         }
         &:has(.worksheet-tool):not(:has(.content-answer-content)) {
