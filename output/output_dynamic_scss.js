@@ -3586,7 +3586,7 @@
       textValue: "",
       color: "#ff2200"
     });
-    const showStampPreview = (stamp2, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos) => {
+    const showStampPreview = q2((stamp2, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos) => {
       setState({
         visible: true,
         mode: "stamp",
@@ -3602,8 +3602,8 @@
         textValue: "",
         color: borderColor
       });
-    };
-    const showTextPreview = (text, writeDimensions, scale, borderColor, initialPos) => {
+    }, []);
+    const showTextPreview = q2((text, writeDimensions, scale, borderColor, initialPos) => {
       setState({
         visible: true,
         mode: "text",
@@ -3619,11 +3619,17 @@
         textValue: text,
         color: borderColor
       });
-    };
-    const hidePreview = () => {
+    }, []);
+    const hidePreview = q2(() => {
       setState((prev) => ({ ...prev, visible: false }));
-    };
-    return /* @__PURE__ */ u3(PrintOverlayContext.Provider, { value: { state, showStampPreview, showTextPreview, hidePreview }, children });
+    }, []);
+    const contextValue = T2(() => ({
+      state,
+      showStampPreview,
+      showTextPreview,
+      hidePreview
+    }), [state, showStampPreview, showTextPreview, hidePreview]);
+    return /* @__PURE__ */ u3(PrintOverlayContext.Provider, { value: contextValue, children });
   };
   var PrintOverlay = () => {
     const { state, hidePreview } = usePrintOverlay();
@@ -4347,23 +4353,48 @@
     const hideDrawTab = q2(() => setDrawTabOpen(false), []);
     const showDrawTab = q2(() => setDrawTabOpen(true), []);
     const toggleDrawTab = q2(() => setDrawTabOpen((prev) => !prev), []);
-    return /* @__PURE__ */ u3(DrawTabContext.Provider, { value: { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab }, children });
+    const contextValue = T2(() => ({
+      drawTabOpen,
+      setDrawTabOpen,
+      hideDrawTab,
+      showDrawTab,
+      toggleDrawTab
+    }), [drawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab]);
+    return /* @__PURE__ */ u3(DrawTabContext.Provider, { value: contextValue, children });
   };
   var TimestampProvider = ({ children }) => {
     const [timestampEnabled, setTimestampEnabled] = d2(true);
-    return /* @__PURE__ */ u3(TimestampContext.Provider, { value: { timestampEnabled, setTimestampEnabled }, children });
+    const contextValue = T2(() => ({
+      timestampEnabled,
+      setTimestampEnabled
+    }), [timestampEnabled]);
+    return /* @__PURE__ */ u3(TimestampContext.Provider, { value: contextValue, children });
   };
   var HDModeProvider = ({ children }) => {
-    const [hdModeEnabled, setHDModeEnabled] = d2(false);
-    return /* @__PURE__ */ u3(HDModeContext.Provider, { value: { hdModeEnabled, setHDModeEnabled }, children });
+    const [hdModeEnabled, setHdModeEnabled] = d2(false);
+    const contextValue = T2(() => ({
+      hdModeEnabled,
+      setHdModeEnabled
+    }), [hdModeEnabled]);
+    return /* @__PURE__ */ u3(HDModeContext.Provider, { value: contextValue, children });
   };
   var KeyboardModeProvider = ({ children }) => {
     const [keyboardModeEnabled, setKeyboardModeEnabled] = d2(false);
-    return /* @__PURE__ */ u3(KeyboardModeContext.Provider, { value: { keyboardModeEnabled, setKeyboardModeEnabled }, children });
+    const contextValue = T2(() => ({
+      keyboardModeEnabled,
+      setKeyboardModeEnabled
+    }), [keyboardModeEnabled]);
+    return /* @__PURE__ */ u3(KeyboardModeContext.Provider, { value: contextValue, children });
   };
   var AppProvider = ({ children }) => {
     return /* @__PURE__ */ u3(DrawTabProvider, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(DiffViewOverlayProvider, { children: /* @__PURE__ */ u3(HelpOverlayProvider, { children: /* @__PURE__ */ u3(DrawToolProvider, { children: /* @__PURE__ */ u3(PenSettingsProvider, { children: /* @__PURE__ */ u3(ImageStampSettingsProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) }) }) }) }) }) });
   };
+
+  // src/icons/stamp.svg
+  var stamp_default = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<svg\n   width="13.534658"\n   height="19.125"\n   viewBox="0 0 13.534659 19.125"\n   fill="none"\n   stroke="currentColor"\n   stroke-width="1.5"\n   stroke-linecap="round"\n   stroke-linejoin="round"\n   version="1.1"\n   id="svg7"\n   sodipodi:docname="stamp.svg"\n   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"\n   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"\n   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"\n   xmlns="http://www.w3.org/2000/svg"\n   xmlns:svg="http://www.w3.org/2000/svg">\n  <defs\n     id="defs7" />\n  <sodipodi:namedview\n     id="namedview7"\n     pagecolor="#ffffff"\n     bordercolor="#000000"\n     borderopacity="0.25"\n     inkscape:showpageshadow="2"\n     inkscape:pageopacity="0.0"\n     inkscape:pagecheckerboard="0"\n     inkscape:deskcolor="#d1d1d1"\n     inkscape:zoom="22.627417"\n     inkscape:cx="13.722291"\n     inkscape:cy="10.584505"\n     inkscape:window-width="2560"\n     inkscape:window-height="1394"\n     inkscape:window-x="0"\n     inkscape:window-y="0"\n     inkscape:window-maximized="1"\n     inkscape:current-layer="svg7" />\n  <path\n     d="M 10.251455,12.65625 C 8.2792667,8.841232 10.901944,7.003471 10.940908,4.84375 10.979408,2.7097225 9.7280927,0.7500496 6.7846577,0.75 c -2.4502715,-4.13e-5 -4.045787,2.0371608 -4.03125,4.09375 0.018371,2.598968 2.686451,4.505516 0.9798087,7.89811"\n     id="path8"\n     sodipodi:nodetypes="csssc" />\n  <path\n     id="path5"\n     d="M 0.75,12.729713 0.7846577,16.75 H 12.784658 l -0.02621,-4.060862 M 0.75,12.72971 c 3.8291677,-0.02647 8.9563707,-0.06953 12.008448,-0.04057"\n     sodipodi:nodetypes="cccccc" />\n  <path\n     d="M 0.7846577,16.75 H 12.784658"\n     id="path6" />\n  <path\n     d="m 1.7846577,16.75 0.046875,1.625 H 11.831533 l -0.04687,-1.625"\n     id="path7"\n     sodipodi:nodetypes="cccc"\n     style="fill:#000000;fill-opacity:1" />\n</svg>\n';
+
+  // src/icons/settings.svg
+  var settings_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>\n  <circle cx="12" cy="12" r="3"/>\n</svg>\n';
 
   // src/components/CustomToolbar.jsx
   var CustomToolbar = () => {
@@ -4459,17 +4490,20 @@
           dangerouslySetInnerHTML: { __html: penIcons.pen }
         }
       ),
-      drawToolTabs?.map((tab) => /* @__PURE__ */ u3(
-        "button",
-        {
-          class: "drawtool-tab-btn",
-          onMouseOver: (e3) => e3.stopPropagation(),
-          onClick: () => handleToolTab(tab.id),
-          title: tab.label,
-          children: tab.label
-        },
-        tab.id
-      )),
+      drawToolTabs?.map((tab) => {
+        const icon = tab.id === "image" ? stamp_default : tab.id === "settings" ? settings_default : null;
+        return /* @__PURE__ */ u3(
+          "button",
+          {
+            class: "drawtool-tab-btn",
+            onMouseOver: (e3) => e3.stopPropagation(),
+            onClick: () => handleToolTab(tab.id),
+            title: tab.label,
+            children: icon ? /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: icon } }) : tab.label
+          },
+          tab.id
+        );
+      }),
       /* @__PURE__ */ u3(
         "button",
         {
@@ -5572,6 +5606,8 @@
 
   // src/components/ImageStampTab.jsx
   var stamps = window.StampLib?.stamps || {};
+  var stampCategories = Object.keys(stamps);
+  var stopPropagation = (e3) => e3.stopPropagation();
   var ImageStampTab = ({ onStampClick, onClose }) => {
     const {
       imageStampSize,
@@ -5606,12 +5642,12 @@
     }, [textStampText]);
     const { showStampPreview, showTextPreview } = usePrintOverlay();
     const stampsRef = A2(null);
-    const stampCategories = Object.keys(stamps);
+    const activeStamps = stamps[activeStampTab] || [];
     y2(() => {
       if (stampCategories.length > 0 && !stampCategories.includes(activeStampTab)) {
         setActiveStampTab(stampCategories[0]);
       }
-    }, [stampCategories, activeStampTab]);
+    }, [activeStampTab]);
     y2(() => {
       const parent = stampsRef.current;
       const draggable = stampsRef.current;
@@ -5673,6 +5709,9 @@
     const handleSizeChange = q2((e3) => {
       setImageStampSize(parseInt(e3.target.value));
     }, [setImageStampSize]);
+    const handleSingleColorChange = q2((e3) => {
+      setSingleColor(e3.target.value);
+    }, [setSingleColor]);
     const handleColorTypeChange = q2((e3) => {
       setStampColorType(e3.target.value);
     }, [setStampColorType]);
@@ -5683,23 +5722,31 @@
         setRainbowFillSpeed(parseInt(e3.target.value));
       }
     }, [stampColorType, setRainbowSpeed, setRainbowFillSpeed]);
+    const handleStampTabClick = q2((e3) => {
+      const btn = e3.currentTarget;
+      const category = btn.getAttribute("data-category");
+      if (category) {
+        setActiveStampTab(category);
+      }
+    }, []);
     const isRainbow = stampColorType === "Rainbow";
     const isRainbowFill = stampColorType === "Rainbow Fill";
     const speedValue = isRainbow ? rainbowSpeed : isRainbowFill ? rainbowFillSpeed : 1;
     const speedMin = isRainbow ? 1 : isRainbowFill ? 1 : 0;
     const speedMax = isRainbow ? 130 : isRainbowFill ? 100 : 0;
-    const activeStamps = stamps[activeStampTab] || [];
     const renderedStampTabs = T2(() => {
       return stampCategories.map((category) => /* @__PURE__ */ u3(
         "button",
         {
+          "data-category": category,
           class: `${ImageStampTab_default.stampTabBtn} ${activeStampTab === category ? ImageStampTab_default.stampTabBtnActive : ""}`,
-          onClick: () => setActiveStampTab(category),
+          onClick: handleStampTabClick,
+          onMouseOver: stopPropagation,
           children: category
         },
         category
       ));
-    }, [stampCategories, activeStampTab]);
+    }, [activeStampTab, handleStampTabClick]);
     const renderedStamps = T2(() => {
       return activeStamps.map((stamp2) => {
         const dims = stamp2._cachedDimensions || StampLib.getWriteStampDimensions(stamp2, 1);
@@ -5708,7 +5755,7 @@
           "button",
           {
             class: ImageStampTab_default.stampBtn,
-            onMouseOver: (e3) => e3.stopPropagation(),
+            onMouseOver: stopPropagation,
             onClick: (e3) => handleStampClick(stamp2, e3),
             style: { "--height-limiter": heightLimiter },
             children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp2.svg.outerHTML } })
@@ -5724,7 +5771,7 @@
           {
             class: ImageStampTab_default.closeBtn,
             onClick: onClose,
-            onMouseOver: (e3) => e3.stopPropagation(),
+            onMouseOver: stopPropagation,
             children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: x_default } })
           }
         ),
@@ -5753,7 +5800,7 @@
               {
                 type: "color",
                 value: singleColor,
-                onChange: (e3) => setSingleColor(e3.target.value)
+                onChange: handleSingleColorChange
               }
             )
           ] }),
@@ -5786,7 +5833,7 @@
               "button",
               {
                 onClick: handleUndo,
-                onMouseOver: (e3) => e3.stopPropagation(),
+                onMouseOver: stopPropagation,
                 children: [
                   /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: undo_default } }),
                   "Undo"
@@ -5797,7 +5844,7 @@
               "button",
               {
                 onClick: handleClear,
-                onMouseOver: (e3) => e3.stopPropagation(),
+                onMouseOver: stopPropagation,
                 children: [
                   /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: trash_default } }),
                   "Clear"
@@ -5826,7 +5873,7 @@
           {
             class: ImageStampTab_default.textStampBtn,
             onClick: handleTextStamp,
-            onMouseOver: (e3) => e3.stopPropagation(),
+            onMouseOver: stopPropagation,
             children: [
               /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp_text_default } }),
               "Stamp Text"
@@ -5840,7 +5887,7 @@
           {
             class: `${ImageStampTab_default.stampTabBtn} ${textStampModeActive ? ImageStampTab_default.stampTabBtnActive : ""}`,
             onClick: handleTextStampToggle,
-            onMouseOver: (e3) => e3.stopPropagation(),
+            onMouseOver: stopPropagation,
             children: [
               /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp_text_default } }),
               "Text"
@@ -5918,6 +5965,7 @@
       alpha: Math.round(alpha * 255)
     });
   };
+  var stopPropagation2 = (e3) => e3.stopPropagation();
   var SettingsTab = ({ onClose }) => {
     const {
       penColor,
@@ -5985,19 +6033,6 @@
       }
       updatePenSettings();
     }, [setEraserEnabled, setPenMode]);
-    const handlePreset = q2((preset) => {
-      if (preset.id === "eraser") {
-        setEraserEnabled(true);
-        setPenMode("eraser");
-      } else {
-        setEraserEnabled(false);
-        setPenMode("pen");
-        setPenWidth(preset.width);
-        setPenAlpha(preset.alpha);
-        setStampLibPenSettings(penColorRef.current, preset.width, preset.alpha);
-      }
-      updatePenSettings();
-    }, [setEraserEnabled, setPenMode, setPenWidth, setPenAlpha]);
     const handleHdToggle = q2((e3) => {
       setHdModeEnabled(e3.target.checked);
     }, [setHdModeEnabled]);
@@ -6007,6 +6042,24 @@
     const handleHelp = q2(() => {
       showHelpOverlay("drawtab");
     }, [showHelpOverlay]);
+    const handlePresetClick = q2((e3) => {
+      const btn = e3.currentTarget;
+      const presetId = btn.getAttribute("data-preset-id");
+      const preset = PEN_PRESETS.find((p3) => p3.id === presetId);
+      if (preset) {
+        if (preset.id === "eraser") {
+          setEraserEnabled(true);
+          setPenMode("eraser");
+        } else {
+          setEraserEnabled(false);
+          setPenMode("pen");
+          setPenWidth(preset.width);
+          setPenAlpha(preset.alpha);
+          setStampLibPenSettings(penColorRef.current, preset.width, preset.alpha);
+        }
+        updatePenSettings();
+      }
+    }, [setEraserEnabled, setPenMode, setPenWidth, setPenAlpha]);
     return /* @__PURE__ */ u3("div", { class: SettingsTab_default.tab, children: [
       /* @__PURE__ */ u3("div", { class: SettingsTab_default.controls, children: [
         /* @__PURE__ */ u3(
@@ -6014,7 +6067,7 @@
           {
             class: SettingsTab_default.closeBtn,
             onClick: onClose,
-            onMouseOver: (e3) => e3.stopPropagation(),
+            onMouseOver: stopPropagation2,
             children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: x_default } })
           }
         ),
@@ -6081,8 +6134,9 @@
         /* @__PURE__ */ u3("div", { class: SettingsTab_default.presetsSubgroup, children: PEN_PRESETS.map((preset) => /* @__PURE__ */ u3(
           "button",
           {
-            onClick: () => handlePreset(preset),
-            onMouseOver: (e3) => e3.stopPropagation(),
+            "data-preset-id": preset.id,
+            onClick: handlePresetClick,
+            onMouseOver: stopPropagation2,
             class: `${SettingsTab_default.presetBtn} ${preset.id === activePresetId ? SettingsTab_default.presetBtnActive : ""}`,
             children: [
               /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: PRESET_ICONS[preset.id] } }),
@@ -6121,7 +6175,7 @@
             {
               class: SettingsTab_default.actionBtn,
               onClick: handleHelp,
-              onMouseOver: (e3) => e3.stopPropagation(),
+              onMouseOver: stopPropagation2,
               children: [
                 /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: help_circle_default } }),
                 "Help"
@@ -6133,7 +6187,7 @@
             {
               class: SettingsTab_default.actionBtn,
               onClick: handleUnlock,
-              onMouseOver: (e3) => e3.stopPropagation(),
+              onMouseOver: stopPropagation2,
               children: [
                 /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: unlock_default } }),
                 "Unlock Page"
@@ -7818,6 +7872,7 @@ body:has(app-atx0010p) .loginAssistantsList {
   overflow-y: auto;
   padding: 10px;
   min-height: 0;
+  will-change: transform;
 }
 .ImageStampTab_stampTabs {
   display: flex;

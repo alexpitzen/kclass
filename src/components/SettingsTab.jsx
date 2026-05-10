@@ -43,6 +43,8 @@ const setStampLibPenSettings = (color, width, alpha) => {
     });
 };
 
+const stopPropagation = (e) => e.stopPropagation();
+
 export const SettingsTab = ({ onClose }) => {
     const {
         penColor,
@@ -122,20 +124,6 @@ export const SettingsTab = ({ onClose }) => {
         updatePenSettings();
     }, [setEraserEnabled, setPenMode]);
 
-    const handlePreset = useCallback((preset) => {
-        if (preset.id === 'eraser') {
-            setEraserEnabled(true);
-            setPenMode('eraser');
-        } else {
-            setEraserEnabled(false);
-            setPenMode('pen');
-            setPenWidth(preset.width);
-            setPenAlpha(preset.alpha);
-            setStampLibPenSettings(penColorRef.current, preset.width, preset.alpha);
-        }
-        updatePenSettings();
-    }, [setEraserEnabled, setPenMode, setPenWidth, setPenAlpha]);
-
     const handleHdToggle = useCallback((e) => {
         setHdModeEnabled(e.target.checked);
     }, [setHdModeEnabled]);
@@ -148,13 +136,32 @@ export const SettingsTab = ({ onClose }) => {
         showHelpOverlay('drawtab');
     }, [showHelpOverlay]);
 
+    const handlePresetClick = useCallback((e) => {
+        const btn = e.currentTarget;
+        const presetId = btn.getAttribute('data-preset-id');
+        const preset = PEN_PRESETS.find(p => p.id === presetId);
+        if (preset) {
+            if (preset.id === 'eraser') {
+                setEraserEnabled(true);
+                setPenMode('eraser');
+            } else {
+                setEraserEnabled(false);
+                setPenMode('pen');
+                setPenWidth(preset.width);
+                setPenAlpha(preset.alpha);
+                setStampLibPenSettings(penColorRef.current, preset.width, preset.alpha);
+            }
+            updatePenSettings();
+        }
+    }, [setEraserEnabled, setPenMode, setPenWidth, setPenAlpha]);
+
     return (
         <div class={styles.tab}>
             <div class={styles.controls}>
                 <button
                     class={styles.closeBtn}
                     onClick={onClose}
-                    onMouseOver={(e) => e.stopPropagation()}
+                    onMouseOver={stopPropagation}
                 >
                     <span dangerouslySetInnerHTML={{ __html: xIcon }} />
                 </button>
@@ -215,8 +222,9 @@ export const SettingsTab = ({ onClose }) => {
                     {PEN_PRESETS.map((preset) => (
                         <button
                             key={preset.id}
-                            onClick={() => handlePreset(preset)}
-                            onMouseOver={(e) => e.stopPropagation()}
+                            data-preset-id={preset.id}
+                            onClick={handlePresetClick}
+                            onMouseOver={stopPropagation}
                             class={`${styles.presetBtn} ${preset.id === activePresetId ? styles.presetBtnActive : ''}`}
                         >
                             <span dangerouslySetInnerHTML={{ __html: PRESET_ICONS[preset.id] }} />
@@ -253,7 +261,7 @@ export const SettingsTab = ({ onClose }) => {
                     <button
                         class={styles.actionBtn}
                         onClick={handleHelp}
-                        onMouseOver={(e) => e.stopPropagation()}
+                        onMouseOver={stopPropagation}
                     >
                         <span dangerouslySetInnerHTML={{ __html: helpCircleIcon }} />
                         Help
@@ -261,7 +269,7 @@ export const SettingsTab = ({ onClose }) => {
                     <button
                         class={styles.actionBtn}
                         onClick={handleUnlock}
-                        onMouseOver={(e) => e.stopPropagation()}
+                        onMouseOver={stopPropagation}
                     >
                         <span dangerouslySetInnerHTML={{ __html: unlockIcon }} />
                         Unlock Page

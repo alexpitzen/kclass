@@ -9,6 +9,9 @@ import stampTextIcon from '../icons/stamp-text.svg';
 import xIcon from '../icons/x.svg';
 
 const stamps = window.StampLib?.stamps || {};
+const stampCategories = Object.keys(stamps);
+
+const stopPropagation = (e) => e.stopPropagation();
 
 export const ImageStampTab = ({ onStampClick, onClose }) => {
     const {
@@ -34,7 +37,6 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
 
     const imageStampSizeRef = useRef(imageStampSize);
     const singleColorRef = useRef(singleColor);
-
     const textStampTextRef = useRef(textStampText);
 
     useEffect(() => {
@@ -52,13 +54,13 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
     const { showStampPreview, showTextPreview } = usePrintOverlay();
     const stampsRef = useRef(null);
 
-    const stampCategories = Object.keys(stamps);
+    const activeStamps = stamps[activeStampTab] || [];
 
     useEffect(() => {
         if (stampCategories.length > 0 && !stampCategories.includes(activeStampTab)) {
             setActiveStampTab(stampCategories[0]);
         }
-    }, [stampCategories, activeStampTab]);
+    }, [activeStampTab]);
 
     useEffect(() => {
         const parent = stampsRef.current;
@@ -132,6 +134,10 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
         setImageStampSize(parseInt(e.target.value));
     }, [setImageStampSize]);
 
+    const handleSingleColorChange = useCallback((e) => {
+        setSingleColor(e.target.value);
+    }, [setSingleColor]);
+
     const handleColorTypeChange = useCallback((e) => {
         setStampColorType(e.target.value);
     }, [setStampColorType]);
@@ -144,6 +150,14 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
         }
     }, [stampColorType, setRainbowSpeed, setRainbowFillSpeed]);
 
+    const handleStampTabClick = useCallback((e) => {
+        const btn = e.currentTarget;
+        const category = btn.getAttribute('data-category');
+        if (category) {
+            setActiveStampTab(category);
+        }
+    }, []);
+
     const isRainbow = stampColorType === 'Rainbow';
     const isRainbowFill = stampColorType === 'Rainbow Fill';
 
@@ -151,19 +165,19 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
     const speedMin = isRainbow ? 1 : isRainbowFill ? 1 : 0;
     const speedMax = isRainbow ? 130 : isRainbowFill ? 100 : 0;
 
-    const activeStamps = stamps[activeStampTab] || [];
-
     const renderedStampTabs = useMemo(() => {
         return stampCategories.map((category) => (
             <button
                 key={category}
+                data-category={category}
                 class={`${styles.stampTabBtn} ${activeStampTab === category ? styles.stampTabBtnActive : ''}`}
-                onClick={() => setActiveStampTab(category)}
+                onClick={handleStampTabClick}
+                onMouseOver={stopPropagation}
             >
                 {category}
             </button>
         ));
-    }, [stampCategories, activeStampTab]);
+    }, [activeStampTab, handleStampTabClick]);
 
     const renderedStamps = useMemo(() => {
         return activeStamps.map((stamp) => {
@@ -173,7 +187,7 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
                 <button
                     key={stamp.name}
                     class={styles.stampBtn}
-                    onMouseOver={(e) => e.stopPropagation()}
+                    onMouseOver={stopPropagation}
                     onClick={(e) => handleStampClick(stamp, e)}
                     style={{ '--height-limiter': heightLimiter }}
                 >
@@ -189,7 +203,7 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
                 <button
                     class={styles.closeBtn}
                     onClick={onClose}
-                    onMouseOver={(e) => e.stopPropagation()}
+                    onMouseOver={stopPropagation}
                 >
                     <span dangerouslySetInnerHTML={{ __html: xIcon }} />
                 </button>
@@ -212,7 +226,7 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
                         <input
                             type="color"
                             value={singleColor}
-                            onChange={(e) => setSingleColor(e.target.value)}
+                            onChange={handleSingleColorChange}
                         />
                     </div>
 
@@ -244,14 +258,14 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
                      <div class={styles.buttons}>
                         <button
                             onClick={handleUndo}
-                            onMouseOver={(e) => e.stopPropagation()}
+                            onMouseOver={stopPropagation}
                         >
                             <span dangerouslySetInnerHTML={{ __html: undoIcon }} />
                             Undo
                         </button>
                         <button
                             onClick={handleClear}
-                            onMouseOver={(e) => e.stopPropagation()}
+                            onMouseOver={stopPropagation}
                         >
                             <span dangerouslySetInnerHTML={{ __html: trashIcon }} />
                             Clear
@@ -274,7 +288,7 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
                     <button
                         class={styles.textStampBtn}
                         onClick={handleTextStamp}
-                        onMouseOver={(e) => e.stopPropagation()}
+                        onMouseOver={stopPropagation}
                     >
                         <span dangerouslySetInnerHTML={{ __html: stampTextIcon }} />
                         Stamp Text
@@ -285,7 +299,7 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
                 <button
                     class={`${styles.stampTabBtn} ${textStampModeActive ? styles.stampTabBtnActive : ''}`}
                     onClick={handleTextStampToggle}
-                    onMouseOver={(e) => e.stopPropagation()}
+                    onMouseOver={stopPropagation}
                 >
                     <span dangerouslySetInnerHTML={{ __html: stampTextIcon }} />
                     Text

@@ -1,5 +1,5 @@
 import { createContext } from 'preact';
-import { useContext, useState, useEffect, useRef } from 'preact/hooks';
+import { useContext, useState, useEffect, useRef, useMemo, useCallback } from 'preact/hooks';
 
 const PrintOverlayContext = createContext(null);
 
@@ -22,7 +22,7 @@ export const PrintOverlayProvider = ({ children }) => {
         color: '#ff2200',
     });
 
-    const showStampPreview = (stamp, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos) => {
+    const showStampPreview = useCallback((stamp, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos) => {
         setState({
             visible: true,
             mode: 'stamp',
@@ -38,9 +38,9 @@ export const PrintOverlayProvider = ({ children }) => {
             textValue: '',
             color: borderColor,
         });
-    };
+    }, []);
 
-    const showTextPreview = (text, writeDimensions, scale, borderColor, initialPos) => {
+    const showTextPreview = useCallback((text, writeDimensions, scale, borderColor, initialPos) => {
         setState({
             visible: true,
             mode: 'text',
@@ -56,14 +56,21 @@ export const PrintOverlayProvider = ({ children }) => {
             textValue: text,
             color: borderColor,
         });
-    };
+    }, []);
 
-    const hidePreview = () => {
+    const hidePreview = useCallback(() => {
         setState(prev => ({ ...prev, visible: false }));
-    };
+    }, []);
+
+    const contextValue = useMemo(() => ({
+        state,
+        showStampPreview,
+        showTextPreview,
+        hidePreview,
+    }), [state, showStampPreview, showTextPreview, hidePreview]);
 
     return (
-        <PrintOverlayContext.Provider value={{ state, showStampPreview, showTextPreview, hidePreview }}>
+        <PrintOverlayContext.Provider value={contextValue}>
             {children}
         </PrintOverlayContext.Provider>
     );

@@ -6,6 +6,8 @@ import { updatePenSettings, toggleHeader } from '../helpers/actions.js';
 import { useTimestampDisplay } from '../hooks/useTimestamp.js';
 import { useTimestamp, useDrawTab } from '../context/AppContext.jsx';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
+import stampIcon from '../icons/stamp.svg';
+import settingsIcon from '../icons/settings.svg';
 
 export const CustomToolbar = () => {
     const [shifted, setShifted] = useState(false);
@@ -98,17 +100,24 @@ export const CustomToolbar = () => {
                 dangerouslySetInnerHTML={{ __html: penIcons.pen }}
             />
 
-            {drawToolTabs?.map((tab) => (
-                <button
-                    key={tab.id}
-                    class="drawtool-tab-btn"
-                    onMouseOver={(e) => e.stopPropagation()}
-                    onClick={() => handleToolTab(tab.id)}
-                    title={tab.label}
-                >
-                    {tab.label}
-                </button>
-            ))}
+            {drawToolTabs?.map((tab) => {
+                const icon = tab.id === 'image' ? stampIcon : tab.id === 'settings' ? settingsIcon : null;
+                return (
+                    <button
+                        key={tab.id}
+                        class="drawtool-tab-btn"
+                        onMouseOver={(e) => e.stopPropagation()}
+                        onClick={() => handleToolTab(tab.id)}
+                        title={tab.label}
+                    >
+                        {icon ? (
+                            <span dangerouslySetInnerHTML={{ __html: icon }} />
+                        ) : (
+                            tab.label
+                        )}
+                    </button>
+                );
+            })}
 
             <button
                 class="mobileUpBtn"
