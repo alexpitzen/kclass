@@ -1,4 +1,5 @@
-import { useDrawTool } from '../context/DrawToolContext.jsx';
+import { useRef, useEffect, useCallback } from 'preact/hooks';
+import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useKeyboardMode as useKeyboardModeContext, useHDMode as useHDModeContext } from '../context/AppContext.jsx';
 import { updatePenSettings } from '../helpers/actions.js';
 import { useHelpOverlay } from './HelpOverlay.jsx';
@@ -10,6 +11,7 @@ import thinHighlighterIcon from '../icons/thin-highlighter.svg';
 import eraserIcon from '../icons/eraser.svg';
 import unlockIcon from '../icons/unlock.svg';
 import helpCircleIcon from '../icons/help-circle.svg';
+import xIcon from '../icons/x.svg';
 
 const PRESET_ICONS = {
     pen: penIcon,
@@ -33,7 +35,15 @@ const getActivePresetId = (eraserEnabled, penWidth, penAlpha) => {
     return null;
 };
 
-export const SettingsTab = () => {
+const setStampLibPenSettings = (color, width, alpha) => {
+    StampLib.setPenSettings({
+        color: color,
+        width: width,
+        alpha: Math.round(alpha * 255),
+    });
+};
+
+export const SettingsTab = ({ onClose }) => {
     const {
         penColor,
         setPenColor,
@@ -46,40 +56,73 @@ export const SettingsTab = () => {
         eraserEnabled,
         setEraserEnabled,
         handleUnlock,
-    } = useDrawTool();
+    } = usePenSettings();
 
     const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardModeContext();
     const { hdModeEnabled, setHdModeEnabled } = useHDModeContext();
     const { showHelpOverlay } = useHelpOverlay();
 
+    const penColorRef = useRef(penColor);
+    const penWidthRef = useRef(penWidth);
+    const penAlphaRef = useRef(penAlpha);
+    const eraserEnabledRef = useRef(eraserEnabled);
+
+    useEffect(() => {
+        penColorRef.current = penColor;
+    }, [penColor]);
+
+    useEffect(() => {
+        penWidthRef.current = penWidth;
+    }, [penWidth]);
+
+    useEffect(() => {
+        penAlphaRef.current = penAlpha;
+    }, [penAlpha]);
+
+    useEffect(() => {
+        eraserEnabledRef.current = eraserEnabled;
+    }, [eraserEnabled]);
+
     const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
 
-    const handleColorChange = (e) => {
-        setPenColor(e.target.value);
+    const handleColorChange = useCallback((e) => {
+        const newColor = e.target.value;
+        setPenColor(newColor);
+        if (!eraserEnabledRef.current) {
+            setStampLibPenSettings(newColor, penWidthRef.current, penAlphaRef.current);
+        }
         updatePenSettings();
-    };
+    }, [setPenColor]);
 
-    const handleWidthChange = (e) => {
-        setPenWidth(parseInt(e.target.value));
+    const handleWidthChange = useCallback((e) => {
+        const newWidth = parseInt(e.target.value);
+        setPenWidth(newWidth);
+        if (!eraserEnabledRef.current) {
+            setStampLibPenSettings(penColorRef.current, newWidth, penAlphaRef.current);
+        }
+    }, [setPenWidth]);
+
+    const handleAlphaChange = useCallback((e) => {
+        const newAlpha = parseFloat(e.target.value);
+        setPenAlpha(newAlpha);
+        if (!eraserEnabledRef.current) {
+            setStampLibPenSettings(penColorRef.current, penWidthRef.current, newAlpha);
+        }
+    }, [setPenAlpha]);
+
+    const handleEraserToggle = useCallback((e) => {
+        const isEnabled = e.target.checked;
+        setEraserEnabled(isEnabled);
+        if (isEnabled) {
+            setPenMode('eraser');
+        } else {
+            setPenMode('pen');
+            setStampLibPenSettings(penColorRef.current, penWidthRef.current, penAlphaRef.current);
+        }
         updatePenSettings();
-    };
+    }, [setEraserEnabled, setPenMode]);
 
-    const handleAlphaChange = (e) => {
-        setPenAlpha(parseFloat(e.target.value));
-        updatePenSettings();
-    };
-
-    const handlePenModeChange = (e) => {
-        setPenMode(e.target.value);
-        updatePenSettings();
-    };
-
-    const handleEraserToggle = (e) => {
-        setEraserEnabled(e.target.checked);
-        updatePenSettings();
-    };
-
-    const handlePreset = (preset) => {
+    const handlePreset = useCallback((preset) => {
         if (preset.id === 'eraser') {
             setEraserEnabled(true);
             setPenMode('eraser');
@@ -88,26 +131,34 @@ export const SettingsTab = () => {
             setPenMode('pen');
             setPenWidth(preset.width);
             setPenAlpha(preset.alpha);
+            setStampLibPenSettings(penColorRef.current, preset.width, preset.alpha);
         }
         updatePenSettings();
-    };
+    }, [setEraserEnabled, setPenMode, setPenWidth, setPenAlpha]);
 
-    const handleHdToggle = (e) => {
+    const handleHdToggle = useCallback((e) => {
         setHdModeEnabled(e.target.checked);
-    };
+    }, [setHdModeEnabled]);
 
-    const handleKeyboardToggle = (e) => {
+    const handleKeyboardToggle = useCallback((e) => {
         setKeyboardModeEnabled(e.target.checked);
-    };
+    }, [setKeyboardModeEnabled]);
 
-    const handleHelp = () => {
+    const handleHelp = useCallback(() => {
         showHelpOverlay('drawtab');
-    };
+    }, [showHelpOverlay]);
 
     return (
         <div class={styles.tab}>
             <div class={styles.controls}>
-                
+                <button
+                    class={styles.closeBtn}
+                    onClick={onClose}
+                    onMouseOver={(e) => e.stopPropagation()}
+                >
+                    <span dangerouslySetInnerHTML={{ __html: xIcon }} />
+                </button>
+
                 {/* Top subgroup - controls (rounded TOP corners) */}
                 <div class={styles.controlsSubgroup}>
                     <div class={styles.controlGroup}>
@@ -120,7 +171,7 @@ export const SettingsTab = () => {
                     </div>
 
                     <div class={styles.controlGroup}>
-                        <label>Width</label>
+                        <label>Width: {penWidth}</label>
                         <div class={styles.controlRow}>
                             <input
                                 type="range"
@@ -129,12 +180,11 @@ export const SettingsTab = () => {
                                 value={penWidth}
                                 onInput={handleWidthChange}
                             />
-                            <span>{penWidth}px</span>
                         </div>
                     </div>
 
                     <div class={styles.controlGroup}>
-                        <label>Alpha</label>
+                        <label>Alpha: {penAlpha}</label>
                         <div class={styles.controlRow}>
                             <input
                                 type="range"
@@ -144,7 +194,6 @@ export const SettingsTab = () => {
                                 value={penAlpha}
                                 onInput={handleAlphaChange}
                             />
-                            <span>{penAlpha}</span>
                         </div>
                     </div>
 

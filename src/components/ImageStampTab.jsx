@@ -1,16 +1,19 @@
-import { useRef, useEffect, useState } from 'preact/hooks';
+import { useRef, useEffect, useMemo, useCallback } from 'preact/hooks';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
+import { useImageStampSettings } from '../context/ImageStampSettingsContext.jsx';
 import { usePrintOverlay } from './PrintOverlay.jsx';
 import styles from './ImageStampTab.module.css';
 import undoIcon from '../icons/undo.svg';
 import trashIcon from '../icons/trash.svg';
+import stampTextIcon from '../icons/stamp-text.svg';
+import xIcon from '../icons/x.svg';
 
 const stamps = window.StampLib?.stamps || {};
 
-export const ImageStampTab = ({ onStampClick }) => {
+export const ImageStampTab = ({ onStampClick, onClose }) => {
     const {
-        stampSize,
-        setStampSize,
+        imageStampSize,
+        setImageStampSize,
         stampColorType,
         setStampColorType,
         rainbowSpeed,
@@ -19,15 +22,37 @@ export const ImageStampTab = ({ onStampClick }) => {
         setRainbowFillSpeed,
         singleColor,
         setSingleColor,
-        handleUndo,
-        handleClear,
-    } = useDrawTool();
+        activeStampTab,
+        setActiveStampTab,
+        textStampModeActive,
+        setTextStampModeActive,
+        textStampText,
+        setTextStampText,
+    } = useImageStampSettings();
 
-    const { showStampPreview } = usePrintOverlay();
+    const { handleUndo, handleClear } = useDrawTool();
+
+    const imageStampSizeRef = useRef(imageStampSize);
+    const singleColorRef = useRef(singleColor);
+
+    const textStampTextRef = useRef(textStampText);
+
+    useEffect(() => {
+        imageStampSizeRef.current = imageStampSize;
+    }, [imageStampSize]);
+
+    useEffect(() => {
+        singleColorRef.current = singleColor;
+    }, [singleColor]);
+
+    useEffect(() => {
+        textStampTextRef.current = textStampText;
+    }, [textStampText]);
+
+    const { showStampPreview, showTextPreview } = usePrintOverlay();
     const stampsRef = useRef(null);
 
     const stampCategories = Object.keys(stamps);
-    const [activeStampTab, setActiveStampTab] = useState(stampCategories[0] || '');
 
     useEffect(() => {
         if (stampCategories.length > 0 && !stampCategories.includes(activeStampTab)) {
@@ -80,30 +105,44 @@ export const ImageStampTab = ({ onStampClick }) => {
         };
     }, []);
 
-    const handleStampClick = (stamp, e) => {
+    const handleStampClick = useCallback((stamp, e) => {
         const stampDimensions = stamp._cachedDimensions || StampLib.getWriteStampDimensions(stamp, 1);
         const maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
-        const scale = (stampSize / 100) * maxScaleFactor;
+        const scale = (imageStampSizeRef.current / 100) * maxScaleFactor;
         const svg = typeof stamp.svg === 'string' ? stamp.svg : stamp.svg.outerHTML;
-        showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, singleColor, svg, { x: e.clientX, y: e.clientY });
+        showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, singleColorRef.current, svg, { x: e.clientX, y: e.clientY });
         onStampClick?.();
-    };
+    }, [showStampPreview, onStampClick]);
 
-    const handleSizeChange = (e) => {
-        setStampSize(parseInt(e.target.value));
-    };
+    const handleTextStampToggle = useCallback(() => {
+        setTextStampModeActive(prev => !prev);
+    }, []);
 
-    const handleColorTypeChange = (e) => {
+    const handleTextStampTextChange = useCallback((e) => {
+        setTextStampText(e.target.value);
+    }, []);
+
+    const handleTextStamp = useCallback((e) => {
+        const scale = imageStampSizeRef.current / 100;
+        const writeDimensions = StampLib.getWriteAllDimensions(textStampTextRef.current, scale);
+        showTextPreview(textStampTextRef.current, writeDimensions, scale, singleColorRef.current, { x: e.clientX, y: e.clientY });
+    }, [showTextPreview]);
+
+    const handleSizeChange = useCallback((e) => {
+        setImageStampSize(parseInt(e.target.value));
+    }, [setImageStampSize]);
+
+    const handleColorTypeChange = useCallback((e) => {
         setStampColorType(e.target.value);
-    };
+    }, [setStampColorType]);
 
-    const handleSpeedChange = (e) => {
+    const handleSpeedChange = useCallback((e) => {
         if (stampColorType === 'Rainbow') {
             setRainbowSpeed(parseInt(e.target.value));
         } else if (stampColorType === 'Rainbow Fill') {
             setRainbowFillSpeed(parseInt(e.target.value));
         }
-    };
+    }, [stampColorType, setRainbowSpeed, setRainbowFillSpeed]);
 
     const isRainbow = stampColorType === 'Rainbow';
     const isRainbowFill = stampColorType === 'Rainbow Fill';
@@ -114,21 +153,57 @@ export const ImageStampTab = ({ onStampClick }) => {
 
     const activeStamps = stamps[activeStampTab] || [];
 
+    const renderedStampTabs = useMemo(() => {
+        return stampCategories.map((category) => (
+            <button
+                key={category}
+                class={`${styles.stampTabBtn} ${activeStampTab === category ? styles.stampTabBtnActive : ''}`}
+                onClick={() => setActiveStampTab(category)}
+            >
+                {category}
+            </button>
+        ));
+    }, [stampCategories, activeStampTab]);
+
+    const renderedStamps = useMemo(() => {
+        return activeStamps.map((stamp) => {
+            const dims = stamp._cachedDimensions || StampLib.getWriteStampDimensions(stamp, 1);
+            const heightLimiter = dims.height <= dims.width ? 1 : dims.width / dims.height;
+            return (
+                <button
+                    key={stamp.name}
+                    class={styles.stampBtn}
+                    onMouseOver={(e) => e.stopPropagation()}
+                    onClick={(e) => handleStampClick(stamp, e)}
+                    style={{ '--height-limiter': heightLimiter }}
+                >
+                    <span dangerouslySetInnerHTML={{ __html: stamp.svg.outerHTML }} />
+                </button>
+            );
+        });
+    }, [activeStamps, handleStampClick]);
+
     return (
         <div class={styles.tab}>
             <div class={styles.controls}>
+                <button
+                    class={styles.closeBtn}
+                    onClick={onClose}
+                    onMouseOver={(e) => e.stopPropagation()}
+                >
+                    <span dangerouslySetInnerHTML={{ __html: xIcon }} />
+                </button>
                 <div class={styles.mainControlRow}>
                     <div class={styles.controlGroup}>
-                        <label>Size</label>
+                        <label>Size: {imageStampSize}%</label>
                         <div class={styles.controlRow}>
                             <input
                                 type="range"
                                 min="10"
                                 max="100"
-                                value={stampSize}
+                                value={imageStampSize}
                                 onInput={handleSizeChange}
                             />
-                            <span>{stampSize}%</span>
                         </div>
                     </div>
 
@@ -137,13 +212,13 @@ export const ImageStampTab = ({ onStampClick }) => {
                         <input
                             type="color"
                             value={singleColor}
-                            onInput={(e) => setSingleColor(e.target.value)}
+                            onChange={(e) => setSingleColor(e.target.value)}
                         />
                     </div>
 
                     <div class={styles.controlGroupWrapper}>
                         <div class={styles.controlGroup}>
-                            <label>Mode</label>
+                            <label>Color Style</label>
                             <select value={stampColorType} onChange={handleColorTypeChange}>
                                 <option value="Unchanged">Unchanged</option>
                                 <option value="Color Picker">Single Color</option>
@@ -185,35 +260,41 @@ export const ImageStampTab = ({ onStampClick }) => {
                 </div>
             </div>
 
-            <div class={styles.stampTabs}>
-                {stampCategories.map((category) => (
+            <div class={`${styles.textInput} ${!textStampModeActive ? styles.textInputCollapsed : ''}`}>
+                    <textarea
+                        value={textStampText}
+                        onInput={handleTextStampTextChange}
+                        placeholder="Enter text..."
+                        rows="1"
+                        style={{
+                            color: singleColor,
+                            fontSize: `calc((${imageStampSize} / 100) * 57px)`
+                        }}
+                    />
                     <button
-                        key={category}
-                        class={`${styles.stampTabBtn} ${activeStampTab === category ? styles.stampTabBtnActive : ''}`}
-                        onClick={() => setActiveStampTab(category)}
+                        class={styles.textStampBtn}
+                        onClick={handleTextStamp}
+                        onMouseOver={(e) => e.stopPropagation()}
                     >
-                        {category}
+                        <span dangerouslySetInnerHTML={{ __html: stampTextIcon }} />
+                        Stamp Text
                     </button>
-                ))}
+                </div>
+
+            <div class={styles.stampTabs}>
+                <button
+                    class={`${styles.stampTabBtn} ${textStampModeActive ? styles.stampTabBtnActive : ''}`}
+                    onClick={handleTextStampToggle}
+                    onMouseOver={(e) => e.stopPropagation()}
+                >
+                    <span dangerouslySetInnerHTML={{ __html: stampTextIcon }} />
+                    Text
+                </button>
+                {renderedStampTabs}
             </div>
 
             <div class={styles.stamps} ref={stampsRef}>
-                {activeStamps.map((stamp) => (
-                    <button
-                        key={stamp.name}
-                        class={styles.stampBtn}
-                        onMouseOver={(e) => e.stopPropagation()}
-                        onClick={(e) => handleStampClick(stamp, e)}
-                        style={{
-                            '--height-limiter': (() => {
-                                const dims = stamp._cachedDimensions || StampLib.getWriteStampDimensions(stamp, 1);
-                                return dims.height <= dims.width ? 1 : dims.width / dims.height;
-                            })()
-                        }}
-                    >
-                        <span dangerouslySetInnerHTML={{ __html: stamp.svg.outerHTML }} />
-                    </button>
-                ))}
+                {renderedStamps}
             </div>
         </div>
     );

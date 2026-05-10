@@ -9,14 +9,13 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding-top: 20px;
+    padding: 20px;
     backdrop-filter: blur(2px);
 }
 
 .content {
     background-color: #ffffff;
-    border: 1px solid #e0e0e8;
-    border-radius: 12px;
+    border-radius: 12px 12px 0 0;
     width: calc(100vw - 2px);
     max-width: 750px;
     max-height: calc(100vh - 40px);
@@ -26,57 +25,10 @@
                 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.header {
-    position: sticky;
-    top: 0;
-    background-color: #f8f8fc;
-    padding: 10px 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #e8e8f0;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    flex-shrink: 0;
-}
-
-.closeBtn {
-    width: 28px;
-    height: 28px;
-    cursor: pointer;
-    border: 1px solid #d0d0da;
-    border-radius: 6px;
-    background: #fff;
-    color: #666;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-    padding: 4px;
-}
-
-.closeBtn span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.closeBtn svg {
-    width: 16px;
-    height: 16px;
-}
-
-.closeBtn:hover {
-    background-color: #f0f0f5;
-    border-color: #b0b0c0;
-    color: #333;
-}
-
 .body {
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 14px 14px 0 14px;
     min-height: 0;
 }

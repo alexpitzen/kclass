@@ -4,6 +4,8 @@ import { PrintOverlayProvider } from '../components/PrintOverlay.jsx';
 import { DiffViewOverlayProvider } from '../components/DiffViewOverlay.jsx';
 import { HelpOverlayProvider } from '../components/HelpOverlay.jsx';
 import { DrawToolProvider } from './DrawToolContext.jsx';
+import { PenSettingsProvider } from './PenSettingsContext.jsx';
+import { ImageStampSettingsProvider } from './ImageStampSettingsContext.jsx';
 
 const DrawTabContext = createContext(null);
 const TimestampContext = createContext(null);
@@ -38,9 +40,9 @@ export const TimestampProvider = ({ children }) => {
 };
 
 export const HDModeProvider = ({ children }) => {
-    const [hdModeEnabled, setHdModeEnabled] = useState(false);
+    const [hdModeEnabled, setHDModeEnabled] = useState(false);
     return (
-        <HDModeContext.Provider value={{ hdModeEnabled, setHdModeEnabled }}>
+        <HDModeContext.Provider value={{ hdModeEnabled, setHDModeEnabled }}>
             {children}
         </HDModeContext.Provider>
     );
@@ -62,13 +64,17 @@ export const AppProvider = ({ children }) => {
                 <DiffViewOverlayProvider>
                     <HelpOverlayProvider>
                         <DrawToolProvider>
-                            <TimestampProvider>
-                                <HDModeProvider>
-                                    <KeyboardModeProvider>
-                                        {children}
-                                    </KeyboardModeProvider>
-                                </HDModeProvider>
-                            </TimestampProvider>
+                            <PenSettingsProvider>
+                                <ImageStampSettingsProvider>
+                                    <TimestampProvider>
+                                        <HDModeProvider>
+                                            <KeyboardModeProvider>
+                                                {children}
+                                            </KeyboardModeProvider>
+                                        </HDModeProvider>
+                                    </TimestampProvider>
+                                </ImageStampSettingsProvider>
+                            </PenSettingsProvider>
                         </DrawToolProvider>
                     </HelpOverlayProvider>
                 </DiffViewOverlayProvider>
