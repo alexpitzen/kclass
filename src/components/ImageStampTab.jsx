@@ -1,6 +1,5 @@
-import { useRef, useEffect, useMemo, useCallback } from 'preact/hooks';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'preact/hooks';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
-import { useImageStampSettings } from '../context/ImageStampSettingsContext.jsx';
 import { usePrintOverlay } from './PrintOverlay.jsx';
 import styles from './ImageStampTab.module.css';
 import undoIcon from '../icons/undo.svg';
@@ -13,31 +12,56 @@ const stampCategories = Object.keys(stamps);
 
 const stopPropagation = (e) => e.stopPropagation();
 
-export const ImageStampTab = ({ onStampClick, onClose }) => {
-    const {
-        imageStampSize,
-        setImageStampSize,
-        stampColorType,
-        setStampColorType,
-        rainbowSpeed,
-        setRainbowSpeed,
-        rainbowFillSpeed,
-        setRainbowFillSpeed,
-        singleColor,
-        setSingleColor,
-        activeStampTab,
-        setActiveStampTab,
-        textStampModeActive,
-        setTextStampModeActive,
-        textStampText,
-        setTextStampText,
-    } = useImageStampSettings();
+const imageStampSizeRef = { current: 25 };
+const singleColorRef = { current: '#ff2200' };
+const stampColorTypeRef = { current: 'Unchanged' };
+const rainbowSpeedRef = { current: 100 };
+const rainbowFillSpeedRef = { current: 20 };
+const activeStampTabRef = { current: '' };
+const textStampModeActiveRef = { current: false };
+const textareaValueRef = { current: '' };
 
+export const ImageStampTab = ({ onStampClick, close }) => {
     const { handleUndo, handleClear } = useDrawTool();
+    const { showStampPreview, showTextPreview } = usePrintOverlay();
 
-    const imageStampSizeRef = useRef(imageStampSize);
-    const singleColorRef = useRef(singleColor);
-    const textStampTextRef = useRef(textStampText);
+    const [imageStampSize, setImageStampSize] = useState(imageStampSizeRef.current);
+    const [stampColorType, setStampColorTypeState] = useState(stampColorTypeRef.current);
+    const [rainbowSpeed, setRainbowSpeedState] = useState(rainbowSpeedRef.current);
+    const [rainbowFillSpeed, setRainbowFillSpeedState] = useState(rainbowFillSpeedRef.current);
+    const [singleColor, setSingleColor] = useState(singleColorRef.current);
+    const [activeStampTab, setActiveStampTabState] = useState(activeStampTabRef.current);
+    const [textStampModeActive, setTextStampModeActiveState] = useState(textStampModeActiveRef.current);
+
+    const setStampColorType = useCallback((val) => {
+        stampColorTypeRef.current = val;
+        setStampColorTypeState(val);
+    }, []);
+
+    const setRainbowSpeed = useCallback((val) => {
+        rainbowSpeedRef.current = val;
+        setRainbowSpeedState(val);
+    }, []);
+
+    const setRainbowFillSpeed = useCallback((val) => {
+        rainbowFillSpeedRef.current = val;
+        setRainbowFillSpeedState(val);
+    }, []);
+
+    const setActiveStampTab = useCallback((val) => {
+        activeStampTabRef.current = val;
+        setActiveStampTabState(val);
+    }, []);
+
+    const setTextStampModeActive = useCallback((valOrFn) => {
+        const newVal = typeof valOrFn === 'function' ? valOrFn(textStampModeActiveRef.current) : valOrFn;
+        textStampModeActiveRef.current = newVal;
+        setTextStampModeActiveState(newVal);
+    }, []);
+
+    const textareaRef = useRef(null);
+    const stampsRef = useRef(null);
+    const activeStamps = stamps[activeStampTab] || [];
 
     useEffect(() => {
         imageStampSizeRef.current = imageStampSize;
@@ -48,19 +72,20 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
     }, [singleColor]);
 
     useEffect(() => {
-        textStampTextRef.current = textStampText;
-    }, [textStampText]);
-
-    const { showStampPreview, showTextPreview } = usePrintOverlay();
-    const stampsRef = useRef(null);
-
-    const activeStamps = stamps[activeStampTab] || [];
-
-    useEffect(() => {
         if (stampCategories.length > 0 && !stampCategories.includes(activeStampTab)) {
             setActiveStampTab(stampCategories[0]);
         }
-    }, [activeStampTab]);
+    }, [activeStampTab, setActiveStampTab]);
+
+    const handleTextareaInput = useCallback((e) => {
+        textareaValueRef.current = e.target.value;
+    }, []);
+
+    useEffect(() => {
+        if (textareaRef.current && textareaValueRef.current) {
+            textareaRef.current.value = textareaValueRef.current;
+        }
+    }, []);
 
     useEffect(() => {
         const parent = stampsRef.current;
@@ -107,48 +132,55 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
         };
     }, []);
 
+    const isRainbow = stampColorType === 'Rainbow';
+    const isRainbowFill = stampColorType === 'Rainbow Fill';
+    const speedValue = isRainbow ? rainbowSpeed : isRainbowFill ? rainbowFillSpeed : 1;
+    const speedMin = isRainbow ? 1 : isRainbowFill ? 1 : 0;
+    const speedMax = isRainbow ? 130 : isRainbowFill ? 100 : 0;
+
     const handleStampClick = useCallback((stamp, e) => {
         const stampDimensions = stamp._cachedDimensions || StampLib.getWriteStampDimensions(stamp, 1);
         const maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
         const scale = (imageStampSizeRef.current / 100) * maxScaleFactor;
         const svg = typeof stamp.svg === 'string' ? stamp.svg : stamp.svg.outerHTML;
-        showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, singleColorRef.current, svg, { x: e.clientX, y: e.clientY });
-        onStampClick?.();
-    }, [showStampPreview, onStampClick]);
+        const currentStampColorType = stampColorTypeRef.current;
+        const currentSpeed = currentStampColorType === 'Rainbow' ? rainbowSpeedRef.current : rainbowFillSpeedRef.current;
+        showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, singleColorRef.current, svg, { x: e.clientX, y: e.clientY }, currentStampColorType, currentSpeed);
+        close();
+    }, [showStampPreview, close]);
 
     const handleTextStampToggle = useCallback(() => {
         setTextStampModeActive(prev => !prev);
-    }, []);
-
-    const handleTextStampTextChange = useCallback((e) => {
-        setTextStampText(e.target.value);
-    }, []);
+    }, [setTextStampModeActive]);
 
     const handleTextStamp = useCallback((e) => {
         const scale = imageStampSizeRef.current / 100;
-        const writeDimensions = StampLib.getWriteAllDimensions(textStampTextRef.current, scale);
-        showTextPreview(textStampTextRef.current, writeDimensions, scale, singleColorRef.current, { x: e.clientX, y: e.clientY });
-    }, [showTextPreview]);
+        const textareaVal = textareaRef.current?.value || '';
+        const writeDimensions = StampLib.getWriteAllDimensions(textareaVal, scale);
+        showTextPreview(textareaVal, writeDimensions, scale, singleColorRef.current, { x: e.clientX, y: e.clientY });
+        close();
+    }, [showTextPreview, close]);
 
     const handleSizeChange = useCallback((e) => {
         setImageStampSize(parseInt(e.target.value));
-    }, [setImageStampSize]);
+    }, []);
 
     const handleSingleColorChange = useCallback((e) => {
         setSingleColor(e.target.value);
-    }, [setSingleColor]);
+    }, []);
 
     const handleColorTypeChange = useCallback((e) => {
         setStampColorType(e.target.value);
     }, [setStampColorType]);
 
     const handleSpeedChange = useCallback((e) => {
-        if (stampColorType === 'Rainbow') {
+        const currentType = stampColorTypeRef.current;
+        if (currentType === 'Rainbow') {
             setRainbowSpeed(parseInt(e.target.value));
-        } else if (stampColorType === 'Rainbow Fill') {
+        } else if (currentType === 'Rainbow Fill') {
             setRainbowFillSpeed(parseInt(e.target.value));
         }
-    }, [stampColorType, setRainbowSpeed, setRainbowFillSpeed]);
+    }, [setRainbowSpeed, setRainbowFillSpeed]);
 
     const handleStampTabClick = useCallback((e) => {
         const btn = e.currentTarget;
@@ -156,14 +188,7 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
         if (category) {
             setActiveStampTab(category);
         }
-    }, []);
-
-    const isRainbow = stampColorType === 'Rainbow';
-    const isRainbowFill = stampColorType === 'Rainbow Fill';
-
-    const speedValue = isRainbow ? rainbowSpeed : isRainbowFill ? rainbowFillSpeed : 1;
-    const speedMin = isRainbow ? 1 : isRainbowFill ? 1 : 0;
-    const speedMax = isRainbow ? 130 : isRainbowFill ? 100 : 0;
+    }, [setActiveStampTab]);
 
     const renderedStampTabs = useMemo(() => {
         return stampCategories.map((category) => (
@@ -202,7 +227,7 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
             <div class={styles.controls}>
                 <button
                     class={styles.closeBtn}
-                    onClick={onClose}
+                    onClick={close}
                     onMouseOver={stopPropagation}
                 >
                     <span dangerouslySetInnerHTML={{ __html: xIcon }} />
@@ -276,8 +301,9 @@ export const ImageStampTab = ({ onStampClick, onClose }) => {
 
             <div class={`${styles.textInput} ${!textStampModeActive ? styles.textInputCollapsed : ''}`}>
                     <textarea
-                        value={textStampText}
-                        onInput={handleTextStampTextChange}
+                        ref={textareaRef}
+                        name="stampTextArea"
+                        onInput={handleTextareaInput}
                         placeholder="Enter text..."
                         rows="1"
                         style={{

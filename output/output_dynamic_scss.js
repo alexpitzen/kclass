@@ -3584,9 +3584,12 @@
       previewContent: null,
       stampData: null,
       textValue: "",
-      color: "#ff2200"
+      color: "#ff2200",
+      scale: 0.25,
+      stampColorType: "Unchanged",
+      rainbowSpeed: 1
     });
-    const showStampPreview = q2((stamp2, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos) => {
+    const showStampPreview = q2((stamp2, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos, stampColorType, rainbowSpeed) => {
       setState({
         visible: true,
         mode: "stamp",
@@ -3600,7 +3603,10 @@
         },
         previewContent: svg,
         textValue: "",
-        color: borderColor
+        color: borderColor,
+        scale,
+        stampColorType,
+        rainbowSpeed
       });
     }, []);
     const showTextPreview = q2((text, writeDimensions, scale, borderColor, initialPos) => {
@@ -3617,7 +3623,10 @@
         },
         previewContent: text,
         textValue: text,
-        color: borderColor
+        color: borderColor,
+        scale,
+        stampColorType: "Unchanged",
+        rainbowSpeed: 1
       });
     }, []);
     const hidePreview = q2(() => {
@@ -3633,7 +3642,7 @@
   };
   var PrintOverlay = () => {
     const { state, hidePreview } = usePrintOverlay();
-    const { visible, mode, previewStyle, previewContent, stampData, textValue, color } = state;
+    const { visible, mode, previewStyle, previewContent, stampData, textValue, color, scale, stampColorType, rainbowSpeed } = state;
     const overlayRef = A2(null);
     const previewRef = A2(null);
     y2(() => {
@@ -3679,19 +3688,17 @@
         }
         const position = { x: (x3 - canvasRect.left) / zoomRatio, y: (y3 - canvasRect.top) / zoomRatio };
         if (mode === "stamp" && stampData) {
-          const scale = parseInt(document.querySelector(".sizeslider")?.value || 25) / 100 * stampData.maxScaleFactor;
-          const stampColorType = document.querySelector("select#stampColorType")?.value || "Unchanged";
+          const stampScale = scale * stampData.maxScaleFactor;
           const options = {
             color,
             rainbow: stampColorType === "Rainbow" || stampColorType === "Rainbow Fill",
-            rainbowSpeed: parseFloat(document.querySelector(".rainbowspeed")?.value || 1),
+            rainbowSpeed: rainbowSpeed || 1,
             usePredefinedColor: stampColorType === "Unchanged",
             rainbowFill: stampColorType === "Rainbow Fill"
           };
-          StampLib.writeStampAt(stampData.stamp, position, scale, options);
+          StampLib.writeStampAt(stampData.stamp, position, scale || 0.25, options);
         } else if (mode === "text") {
-          const scale = parseInt(document.querySelector(".sizeslider")?.value || 25) / 100;
-          StampLib.writeAllAt(textValue, position, scale, { color });
+          StampLib.writeAllAt(textValue, position, scale || 0.25, { color });
         }
         hidePreview();
       };
@@ -3701,7 +3708,7 @@
         overlay.removeEventListener("pointermove", handlePMove);
         overlay.removeEventListener("click", handleClick);
       };
-    }, [visible, mode, stampData, textValue, color, hidePreview]);
+    }, [visible, mode, stampData, textValue, color, hidePreview, scale, stampColorType, rainbowSpeed]);
     if (!visible)
       return null;
     return /* @__PURE__ */ u3(
@@ -4291,54 +4298,6 @@
     return /* @__PURE__ */ u3(PenSettingsContext.Provider, { value: contextValue, children });
   };
 
-  // src/context/ImageStampSettingsContext.jsx
-  var ImageStampSettingsContext = R(null);
-  var useImageStampSettings = () => {
-    const context = x2(ImageStampSettingsContext);
-    if (!context) {
-      throw new Error("useImageStampSettings must be used within ImageStampSettingsProvider");
-    }
-    return context;
-  };
-  var ImageStampSettingsProvider = ({ children }) => {
-    const [imageStampSize, setImageStampSize] = d2(25);
-    const [stampColorType, setStampColorType] = d2("Unchanged");
-    const [rainbowSpeed, setRainbowSpeed] = d2(1);
-    const [rainbowFillSpeed, setRainbowFillSpeed] = d2(1);
-    const [singleColor, setSingleColor] = d2("#ff2200");
-    const [activeStampTab, setActiveStampTab] = d2("");
-    const [textStampModeActive, setTextStampModeActive] = d2(false);
-    const [textStampText, setTextStampText] = d2("");
-    const contextValue = T2(() => ({
-      imageStampSize,
-      setImageStampSize,
-      stampColorType,
-      setStampColorType,
-      rainbowSpeed,
-      setRainbowSpeed,
-      rainbowFillSpeed,
-      setRainbowFillSpeed,
-      singleColor,
-      setSingleColor,
-      activeStampTab,
-      setActiveStampTab,
-      textStampModeActive,
-      setTextStampModeActive,
-      textStampText,
-      setTextStampText
-    }), [
-      imageStampSize,
-      stampColorType,
-      rainbowSpeed,
-      rainbowFillSpeed,
-      singleColor,
-      activeStampTab,
-      textStampModeActive,
-      textStampText
-    ]);
-    return /* @__PURE__ */ u3(ImageStampSettingsContext.Provider, { value: contextValue, children });
-  };
-
   // src/context/AppContext.jsx
   var DrawTabContext = R(null);
   var TimestampContext = R(null);
@@ -4387,7 +4346,7 @@
     return /* @__PURE__ */ u3(KeyboardModeContext.Provider, { value: contextValue, children });
   };
   var AppProvider = ({ children }) => {
-    return /* @__PURE__ */ u3(DrawTabProvider, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(DiffViewOverlayProvider, { children: /* @__PURE__ */ u3(HelpOverlayProvider, { children: /* @__PURE__ */ u3(DrawToolProvider, { children: /* @__PURE__ */ u3(PenSettingsProvider, { children: /* @__PURE__ */ u3(ImageStampSettingsProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) }) }) }) }) }) });
+    return /* @__PURE__ */ u3(DrawTabProvider, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(DiffViewOverlayProvider, { children: /* @__PURE__ */ u3(HelpOverlayProvider, { children: /* @__PURE__ */ u3(DrawToolProvider, { children: /* @__PURE__ */ u3(PenSettingsProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) }) }) }) }) });
   };
 
   // src/icons/stamp.svg
@@ -5281,8 +5240,8 @@
     const { hdModeEnabled, setHdModeEnabled } = useHDMode();
     const penColorRef = A2("#ff2200");
     const penTypeRef = A2("pen");
-    const stampColorTypeRef = A2("Unchanged");
-    const rainbowSpeedRef = A2(1);
+    const stampColorTypeRef2 = A2("Unchanged");
+    const rainbowSpeedRef2 = A2(1);
     const { showStampPreview, showTextPreview } = usePrintOverlay();
     const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
     const textareaRef = A2(null);
@@ -5345,14 +5304,14 @@
       updatePenSettings();
     };
     const handleStampColorChange = (e3) => {
-      stampColorTypeRef.current = e3.target.value;
+      stampColorTypeRef2.current = e3.target.value;
       const rainbowSpeedInput = rootRef.current?.querySelector(".rainbowspeed");
       if (rainbowSpeedInput) {
         rainbowSpeedInput.disabled = e3.target.value !== "Rainbow" && e3.target.value !== "Rainbow Fill";
       }
     };
     const handleRainbowSpeedChange = (e3) => {
-      rainbowSpeedRef.current = parseInt(e3.target.value);
+      rainbowSpeedRef2.current = parseInt(e3.target.value);
     };
     const handleUnlock = () => {
       stamp.unlockPage();
@@ -5608,29 +5567,48 @@
   var stamps = window.StampLib?.stamps || {};
   var stampCategories = Object.keys(stamps);
   var stopPropagation = (e3) => e3.stopPropagation();
-  var ImageStampTab = ({ onStampClick, onClose }) => {
-    const {
-      imageStampSize,
-      setImageStampSize,
-      stampColorType,
-      setStampColorType,
-      rainbowSpeed,
-      setRainbowSpeed,
-      rainbowFillSpeed,
-      setRainbowFillSpeed,
-      singleColor,
-      setSingleColor,
-      activeStampTab,
-      setActiveStampTab,
-      textStampModeActive,
-      setTextStampModeActive,
-      textStampText,
-      setTextStampText
-    } = useImageStampSettings();
+  var imageStampSizeRef = { current: 25 };
+  var singleColorRef = { current: "#ff2200" };
+  var stampColorTypeRef = { current: "Unchanged" };
+  var rainbowSpeedRef = { current: 100 };
+  var rainbowFillSpeedRef = { current: 20 };
+  var activeStampTabRef = { current: "" };
+  var textStampModeActiveRef = { current: false };
+  var textareaValueRef = { current: "" };
+  var ImageStampTab = ({ onStampClick, close }) => {
     const { handleUndo, handleClear } = useDrawTool();
-    const imageStampSizeRef = A2(imageStampSize);
-    const singleColorRef = A2(singleColor);
-    const textStampTextRef = A2(textStampText);
+    const { showStampPreview, showTextPreview } = usePrintOverlay();
+    const [imageStampSize, setImageStampSize] = d2(imageStampSizeRef.current);
+    const [stampColorType, setStampColorTypeState] = d2(stampColorTypeRef.current);
+    const [rainbowSpeed, setRainbowSpeedState] = d2(rainbowSpeedRef.current);
+    const [rainbowFillSpeed, setRainbowFillSpeedState] = d2(rainbowFillSpeedRef.current);
+    const [singleColor, setSingleColor] = d2(singleColorRef.current);
+    const [activeStampTab, setActiveStampTabState] = d2(activeStampTabRef.current);
+    const [textStampModeActive, setTextStampModeActiveState] = d2(textStampModeActiveRef.current);
+    const setStampColorType = q2((val) => {
+      stampColorTypeRef.current = val;
+      setStampColorTypeState(val);
+    }, []);
+    const setRainbowSpeed = q2((val) => {
+      rainbowSpeedRef.current = val;
+      setRainbowSpeedState(val);
+    }, []);
+    const setRainbowFillSpeed = q2((val) => {
+      rainbowFillSpeedRef.current = val;
+      setRainbowFillSpeedState(val);
+    }, []);
+    const setActiveStampTab = q2((val) => {
+      activeStampTabRef.current = val;
+      setActiveStampTabState(val);
+    }, []);
+    const setTextStampModeActive = q2((valOrFn) => {
+      const newVal = typeof valOrFn === "function" ? valOrFn(textStampModeActiveRef.current) : valOrFn;
+      textStampModeActiveRef.current = newVal;
+      setTextStampModeActiveState(newVal);
+    }, []);
+    const textareaRef = A2(null);
+    const stampsRef = A2(null);
+    const activeStamps = stamps[activeStampTab] || [];
     y2(() => {
       imageStampSizeRef.current = imageStampSize;
     }, [imageStampSize]);
@@ -5638,16 +5616,18 @@
       singleColorRef.current = singleColor;
     }, [singleColor]);
     y2(() => {
-      textStampTextRef.current = textStampText;
-    }, [textStampText]);
-    const { showStampPreview, showTextPreview } = usePrintOverlay();
-    const stampsRef = A2(null);
-    const activeStamps = stamps[activeStampTab] || [];
-    y2(() => {
       if (stampCategories.length > 0 && !stampCategories.includes(activeStampTab)) {
         setActiveStampTab(stampCategories[0]);
       }
-    }, [activeStampTab]);
+    }, [activeStampTab, setActiveStampTab]);
+    const handleTextareaInput = q2((e3) => {
+      textareaValueRef.current = e3.target.value;
+    }, []);
+    y2(() => {
+      if (textareaRef.current && textareaValueRef.current) {
+        textareaRef.current.value = textareaValueRef.current;
+      }
+    }, []);
     y2(() => {
       const parent = stampsRef.current;
       const draggable = stampsRef.current;
@@ -5687,53 +5667,55 @@
         draggable.removeEventListener("pointermove", drag);
       };
     }, []);
+    const isRainbow = stampColorType === "Rainbow";
+    const isRainbowFill = stampColorType === "Rainbow Fill";
+    const speedValue = isRainbow ? rainbowSpeed : isRainbowFill ? rainbowFillSpeed : 1;
+    const speedMin = isRainbow ? 1 : isRainbowFill ? 1 : 0;
+    const speedMax = isRainbow ? 130 : isRainbowFill ? 100 : 0;
     const handleStampClick = q2((stamp2, e3) => {
       const stampDimensions = stamp2._cachedDimensions || StampLib.getWriteStampDimensions(stamp2, 1);
       const maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
       const scale = imageStampSizeRef.current / 100 * maxScaleFactor;
       const svg = typeof stamp2.svg === "string" ? stamp2.svg : stamp2.svg.outerHTML;
-      showStampPreview(stamp2, stampDimensions, maxScaleFactor, scale, singleColorRef.current, svg, { x: e3.clientX, y: e3.clientY });
-      onStampClick?.();
-    }, [showStampPreview, onStampClick]);
+      const currentStampColorType = stampColorTypeRef.current;
+      const currentSpeed = currentStampColorType === "Rainbow" ? rainbowSpeedRef.current : rainbowFillSpeedRef.current;
+      showStampPreview(stamp2, stampDimensions, maxScaleFactor, scale, singleColorRef.current, svg, { x: e3.clientX, y: e3.clientY }, currentStampColorType, currentSpeed);
+      close();
+    }, [showStampPreview, close]);
     const handleTextStampToggle = q2(() => {
       setTextStampModeActive((prev) => !prev);
-    }, []);
-    const handleTextStampTextChange = q2((e3) => {
-      setTextStampText(e3.target.value);
-    }, []);
+    }, [setTextStampModeActive]);
     const handleTextStamp = q2((e3) => {
       const scale = imageStampSizeRef.current / 100;
-      const writeDimensions = StampLib.getWriteAllDimensions(textStampTextRef.current, scale);
-      showTextPreview(textStampTextRef.current, writeDimensions, scale, singleColorRef.current, { x: e3.clientX, y: e3.clientY });
-    }, [showTextPreview]);
+      const textareaVal = textareaRef.current?.value || "";
+      const writeDimensions = StampLib.getWriteAllDimensions(textareaVal, scale);
+      showTextPreview(textareaVal, writeDimensions, scale, singleColorRef.current, { x: e3.clientX, y: e3.clientY });
+      close();
+    }, [showTextPreview, close]);
     const handleSizeChange = q2((e3) => {
       setImageStampSize(parseInt(e3.target.value));
-    }, [setImageStampSize]);
+    }, []);
     const handleSingleColorChange = q2((e3) => {
       setSingleColor(e3.target.value);
-    }, [setSingleColor]);
+    }, []);
     const handleColorTypeChange = q2((e3) => {
       setStampColorType(e3.target.value);
     }, [setStampColorType]);
     const handleSpeedChange = q2((e3) => {
-      if (stampColorType === "Rainbow") {
+      const currentType = stampColorTypeRef.current;
+      if (currentType === "Rainbow") {
         setRainbowSpeed(parseInt(e3.target.value));
-      } else if (stampColorType === "Rainbow Fill") {
+      } else if (currentType === "Rainbow Fill") {
         setRainbowFillSpeed(parseInt(e3.target.value));
       }
-    }, [stampColorType, setRainbowSpeed, setRainbowFillSpeed]);
+    }, [setRainbowSpeed, setRainbowFillSpeed]);
     const handleStampTabClick = q2((e3) => {
       const btn = e3.currentTarget;
       const category = btn.getAttribute("data-category");
       if (category) {
         setActiveStampTab(category);
       }
-    }, []);
-    const isRainbow = stampColorType === "Rainbow";
-    const isRainbowFill = stampColorType === "Rainbow Fill";
-    const speedValue = isRainbow ? rainbowSpeed : isRainbowFill ? rainbowFillSpeed : 1;
-    const speedMin = isRainbow ? 1 : isRainbowFill ? 1 : 0;
-    const speedMax = isRainbow ? 130 : isRainbowFill ? 100 : 0;
+    }, [setActiveStampTab]);
     const renderedStampTabs = T2(() => {
       return stampCategories.map((category) => /* @__PURE__ */ u3(
         "button",
@@ -5770,7 +5752,7 @@
           "button",
           {
             class: ImageStampTab_default.closeBtn,
-            onClick: onClose,
+            onClick: close,
             onMouseOver: stopPropagation,
             children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: x_default } })
           }
@@ -5858,8 +5840,9 @@
         /* @__PURE__ */ u3(
           "textarea",
           {
-            value: textStampText,
-            onInput: handleTextStampTextChange,
+            ref: textareaRef,
+            name: "stampTextArea",
+            onInput: handleTextareaInput,
             placeholder: "Enter text...",
             rows: "1",
             style: {
@@ -5966,7 +5949,7 @@
     });
   };
   var stopPropagation2 = (e3) => e3.stopPropagation();
-  var SettingsTab = ({ onClose }) => {
+  var SettingsTab = ({ close }) => {
     const {
       penColor,
       setPenColor,
@@ -6066,7 +6049,7 @@
           "button",
           {
             class: SettingsTab_default.closeBtn,
-            onClick: onClose,
+            onClick: close,
             onMouseOver: stopPropagation2,
             children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: x_default } })
           }
@@ -6209,12 +6192,18 @@
   // src/components/DrawToolOverlay.jsx
   var DrawToolOverlay = () => {
     const { activeTab, drawToolVisible, hideDrawTool } = useDrawTool();
-    if (!drawToolVisible)
-      return null;
-    return /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.overlay, onClick: hideDrawTool, children: /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.content, onClick: (e3) => e3.stopPropagation(), children: /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.body, children: [
-      activeTab === "image" && /* @__PURE__ */ u3(ImageStampTab, { onClose: hideDrawTool }),
-      activeTab === "settings" && /* @__PURE__ */ u3(SettingsTab, { onClose: hideDrawTool })
-    ] }) }) });
+    return /* @__PURE__ */ u3(
+      "div",
+      {
+        class: DrawToolOverlay_default.overlay,
+        onClick: hideDrawTool,
+        style: { display: drawToolVisible ? "flex" : "none" },
+        children: /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.content, onClick: (e3) => e3.stopPropagation(), children: /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.body, children: [
+          /* @__PURE__ */ u3("div", { style: { display: activeTab === "image" ? "contents" : "none" }, children: /* @__PURE__ */ u3(ImageStampTab, { close: hideDrawTool }) }),
+          /* @__PURE__ */ u3("div", { style: { display: activeTab === "settings" ? "contents" : "none" }, children: /* @__PURE__ */ u3(SettingsTab, { close: hideDrawTool }) })
+        ] }) })
+      }
+    );
   };
 
   // src/components/Misc.jsx
@@ -8336,7 +8325,6 @@ body:has(app-atx0010p) .loginAssistantsList {
   background-color: #ffffff;
   border-radius: 12px 12px 0 0;
   width: calc(100vw - 2px);
-  max-width: 750px;
   max-height: calc(100vh - 40px);
   display: flex;
   flex-direction: column;

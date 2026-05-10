@@ -45,7 +45,7 @@ const setStampLibPenSettings = (color, width, alpha) => {
 
 const stopPropagation = (e) => e.stopPropagation();
 
-export const SettingsTab = ({ onClose }) => {
+export const SettingsTab = ({ close }) => {
     const {
         penColor,
         setPenColor,
@@ -160,7 +160,7 @@ export const SettingsTab = ({ onClose }) => {
             <div class={styles.controls}>
                 <button
                     class={styles.closeBtn}
-                    onClick={onClose}
+                    onClick={close}
                     onMouseOver={stopPropagation}
                 >
                     <span dangerouslySetInnerHTML={{ __html: xIcon }} />

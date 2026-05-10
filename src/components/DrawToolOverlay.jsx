@@ -6,14 +6,20 @@ import styles from './DrawToolOverlay.module.css';
 export const DrawToolOverlay = () => {
     const { activeTab, drawToolVisible, hideDrawTool } = useDrawTool();
 
-    if (!drawToolVisible) return null;
-
     return (
-        <div class={styles.overlay} onClick={hideDrawTool}>
+        <div
+            class={styles.overlay}
+            onClick={hideDrawTool}
+            style={{ display: drawToolVisible ? 'flex' : 'none' }}
+        >
             <div class={styles.content} onClick={(e) => e.stopPropagation()}>
                 <div class={styles.body}>
-                    {activeTab === 'image' && <ImageStampTab onClose={hideDrawTool} />}
-                    {activeTab === 'settings' && <SettingsTab onClose={hideDrawTool} />}
+                    <div style={{ display: activeTab === 'image' ? 'contents' : 'none' }}>
+                        <ImageStampTab close={hideDrawTool} />
+                    </div>
+                    <div style={{ display: activeTab === 'settings' ? 'contents' : 'none' }}>
+                        <SettingsTab close={hideDrawTool} />
+                    </div>
                 </div>
             </div>
         </div>

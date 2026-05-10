@@ -20,9 +20,12 @@ export const PrintOverlayProvider = ({ children }) => {
         stampData: null,
         textValue: '',
         color: '#ff2200',
+        scale: 0.25,
+        stampColorType: "Unchanged",
+        rainbowSpeed: 1,
     });
 
-    const showStampPreview = useCallback((stamp, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos) => {
+    const showStampPreview = useCallback((stamp, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos, stampColorType, rainbowSpeed) => {
         setState({
             visible: true,
             mode: 'stamp',
@@ -37,6 +40,9 @@ export const PrintOverlayProvider = ({ children }) => {
             previewContent: svg,
             textValue: '',
             color: borderColor,
+            scale: scale,
+            stampColorType: stampColorType,
+            rainbowSpeed: rainbowSpeed,
         });
     }, []);
 
@@ -55,6 +61,9 @@ export const PrintOverlayProvider = ({ children }) => {
             previewContent: text,
             textValue: text,
             color: borderColor,
+            scale: scale,
+            stampColorType: "Unchanged",
+            rainbowSpeed: 1,
         });
     }, []);
 
@@ -78,7 +87,7 @@ export const PrintOverlayProvider = ({ children }) => {
 
 export const PrintOverlay = () => {
     const { state, hidePreview } = usePrintOverlay();
-    const { visible, mode, previewStyle, previewContent, stampData, textValue, color } = state;
+    const { visible, mode, previewStyle, previewContent, stampData, textValue, color, scale, stampColorType, rainbowSpeed } = state;
     const overlayRef = useRef(null);
     const previewRef = useRef(null);
 
@@ -130,19 +139,17 @@ export const PrintOverlay = () => {
             const position = { x: (x - canvasRect.left) / zoomRatio, y: (y - canvasRect.top) / zoomRatio };
 
             if (mode === 'stamp' && stampData) {
-                const scale = (parseInt(document.querySelector('.sizeslider')?.value || 25) / 100) * stampData.maxScaleFactor;
-                const stampColorType = document.querySelector('select#stampColorType')?.value || 'Unchanged';
+                const stampScale = scale * stampData.maxScaleFactor;
                 const options = {
                     color,
                     rainbow: stampColorType === 'Rainbow' || stampColorType === 'Rainbow Fill',
-                    rainbowSpeed: parseFloat(document.querySelector('.rainbowspeed')?.value || 1),
+                    rainbowSpeed: rainbowSpeed || 1,
                     usePredefinedColor: stampColorType === 'Unchanged',
                     rainbowFill: stampColorType === 'Rainbow Fill',
                 };
-                StampLib.writeStampAt(stampData.stamp, position, scale, options);
+                StampLib.writeStampAt(stampData.stamp, position, scale || 0.25, options);
             } else if (mode === 'text') {
-                const scale = parseInt(document.querySelector('.sizeslider')?.value || 25) / 100;
-                StampLib.writeAllAt(textValue, position, scale, { color });
+                StampLib.writeAllAt(textValue, position, scale || 0.25, { color });
             }
             hidePreview();
         };
@@ -154,7 +161,7 @@ export const PrintOverlay = () => {
             overlay.removeEventListener('pointermove', handlePMove);
             overlay.removeEventListener('click', handleClick);
         };
-    }, [visible, mode, stampData, textValue, color, hidePreview]);
+    }, [visible, mode, stampData, textValue, color, hidePreview, scale, stampColorType, rainbowSpeed]);
 
     if (!visible) return null;
 
