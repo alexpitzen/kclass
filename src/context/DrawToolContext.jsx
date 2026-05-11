@@ -1,5 +1,5 @@
 import { createContext } from 'preact';
-import { useContext, useState, useMemo, useCallback } from 'preact/hooks';
+import { useContext, useState, useMemo, useRef, useCallback } from 'preact/hooks';
 
 const DrawToolContext = createContext(null);
 
@@ -19,9 +19,22 @@ const TAB_IDS = [
 export const DrawToolProvider = ({ children }) => {
     const [activeTab, setActiveTab] = useState('image');
     const [drawToolVisible, setDrawToolVisible] = useState(false);
+    const keyDownHandlersRef = useRef({});
 
     const showDrawTool = useCallback(() => setDrawToolVisible(true), []);
     const hideDrawTool = useCallback(() => setDrawToolVisible(false), []);
+
+    const registerKeyDownHandler = useCallback((tabType, handler) => {
+        keyDownHandlersRef.current[tabType] = handler;
+        return () => {
+            delete keyDownHandlersRef.current[tabType];
+        };
+    }, []);
+
+    const callKeyDownHandler = useCallback((e) => {
+        const handler = keyDownHandlersRef.current[activeTab];
+        handler?.(e);
+    }, [activeTab]);
 
     const handleUndo = useCallback(() => {
         StampLib.undoLastWriteAll();
@@ -40,6 +53,8 @@ export const DrawToolProvider = ({ children }) => {
         hideDrawTool,
         handleUndo,
         handleClear,
+        registerKeyDownHandler,
+        callKeyDownHandler,
     }), [
         activeTab,
         drawToolVisible,
@@ -47,6 +62,8 @@ export const DrawToolProvider = ({ children }) => {
         hideDrawTool,
         handleUndo,
         handleClear,
+        registerKeyDownHandler,
+        callKeyDownHandler,
     ]);
 
     return (

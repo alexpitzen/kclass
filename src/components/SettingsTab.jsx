@@ -1,6 +1,7 @@
 import { useRef, useEffect, useCallback } from 'preact/hooks';
 import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useKeyboardMode as useKeyboardModeContext, useHDMode as useHDModeContext } from '../context/AppContext.jsx';
+import { useDrawTool } from '../context/DrawToolContext.jsx';
 import { updatePenSettings } from '../helpers/actions.js';
 import { useHelpOverlay } from './HelpOverlay.jsx';
 import styles from './SettingsTab.module.css';
@@ -63,6 +64,20 @@ export const SettingsTab = ({ close }) => {
     const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardModeContext();
     const { hdModeEnabled, setHdModeEnabled } = useHDModeContext();
     const { showHelpOverlay } = useHelpOverlay();
+    const { registerKeyDownHandler } = useDrawTool();
+
+    const handleKeys = useCallback((e) => {
+        if (e.altKey || e.ctrlKey || e.metaKey) return;
+        if (e.repeat) return;
+        if (e.key === "Escape" || e.key === "d") {
+            close();
+            e.preventDefault();
+        }
+    }, [close]);
+
+    useEffect(() => {
+        return registerKeyDownHandler('settings', handleKeys);
+    }, [registerKeyDownHandler, handleKeys]);
 
     const penColorRef = useRef(penColor);
     const penWidthRef = useRef(penWidth);

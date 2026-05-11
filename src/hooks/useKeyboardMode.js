@@ -5,6 +5,7 @@ import { doEnter, doEscape, doBackspace, clearSearch, focusSearch, cycleHighligh
 import { doMarkingListJK, doMarkingListHL } from '../helpers/marking.js';
 import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sideScrollProgressChart, scrollScore, stopScrolling, startScrolling, isProgressChartFloating } from '../helpers/scrolling.js';
 import { useTimestamp, useDrawTab } from '../context/AppContext.jsx';
+import { useDrawTool } from '../context/DrawToolContext.jsx';
 import { useDiffViewOverlay } from '../components/DiffViewOverlay.jsx';
 import { useHelpOverlay } from '../components/HelpOverlay.jsx';
 
@@ -311,6 +312,7 @@ const handleStudyRecordsKey = (e, fns) => {
 export const useKeyboardMode = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
     const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
+    const { drawToolVisible, callKeyDownHandler } = useDrawTool();
     const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
     const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
     const fns = {
@@ -334,7 +336,20 @@ export const useKeyboardMode = (enabled) => {
         if (!enabled) return;
 
         const handleKeyDown = (e) => {
-            if (e.repeat && ["j", "J", "k", "K", "l", "L", "h", "H", "b"].includes(e.key)) return;
+            if (e.altKey && !e.ctrlKey && !e.metaKey) {
+                if (e.key === "d") {
+                    toggleDrawTab();
+                } else if (e.key === "t") {
+                    setTimestampEnabled((prev) => !prev);
+                }
+                return;
+            }
+
+            if (drawToolVisible) {
+                callKeyDownHandler(e);
+                return;
+            }
+
             if ((e.target.nodeName === "INPUT" && e.target.type !== "checkbox") || e.target.nodeName === "TEXTAREA") {
                 if (e.key === "Escape") {
                     doEscape(e, fns);
@@ -353,15 +368,7 @@ export const useKeyboardMode = (enabled) => {
                 }
                 return;
             }
-
-            if (e.altKey && !e.ctrlKey && !e.metaKey) {
-                if (e.key === "d") {
-                    toggleDrawTab();
-                } else if (e.key === "t") {
-                    setTimestampEnabled((prev) => !prev);
-                }
-                return;
-            }
+            if (e.repeat) return;
 
             if (e.altKey || e.ctrlKey || e.metaKey) return;
 
@@ -427,5 +434,5 @@ export const useKeyboardMode = (enabled) => {
             document.removeEventListener("keydown", handleKeyDown);
             document.removeEventListener("keyup", handleKeyUp);
         };
-    }, [enabled, drawTabOpen, toggleDrawTab, helpOverlayVisible, helpOverlayActiveTab]);
+    }, [enabled, drawTabOpen, toggleDrawTab, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible]);
 };

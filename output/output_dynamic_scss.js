@@ -4236,8 +4236,19 @@
   var DrawToolProvider = ({ children }) => {
     const [activeTab, setActiveTab] = d2("image");
     const [drawToolVisible, setDrawToolVisible] = d2(false);
+    const keyDownHandlersRef = A2({});
     const showDrawTool = q2(() => setDrawToolVisible(true), []);
     const hideDrawTool = q2(() => setDrawToolVisible(false), []);
+    const registerKeyDownHandler = q2((tabType, handler) => {
+      keyDownHandlersRef.current[tabType] = handler;
+      return () => {
+        delete keyDownHandlersRef.current[tabType];
+      };
+    }, []);
+    const callKeyDownHandler = q2((e3) => {
+      const handler = keyDownHandlersRef.current[activeTab];
+      handler?.(e3);
+    }, [activeTab]);
     const handleUndo = q2(() => {
       StampLib.undoLastWriteAll();
     }, []);
@@ -4252,14 +4263,18 @@
       showDrawTool,
       hideDrawTool,
       handleUndo,
-      handleClear
+      handleClear,
+      registerKeyDownHandler,
+      callKeyDownHandler
     }), [
       activeTab,
       drawToolVisible,
       showDrawTool,
       hideDrawTool,
       handleUndo,
-      handleClear
+      handleClear,
+      registerKeyDownHandler,
+      callKeyDownHandler
     ]);
     return /* @__PURE__ */ u3(DrawToolContext.Provider, { value: contextValue, children });
   };
@@ -5120,6 +5135,7 @@
   var useKeyboardMode2 = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
     const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
+    const { drawToolVisible, callKeyDownHandler } = useDrawTool();
     const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
     const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
     const fns = {
@@ -5143,8 +5159,18 @@
       if (!enabled)
         return;
       const handleKeyDown = (e3) => {
-        if (e3.repeat && ["j", "J", "k", "K", "l", "L", "h", "H", "b"].includes(e3.key))
+        if (e3.altKey && !e3.ctrlKey && !e3.metaKey) {
+          if (e3.key === "d") {
+            toggleDrawTab();
+          } else if (e3.key === "t") {
+            setTimestampEnabled((prev) => !prev);
+          }
           return;
+        }
+        if (drawToolVisible) {
+          callKeyDownHandler(e3);
+          return;
+        }
         if (e3.target.nodeName === "INPUT" && e3.target.type !== "checkbox" || e3.target.nodeName === "TEXTAREA") {
           if (e3.key === "Escape") {
             doEscape(e3, fns);
@@ -5163,14 +5189,8 @@
           }
           return;
         }
-        if (e3.altKey && !e3.ctrlKey && !e3.metaKey) {
-          if (e3.key === "d") {
-            toggleDrawTab();
-          } else if (e3.key === "t") {
-            setTimestampEnabled((prev) => !prev);
-          }
+        if (e3.repeat)
           return;
-        }
         if (e3.altKey || e3.ctrlKey || e3.metaKey)
           return;
         const markingList = document.querySelector(".markingList.tabActive");
@@ -5230,7 +5250,7 @@
         document.removeEventListener("keydown", handleKeyDown);
         document.removeEventListener("keyup", handleKeyUp);
       };
-    }, [enabled, drawTabOpen, toggleDrawTab, helpOverlayVisible, helpOverlayActiveTab]);
+    }, [enabled, drawTabOpen, toggleDrawTab, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible]);
   };
 
   // src/components/DrawTab.jsx
@@ -5547,11 +5567,18 @@
     stampTabs: "ImageStampTab_stampTabs",
     stampTabBtn: "ImageStampTab_stampTabBtn",
     stampTabBtnActive: "ImageStampTab_stampTabBtnActive",
+    stampTabDivider: "ImageStampTab_stampTabDivider",
     stampBtn: "ImageStampTab_stampBtn",
+    auxPanelWrapper: "ImageStampTab_auxPanelWrapper",
+    auxPanelWrapperCollapsed: "ImageStampTab_auxPanelWrapperCollapsed",
     textInput: "ImageStampTab_textInput",
-    textInputCollapsed: "ImageStampTab_textInputCollapsed",
+    auxPanelActive: "ImageStampTab_auxPanelActive",
     textStampBtn: "ImageStampTab_textStampBtn",
-    closeBtn: "ImageStampTab_closeBtn"
+    closeBtn: "ImageStampTab_closeBtn",
+    penSettingsInput: "ImageStampTab_penSettingsInput",
+    presetsContainer: "ImageStampTab_presetsContainer",
+    presetBtn: "ImageStampTab_presetBtn",
+    presetBtnActive: "ImageStampTab_presetBtnActive"
   };
 
   // src/icons/undo.svg
@@ -5563,10 +5590,52 @@
   // src/icons/stamp-text.svg
   var stamp_text_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <polyline points="4 7 4 4 20 4 20 7"/>\n  <line x1="9" y1="20" x2="15" y2="20"/>\n  <line x1="12" y1="4" x2="12" y2="20"/>\n</svg>';
 
+  // src/icons/pen.svg
+  var pen_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>\n</svg>';
+
+  // src/icons/highlighter.svg
+  var highlighter_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="m9 11-6 6v3h9l3-3"/>\n  <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>\n</svg>';
+
+  // src/icons/thin-highlighter.svg
+  var thin_highlighter_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="m9 11-6 6v3h9l3-3"/>\n  <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>\n  <line x1="19" y1="9" x2="15" y2="5"/>\n</svg>';
+
+  // src/icons/eraser.svg
+  var eraser_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/>\n  <path d="M22 21H7"/>\n  <path d="m5 11 9 9"/>\n</svg>';
+
   // src/components/ImageStampTab.jsx
   var stamps = window.StampLib?.stamps || {};
   var stampCategories = Object.keys(stamps);
   var stopPropagation = (e3) => e3.stopPropagation();
+  var PEN_PRESETS = [
+    { id: "pen", label: "Pen", width: 2, alpha: 1 },
+    { id: "highlighter", label: "Highlighter", width: 20, alpha: 0.3 },
+    { id: "thin-highlighter", label: "Thin Highlighter", width: 10, alpha: 0.5 },
+    { id: "eraser", label: "Eraser", width: 20, alpha: 1 }
+  ];
+  var PRESET_ICONS = {
+    pen: pen_default,
+    highlighter: highlighter_default,
+    "thin-highlighter": thin_highlighter_default,
+    eraser: eraser_default
+  };
+  var getActivePresetId = (eraserEnabled, penWidth, penAlpha) => {
+    if (eraserEnabled)
+      return "eraser";
+    if (penWidth === 2 && penAlpha === 1)
+      return "pen";
+    if (penWidth === 20 && Math.abs(penAlpha - 0.3) < 0.01)
+      return "highlighter";
+    if (penWidth === 10 && Math.abs(penAlpha - 0.5) < 0.01)
+      return "thin-highlighter";
+    return null;
+  };
+  var setStampLibPenSettings = (color, width, alpha) => {
+    StampLib.setPenSettings({
+      color,
+      width,
+      alpha: Math.round(alpha * 255)
+    });
+  };
   var imageStampSizeRef = { current: 25 };
   var singleColorRef = { current: "#ff2200" };
   var stampColorTypeRef = { current: "Unchanged" };
@@ -5574,17 +5643,31 @@
   var rainbowFillSpeedRef = { current: 20 };
   var activeStampTabRef = { current: "" };
   var textStampModeActiveRef = { current: false };
+  var penSettingsModeActiveRef = { current: false };
   var textareaValueRef = { current: "" };
   var ImageStampTab = ({ onStampClick, close }) => {
-    const { handleUndo, handleClear } = useDrawTool();
+    const { handleUndo, handleClear, registerKeyDownHandler } = useDrawTool();
     const { showStampPreview, showTextPreview } = usePrintOverlay();
+    const { showHelpOverlay } = useHelpOverlay();
+    const {
+      penWidth,
+      setPenWidth,
+      penAlpha,
+      setPenAlpha,
+      penMode,
+      setPenMode,
+      eraserEnabled,
+      setEraserEnabled,
+      setPenColor
+    } = usePenSettings();
     const [imageStampSize, setImageStampSize] = d2(imageStampSizeRef.current);
     const [stampColorType, setStampColorTypeState] = d2(stampColorTypeRef.current);
     const [rainbowSpeed, setRainbowSpeedState] = d2(rainbowSpeedRef.current);
     const [rainbowFillSpeed, setRainbowFillSpeedState] = d2(rainbowFillSpeedRef.current);
-    const [singleColor, setSingleColor] = d2(singleColorRef.current);
+    const [singleColor, setSingleColorState] = d2(singleColorRef.current);
     const [activeStampTab, setActiveStampTabState] = d2(activeStampTabRef.current);
     const [textStampModeActive, setTextStampModeActiveState] = d2(textStampModeActiveRef.current);
+    const [penSettingsModeActive, setPenSettingsModeActiveState] = d2(penSettingsModeActiveRef.current);
     const setStampColorType = q2((val) => {
       stampColorTypeRef.current = val;
       setStampColorTypeState(val);
@@ -5601,20 +5684,46 @@
       activeStampTabRef.current = val;
       setActiveStampTabState(val);
     }, []);
+    const setSingleColor = q2((val) => {
+      singleColorRef.current = val;
+      setSingleColorState(val);
+      setPenColor(val);
+      if (!eraserEnabled) {
+        setStampLibPenSettings(val, penWidth, penAlpha);
+      }
+    }, [setPenColor, eraserEnabled, penWidth, penAlpha]);
     const setTextStampModeActive = q2((valOrFn) => {
       const newVal = typeof valOrFn === "function" ? valOrFn(textStampModeActiveRef.current) : valOrFn;
       textStampModeActiveRef.current = newVal;
       setTextStampModeActiveState(newVal);
+      if (newVal) {
+        penSettingsModeActiveRef.current = false;
+        setPenSettingsModeActiveState(false);
+        requestAnimationFrame(() => {
+          textareaRef.current.focus();
+          textareaRef.current.select();
+        });
+      }
     }, []);
+    const setPenSettingsModeActive = q2((valOrFn) => {
+      const newVal = typeof valOrFn === "function" ? valOrFn(penSettingsModeActiveRef.current) : valOrFn;
+      penSettingsModeActiveRef.current = newVal;
+      setPenSettingsModeActiveState(newVal);
+      if (newVal) {
+        textStampModeActiveRef.current = false;
+        setTextStampModeActiveState(false);
+      }
+    }, []);
+    const sizeSliderRef = A2(null);
+    const presetsContainerRef = A2(null);
+    const stampColorTypeElementRef = A2(null);
     const textareaRef = A2(null);
     const stampsRef = A2(null);
     const activeStamps = stamps[activeStampTab] || [];
+    const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
     y2(() => {
       imageStampSizeRef.current = imageStampSize;
     }, [imageStampSize]);
-    y2(() => {
-      singleColorRef.current = singleColor;
-    }, [singleColor]);
     y2(() => {
       if (stampCategories.length > 0 && !stampCategories.includes(activeStampTab)) {
         setActiveStampTab(stampCategories[0]);
@@ -5685,6 +5794,9 @@
     const handleTextStampToggle = q2(() => {
       setTextStampModeActive((prev) => !prev);
     }, [setTextStampModeActive]);
+    const handlePenSettingsToggle = q2(() => {
+      setPenSettingsModeActive((prev) => !prev);
+    }, [setPenSettingsModeActive]);
     const handleTextStamp = q2((e3) => {
       const scale = imageStampSizeRef.current / 100;
       const textareaVal = textareaRef.current?.value || "";
@@ -5697,7 +5809,7 @@
     }, []);
     const handleSingleColorChange = q2((e3) => {
       setSingleColor(e3.target.value);
-    }, []);
+    }, [setSingleColor]);
     const handleColorTypeChange = q2((e3) => {
       setStampColorType(e3.target.value);
     }, [setStampColorType]);
@@ -5709,6 +5821,40 @@
         setRainbowFillSpeed(parseInt(e3.target.value));
       }
     }, [setRainbowSpeed, setRainbowFillSpeed]);
+    const handleWidthChange = q2((e3) => {
+      console.log("**** handleWidthChange");
+      const newWidth = parseInt(e3.target.value);
+      setPenWidth(newWidth);
+      if (!eraserEnabled) {
+        setStampLibPenSettings(singleColorRef.current, newWidth, penAlpha);
+      }
+    }, [setPenWidth, eraserEnabled, penAlpha]);
+    const handleAlphaChange = q2((e3) => {
+      console.log("**** handleAlphaChange");
+      const newAlpha = parseFloat(e3.target.value);
+      setPenAlpha(newAlpha);
+      if (!eraserEnabled) {
+        setStampLibPenSettings(singleColorRef.current, penWidth, newAlpha);
+      }
+    }, [setPenAlpha, eraserEnabled, penWidth]);
+    const handlePresetClick = q2((e3) => {
+      const btn = e3.currentTarget;
+      const presetId = btn.getAttribute("data-preset-id");
+      const preset = PEN_PRESETS.find((p3) => p3.id === presetId);
+      if (preset) {
+        if (preset.id === "eraser") {
+          setEraserEnabled(true);
+          setPenMode("eraser");
+          selectEraser();
+        } else {
+          setEraserEnabled(false);
+          setPenMode("pen");
+          setPenWidth(preset.width);
+          setPenAlpha(preset.alpha);
+          setStampLibPenSettings(singleColorRef.current, preset.width, preset.alpha);
+        }
+      }
+    }, [setEraserEnabled, setPenMode, setPenWidth, setPenAlpha]);
     const handleStampTabClick = q2((e3) => {
       const btn = e3.currentTarget;
       const category = btn.getAttribute("data-category");
@@ -5746,6 +5892,85 @@
         );
       });
     }, [activeStamps, handleStampClick]);
+    const cycleHighlighter2 = q2(() => {
+      const activeBtn = presetsContainerRef.current.querySelector(`.${ImageStampTab_default.presetBtnActive}`);
+      if (activeBtn?.dataset.presetId == "highlighter") {
+        presetsContainerRef.current.querySelector(`button[data-preset-id="thin-highlighter"]`).click();
+      } else {
+        presetsContainerRef.current.querySelector(`button[data-preset-id="highlighter"]`).click();
+      }
+    }, []);
+    const handleKeys2 = q2((e3) => {
+      if (e3.altKey || e3.ctrlKey || e3.metaKey)
+        return;
+      if (e3.target.nodeName === "INPUT" && e3.target.type !== "checkbox" || e3.target.nodeName === "TEXTAREA") {
+        if (e3.key === "Escape") {
+          close();
+        }
+        return;
+      }
+      if (e3.repeat)
+        return;
+      switch (e3.key) {
+        case "d":
+        case "Escape":
+          close();
+          break;
+        case "-":
+          sizeSliderRef.current.value--;
+          sizeSliderRef.current.dispatchEvent(new Event("input"));
+          break;
+        case "+":
+        case "=":
+          sizeSliderRef.current.value++;
+          sizeSliderRef.current.dispatchEvent(new Event("input"));
+          break;
+        case "J":
+        case "K":
+          startScrolling(e3.key == "J" ? DOWN : UP, `.${ImageStampTab_default.stamps}`);
+          break;
+        case "h":
+          setPenSettingsModeActive(true);
+          cycleHighlighter2();
+          break;
+        case "p":
+          setPenSettingsModeActive(true);
+          presetsContainerRef.current.querySelector(`button[data-preset-id="pen"]`).click();
+          break;
+        case "P":
+        case "H":
+        case "E":
+          setPenSettingsModeActive(false);
+          break;
+        case "e":
+          setPenSettingsModeActive(true);
+          presetsContainerRef.current.querySelector(`button[data-preset-id="eraser"]`).click();
+          break;
+        case "r":
+        case "u":
+        case "c":
+          if (e3.key === "r")
+            stampColorTypeElementRef.current.value = stampColorTypeElementRef.current.value === "Rainbow Fill" ? "Rainbow" : "Rainbow Fill";
+          else if (e3.key === "u")
+            stampColorTypeElementRef.current.value = "Unchanged";
+          else if (e3.key === "c")
+            stampColorTypeElementRef.current.value = "Color Picker";
+          stampColorTypeElementRef.current.dispatchEvent(new Event("change"));
+          break;
+        case "t":
+          setTextStampModeActive(true);
+          break;
+        case "T":
+          setTextStampModeActive(false);
+          break;
+        case "?":
+          showHelpOverlay("drawtab");
+          break;
+      }
+    }, [close, showHelpOverlay, cycleHighlighter2, setPenSettingsModeActive, setTextStampModeActive]);
+    y2(() => {
+      return registerKeyDownHandler("image", handleKeys2);
+    }, [registerKeyDownHandler, handleKeys2]);
     return /* @__PURE__ */ u3("div", { class: ImageStampTab_default.tab, children: [
       /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controls, children: [
         /* @__PURE__ */ u3(
@@ -5767,6 +5992,7 @@
             /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlRow, children: /* @__PURE__ */ u3(
               "input",
               {
+                ref: sizeSliderRef,
                 type: "range",
                 min: "10",
                 max: "100",
@@ -5788,8 +6014,8 @@
           ] }),
           /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroupWrapper, children: [
             /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroup, children: [
-              /* @__PURE__ */ u3("label", { children: "Color Style" }),
-              /* @__PURE__ */ u3("select", { value: stampColorType, onChange: handleColorTypeChange, children: [
+              /* @__PURE__ */ u3("label", { children: "Stamp Color" }),
+              /* @__PURE__ */ u3("select", { ref: stampColorTypeElementRef, value: stampColorType, onChange: handleColorTypeChange, children: [
                 /* @__PURE__ */ u3("option", { value: "Unchanged", children: "Unchanged" }),
                 /* @__PURE__ */ u3("option", { value: "Color Picker", children: "Single Color" }),
                 /* @__PURE__ */ u3("option", { value: "Rainbow", children: "Rainbow" }),
@@ -5836,34 +6062,6 @@
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ u3("div", { class: `${ImageStampTab_default.textInput} ${!textStampModeActive ? ImageStampTab_default.textInputCollapsed : ""}`, children: [
-        /* @__PURE__ */ u3(
-          "textarea",
-          {
-            ref: textareaRef,
-            name: "stampTextArea",
-            onInput: handleTextareaInput,
-            placeholder: "Enter text...",
-            rows: "1",
-            style: {
-              color: singleColor,
-              fontSize: `calc((${imageStampSize} / 100) * 57px)`
-            }
-          }
-        ),
-        /* @__PURE__ */ u3(
-          "button",
-          {
-            class: ImageStampTab_default.textStampBtn,
-            onClick: handleTextStamp,
-            onMouseOver: stopPropagation,
-            children: [
-              /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp_text_default } }),
-              "Stamp Text"
-            ]
-          }
-        )
-      ] }),
       /* @__PURE__ */ u3("div", { class: ImageStampTab_default.stampTabs, children: [
         /* @__PURE__ */ u3(
           "button",
@@ -5877,7 +6075,99 @@
             ]
           }
         ),
+        /* @__PURE__ */ u3(
+          "button",
+          {
+            class: `${ImageStampTab_default.stampTabBtn} ${penSettingsModeActive ? ImageStampTab_default.stampTabBtnActive : ""}`,
+            onClick: handlePenSettingsToggle,
+            onMouseOver: stopPropagation,
+            children: [
+              /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: pen_default } }),
+              "Pen"
+            ]
+          }
+        ),
+        /* @__PURE__ */ u3("div", { class: ImageStampTab_default.stampTabDivider }),
         renderedStampTabs
+      ] }),
+      /* @__PURE__ */ u3("div", { class: `${ImageStampTab_default.auxPanelWrapper} ${textStampModeActive || penSettingsModeActive ? "" : ImageStampTab_default.auxPanelWrapperCollapsed}`, children: [
+        /* @__PURE__ */ u3("div", { class: `${ImageStampTab_default.textInput} ${textStampModeActive ? ImageStampTab_default.auxPanelActive : ""}`, children: [
+          /* @__PURE__ */ u3(
+            "textarea",
+            {
+              ref: textareaRef,
+              name: "stampTextArea",
+              onInput: handleTextareaInput,
+              placeholder: "Enter text...",
+              rows: "1",
+              style: {
+                color: singleColor,
+                fontSize: `calc((${imageStampSize} / 100) * 57px)`
+              }
+            }
+          ),
+          /* @__PURE__ */ u3(
+            "button",
+            {
+              class: ImageStampTab_default.textStampBtn,
+              onClick: handleTextStamp,
+              onMouseOver: stopPropagation,
+              children: [
+                /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp_text_default } }),
+                "Stamp Text"
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ u3("div", { class: `${ImageStampTab_default.penSettingsInput} ${penSettingsModeActive ? ImageStampTab_default.auxPanelActive : ""}`, children: [
+          /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroup, children: [
+            /* @__PURE__ */ u3("label", { children: [
+              "Width: ",
+              penWidth
+            ] }),
+            /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlRow, children: /* @__PURE__ */ u3(
+              "input",
+              {
+                type: "range",
+                min: "1",
+                max: "50",
+                value: penWidth,
+                onInput: handleWidthChange
+              }
+            ) })
+          ] }),
+          /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroup, children: [
+            /* @__PURE__ */ u3("label", { children: [
+              "Alpha: ",
+              penAlpha
+            ] }),
+            /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlRow, children: /* @__PURE__ */ u3(
+              "input",
+              {
+                type: "range",
+                min: "0",
+                max: "1",
+                step: "0.1",
+                value: penAlpha,
+                onInput: handleAlphaChange
+              }
+            ) })
+          ] }),
+          /* @__PURE__ */ u3("div", { class: ImageStampTab_default.presetsContainer, ref: presetsContainerRef, children: PEN_PRESETS.map((preset) => /* @__PURE__ */ u3(
+            "button",
+            {
+              "data-preset-id": preset.id,
+              onClick: handlePresetClick,
+              onMouseOver: stopPropagation,
+              class: `${ImageStampTab_default.presetBtn} ${preset.id === activePresetId ? ImageStampTab_default.presetBtnActive : ""}`,
+              children: [
+                /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: PRESET_ICONS[preset.id] } }),
+                preset.label
+              ]
+            },
+            preset.id
+          )) })
+        ] })
       ] }),
       /* @__PURE__ */ u3("div", { class: ImageStampTab_default.stamps, ref: stampsRef, children: renderedStamps })
     ] });
@@ -5899,18 +6189,6 @@
     closeBtn: "SettingsTab_closeBtn"
   };
 
-  // src/icons/pen.svg
-  var pen_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>\n</svg>';
-
-  // src/icons/highlighter.svg
-  var highlighter_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="m9 11-6 6v3h9l3-3"/>\n  <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>\n</svg>';
-
-  // src/icons/thin-highlighter.svg
-  var thin_highlighter_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="m9 11-6 6v3h9l3-3"/>\n  <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>\n  <line x1="19" y1="9" x2="15" y2="5"/>\n</svg>';
-
-  // src/icons/eraser.svg
-  var eraser_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/>\n  <path d="M22 21H7"/>\n  <path d="m5 11 9 9"/>\n</svg>';
-
   // src/icons/unlock.svg
   var unlock_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>\n  <path d="M7 11V7a5 5 0 0 1 9.9-1"/>\n</svg>';
 
@@ -5918,19 +6196,19 @@
   var help_circle_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <circle cx="12" cy="12" r="10"/>\n  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>\n  <path d="M12 17h.01"/>\n</svg>';
 
   // src/components/SettingsTab.jsx
-  var PRESET_ICONS = {
+  var PRESET_ICONS2 = {
     pen: pen_default,
     highlighter: highlighter_default,
     "thin-highlighter": thin_highlighter_default,
     eraser: eraser_default
   };
-  var PEN_PRESETS = [
+  var PEN_PRESETS2 = [
     { id: "pen", label: "Pen", width: 2, alpha: 1 },
     { id: "highlighter", label: "Highlighter", width: 20, alpha: 0.3 },
     { id: "thin-highlighter", label: "Thin Highlighter", width: 10, alpha: 0.5 },
     { id: "eraser", label: "Eraser", width: 20, alpha: 1 }
   ];
-  var getActivePresetId = (eraserEnabled, penWidth, penAlpha) => {
+  var getActivePresetId2 = (eraserEnabled, penWidth, penAlpha) => {
     if (eraserEnabled)
       return "eraser";
     if (penWidth === 2 && penAlpha === 1)
@@ -5941,7 +6219,7 @@
       return "thin-highlighter";
     return null;
   };
-  var setStampLibPenSettings = (color, width, alpha) => {
+  var setStampLibPenSettings2 = (color, width, alpha) => {
     StampLib.setPenSettings({
       color,
       width,
@@ -5966,6 +6244,20 @@
     const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardMode();
     const { hdModeEnabled, setHdModeEnabled } = useHDMode();
     const { showHelpOverlay } = useHelpOverlay();
+    const { registerKeyDownHandler } = useDrawTool();
+    const handleKeys2 = q2((e3) => {
+      if (e3.altKey || e3.ctrlKey || e3.metaKey)
+        return;
+      if (e3.repeat)
+        return;
+      if (e3.key === "Escape" || e3.key === "d") {
+        close();
+        e3.preventDefault();
+      }
+    }, [close]);
+    y2(() => {
+      return registerKeyDownHandler("settings", handleKeys2);
+    }, [registerKeyDownHandler, handleKeys2]);
     const penColorRef = A2(penColor);
     const penWidthRef = A2(penWidth);
     const penAlphaRef = A2(penAlpha);
@@ -5982,12 +6274,12 @@
     y2(() => {
       eraserEnabledRef.current = eraserEnabled;
     }, [eraserEnabled]);
-    const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
+    const activePresetId = getActivePresetId2(eraserEnabled, penWidth, penAlpha);
     const handleColorChange = q2((e3) => {
       const newColor = e3.target.value;
       setPenColor(newColor);
       if (!eraserEnabledRef.current) {
-        setStampLibPenSettings(newColor, penWidthRef.current, penAlphaRef.current);
+        setStampLibPenSettings2(newColor, penWidthRef.current, penAlphaRef.current);
       }
       updatePenSettings();
     }, [setPenColor]);
@@ -5995,14 +6287,14 @@
       const newWidth = parseInt(e3.target.value);
       setPenWidth(newWidth);
       if (!eraserEnabledRef.current) {
-        setStampLibPenSettings(penColorRef.current, newWidth, penAlphaRef.current);
+        setStampLibPenSettings2(penColorRef.current, newWidth, penAlphaRef.current);
       }
     }, [setPenWidth]);
     const handleAlphaChange = q2((e3) => {
       const newAlpha = parseFloat(e3.target.value);
       setPenAlpha(newAlpha);
       if (!eraserEnabledRef.current) {
-        setStampLibPenSettings(penColorRef.current, penWidthRef.current, newAlpha);
+        setStampLibPenSettings2(penColorRef.current, penWidthRef.current, newAlpha);
       }
     }, [setPenAlpha]);
     const handleEraserToggle = q2((e3) => {
@@ -6012,7 +6304,7 @@
         setPenMode("eraser");
       } else {
         setPenMode("pen");
-        setStampLibPenSettings(penColorRef.current, penWidthRef.current, penAlphaRef.current);
+        setStampLibPenSettings2(penColorRef.current, penWidthRef.current, penAlphaRef.current);
       }
       updatePenSettings();
     }, [setEraserEnabled, setPenMode]);
@@ -6028,7 +6320,7 @@
     const handlePresetClick = q2((e3) => {
       const btn = e3.currentTarget;
       const presetId = btn.getAttribute("data-preset-id");
-      const preset = PEN_PRESETS.find((p3) => p3.id === presetId);
+      const preset = PEN_PRESETS2.find((p3) => p3.id === presetId);
       if (preset) {
         if (preset.id === "eraser") {
           setEraserEnabled(true);
@@ -6038,7 +6330,7 @@
           setPenMode("pen");
           setPenWidth(preset.width);
           setPenAlpha(preset.alpha);
-          setStampLibPenSettings(penColorRef.current, preset.width, preset.alpha);
+          setStampLibPenSettings2(penColorRef.current, preset.width, preset.alpha);
         }
         updatePenSettings();
       }
@@ -6114,7 +6406,7 @@
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ u3("div", { class: SettingsTab_default.presetsSubgroup, children: PEN_PRESETS.map((preset) => /* @__PURE__ */ u3(
+        /* @__PURE__ */ u3("div", { class: SettingsTab_default.presetsSubgroup, children: PEN_PRESETS2.map((preset) => /* @__PURE__ */ u3(
           "button",
           {
             "data-preset-id": preset.id,
@@ -6122,7 +6414,7 @@
             onMouseOver: stopPropagation2,
             class: `${SettingsTab_default.presetBtn} ${preset.id === activePresetId ? SettingsTab_default.presetBtnActive : ""}`,
             children: [
-              /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: PRESET_ICONS[preset.id] } }),
+              /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: PRESET_ICONS2[preset.id] } }),
               preset.label
             ]
           },
@@ -6192,13 +6484,22 @@
   // src/components/DrawToolOverlay.jsx
   var DrawToolOverlay = () => {
     const { activeTab, drawToolVisible, hideDrawTool } = useDrawTool();
+    const bodyRef = A2(null);
+    y2(() => {
+      if (drawToolVisible && bodyRef.current) {
+        const focusableElement = bodyRef.current.querySelector("[tabindex]");
+        if (focusableElement) {
+          focusableElement.focus();
+        }
+      }
+    }, [drawToolVisible, activeTab]);
     return /* @__PURE__ */ u3(
       "div",
       {
         class: DrawToolOverlay_default.overlay,
         onClick: hideDrawTool,
         style: { display: drawToolVisible ? "flex" : "none" },
-        children: /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.content, onClick: (e3) => e3.stopPropagation(), children: /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.body, children: [
+        children: /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.content, onClick: (e3) => e3.stopPropagation(), children: /* @__PURE__ */ u3("div", { ref: bodyRef, class: DrawToolOverlay_default.body, children: [
           /* @__PURE__ */ u3("div", { style: { display: activeTab === "image" ? "contents" : "none" }, children: /* @__PURE__ */ u3(ImageStampTab, { close: hideDrawTool }) }),
           /* @__PURE__ */ u3("div", { style: { display: activeTab === "settings" ? "contents" : "none" }, children: /* @__PURE__ */ u3(SettingsTab, { close: hideDrawTool }) })
         ] }) })
@@ -7916,6 +8217,13 @@ body:has(app-atx0010p) .loginAssistantsList {
   background-color: #0069d9;
   border-color: #0062cc;
 }
+.ImageStampTab_stampTabDivider {
+  width: 1px;
+  height: 23px;
+  background-color: #d0d0da;
+  align-self: center;
+  margin: 0 4px;
+}
 .ImageStampTab_stampTabs::-webkit-scrollbar {
   height: 6px;
 }
@@ -7961,31 +8269,39 @@ body:has(app-atx0010p) .loginAssistantsList {
 .ImageStampTab_stampBtn svg {
   margin-bottom: -3px;
 }
-.ImageStampTab_textInput {
-  display: flex;
-  gap: 8px;
-  padding: 12px 16px;
+.ImageStampTab_auxPanelWrapper {
+  position: relative;
   background-color: #f0f0f5;
   border: 1px solid #e0e0e8;
   border-top: 0px;
   flex-shrink: 0;
   overflow: hidden;
   transition:
-    max-height 0.22s ease,
-    padding 0.22s ease,
-    opacity 0.2s ease,
-    border-width 0.22s ease;
-  max-height: 120px;
-  opacity: 1;
+    max-height 0.25s ease,
+    padding 0.25s ease,
+    border-width 0.25s ease;
+  padding: 12px 16px;
 }
-.ImageStampTab_textInputCollapsed {
+.ImageStampTab_auxPanelWrapperCollapsed {
   max-height: 0;
   padding-top: 0;
   padding-bottom: 0;
-  opacity: 0;
-  pointer-events: none;
   border-top-width: 0;
   border-bottom-width: 0;
+}
+.ImageStampTab_textInput {
+  display: none;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-height: none;
+}
+.ImageStampTab_textInput.ImageStampTab_auxPanelActive {
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
 }
 .ImageStampTab_textInput textarea {
   flex: 1;
@@ -8070,6 +8386,63 @@ body:has(app-atx0010p) .loginAssistantsList {
   background-color: #f0f0f5;
   border-color: #b0b0c0;
   color: #333;
+}
+.ImageStampTab_penSettingsInput {
+  align-items: flex-start;
+  display: none;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-height: none;
+}
+.ImageStampTab_penSettingsInput.ImageStampTab_auxPanelActive {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  pointer-events: auto;
+}
+.ImageStampTab_presetsContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ImageStampTab_presetBtn {
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  background: #fff;
+  border-radius: 4px;
+  color: #444;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ImageStampTab_presetBtn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.ImageStampTab_presetBtn:hover {
+  background-color: #f0f0f5;
+  border-color: #b0b0c0;
+}
+.ImageStampTab_presetBtnActive {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+.ImageStampTab_presetBtnActive:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
 }
 
 /* src/components/SettingsTab.module.css */
