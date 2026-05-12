@@ -6,6 +6,8 @@ import { doMarkingListJK, doMarkingListHL } from '../helpers/marking.js';
 import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sideScrollProgressChart, scrollScore, stopScrolling, startScrolling, isProgressChartFloating } from '../helpers/scrolling.js';
 import { useTimestamp, useDrawTab } from '../context/AppContext.jsx';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
+import { activateTextStampMode, adjustStampSize } from '../components/ImageStampTab.jsx';
+import { usePrintOverlay } from '../components/PrintOverlay.jsx';
 import { useDiffViewOverlay } from '../components/DiffViewOverlay.jsx';
 import { useHelpOverlay } from '../components/HelpOverlay.jsx';
 
@@ -185,7 +187,8 @@ const handleGradingKey = (e, fns) => {
         case "Escape": doEscape(e, fns); break;
         case "d":
             e.preventDefault();
-            fns.showDrawTab();
+            fns.setActiveTab('image');
+            fns.showDrawTool();
             break;
         case "S": document.querySelector(".other-worksheet-button")?.click(); break;
         case "m":
@@ -196,15 +199,9 @@ const handleGradingKey = (e, fns) => {
             fns.showBeforeViewOverlay();
             break;
         case "t":
-            fns.showDrawTab();
-            requestAnimationFrame(() => {
-                const drawtab = document.querySelector(".drawtab");
-                const textarea = drawtab?.querySelector("textarea");
-                if (textarea) {
-                    textarea.focus();
-                    textarea.select();
-                }
-            });
+            fns.setActiveTab('image');
+            fns.showDrawTool();
+            activateTextStampMode();
             e.preventDefault();
             break;
         case "h": cycleHighlighter?.(); break;
@@ -312,7 +309,8 @@ const handleStudyRecordsKey = (e, fns) => {
 export const useKeyboardMode = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
     const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
-    const { drawToolVisible, callKeyDownHandler } = useDrawTool();
+    const { drawToolVisible, callKeyDownHandler, showDrawTool, hideDrawTool, setActiveTab } = useDrawTool();
+    const { hidePreview, state: printOverlayState } = usePrintOverlay();
     const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
     const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
     const fns = {
@@ -331,6 +329,9 @@ export const useKeyboardMode = (enabled) => {
         hideHelpOverlay,
         showHelpOverlay,
         helpTabs,
+        showDrawTool,
+        setActiveTab,
+        hidePreview,
     };
     useEffect(() => {
         if (!enabled) return;
@@ -338,7 +339,12 @@ export const useKeyboardMode = (enabled) => {
         const handleKeyDown = (e) => {
             if (e.altKey && !e.ctrlKey && !e.metaKey) {
                 if (e.key === "d") {
-                    toggleDrawTab();
+                    if (drawToolVisible) {
+                        hideDrawTool();
+                    } else {
+                        setActiveTab('image');
+                        showDrawTool();
+                    }
                 } else if (e.key === "t") {
                     setTimestampEnabled((prev) => !prev);
                 }
@@ -347,6 +353,25 @@ export const useKeyboardMode = (enabled) => {
 
             if (drawToolVisible) {
                 callKeyDownHandler(e);
+                return;
+            }
+
+            if (printOverlayState.visible) {
+                switch (e.key) {
+                    case "-":
+                        adjustStampSize(-1);
+                        e.preventDefault();
+                        break;
+                    case "+":
+                    case "=":
+                        adjustStampSize(1);
+                        e.preventDefault();
+                        break;
+                    case "Escape":
+                        hidePreview();
+                        e.preventDefault();
+                        break;
+                }
                 return;
             }
 
@@ -434,5 +459,5 @@ export const useKeyboardMode = (enabled) => {
             document.removeEventListener("keydown", handleKeyDown);
             document.removeEventListener("keyup", handleKeyUp);
         };
-    }, [enabled, drawTabOpen, toggleDrawTab, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible]);
+    }, [enabled, drawTabOpen, toggleDrawTab, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview]);
 };

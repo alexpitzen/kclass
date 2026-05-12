@@ -23,9 +23,9 @@ const stopPropagation = (e) => e.stopPropagation();
 
 const PEN_PRESETS = [
     { id: 'pen', label: 'Pen', width: 2, alpha: 1 },
-    { id: 'highlighter', label: 'Highlighter', width: 20, alpha: 0.3 },
-    { id: 'thin-highlighter', label: 'Thin Highlighter', width: 10, alpha: 0.5 },
-    { id: 'eraser', label: 'Eraser', width: 20, alpha: 1 },
+    { id: 'highlighter', label: 'Highlighter', width: 25, alpha: 0.2 },
+    { id: 'thin-highlighter', label: 'Thin Highlighter', width: 5, alpha: 0.2 },
+    { id: 'eraser', label: 'Eraser', width: 24, alpha: 1 },
 ];
 
 const PRESET_ICONS = {
@@ -38,8 +38,8 @@ const PRESET_ICONS = {
 const getActivePresetId = (eraserEnabled, penWidth, penAlpha) => {
     if (eraserEnabled) return 'eraser';
     if (penWidth === 2 && penAlpha === 1) return 'pen';
-    if (penWidth === 20 && Math.abs(penAlpha - 0.3) < 0.01) return 'highlighter';
-    if (penWidth === 10 && Math.abs(penAlpha - 0.5) < 0.01) return 'thin-highlighter';
+    if (penWidth === 25 && Math.abs(penAlpha - 0.2) < 0.01) return 'highlighter';
+    if (penWidth === 5 && Math.abs(penAlpha - 0.2) < 0.01) return 'thin-highlighter';
     return null;
 };
 
@@ -60,10 +60,42 @@ const activeStampTabRef = { current: '' };
 const textStampModeActiveRef = { current: false };
 const penSettingsModeActiveRef = { current: false };
 const textareaValueRef = { current: '' };
+const setTextStampModeActiveFnRef = { current: null };
+const setImageStampSizeFnRef = { current: null };
+
+export const activateTextStampMode = () => {
+    if (setTextStampModeActiveFnRef.current) {
+        setTextStampModeActiveFnRef.current(true);
+    } else {
+        textStampModeActiveRef.current = true;
+    }
+};
+
+export const adjustStampSize = (delta) => {
+    const currentSize = imageStampSizeRef.current;
+    let newSize = currentSize + delta;
+    if (newSize < 10) newSize = 10;
+    if (newSize > 100) newSize = 100;
+    if (newSize === currentSize) return;
+
+    imageStampSizeRef.current = newSize;
+    if (setImageStampSizeFnRef.current) {
+        setImageStampSizeFnRef.current(newSize);
+    }
+};
+
+export const getStampSize = () => imageStampSizeRef.current;
+export const getSingleColor = () => singleColorRef.current;
+export const getStampColorType = () => stampColorTypeRef.current;
+export const getRainbowSpeed = () => {
+    return stampColorTypeRef.current === 'Rainbow' 
+        ? rainbowSpeedRef.current 
+        : rainbowFillSpeedRef.current;
+};
 
 export const ImageStampTab = ({ onStampClick, close }) => {
     const { handleUndo, handleClear, registerKeyDownHandler } = useDrawTool();
-    const { showStampPreview, showTextPreview } = usePrintOverlay();
+     const { showStampPreview, showTextPreview, updatePreview, state: printOverlayState } = usePrintOverlay();
     const { showHelpOverlay } = useHelpOverlay();
     const {
         penWidth,
@@ -147,9 +179,29 @@ export const ImageStampTab = ({ onStampClick, close }) => {
     const activeStamps = stamps[activeStampTab] || [];
     const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
 
-    useEffect(() => {
-        imageStampSizeRef.current = imageStampSize;
-    }, [imageStampSize]);
+     useEffect(() => {
+         imageStampSizeRef.current = imageStampSize;
+         if (printOverlayState.visible) {
+             updatePreview();
+         }
+     }, [imageStampSize, printOverlayState.visible, updatePreview]);
+
+     useEffect(() => {
+         if (printOverlayState.visible) {
+             updatePreview();
+         }
+     }, [singleColor, printOverlayState.visible, updatePreview]);
+
+      useEffect(() => {
+          setTextStampModeActiveFnRef.current = setTextStampModeActive;
+         if (textStampModeActiveRef.current && !textStampModeActive) {
+             setTextStampModeActive(true);
+         }
+     }, [setTextStampModeActive, textStampModeActive]);
+
+     useEffect(() => {
+         setImageStampSizeFnRef.current = setImageStampSize;
+     }, [setImageStampSize]);
 
     useEffect(() => {
         if (stampCategories.length > 0 && !stampCategories.includes(activeStampTab)) {
@@ -445,11 +497,12 @@ export const ImageStampTab = ({ onStampClick, close }) => {
 
                     <div class={styles.controlGroup}>
                         <label>Color</label>
-                        <input
-                            type="color"
-                            value={singleColor}
-                            onChange={handleSingleColorChange}
-                        />
+                         <input
+                             type="color"
+                             value={singleColor}
+                             onChange={handleSingleColorChange}
+                             accessKey="c"
+                         />
                     </div>
 
                     <div class={styles.controlGroupWrapper}>

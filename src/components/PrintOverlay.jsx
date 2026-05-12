@@ -1,5 +1,6 @@
 import { createContext } from 'preact';
 import { useContext, useState, useEffect, useRef, useMemo, useCallback } from 'preact/hooks';
+import { getStampSize, getSingleColor, getStampColorType, getRainbowSpeed } from './ImageStampTab.jsx';
 
 const PrintOverlayContext = createContext(null);
 
@@ -67,16 +68,50 @@ export const PrintOverlayProvider = ({ children }) => {
         });
     }, []);
 
-    const hidePreview = useCallback(() => {
-        setState(prev => ({ ...prev, visible: false }));
-    }, []);
+     const hidePreview = useCallback(() => {
+         setState(prev => ({ ...prev, visible: false }));
+     }, []);
 
-    const contextValue = useMemo(() => ({
-        state,
-        showStampPreview,
-        showTextPreview,
-        hidePreview,
-    }), [state, showStampPreview, showTextPreview, hidePreview]);
+     const updatePreview = useCallback(() => {
+         setState(prev => {
+             if (!prev.visible) return prev;
+
+             const currentSize = getStampSize();
+             const currentColor = getSingleColor();
+             const currentStampColorType = getStampColorType();
+             const currentRainbowSpeed = getRainbowSpeed();
+
+             const newPreviewStyle = { ...prev.previewStyle };
+             newPreviewStyle['border-color'] = currentColor;
+
+             if (prev.mode === 'stamp' && prev.stampData) {
+                 const stampDimensions = prev.stampData.stamp._cachedDimensions || 
+                     StampLib.getWriteStampDimensions(prev.stampData.stamp, 1);
+                 const currentScale = (currentSize / 100) * prev.stampData.maxScaleFactor;
+                 newPreviewStyle.height = `${stampDimensions.height * currentScale}px`;
+                 newPreviewStyle.width = `${stampDimensions.width * currentScale}px`;
+             }
+
+             return {
+                 ...prev,
+                 previewStyle: newPreviewStyle,
+                 color: currentColor,
+                 scale: prev.mode === 'stamp' && prev.stampData 
+                     ? (currentSize / 100) * prev.stampData.maxScaleFactor
+                     : (currentSize / 100),
+                 stampColorType: currentStampColorType,
+                 rainbowSpeed: currentRainbowSpeed,
+             };
+         });
+     }, []);
+
+     const contextValue = useMemo(() => ({
+         state,
+         showStampPreview,
+         showTextPreview,
+         hidePreview,
+         updatePreview,
+     }), [state, showStampPreview, showTextPreview, hidePreview, updatePreview]);
 
     return (
         <PrintOverlayContext.Provider value={contextValue}>
@@ -117,42 +152,48 @@ export const PrintOverlay = () => {
             }, { duration: 100, fill: "forwards" });
         };
 
-        const handleClick = (e) => {
-            const atd = StampLib.getAtd();
-            if (!atd?.bcanvas) {
-                hidePreview();
-                return;
-            }
+         const handleClick = (e) => {
+             const atd = StampLib.getAtd();
+             if (!atd?.bcanvas) {
+                 hidePreview();
+                 return;
+             }
 
-            const canvasRect = atd.bcanvas.getBoundingClientRect();
-            const zoomRatio = atd.bcanvas.clientHeight / atd.inkHeight;
+             const canvasRect = atd.bcanvas.getBoundingClientRect();
+             const zoomRatio = atd.bcanvas.clientHeight / atd.inkHeight;
 
-            let x = e.clientX, y = e.clientY;
-            if (e.clientX < canvasRect.left && e.clientX > canvasRect.left - 10) x = canvasRect.left;
-            if (e.clientY < canvasRect.top && e.clientY > canvasRect.top - 10) y = canvasRect.top;
+             let x = e.clientX, y = e.clientY;
+             if (e.clientX < canvasRect.left && e.clientX > canvasRect.left - 10) x = canvasRect.left;
+             if (e.clientY < canvasRect.top && e.clientY > canvasRect.top - 10) y = canvasRect.top;
 
-            if (x < canvasRect.left || y < canvasRect.top || x > canvasRect.right || y > canvasRect.bottom) {
-                hidePreview();
-                return;
-            }
+             if (x < canvasRect.left || y < canvasRect.top || x > canvasRect.right || y > canvasRect.bottom) {
+                 hidePreview();
+                 return;
+             }
 
-            const position = { x: (x - canvasRect.left) / zoomRatio, y: (y - canvasRect.top) / zoomRatio };
+             const position = { x: (x - canvasRect.left) / zoomRatio, y: (y - canvasRect.top) / zoomRatio };
+             const currentColor = getSingleColor();
+             const currentStampColorType = getStampColorType();
+             const currentRainbowSpeed = getRainbowSpeed();
 
-            if (mode === 'stamp' && stampData) {
-                const stampScale = scale * stampData.maxScaleFactor;
-                const options = {
-                    color,
-                    rainbow: stampColorType === 'Rainbow' || stampColorType === 'Rainbow Fill',
-                    rainbowSpeed: rainbowSpeed || 1,
-                    usePredefinedColor: stampColorType === 'Unchanged',
-                    rainbowFill: stampColorType === 'Rainbow Fill',
-                };
-                StampLib.writeStampAt(stampData.stamp, position, scale || 0.25, options);
-            } else if (mode === 'text') {
-                StampLib.writeAllAt(textValue, position, scale || 0.25, { color });
-            }
-            hidePreview();
-        };
+             if (mode === 'stamp' && stampData) {
+                 const currentSize = getStampSize();
+                 const currentScale = (currentSize / 100) * stampData.maxScaleFactor;
+                 const options = {
+                     color: currentColor,
+                     rainbow: currentStampColorType === 'Rainbow' || currentStampColorType === 'Rainbow Fill',
+                     rainbowSpeed: currentRainbowSpeed || 1,
+                     usePredefinedColor: currentStampColorType === 'Unchanged',
+                     rainbowFill: currentStampColorType === 'Rainbow Fill',
+                 };
+                 StampLib.writeStampAt(stampData.stamp, position, currentScale, options);
+             } else if (mode === 'text') {
+                 const currentSize = getStampSize();
+                 const currentScale = currentSize / 100;
+                 StampLib.writeAllAt(textValue, position, currentScale, { color: currentColor });
+             }
+             hidePreview();
+         };
 
         overlay.addEventListener('pointermove', handlePMove);
         overlay.addEventListener('click', handleClick);
