@@ -6,36 +6,13 @@ import { HelpOverlayProvider } from '../components/HelpOverlay.jsx';
 import { DrawToolProvider } from './DrawToolContext.jsx';
 import { PenSettingsProvider } from './PenSettingsContext.jsx';
 
-const DrawTabContext = createContext(null);
 const TimestampContext = createContext(null);
 const HDModeContext = createContext(null);
 const KeyboardModeContext = createContext(null);
 
-export const useDrawTab = () => useContext(DrawTabContext);
 export const useTimestamp = () => useContext(TimestampContext);
 export const useHDMode = () => useContext(HDModeContext);
 export const useKeyboardMode = () => useContext(KeyboardModeContext);
-
-export const DrawTabProvider = ({ children }) => {
-    const [drawTabOpen, setDrawTabOpen] = useState(false);
-    const hideDrawTab = useCallback(() => setDrawTabOpen(false), []);
-    const showDrawTab = useCallback(() => setDrawTabOpen(true), []);
-    const toggleDrawTab = useCallback(() => setDrawTabOpen(prev => !prev), []);
-
-    const contextValue = useMemo(() => ({
-        drawTabOpen,
-        setDrawTabOpen,
-        hideDrawTab,
-        showDrawTab,
-        toggleDrawTab,
-    }), [drawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab]);
-
-    return (
-        <DrawTabContext.Provider value={contextValue}>
-            {children}
-        </DrawTabContext.Provider>
-    );
-};
 
 export const TimestampProvider = ({ children }) => {
     const [timestampEnabled, setTimestampEnabled] = useState(true);
@@ -78,24 +55,22 @@ export const KeyboardModeProvider = ({ children }) => {
 
 export const AppProvider = ({ children }) => {
     return (
-        <DrawTabProvider>
-            <PrintOverlayProvider>
-                <DiffViewOverlayProvider>
-                    <HelpOverlayProvider>
-                        <DrawToolProvider>
-                            <PenSettingsProvider>
-                                <TimestampProvider>
-                                    <HDModeProvider>
-                                        <KeyboardModeProvider>
-                                            {children}
-                                        </KeyboardModeProvider>
-                                    </HDModeProvider>
-                                </TimestampProvider>
-                            </PenSettingsProvider>
-                        </DrawToolProvider>
-                    </HelpOverlayProvider>
-                </DiffViewOverlayProvider>
-            </PrintOverlayProvider>
-        </DrawTabProvider>
+        <PrintOverlayProvider>
+            <DiffViewOverlayProvider>
+                <HelpOverlayProvider>
+                    <DrawToolProvider>
+                        <PenSettingsProvider>
+                            <TimestampProvider>
+                                <HDModeProvider>
+                                    <KeyboardModeProvider>
+                                        {children}
+                                    </KeyboardModeProvider>
+                                </HDModeProvider>
+                            </TimestampProvider>
+                        </PenSettingsProvider>
+                    </DrawToolProvider>
+                </HelpOverlayProvider>
+            </DiffViewOverlayProvider>
+        </PrintOverlayProvider>
     );
 };

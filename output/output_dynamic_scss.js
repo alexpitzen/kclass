@@ -3028,24 +3028,12 @@
   }
 
   // src/components/constants.js
-  var penIcons = {
-    pen: `<svg width="20" height="20" viewBox="0 0 18.24 18.24" color="#000000" xmlns="http://www.w3.org/2000/svg" ><g id="g1" transform="translate(-3.173,-2.84)"><path id="path3" style="fill-rule:evenodd" d="m 3.486,16.01 -0.327,3.57 c 0.08,0.89 1.231,1.58 1.737,1.53 L 8.418,20.73 C 9.147,20.53 9.644,19.95 9.964,19.61 13.42,16.11 17.12,12.25 20.9,8.609 21.76,7.588 21.38,5.886 20.79,5.28 L 18.85,3.379 C 17.75,2.318 16.09,2.838 15.36,3.523 L 4.084,14.88 C 3.652,15.31 3.501,15.75 3.486,16.01 Z M 15.42,5.627 18.67,8.915 19.79,7.628 C 20.05,7.242 20.03,6.654 19.73,6.339 L 17.9,4.552 C 17.42,4.173 16.97,4.165 16.65,4.452 Z M 5.547,15.5 c -0.371,0.41 2.855,3.58 3.137,3.28 L 17.56,9.902 14.34,6.715 Z m -0.636,0.83 c -0.07,0.65 -0.502,3.03 -0.181,3.23 0.216,0.2 2.03,0 3.119,-0.19 C 5.543,17.58 4.926,16.2 4.911,16.33 Z" /></g></svg>`,
-    "thick-highlighter": `<svg viewBox="0 0 497.4 542" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g id="g6" transform="translate(0,18.69)"><path d="M 186.6,453.4 447.1,183.6 C 463.8,166.3 484,143 494.9,120.9 l 2.5,-5.1 -135,-134.49 -5.1,2.63 C 335.7,-4.899 316.1,9.353 299.1,26.72 L 39.36,293.8 l -0.38,2.5 c -5.54,36.5 -0.96,78.4 -9.62,114.2 l -6.84,28.2 2.17,2.2 L 0,465.6 v 39.3 h 43.31 l 22.46,-20.4 2.17,2.2 8.98,-3.9 C 110.7,468.2 142.5,446 178.8,452.1 Z M 36.69,484.9 H 16 v -12.7 l 20,-20 18.46,18.3 z M 69.68,466.7 41.49,435.1 C 51.71,405 51.47,353.8 52.12,319.2 L 159.5,431.7 c -32.2,5.7 -59.77,22.2 -89.82,35 z M 94.47,337.4 185.7,246.7 c 7.1,-6.9 16.4,-10.9 26.3,-10.9 20.6,0 44,25.8 44,46.3 0,10 -3.9,19.3 -10.9,26.4 L 152,401.6 Z m 68.83,75.5 93.1,-93.1 c 10.1,-10.1 15.6,-23.4 15.6,-37.7 0,-29.3 -30.6,-62.3 -60,-62.3 -14.2,0 -27.4,5.6 -37.6,15.6 L 83.16,326.1 58.14,297.4 310.6,37.9 C 324.9,23.16 341.4,10.73 359.4,0.9131 L 478,119.1 c -9.4,18.3 -22.8,34.6 -37.2,49.3 L 182.2,434 Z" id="path1" /><rect x="-406" y="37.07" transform="rotate(-135)" width="16" height="135.8" id="rect1" style="stroke-width:0.99999" /><rect x="72" y="476.9" width="392" height="46.36" id="rect3" /></g></svg>`,
-    "thin-highlighter": `<svg viewBox="0 0 496 496" width="20" height="20" xmlns="http://www.w3.org/2000/svg" ><g id="g4"><path d="M179.832,444.412l266.024-272.904c16.816-17.216,30.656-36.96,41.376-59.184l2.424-5.104L385.544,3.116l-5.176,2.632     c-21.624,11.016-41.192,25.408-58.16,42.784L56.456,321.164l-0.376,2.584c-5.208,36.48-15.208,72.136-29.712,105.968     l-3.848,8.992l2.168,2.176L0,465.572v27.312h43.312L60,476.196l2.168,2.168l8.984-3.848     c33.84-14.504,69.504-24.504,105.976-29.712L179.832,444.412z M36.688,476.884H16v-4.688l20-20l12.688,12.688L36.688,476.884z      M65.832,459.396l-24.344-24.344c12.792-30.048,21.952-61.512,27.728-93.648l90.264,90.264     C127.336,437.444,95.88,446.604,65.832,459.396z M99.312,348.884l93.088-93.088c7.04-7.04,16.392-10.912,26.344-10.912     c20.544,0,37.256,16.712,37.256,37.256c0,9.952-3.872,19.304-10.912,26.344L152,401.572L99.312,348.884z M163.312,412.884     l93.088-93.088c10.064-10.064,15.6-23.432,15.6-37.656c0-29.368-23.888-53.256-53.256-53.256c-14.224,0-27.592,5.536-37.656,15.6     L88,337.572l-12.76-12.76L333.664,59.708c14.384-14.736,30.8-27.168,48.84-36.992l87.776,87.768     c-9.416,18.344-21.472,35.096-35.88,49.856L175.928,425.5L163.312,412.884z" id="path1" /><rect x="327.996" y="153.003" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 417.3918 614.6613)" width="16" height="135.767" id="rect1" /><rect x="72" y="476.884" width="392" height="16" id="rect3" /></g></svg>`,
-    eraser: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="m 5.505,11.41 0.53,0.53 z M 3,14.95 H 2.25 Z m 9.59,3.54 -0.53,-0.53 z M 9.048,21 v 0.75 z M 11.41,5.505 10.88,4.975 Z m 1.83,12.335 c 0.58,0.59 1.6,-0.52 1.06,-1.06 z M 7.216,9.698 C 6.519,9.001 5.463,10.07 6.156,10.76 Z M 6.035,11.94 11.94,6.035 10.88,4.975 4.975,10.88 Z m 0,6.02 C 5.185,17.11 4.602,16.53 4.223,16.03 3.856,15.55 3.75,15.24 3.75,14.95 h -1.5 c 0,0.75 0.312,1.38 0.78,1.99 0.455,0.6 1.125,1.27 1.945,2.09 z M 4.975,10.88 C 4.155,11.7 3.485,12.37 3.03,12.96 2.562,13.58 2.25,14.2 2.25,14.95 h 1.5 c 0,-0.29 0.106,-0.6 0.473,-1.08 0.379,-0.49 0.962,-1.08 1.812,-1.93 z m 7.085,7.08 c -0.85,0.85 -1.44,1.44 -1.93,1.82 -0.483,0.36 -0.793,0.47 -1.082,0.47 v 1.5 c 0.748,0 1.372,-0.31 1.992,-0.78 0.59,-0.46 1.26,-1.12 2.08,-1.94 z m -7.085,1.07 c 0.82,0.82 1.487,1.48 2.084,1.94 0.614,0.47 1.24,0.78 1.989,0.78 v -1.5 C 8.759,20.25 8.449,20.14 7.968,19.78 7.471,19.4 6.885,18.81 6.035,17.96 Z M 17.96,6.035 c 0.85,0.85 1.44,1.436 1.82,1.933 0.36,0.481 0.47,0.791 0.47,1.08 h 1.5 C 21.75,8.299 21.44,7.673 20.97,7.059 20.51,6.462 19.85,5.795 19.03,4.975 Z m 1.07,-1.06 C 18.21,4.155 17.54,3.485 16.94,3.03 16.33,2.562 15.7,2.25 14.95,2.25 v 1.5 c 0.29,0 0.6,0.106 1.08,0.473 0.5,0.379 1.08,0.962 1.93,1.812 z m -7.09,1.06 C 12.79,5.185 13.38,4.602 13.87,4.223 14.35,3.856 14.66,3.75 14.95,3.75 v -1.5 c -0.75,0 -1.37,0.312 -1.99,0.78 -0.59,0.455 -1.26,1.125 -2.08,1.945 z M 14.3,16.78 7.216,9.698 6.156,10.76 13.24,17.84 Z m 5.23,-4.17 c 0.66,-0.66 1.21,-1.23 1.58,-1.77 0.39,-0.55 0.64,-1.125 0.64,-1.792 h -1.5 c 0,0.26 -0.1,0.534 -0.36,0.931 -0.3,0.411 -0.75,0.901 -1.42,1.581 l -2.5,2.52 -3.91,3.88 1.06,1.07 2.95,-2.96 z" fill="#1c274c" id="path1" /></g></svg>`
-  };
   var toolbarIcons = {
     togglePen: `<svg width="15px" height="15px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M21 12L3 12L8 7M3 12L8 17" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
     shift: `<svg width="15px" height="15px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12 21L12 3L17 8M12 3L7 8M12 21L7 16M12 21L17 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
     prevPage: `<svg width="15px" height="15px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12 21L12 3L17 8M12 3L7 8" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
     nextPage: `<svg width="15px" height="15px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12 3L12 21L7 16M12 21L17 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`
   };
-  var penTypes = [
-    { value: "pen", label: "Pen" },
-    { value: "thick-highlighter", label: "Highlighter" },
-    { value: "thin-highlighter", label: "Thin highlighter" },
-    { value: "eraser", label: "Eraser" }
-  ];
 
   // src/helpers/navigation.js
   function goLastPage() {
@@ -3181,7 +3169,10 @@
     const [activeTab, setActiveTab] = d2("image");
     const [drawToolVisible, setDrawToolVisible] = d2(false);
     const keyDownHandlersRef = A2({});
-    const showDrawTool = q2(() => setDrawToolVisible(true), []);
+    const showDrawTool = q2(() => {
+      setDrawToolVisible(true);
+      updateStampLibFromPenSettings();
+    }, []);
     const hideDrawTool = q2(() => setDrawToolVisible(false), []);
     const registerKeyDownHandler = q2((tabType, handler) => {
       keyDownHandlersRef.current[tabType] = handler;
@@ -3245,11 +3236,11 @@
       stampColorType: "Unchanged",
       rainbowSpeed: 1
     });
-    const showStampPreview = q2((stamp2, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos, stampColorType, rainbowSpeed) => {
+    const showStampPreview = q2((stamp, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos, stampColorType, rainbowSpeed) => {
       setState({
         visible: true,
         mode: "stamp",
-        stampData: { stamp: stamp2, maxScaleFactor },
+        stampData: { stamp, maxScaleFactor },
         previewStyle: {
           height: `${stampDimensions.height * scale}px`,
           width: `${stampDimensions.width * scale}px`,
@@ -3454,7 +3445,7 @@
     { id: "general", label: "General" },
     { id: "studentlist", label: "Student List / Marking List" },
     { id: "grading", label: "Grading" },
-    { id: "drawtab", label: "Draw Tab" },
+    { id: "stamps", label: "Stamps" },
     { id: "profile", label: "Profile" },
     { id: "studyrecords", label: "Study Records" }
   ];
@@ -3483,7 +3474,8 @@
         title: "Always active",
         keys: [
           { key: ["Alt", "k"], separator: " + ", desc: "Toggle keyboard mode" },
-          { key: ["Alt", "c"], separator: " + ", desc: "Color picker" }
+          { key: ["Alt", "c"], separator: " + ", desc: "Access color picker" },
+          { key: ["Alt", "h"], separator: " + ", desc: ["Toggle HD mode", "Note: This is buggy"] }
         ]
       }
     ],
@@ -3560,8 +3552,8 @@
       {
         title: "Drawing",
         keys: [
-          { key: "d", desc: "Open draw tab" },
-          { key: "t", desc: ["Open draw tab & focus text area", "(tip: press Tab Enter after typing)"] },
+          { key: "d", desc: "Open stamps" },
+          { key: "t", desc: ["Open stamps & focus text area", "(tip: press Tab Enter after typing)"] },
           { key: "p", desc: "Select pen" },
           { key: "h", desc: "Select highlighter / cycle highlighter type" },
           { key: "e", desc: "Select eraser" },
@@ -3592,9 +3584,9 @@
         ]
       }
     ],
-    drawtab: [
+    stamps: [
       {
-        title: "Draw Tab",
+        title: "Stamps",
         keys: [
           { key: "t", desc: "Focus the text area" },
           { key: "u", desc: 'Set Stamp Color to "Unchanged"' },
@@ -3606,7 +3598,7 @@
           { key: ["+", "="], desc: "Increase stamp size" },
           { key: "J", desc: "(hold) Scroll stamps down" },
           { key: "K", desc: "(hold) Scroll stamps up" },
-          { key: ["d", "Escape"], desc: "Close draw tab" },
+          { key: ["d", "Escape"], desc: "Close stamps" },
           { key: ["Alt", "c"], separator: " + ", desc: "Color picker" },
           { key: "?", desc: "Show keyboard shortcuts" }
         ]
@@ -4041,14 +4033,14 @@
     const speedValue = isRainbow ? rainbowSpeed : isRainbowFill ? rainbowFillSpeed : 1;
     const speedMin = isRainbow ? 1 : isRainbowFill ? 1 : 0;
     const speedMax = isRainbow ? 130 : isRainbowFill ? 100 : 0;
-    const handleStampClick = q2((stamp2, e3) => {
-      const stampDimensions = stamp2._cachedDimensions || StampLib.getWriteStampDimensions(stamp2, 1);
+    const handleStampClick = q2((stamp, e3) => {
+      const stampDimensions = stamp._cachedDimensions || StampLib.getWriteStampDimensions(stamp, 1);
       const maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
       const scale = imageStampSizeRef.current / 100 * maxScaleFactor;
-      const svg = typeof stamp2.svg === "string" ? stamp2.svg : stamp2.svg.outerHTML;
+      const svg = typeof stamp.svg === "string" ? stamp.svg : stamp.svg.outerHTML;
       const currentStampColorType = stampColorTypeRef.current;
       const currentSpeed = currentStampColorType === "Rainbow" ? rainbowSpeedRef.current : rainbowFillSpeedRef.current;
-      showStampPreview(stamp2, stampDimensions, maxScaleFactor, scale, singleColorRef.current, svg, { x: e3.clientX, y: e3.clientY }, currentStampColorType, currentSpeed);
+      showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, singleColorRef.current, svg, { x: e3.clientX, y: e3.clientY }, currentStampColorType, currentSpeed);
       close();
     }, [showStampPreview, close]);
     const handleTextStampToggle = q2(() => {
@@ -4140,23 +4132,23 @@
       ));
     }, [activeStampTab, handleStampTabClick]);
     const renderedStamps = T2(() => {
-      return activeStamps.map((stamp2) => {
-        const dims = stamp2._cachedDimensions || StampLib.getWriteStampDimensions(stamp2, 1);
+      return activeStamps.map((stamp) => {
+        const dims = stamp._cachedDimensions || StampLib.getWriteStampDimensions(stamp, 1);
         const heightLimiter = dims.height <= dims.width ? 1 : dims.width / dims.height;
         return /* @__PURE__ */ u3(
           "button",
           {
             class: ImageStampTab_default.stampBtn,
             onMouseOver: stopPropagation,
-            onClick: (e3) => handleStampClick(stamp2, e3),
+            onClick: (e3) => handleStampClick(stamp, e3),
             style: { "--height-limiter": heightLimiter },
-            children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp2.svg.outerHTML } })
+            children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp.svg.outerHTML } })
           },
-          stamp2.name
+          stamp.name
         );
       });
     }, [activeStamps, handleStampClick]);
-    const cycleHighlighter2 = q2(() => {
+    const cycleHighlighter = q2(() => {
       const activeBtn = presetsContainerRef.current.querySelector(`.${ImageStampTab_default.presetBtnActive}`);
       if (activeBtn?.dataset.presetId == "highlighter") {
         presetsContainerRef.current.querySelector(`button[data-preset-id="thin-highlighter"]`).click();
@@ -4173,7 +4165,7 @@
         }
         return;
       }
-      if (e3.repeat)
+      if (e3.repeat && !(e3.key in ["+", "-", "="]))
         return;
       switch (e3.key) {
         case "d":
@@ -4195,7 +4187,7 @@
           break;
         case "h":
           setPenSettingsModeActive(true);
-          cycleHighlighter2();
+          cycleHighlighter();
           break;
         case "p":
           setPenSettingsModeActive(true);
@@ -4231,7 +4223,7 @@
           showHelpOverlay("drawtab");
           break;
       }
-    }, [close, showHelpOverlay, cycleHighlighter2, setPenSettingsModeActive, setTextStampModeActive]);
+    }, [close, showHelpOverlay, cycleHighlighter, setPenSettingsModeActive, setTextStampModeActive]);
     y2(() => {
       return registerKeyDownHandler("image", handleKeys2);
     }, [registerKeyDownHandler, handleKeys2]);
@@ -4445,9 +4437,6 @@
   var penAlphaRef = { current: 1 };
   var penModeRef = { current: "pen" };
   var eraserEnabledRef = { current: false };
-  var getPenWidth = () => penWidthRef.current;
-  var getPenAlpha = () => penAlphaRef.current;
-  var getEraserEnabled = () => eraserEnabledRef.current;
   var updateStampLibFromPenSettings = () => {
     const color = getSingleColor() || penColorRef.current;
     const width = penWidthRef.current;
@@ -4505,32 +4494,6 @@
   };
 
   // src/helpers/actions.js
-  function getOldPenTypeFromNewSettings() {
-    const eraserEnabled = getEraserEnabled();
-    const penWidth = getPenWidth();
-    const penAlpha = getPenAlpha();
-    if (eraserEnabled)
-      return "eraser";
-    if (penWidth === 2 && Math.abs(penAlpha - 1) < 0.01)
-      return "pen";
-    if (penWidth === 25 && Math.abs(penAlpha - 0.2) < 0.01)
-      return "thick-highlighter";
-    if (penWidth === 5 && Math.abs(penAlpha - 0.2) < 0.01)
-      return "thin-highlighter";
-    return "pen";
-  }
-  function updatePenSettings() {
-    updateStampLibFromPenSettings();
-    const penType = getOldPenTypeFromNewSettings();
-    const color = getSingleColor();
-    const drawbtn = document.querySelector(".drawbtn");
-    if (drawbtn) {
-      drawbtn.innerHTML = penIcons[penType];
-      if (color) {
-        drawbtn.style.fill = color;
-      }
-    }
-  }
   function clickReading() {
     document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
   }
@@ -4632,13 +4595,6 @@
       searchInput1.dispatchEvent(new Event("input"), {});
     }
     e3.preventDefault();
-  }
-  function cycleHighlighter() {
-    if (document.querySelector("input[name=penType]:checked")?.value === "thick-highlighter") {
-      document.querySelector("input[name=penType][value=thin-highlighter]")?.click();
-    } else {
-      document.querySelector("input[name=penType][value=thick-highlighter]")?.click();
-    }
   }
   function selectEraser() {
     StampLib.expandToolbar();
@@ -5128,28 +5084,12 @@
   };
 
   // src/context/AppContext.jsx
-  var DrawTabContext = R(null);
   var TimestampContext = R(null);
   var HDModeContext = R(null);
   var KeyboardModeContext = R(null);
-  var useDrawTab = () => x2(DrawTabContext);
   var useTimestamp = () => x2(TimestampContext);
   var useHDMode = () => x2(HDModeContext);
   var useKeyboardMode = () => x2(KeyboardModeContext);
-  var DrawTabProvider = ({ children }) => {
-    const [drawTabOpen, setDrawTabOpen] = d2(false);
-    const hideDrawTab = q2(() => setDrawTabOpen(false), []);
-    const showDrawTab = q2(() => setDrawTabOpen(true), []);
-    const toggleDrawTab = q2(() => setDrawTabOpen((prev) => !prev), []);
-    const contextValue = T2(() => ({
-      drawTabOpen,
-      setDrawTabOpen,
-      hideDrawTab,
-      showDrawTab,
-      toggleDrawTab
-    }), [drawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab]);
-    return /* @__PURE__ */ u3(DrawTabContext.Provider, { value: contextValue, children });
-  };
   var TimestampProvider = ({ children }) => {
     const [timestampEnabled, setTimestampEnabled] = d2(true);
     const contextValue = T2(() => ({
@@ -5175,7 +5115,7 @@
     return /* @__PURE__ */ u3(KeyboardModeContext.Provider, { value: contextValue, children });
   };
   var AppProvider = ({ children }) => {
-    return /* @__PURE__ */ u3(DrawTabProvider, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(DiffViewOverlayProvider, { children: /* @__PURE__ */ u3(HelpOverlayProvider, { children: /* @__PURE__ */ u3(DrawToolProvider, { children: /* @__PURE__ */ u3(PenSettingsProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) }) }) }) }) });
+    return /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(DiffViewOverlayProvider, { children: /* @__PURE__ */ u3(HelpOverlayProvider, { children: /* @__PURE__ */ u3(DrawToolProvider, { children: /* @__PURE__ */ u3(PenSettingsProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) }) }) }) });
   };
 
   // src/icons/settings.svg
@@ -5186,7 +5126,6 @@
     const [shifted, setShifted] = d2(false);
     const { timestampEnabled } = useTimestamp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
-    const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
     const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible } = useDrawTool();
     const { eraserEnabled, penWidth, penAlpha, penColor } = usePenSettings();
     const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
@@ -5196,9 +5135,6 @@
       if (handler)
         handler(e3);
     };
-    y2(() => {
-      updatePenSettings();
-    }, []);
     const toggleShift = () => {
       const container = document.querySelector(".worksheet-container");
       if (!container)
@@ -5209,28 +5145,6 @@
         container.classList.add("shiftup");
       }
       setShifted(!shifted);
-    };
-    const handleDrawTab = () => {
-      const drawtab = document.querySelector(".drawtab");
-      if (!drawtab)
-        return;
-      const isHidden = drawtab.classList.contains("hidden");
-      if (isHidden) {
-        showDrawTab();
-        const clearBtn = document.querySelector(".clearAll");
-        if (clearBtn) {
-          clearBtn.focus();
-          clearBtn.blur();
-        }
-        const textarea = drawtab.querySelector("textarea");
-        if (textarea) {
-          textarea.style.height = "";
-          textarea.style.height = `${textarea.scrollHeight}px`;
-        }
-        updatePenSettings();
-      } else {
-        hideDrawTab();
-      }
     };
     const handleToolTab = (tabId) => {
       if (drawToolVisible && activeTab === tabId) {
@@ -5270,17 +5184,6 @@
           onClick: withBlur(handleXAll),
           title: "Click every grading box on the page",
           children: "x all"
-        }
-      ),
-      /* @__PURE__ */ u3(
-        "button",
-        {
-          class: "drawbtn",
-          onClick: withBlur(handleDrawTab),
-          onMouseOver: (e3) => e3.stopPropagation(),
-          title: "Show the draw tab",
-          accessKey: "d",
-          dangerouslySetInnerHTML: { __html: penIcons.pen }
         }
       ),
       drawToolTabs?.map((tab) => {
@@ -5336,1048 +5239,6 @@
     ] });
   };
 
-  // src/helpers/marking.js
-  function doMarkingListHL(direction) {
-    const studentList = document.querySelector(".studentList:not(.tabItem)");
-    if (!studentList)
-      return;
-    const focusedStudent = studentList.querySelector("app-score-list-item .checkbox.kbfocus");
-    if (focusedStudent) {
-      if (direction === LEFT)
-        return;
-      doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item:has(.kbfocus) .studyBarWrap"));
-      return;
-    }
-    const focusedSet = studentList.querySelector(".studyBarWrap.kbfocus");
-    if (focusedSet) {
-      const subject = getFocusedSetSubject(focusedSet);
-      if (direction === RIGHT) {
-        if (subject === "KNA")
-          return;
-        moveMarkingListSetFocusLeftRight(studentList, focusedSet, subject);
-      } else if (direction === LEFT) {
-        if (subject === "math") {
-          selectStudentCheckboxFromSet(studentList, focusedSet);
-        } else {
-          if (!moveMarkingListSetFocusLeftRight(studentList, focusedSet, subject)) {
-            selectStudentCheckboxFromSet(studentList, focusedSet);
-          }
-        }
-      }
-      return;
-    }
-    if (studentList.querySelector("app-score-list-header .checkbox.kbfocus"))
-      return;
-    if (direction === LEFT) {
-      doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item .checkbox"));
-    } else {
-      doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item .studyBarWrap"));
-    }
-  }
-  function selectStudentCheckboxFromSet(studentList, focusedSet) {
-    doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item:has(.kbfocus) i.checkbox"));
-  }
-  function moveMarkingListSetFocusLeftRight(studentList, focusedSet, subject) {
-    const otherSubjectSets = studentList.querySelectorAll(
-      `app-score-list-item:has(.kbfocus) .subjectCellWrapColumn:has(.studyBarWrap.${subject === "math" ? "KNA" : "math"}) .studyBarWrap`
-    );
-    if (!otherSubjectSets.length)
-      return false;
-    const sameSubjectSets = studentList.querySelectorAll(
-      `app-score-list-item:has(.kbfocus) .subjectCellWrapColumn:has(.studyBarWrap.${subject}) .studyBarWrap`
-    );
-    const i4 = Array.from(sameSubjectSets).indexOf(focusedSet);
-    doMarkingListFocusAndScroll(studentList, otherSubjectSets[Math.min(i4, otherSubjectSets.length - 1)]);
-    return true;
-  }
-  function doMarkingListJK(direction) {
-    const studentList = document.querySelector(".studentList:not(.tabItem)");
-    if (!studentList)
-      return;
-    const focusedStudent = studentList.querySelector("app-score-list-item .checkbox.kbfocus");
-    if (focusedStudent) {
-      moveMarkingListCheckboxFocus(studentList, focusedStudent, direction);
-      return;
-    }
-    const focusedSet = studentList.querySelector(".studyBarWrap.kbfocus");
-    if (focusedSet) {
-      moveMarkingListSetFocusUpDown(studentList, focusedSet, direction);
-      return;
-    }
-    const headerCheckbox = studentList.querySelector("app-score-list-header .checkbox");
-    if (headerCheckbox?.classList.contains("kbfocus")) {
-      if (direction === DOWN) {
-        doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item .checkbox"));
-      } else {
-        const items = studentList.querySelectorAll("app-score-list-item .checkbox");
-        doMarkingListFocusAndScroll(studentList, items[items.length - 1]);
-      }
-      return;
-    }
-    if (direction === DOWN) {
-      doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item .checkbox"));
-    } else {
-      markingListSelectHeaderCheckbox(studentList);
-    }
-  }
-  function getFocusedSetSubject(focusedSet) {
-    const entry = focusedSet.classList.entries().find((a3) => a3[1] === "math" || a3[1] === "KNA");
-    return entry?.[1];
-  }
-  function moveMarkingListSetFocusUpDown(studentList, focusedSet, direction) {
-    const currentStudentSets = Array.from(studentList.querySelectorAll(".subjectCellWrapColumn:has(.kbfocus) .studyBarWrap"));
-    const i4 = currentStudentSets.indexOf(focusedSet);
-    const subject = getFocusedSetSubject(focusedSet);
-    if (direction === UP && i4 === 0) {
-      const student = getMarkingListStudent(studentList, direction);
-      const subjectColumn = getMarkingListStudentSubjectColumn(student, subject);
-      const sets = subjectColumn.querySelectorAll(".studyBarWrap");
-      doMarkingListFocusAndScroll(studentList, sets[sets.length - 1]);
-    } else if (direction === DOWN && i4 === currentStudentSets.length - 1) {
-      const student = getMarkingListStudent(studentList, direction);
-      const subjectColumn = getMarkingListStudentSubjectColumn(student, subject);
-      doMarkingListFocusAndScroll(studentList, subjectColumn.querySelector(".studyBarWrap"));
-    } else {
-      doMarkingListFocusAndScroll(studentList, currentStudentSets[i4 + direction]);
-    }
-  }
-  function getMarkingListStudent(studentList, direction) {
-    const students = Array.from(studentList.querySelectorAll("app-score-list-item"));
-    const i4 = students.indexOf(studentList.querySelector("app-score-list-item:has(.kbfocus)"));
-    if (direction === UP && i4 === 0) {
-      return students[students.length - 1];
-    } else if (direction === DOWN && i4 === students.length - 1) {
-      return students[0];
-    }
-    return students[i4 + direction];
-  }
-  function getMarkingListStudentSubjectColumn(student, subject) {
-    return student.querySelector(`.subjectCellWrapColumn:has(.studyBarWrap.${subject})`) || student.querySelector(".subjectCellWrapColumn:has(.studyBarWrap)");
-  }
-  function moveMarkingListCheckboxFocus(studentList, focusedStudent, direction) {
-    const items = Array.from(studentList.querySelectorAll("app-score-list-item .checkbox"));
-    const i4 = items.indexOf(focusedStudent);
-    if (direction === UP && i4 === 0 || direction === DOWN && i4 === items.length - 1) {
-      focusedStudent.classList.remove("kbfocus");
-      markingListSelectHeaderCheckbox(studentList);
-    } else {
-      doMarkingListFocusAndScroll(studentList, items[i4 + direction]);
-    }
-  }
-  function markingListSelectHeaderCheckbox(studentList) {
-    studentList.querySelector("app-score-list-header .checkbox")?.classList.add("kbfocus");
-    studentList.scrollTop = 0;
-  }
-  function doMarkingListFocusAndScroll(studentList, toFocus) {
-    if (!studentList || !toFocus)
-      return;
-    studentList.querySelector(".kbfocus")?.classList.remove("kbfocus");
-    toFocus.classList.add("kbfocus");
-    const firstCheckbox = studentList.querySelector("app-score-list-item .checkbox");
-    if (toFocus.classList.contains("checkbox")) {
-      studentList.scrollTop = toFocus.offsetTop - firstCheckbox.offsetTop;
-    } else {
-      toFocus.scrollIntoViewIfNeeded();
-      if (studentList.scrollTop > toFocus.offsetTop - firstCheckbox.offsetTop) {
-        studentList.scrollTop = toFocus.offsetTop - firstCheckbox.offsetTop;
-      }
-    }
-  }
-
-  // src/hooks/useKeyboardMode.js
-  var handleDrawTabKey = (e3, fns) => {
-    const drawtab = document.querySelector(".drawtab");
-    switch (e3.key) {
-      case "d":
-      case "Escape":
-        fns.hideDrawTab();
-        break;
-      case "-":
-      case "+":
-      case "=":
-        const slider = drawtab?.querySelector(".sizeslider");
-        if (slider) {
-          e3.key === "-" ? slider.value-- : slider.value++;
-          slider.dispatchEvent(new Event("input"));
-        }
-        break;
-      case "J":
-      case "K":
-        startScrolling?.(e3.key === "J" ? DOWN : UP, ".drawtab");
-        break;
-      case "h":
-        cycleHighlighter?.();
-        break;
-      case "p":
-        document.querySelector("input[name=penType][value=pen]")?.click();
-        break;
-      case "r":
-      case "u":
-      case "c": {
-        const select = drawtab?.querySelector("select#stampColorType");
-        if (select) {
-          if (e3.key === "r")
-            select.value = select.value === "Rainbow Fill" ? "Rainbow" : "Rainbow Fill";
-          else if (e3.key === "u")
-            select.value = "Unchanged";
-          else if (e3.key === "c")
-            select.value = "Color Picker";
-          select.dispatchEvent(new Event("change"));
-        }
-        break;
-      }
-      case "t":
-        const textarea = drawtab?.querySelector("textarea");
-        if (textarea) {
-          textarea.focus();
-          textarea.select();
-          e3.preventDefault();
-        }
-        break;
-      case "?":
-        fns.showHelpOverlay("drawtab");
-        break;
-    }
-    return;
-  };
-  var handleMarkingListKey = (e3, fns) => {
-    switch (e3.key) {
-      case "f":
-      case "/":
-        focusSearch?.(e3);
-        break;
-      case "?":
-        fns.showHelpOverlay("studentlist");
-        break;
-      case "c":
-        clearSearch?.();
-        break;
-      case "C":
-        document.querySelectorAll(".studentRow .checkbox.checked").forEach((c3) => c3.click());
-        break;
-      case "g":
-        document.querySelector(".studentList:not(.tabItem)")?.scrollTo(0, 0);
-        break;
-      case "G":
-        const sl1 = document.querySelector(".studentList:not(.tabItem)");
-        sl1?.scrollTo(0, sl1.scrollHeight - sl1.clientHeight);
-        break;
-      case "J":
-        scrollStudents?.(DOWN);
-        break;
-      case "K":
-        scrollStudents?.(UP);
-        break;
-      case "j":
-        doMarkingListJK?.(DOWN);
-        break;
-      case "k":
-        doMarkingListJK?.(UP);
-        break;
-      case "h":
-        doMarkingListHL?.(LEFT);
-        break;
-      case "l":
-        doMarkingListHL?.(RIGHT);
-        break;
-      case " ":
-        document.querySelector(".studentList .checkbox.kbfocus")?.click();
-        e3.preventDefault();
-        break;
-      case "S":
-        document.querySelector(".studentList.tabItem")?.click();
-        break;
-      case "r":
-        document.querySelector(".studentListUpdateButton")?.click();
-        break;
-      case "A":
-        document.querySelector("app-student-list-filter-capsule .all")?.click();
-        break;
-      case "M":
-        document.querySelector("app-student-list-filter-capsule .math")?.click();
-        break;
-      case "R":
-        document.querySelector("app-student-list-filter-capsule .KNA")?.click();
-        break;
-      case "Enter":
-        doEnter?.();
-        break;
-      case "Escape":
-        doEscape?.(e3, fns);
-        break;
-    }
-  };
-  var handleStudentListKey = (e3, fns) => {
-    switch (e3.key) {
-      case "f":
-      case "/":
-        focusSearch?.(e3);
-        break;
-      case "?":
-        fns.showHelpOverlay("studentlist");
-        break;
-      case "c":
-        clearSearch?.();
-        break;
-      case "M":
-        document.querySelector(".markingList.tabItem")?.click();
-        break;
-      case "J":
-        scrollStudents?.(DOWN);
-        break;
-      case "K":
-        scrollStudents?.(UP);
-        break;
-      case "r":
-        document.querySelector(".studentListUpdateButton")?.click();
-        break;
-    }
-  };
-  var handleGradingKey = (e3, fns) => {
-    switch (e3.key) {
-      case "j":
-        doDown?.();
-        break;
-      case "k":
-        doUp?.();
-        break;
-      case "g":
-        document.querySelectorAll(".worksheet-navigator-page span:not(.disabled)")[0]?.click();
-        break;
-      case "G":
-        goLastPage?.();
-        break;
-      case "?":
-        fns.showHelpOverlay("grading");
-        break;
-      case "X":
-        xAll();
-        break;
-      case "x":
-        matchPreviousMarkings?.();
-        break;
-      case "c":
-        clearMarkboxs?.();
-        break;
-      case "Backspace":
-        doBackspace?.();
-        break;
-      case "n":
-        goNextCorrectionPage?.();
-        break;
-      case "N":
-        goPrevCorrectionPage?.();
-        break;
-      case "p": {
-        const breakScoringButton = document.querySelector("#BreakScoringButton");
-        if (breakScoringButton) {
-          breakScoringButton.click();
-          break;
-        }
-        const playbackControl = getPlaybackControl?.();
-        if (playbackControl) {
-          playbackControl.querySelector(".play,.pause")?.click();
-          break;
-        }
-        fns.setEraserEnabled(false);
-        fns.setPenMode("pen");
-        fns.setPenWidth(PEN_PRESETS["pen"].width);
-        fns.setPenAlpha(PEN_PRESETS["pen"].alpha);
-        const currentColor = getSingleColor?.() || fns.penColor;
-        setStampLibPenSettings(currentColor, PEN_PRESETS["pen"].width, PEN_PRESETS["pen"].alpha);
-        break;
-      }
-      case "P": {
-        const playbackControl = getPlaybackControl?.();
-        if (playbackControl) {
-          playbackControl.querySelector(".play,.pause")?.click();
-          return;
-        } else {
-          StampLib.expandToolbar();
-          document.querySelector(".grading-toolbar-box .grading-toolbar .play")?.click();
-          StampLib.collapseToolbar();
-        }
-        break;
-      }
-      case "s":
-        doS?.();
-        break;
-      case "u": {
-        const atd = StampLib.getAtd();
-        if (atd) {
-          atd.undoInk();
-          atd.penUpFunc(atd);
-        }
-        break;
-      }
-      case "U":
-        StampLib.undoLastWriteAll?.();
-        break;
-      case "r": {
-        const atd = StampLib.getAtd();
-        if (atd) {
-          atd.redoInk();
-          atd.penUpFunc(atd);
-        }
-        break;
-      }
-      case "2":
-      case "@":
-        do2?.(e3.key);
-        break;
-      case "8":
-      case "*":
-        do8?.(e3.key);
-        break;
-      case "A":
-        document.querySelector("#AnswerDisplayButton")?.click();
-        break;
-      case "Enter":
-        doEnter?.();
-        break;
-      case "Escape":
-        doEscape(e3, fns);
-        break;
-      case "d":
-        e3.preventDefault();
-        fns.setActiveTab("image");
-        fns.showDrawTool();
-        break;
-      case "S":
-        document.querySelector(".other-worksheet-button")?.click();
-        break;
-      case "m":
-      case "D":
-        fns.showDiffViewOverlay();
-        break;
-      case "b":
-        fns.showBeforeViewOverlay();
-        break;
-      case "t":
-        fns.setActiveTab("image");
-        fns.showDrawTool();
-        activateTextStampMode();
-        e3.preventDefault();
-        break;
-      case "h": {
-        const currentPresetId = getActivePresetId(fns.eraserEnabled, fns.penWidth, fns.penAlpha);
-        let targetPresetId;
-        if (currentPresetId === "highlighter") {
-          targetPresetId = "thin-highlighter";
-        } else if (currentPresetId === "thin-highlighter") {
-          targetPresetId = "highlighter";
-        } else {
-          targetPresetId = "highlighter";
-        }
-        fns.setEraserEnabled(false);
-        fns.setPenMode("pen");
-        fns.setPenWidth(PEN_PRESETS[targetPresetId].width);
-        fns.setPenAlpha(PEN_PRESETS[targetPresetId].alpha);
-        const hColor = getSingleColor?.() || fns.penColor;
-        setStampLibPenSettings(hColor, PEN_PRESETS[targetPresetId].width, PEN_PRESETS[targetPresetId].alpha);
-        break;
-      }
-      case "e": {
-        selectEraser?.();
-        fns.setEraserEnabled(true);
-        fns.setPenMode("eraser");
-        fns.setPenWidth(PEN_PRESETS["eraser"].width);
-        fns.setPenAlpha(PEN_PRESETS["eraser"].alpha);
-        break;
-      }
-      case "R":
-        clickReading?.();
-        break;
-      case "M":
-        clickMath?.();
-        break;
-      case "H": {
-        const wasPulldownOpen = isPulldownOpen?.();
-        const pulldownExists = !!document.querySelector("#studentInfoPullDown.student-info-btn");
-        document.querySelector("#studentInfoPullDown")?.click();
-        document.querySelector("#studentInfoPullDown")?.blur();
-        document.querySelectorAll("#customPulldown > .kbfocus").forEach((p3) => p3.classList.remove("kbfocus"));
-        if (pulldownExists) {
-          if (!wasPulldownOpen) {
-            document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
-            showHeader(true);
-          } else {
-            showHeader(false);
-          }
-        } else {
-          toggleHeader();
-        }
-        break;
-      }
-      case "J":
-        scrollAnswer?.(DOWN);
-        break;
-      case "K":
-        scrollAnswer?.(UP);
-        break;
-      case "-":
-      case "+":
-      case "=": {
-        const drawtab2 = document.querySelector(".drawtab");
-        const printoverlay = document.querySelector(".printoverlay");
-        const slider2 = drawtab2?.checkVisibility() || printoverlay?.checkVisibility() ? drawtab2?.querySelector(".sizeslider") : null;
-        if (slider2) {
-          e3.key === "-" ? slider2.value-- : slider2.value++;
-          slider2.dispatchEvent(new Event("input"));
-        } else {
-          doKeyboardDefault?.(e3.key);
-        }
-        break;
-      }
-      default:
-        doKeyboardDefault?.(e3.key);
-        break;
-    }
-  };
-  var handleStudentProfileKey = (e3, fns) => {
-    switch (e3.key) {
-      case "R":
-        if (!document.querySelector("loading-spinner div")) {
-          document.querySelector(".btn-close")?.click();
-          clickReading?.();
-        }
-        break;
-      case "M":
-        if (!document.querySelector("loading-spinner div")) {
-          document.querySelector(".btn-close")?.click();
-          clickMath?.();
-        }
-        break;
-      case "S":
-        document.querySelector(".dashboard-set-left .btn-primary")?.click();
-        break;
-      case "J":
-        if (isProgressChartFloating()) {
-          scrollProgressChart?.(DOWN);
-        } else {
-          scrollDashboard?.(DOWN);
-        }
-        break;
-      case "K":
-        if (isProgressChartFloating()) {
-          scrollProgressChart?.(UP);
-        } else {
-          scrollDashboard?.(UP);
-        }
-        break;
-      case "H":
-        sideScrollProgressChart?.(LEFT);
-        break;
-      case "L":
-        sideScrollProgressChart?.(RIGHT);
-        break;
-      case "p":
-        document.querySelector(".dashboard-progress-chart .finally > .icon")?.click();
-        break;
-      case "e":
-        Array.from(document.querySelectorAll(".dashboard-menu-right .options-btn")).find((b) => b.innerHTML?.trim() === "Edit")?.click();
-        break;
-      case "Backspace":
-        doBackspace?.();
-        break;
-      case "Escape":
-        doEscape?.(e3, fns);
-        break;
-      case "Enter":
-        doEnter?.();
-        break;
-      case "?":
-        fns.showHelpOverlay("profile");
-        break;
-    }
-  };
-  var handleStudyRecordsKey = (e3, fns) => {
-    switch (e3.key) {
-      case "R":
-        clickReading?.();
-        break;
-      case "M":
-        clickMath?.();
-        break;
-      case "Backspace":
-        doBackspace?.();
-        break;
-      case "J":
-        scrollScore?.(DOWN);
-        break;
-      case "K":
-        scrollScore?.(UP);
-        break;
-      case "G":
-        const scoreGrid = document.querySelector(".score-grid-all");
-        scoreGrid?.scrollIntoView();
-        scoreGrid?.scroll(0, scoreGrid?.scrollHeight);
-        break;
-      case "?":
-        fns.showHelpOverlay("studyrecords");
-        break;
-    }
-  };
-  var useKeyboardMode2 = (enabled) => {
-    const { setTimestampEnabled } = useTimestamp();
-    const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
-    const { drawToolVisible, callKeyDownHandler, showDrawTool, hideDrawTool, setActiveTab } = useDrawTool();
-    const { penWidth, setPenWidth, penAlpha, setPenAlpha, penMode, setPenMode, eraserEnabled, setEraserEnabled, penColor, setPenColor } = usePenSettings();
-    const { hidePreview, state: printOverlayState } = usePrintOverlay();
-    const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
-    const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
-    const fns = {
-      drawTabOpen,
-      showDrawTab,
-      hideDrawTab,
-      toggleDrawTab,
-      setTimestampEnabled,
-      diffViewOverlayVisible,
-      showDiffViewOverlay,
-      hideDiffViewOverlay,
-      showBeforeViewOverlay,
-      hideBeforeViewOverlay,
-      helpOverlayVisible,
-      helpOverlayActiveTab,
-      hideHelpOverlay,
-      showHelpOverlay,
-      helpTabs,
-      showDrawTool,
-      setActiveTab,
-      hidePreview,
-      penWidth,
-      setPenWidth,
-      penAlpha,
-      setPenAlpha,
-      penMode,
-      setPenMode,
-      eraserEnabled,
-      setEraserEnabled,
-      penColor,
-      setPenColor
-    };
-    y2(() => {
-      if (!enabled)
-        return;
-      const handleKeyDown = (e3) => {
-        if (e3.altKey && !e3.ctrlKey && !e3.metaKey) {
-          if (e3.key === "d") {
-            if (drawToolVisible) {
-              hideDrawTool();
-            } else {
-              setActiveTab("image");
-              showDrawTool();
-            }
-          } else if (e3.key === "t") {
-            setTimestampEnabled((prev) => !prev);
-          }
-          return;
-        }
-        if (drawToolVisible) {
-          callKeyDownHandler(e3);
-          return;
-        }
-        if (printOverlayState.visible) {
-          switch (e3.key) {
-            case "-":
-              adjustStampSize(-1);
-              e3.preventDefault();
-              break;
-            case "+":
-            case "=":
-              adjustStampSize(1);
-              e3.preventDefault();
-              break;
-            case "Escape":
-              hidePreview();
-              e3.preventDefault();
-              break;
-          }
-          return;
-        }
-        if (e3.target.nodeName === "INPUT" && e3.target.type !== "checkbox" || e3.target.nodeName === "TEXTAREA") {
-          if (e3.key === "Escape") {
-            doEscape(e3, fns);
-          } else if (e3.key === "Enter" && e3.target.classList.contains("search-input")) {
-            const searchBtn = e3.target.parentElement?.querySelector(".search-btn");
-            if (searchBtn) {
-              e3.preventDefault();
-              searchBtn.click();
-              e3.target.blur();
-              if (document.querySelector(".markingList.tabActive")) {
-                if (!document.querySelector(".studentList .kbfocus")) {
-                  doMarkingListJK?.(DOWN);
-                }
-              }
-            }
-          }
-          return;
-        }
-        if (e3.repeat)
-          return;
-        if (e3.altKey || e3.ctrlKey || e3.metaKey)
-          return;
-        const markingList = document.querySelector(".markingList.tabActive");
-        const studentList = document.querySelector(".studentList.tabActive");
-        const worksheet = document.querySelector(".ATD0020P-worksheet-container.selected");
-        const studentProfile = document.querySelector(".student-profile");
-        const studyRecords = document.querySelector(".ATD0010P-root");
-        if (drawTabOpen) {
-          handleDrawTabKey(e3, fns);
-        } else if (markingList) {
-          handleMarkingListKey(e3, fns);
-        } else if (studentList) {
-          handleStudentListKey(e3, fns);
-        } else if (worksheet) {
-          handleGradingKey(e3, fns);
-        } else if (studentProfile) {
-          handleStudentProfileKey(e3, fns);
-        } else if (studyRecords) {
-          handleStudyRecordsKey(e3, fns);
-        }
-      };
-      const handleKeyUp = (e3) => {
-        const { pageSideScrolling: pageSideScrolling2, pageScrollingDirection: pageScrollingDirection2 } = window.__scrollingState || {};
-        switch (e3.key) {
-          case "J":
-          case "j":
-            if (!pageSideScrolling2 && pageScrollingDirection2 == DOWN) {
-              stopScrolling?.();
-            }
-            break;
-          case "K":
-          case "k":
-            if (!pageSideScrolling2 && pageScrollingDirection2 == UP) {
-              stopScrolling?.();
-            }
-            break;
-          case "H":
-          case "h":
-            if (pageSideScrolling2 && pageScrollingDirection2 == LEFT) {
-              stopScrolling?.();
-            }
-            break;
-          case "L":
-          case "l":
-            if (pageSideScrolling2 && pageScrollingDirection2 == RIGHT) {
-              stopScrolling?.();
-            }
-            break;
-          case "b":
-            hideBeforeViewOverlay();
-            break;
-        }
-      };
-      document.addEventListener("keydown", handleKeyDown);
-      document.addEventListener("keyup", handleKeyUp);
-      return () => {
-        document.removeEventListener("keydown", handleKeyDown);
-        document.removeEventListener("keyup", handleKeyUp);
-      };
-    }, [enabled, drawTabOpen, toggleDrawTab, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview, penWidth, penAlpha, eraserEnabled, penColor]);
-  };
-
-  // src/components/DrawTab.jsx
-  var DrawTabContent = ({ stamps: _stamps }) => {
-    const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
-    const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardMode();
-    const { hdModeEnabled, setHdModeEnabled } = useHDMode();
-    const penColorRef2 = A2("#ff2200");
-    const penTypeRef = A2("pen");
-    const stampColorTypeRef2 = A2("Unchanged");
-    const rainbowSpeedRef2 = A2(1);
-    const { showStampPreview, showTextPreview } = usePrintOverlay();
-    const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
-    const textareaRef = A2(null);
-    const stampsRef = A2(null);
-    const rootRef = A2(null);
-    const colorInputRef = A2(null);
-    useKeyboardMode2(keyboardModeEnabled);
-    const getPenColor = () => colorInputRef.current?.value || "#ff2200";
-    const stamps2 = window.StampLib?.stamps || {};
-    y2(() => {
-      if (drawTabOpen && textareaRef.current) {
-        updateTextAreaSize();
-      }
-    }, [drawTabOpen]);
-    const hide = () => setDrawTabOpen(false);
-    const updateTextAreaSize = () => {
-      if (textareaRef.current) {
-        textareaRef.current.style.height = "";
-        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-      }
-    };
-    const handleSizeChange = (e3) => {
-      const newSize = parseInt(e3.target.value);
-      const drawtab = rootRef.current;
-      if (drawtab) {
-        drawtab.style.setProperty("--sizeslider", `${newSize} / 100`);
-      }
-      updateTextAreaSize();
-      const stampPreview = document.querySelector(".stampPrintPreviewDiv");
-      if (stampPreview?.checkVisibility()) {
-        const maxScaleFactor = stampPreview.maxScaleFactor;
-        const scale = newSize / 100 * maxScaleFactor;
-        const dims = stampPreview.stampDimensions;
-        if (dims) {
-          stampPreview.style.height = `${dims.height * scale}px`;
-          stampPreview.style.width = `${dims.width * scale}px`;
-        }
-      }
-      const textPreview = document.querySelector(".printPreviewDiv");
-      if (textPreview?.checkVisibility()) {
-        const scale = newSize / 100;
-        const textareaVal = textareaRef.current?.value || "";
-        const writeDimensions = StampLib.getWriteAllDimensions(textareaVal, scale);
-        textPreview.style.height = `${writeDimensions.height}px`;
-        textPreview.style.width = `${writeDimensions.width}px`;
-      }
-    };
-    const handleColorChange = (e3) => {
-      penColorRef2.current = e3.target.value;
-      const textarea = rootRef.current?.querySelector("textarea");
-      if (textarea) {
-        textarea.style.color = e3.target.value;
-      }
-      updatePenSettings();
-    };
-    const handlePenTypeChange = (e3) => {
-      penTypeRef.current = e3.target.value;
-      const radios = rootRef.current?.querySelectorAll('input[name="penType"]');
-      radios?.forEach((r3) => r3.checked = r3.value === e3.target.value);
-      updatePenSettings();
-    };
-    const handleStampColorChange = (e3) => {
-      stampColorTypeRef2.current = e3.target.value;
-      const rainbowSpeedInput = rootRef.current?.querySelector(".rainbowspeed");
-      if (rainbowSpeedInput) {
-        rainbowSpeedInput.disabled = e3.target.value !== "Rainbow" && e3.target.value !== "Rainbow Fill";
-      }
-    };
-    const handleRainbowSpeedChange = (e3) => {
-      rainbowSpeedRef2.current = parseInt(e3.target.value);
-    };
-    const handleUnlock = () => {
-      stamp.unlockPage();
-      hide();
-    };
-    const toggleHdMode = (e3) => {
-      setHdModeEnabled(e3.target.checked);
-    };
-    const helpClick = () => {
-      showHelpOverlay("drawtab");
-    };
-    const handleUndo = () => StampLib.undoLastWriteAll();
-    const handleClear = () => StampLib.clearPage();
-    const handleTextStamp = (e3) => {
-      hide();
-      const slider = rootRef.current?.querySelector(".sizeslider");
-      const currentSize = slider ? parseInt(slider.value) : 25;
-      const scale = currentSize / 100;
-      const textareaVal = textareaRef.current?.value || "";
-      const writeDimensions = StampLib.getWriteAllDimensions(textareaVal, scale);
-      showTextPreview(textareaVal, writeDimensions, scale, getPenColor(), { x: e3.clientX, y: e3.clientY });
-    };
-    const handleStampClick = (stamp2, e3) => {
-      hide();
-      const stampDimensions = stamp2._cachedDimensions || StampLib.getWriteStampDimensions(stamp2, 1);
-      const maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
-      const slider = rootRef.current?.querySelector(".sizeslider");
-      const currentSize = slider ? parseInt(slider.value) : 25;
-      const scale = currentSize / 100 * maxScaleFactor;
-      const svg = typeof stamp2.svg === "string" ? stamp2.svg : stamp2.svg.outerHTML;
-      showStampPreview(stamp2, stampDimensions, maxScaleFactor, scale, getPenColor(), svg, { x: e3.clientX, y: e3.clientY });
-    };
-    y2(() => {
-      const parent = rootRef.current;
-      const draggable = stampsRef.current;
-      if (!parent || !draggable)
-        return;
-      let dragging = false;
-      let startY = 0;
-      let scrollStart = 0;
-      let dragged = 0;
-      const dragStart = (ev) => {
-        dragging = true;
-        startY = ev.clientY;
-        scrollStart = parent.scrollTop;
-        dragged = 0;
-      };
-      const dragEnd = (ev) => {
-        dragging = false;
-        if (draggable.hasPointerCapture(ev.pointerId)) {
-          draggable.releasePointerCapture(ev.pointerId);
-        }
-      };
-      const drag = (ev) => {
-        if (dragging) {
-          dragged++;
-          parent.scrollTop = scrollStart - (ev.clientY - startY);
-          if (dragged === 40) {
-            draggable.setPointerCapture(ev.pointerId);
-          }
-        }
-      };
-      draggable.addEventListener("pointerdown", dragStart);
-      draggable.addEventListener("pointerup", dragEnd);
-      draggable.addEventListener("pointermove", drag);
-      return () => {
-        draggable.removeEventListener("pointerdown", dragStart);
-        draggable.removeEventListener("pointerup", dragEnd);
-        draggable.removeEventListener("pointermove", drag);
-      };
-    }, []);
-    const handleMouseLeave = (e3) => {
-      const rect = rootRef.current.getBoundingClientRect();
-      if (e3.clientX <= rect.left || e3.clientX >= rect.right - 2 || e3.clientY <= rect.top || e3.clientY >= rect.bottom - 2) {
-        hide();
-      }
-    };
-    return /* @__PURE__ */ u3("div", { ref: rootRef, class: `drawtab ${drawTabOpen ? "" : "hidden"}`, onMouseLeave: handleMouseLeave, children: [
-      /* @__PURE__ */ u3("div", { class: "header", children: [
-        /* @__PURE__ */ u3("div", { class: "buttonsleft", children: [
-          /* @__PURE__ */ u3(
-            "input",
-            {
-              type: "range",
-              class: "sizeslider",
-              min: "10",
-              max: "100",
-              defaultValue: "25",
-              onInput: handleSizeChange,
-              title: "Adjust stamp size"
-            }
-          ),
-          /* @__PURE__ */ u3(
-            "button",
-            {
-              class: "unlockbtn",
-              onClick: handleUnlock,
-              title: "Unlock the page for writing",
-              children: "\u{1F513}"
-            }
-          ),
-          /* @__PURE__ */ u3("div", { class: "toggle", children: [
-            /* @__PURE__ */ u3(
-              "input",
-              {
-                type: "checkbox",
-                id: "hdbtn",
-                class: "hdbtn",
-                checked: hdModeEnabled,
-                onChange: toggleHdMode,
-                accessKey: "h"
-              }
-            ),
-            /* @__PURE__ */ u3("label", { for: "hdbtn", children: "HD mode" })
-          ] }),
-          /* @__PURE__ */ u3("span", { children: [
-            /* @__PURE__ */ u3("span", { class: "toggle", children: [
-              /* @__PURE__ */ u3(
-                "input",
-                {
-                  type: "checkbox",
-                  id: "kbbtn",
-                  checked: keyboardModeEnabled,
-                  onChange: (e3) => setKeyboardModeEnabled(e3.target.checked),
-                  accessKey: "k"
-                }
-              ),
-              /* @__PURE__ */ u3("label", { for: "kbbtn", children: "Keyboard mode" })
-            ] }),
-            /* @__PURE__ */ u3("button", { class: "kbhelpbtn", onClick: helpClick, children: "?" })
-          ] })
-        ] }),
-        /* @__PURE__ */ u3("span", { class: "stackedButtons", children: [
-          /* @__PURE__ */ u3(
-            "input",
-            {
-              ref: colorInputRef,
-              type: "color",
-              class: "pencolorbtn",
-              defaultValue: "#ff2200",
-              onChange: handleColorChange,
-              accessKey: "c"
-            }
-          ),
-          /* @__PURE__ */ u3("button", { class: "undoLast", onClick: handleUndo, title: "Undo last stamp", children: "Undo stamp" })
-        ] }),
-        /* @__PURE__ */ u3("fieldset", { children: [
-          /* @__PURE__ */ u3("legend", { children: "Pen type:" }),
-          penTypes.map((type) => /* @__PURE__ */ u3("label", { style: type.value === "eraser" ? { display: "none" } : {}, children: [
-            /* @__PURE__ */ u3(
-              "input",
-              {
-                type: "radio",
-                name: "penType",
-                value: type.value,
-                defaultChecked: type.value === "pen",
-                onChange: handlePenTypeChange
-              }
-            ),
-            type.label
-          ] }, type.value))
-        ] }),
-        /* @__PURE__ */ u3("span", { class: "stackedButtons right", children: [
-          /* @__PURE__ */ u3("button", { class: "closeDrawTab squarebtn", onClick: hide, title: "Close the draw tab", children: "x" }),
-          /* @__PURE__ */ u3("button", { class: "clearAll", onClick: handleClear, title: "Clear the entire page", children: "Clear all drawings" })
-        ] }),
-        /* @__PURE__ */ u3("div", { children: [
-          /* @__PURE__ */ u3(
-            "textarea",
-            {
-              ref: textareaRef,
-              name: "stampTextArea",
-              defaultValue: "",
-              onInput: updateTextAreaSize,
-              style: "color:#FF2200"
-            }
-          ),
-          /* @__PURE__ */ u3("button", { class: "textprintbtn squarebtn", onClick: (e3) => handleTextStamp(e3), children: "T" })
-        ] }),
-        /* @__PURE__ */ u3("label", { children: [
-          "Stamp Color:",
-          /* @__PURE__ */ u3("select", { id: "stampColorType", onChange: handleStampColorChange, children: [
-            /* @__PURE__ */ u3("option", { value: "Unchanged", children: "Unchanged" }),
-            /* @__PURE__ */ u3("option", { value: "Color Picker", children: "Color Picker" }),
-            /* @__PURE__ */ u3("option", { value: "Rainbow", children: "Rainbow" }),
-            /* @__PURE__ */ u3("option", { value: "Rainbow Fill", children: "Rainbow Fill" })
-          ] })
-        ] }),
-        /* @__PURE__ */ u3(
-          "input",
-          {
-            type: "range",
-            class: "rainbowspeed",
-            min: "1",
-            max: "130",
-            defaultValue: "1",
-            onInput: handleRainbowSpeedChange,
-            disabled: true
-          }
-        )
-      ] }),
-      /* @__PURE__ */ u3("div", { class: "stamps", ref: stampsRef, children: Object.entries(stamps2).map(([category, stampList]) => /* @__PURE__ */ u3("details", { open: category === Object.keys(stamps2)[0], children: [
-        /* @__PURE__ */ u3("summary", { children: category }),
-        stampList.map((stamp2) => /* @__PURE__ */ u3(
-          "button",
-          {
-            class: "stampbtn",
-            onMouseOver: (e3) => e3.stopPropagation(),
-            onClick: (e3) => handleStampClick(stamp2, e3),
-            style: { "--height-limiter": (() => {
-              const dims = stamp2._cachedDimensions || StampLib.getWriteStampDimensions(stamp2, 1);
-              return dims.height <= dims.width ? 1 : dims.width / dims.height;
-            })() },
-            children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp2.svg.outerHTML } })
-          },
-          stamp2.name
-        ))
-      ] }, category)) })
-    ] });
-  };
-  var DrawTab = (props) => /* @__PURE__ */ u3(DrawTabContent, { ...props });
-
   // src/components/SettingsTab.module.css
   var SettingsTab_default = {
     tab: "SettingsTab_tab",
@@ -6428,7 +5289,7 @@
       setKeyboardModeEnabled(e3.target.checked);
     }, [setKeyboardModeEnabled]);
     const handleHelp = q2(() => {
-      showHelpOverlay("drawtab");
+      showHelpOverlay("grading");
     }, [showHelpOverlay]);
     return /* @__PURE__ */ u3("div", { class: SettingsTab_default.tab, children: [
       /* @__PURE__ */ u3("div", { class: SettingsTab_default.controls, children: /* @__PURE__ */ u3(
@@ -6441,28 +5302,34 @@
         }
       ) }),
       /* @__PURE__ */ u3("div", { class: SettingsTab_default.settingsSection, children: [
-        /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
-          /* @__PURE__ */ u3("label", { children: "HD Mode" }),
-          /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlRow, children: /* @__PURE__ */ u3(
+        /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: /* @__PURE__ */ u3("div", { class: "toggle", children: [
+          /* @__PURE__ */ u3(
             "input",
             {
               type: "checkbox",
+              id: "hdbtn",
+              class: "hdbtn",
               checked: hdModeEnabled,
-              onChange: handleHdToggle
+              onChange: handleHdToggle,
+              accessKey: "h"
             }
-          ) })
-        ] }),
-        /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
-          /* @__PURE__ */ u3("label", { children: "Keyboard Mode" }),
-          /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlRow, children: /* @__PURE__ */ u3(
+          ),
+          /* @__PURE__ */ u3("label", { for: "hdbtn", children: "HD Mode" })
+        ] }) }),
+        /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: /* @__PURE__ */ u3("div", { class: "toggle", children: [
+          /* @__PURE__ */ u3(
             "input",
             {
               type: "checkbox",
+              id: "kbbtn",
+              class: "kbbtn",
               checked: keyboardModeEnabled,
-              onChange: handleKeyboardToggle
+              onChange: handleKeyboardToggle,
+              accessKey: "k"
             }
-          ) })
-        ] }),
+          ),
+          /* @__PURE__ */ u3("label", { for: "kbbtn", children: "Keyboard Mode" })
+        ] }) }),
         /* @__PURE__ */ u3("div", { class: SettingsTab_default.actionButtons, children: [
           /* @__PURE__ */ u3(
             "button",
@@ -6699,11 +5566,693 @@
     }, [enabled, initHD, makeHD]);
   };
 
+  // src/helpers/marking.js
+  function doMarkingListHL(direction) {
+    const studentList = document.querySelector(".studentList:not(.tabItem)");
+    if (!studentList)
+      return;
+    const focusedStudent = studentList.querySelector("app-score-list-item .checkbox.kbfocus");
+    if (focusedStudent) {
+      if (direction === LEFT)
+        return;
+      doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item:has(.kbfocus) .studyBarWrap"));
+      return;
+    }
+    const focusedSet = studentList.querySelector(".studyBarWrap.kbfocus");
+    if (focusedSet) {
+      const subject = getFocusedSetSubject(focusedSet);
+      if (direction === RIGHT) {
+        if (subject === "KNA")
+          return;
+        moveMarkingListSetFocusLeftRight(studentList, focusedSet, subject);
+      } else if (direction === LEFT) {
+        if (subject === "math") {
+          selectStudentCheckboxFromSet(studentList, focusedSet);
+        } else {
+          if (!moveMarkingListSetFocusLeftRight(studentList, focusedSet, subject)) {
+            selectStudentCheckboxFromSet(studentList, focusedSet);
+          }
+        }
+      }
+      return;
+    }
+    if (studentList.querySelector("app-score-list-header .checkbox.kbfocus"))
+      return;
+    if (direction === LEFT) {
+      doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item .checkbox"));
+    } else {
+      doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item .studyBarWrap"));
+    }
+  }
+  function selectStudentCheckboxFromSet(studentList, focusedSet) {
+    doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item:has(.kbfocus) i.checkbox"));
+  }
+  function moveMarkingListSetFocusLeftRight(studentList, focusedSet, subject) {
+    const otherSubjectSets = studentList.querySelectorAll(
+      `app-score-list-item:has(.kbfocus) .subjectCellWrapColumn:has(.studyBarWrap.${subject === "math" ? "KNA" : "math"}) .studyBarWrap`
+    );
+    if (!otherSubjectSets.length)
+      return false;
+    const sameSubjectSets = studentList.querySelectorAll(
+      `app-score-list-item:has(.kbfocus) .subjectCellWrapColumn:has(.studyBarWrap.${subject}) .studyBarWrap`
+    );
+    const i4 = Array.from(sameSubjectSets).indexOf(focusedSet);
+    doMarkingListFocusAndScroll(studentList, otherSubjectSets[Math.min(i4, otherSubjectSets.length - 1)]);
+    return true;
+  }
+  function doMarkingListJK(direction) {
+    const studentList = document.querySelector(".studentList:not(.tabItem)");
+    if (!studentList)
+      return;
+    const focusedStudent = studentList.querySelector("app-score-list-item .checkbox.kbfocus");
+    if (focusedStudent) {
+      moveMarkingListCheckboxFocus(studentList, focusedStudent, direction);
+      return;
+    }
+    const focusedSet = studentList.querySelector(".studyBarWrap.kbfocus");
+    if (focusedSet) {
+      moveMarkingListSetFocusUpDown(studentList, focusedSet, direction);
+      return;
+    }
+    const headerCheckbox = studentList.querySelector("app-score-list-header .checkbox");
+    if (headerCheckbox?.classList.contains("kbfocus")) {
+      if (direction === DOWN) {
+        doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item .checkbox"));
+      } else {
+        const items = studentList.querySelectorAll("app-score-list-item .checkbox");
+        doMarkingListFocusAndScroll(studentList, items[items.length - 1]);
+      }
+      return;
+    }
+    if (direction === DOWN) {
+      doMarkingListFocusAndScroll(studentList, studentList.querySelector("app-score-list-item .checkbox"));
+    } else {
+      markingListSelectHeaderCheckbox(studentList);
+    }
+  }
+  function getFocusedSetSubject(focusedSet) {
+    const entry = focusedSet.classList.entries().find((a3) => a3[1] === "math" || a3[1] === "KNA");
+    return entry?.[1];
+  }
+  function moveMarkingListSetFocusUpDown(studentList, focusedSet, direction) {
+    const currentStudentSets = Array.from(studentList.querySelectorAll(".subjectCellWrapColumn:has(.kbfocus) .studyBarWrap"));
+    const i4 = currentStudentSets.indexOf(focusedSet);
+    const subject = getFocusedSetSubject(focusedSet);
+    if (direction === UP && i4 === 0) {
+      const student = getMarkingListStudent(studentList, direction);
+      const subjectColumn = getMarkingListStudentSubjectColumn(student, subject);
+      const sets = subjectColumn.querySelectorAll(".studyBarWrap");
+      doMarkingListFocusAndScroll(studentList, sets[sets.length - 1]);
+    } else if (direction === DOWN && i4 === currentStudentSets.length - 1) {
+      const student = getMarkingListStudent(studentList, direction);
+      const subjectColumn = getMarkingListStudentSubjectColumn(student, subject);
+      doMarkingListFocusAndScroll(studentList, subjectColumn.querySelector(".studyBarWrap"));
+    } else {
+      doMarkingListFocusAndScroll(studentList, currentStudentSets[i4 + direction]);
+    }
+  }
+  function getMarkingListStudent(studentList, direction) {
+    const students = Array.from(studentList.querySelectorAll("app-score-list-item"));
+    const i4 = students.indexOf(studentList.querySelector("app-score-list-item:has(.kbfocus)"));
+    if (direction === UP && i4 === 0) {
+      return students[students.length - 1];
+    } else if (direction === DOWN && i4 === students.length - 1) {
+      return students[0];
+    }
+    return students[i4 + direction];
+  }
+  function getMarkingListStudentSubjectColumn(student, subject) {
+    return student.querySelector(`.subjectCellWrapColumn:has(.studyBarWrap.${subject})`) || student.querySelector(".subjectCellWrapColumn:has(.studyBarWrap)");
+  }
+  function moveMarkingListCheckboxFocus(studentList, focusedStudent, direction) {
+    const items = Array.from(studentList.querySelectorAll("app-score-list-item .checkbox"));
+    const i4 = items.indexOf(focusedStudent);
+    if (direction === UP && i4 === 0 || direction === DOWN && i4 === items.length - 1) {
+      focusedStudent.classList.remove("kbfocus");
+      markingListSelectHeaderCheckbox(studentList);
+    } else {
+      doMarkingListFocusAndScroll(studentList, items[i4 + direction]);
+    }
+  }
+  function markingListSelectHeaderCheckbox(studentList) {
+    studentList.querySelector("app-score-list-header .checkbox")?.classList.add("kbfocus");
+    studentList.scrollTop = 0;
+  }
+  function doMarkingListFocusAndScroll(studentList, toFocus) {
+    if (!studentList || !toFocus)
+      return;
+    studentList.querySelector(".kbfocus")?.classList.remove("kbfocus");
+    toFocus.classList.add("kbfocus");
+    const firstCheckbox = studentList.querySelector("app-score-list-item .checkbox");
+    if (toFocus.classList.contains("checkbox")) {
+      studentList.scrollTop = toFocus.offsetTop - firstCheckbox.offsetTop;
+    } else {
+      toFocus.scrollIntoViewIfNeeded();
+      if (studentList.scrollTop > toFocus.offsetTop - firstCheckbox.offsetTop) {
+        studentList.scrollTop = toFocus.offsetTop - firstCheckbox.offsetTop;
+      }
+    }
+  }
+
+  // src/hooks/useKeyboardMode.js
+  var handleMarkingListKey = (e3, fns) => {
+    if (e3.repeat)
+      return;
+    switch (e3.key) {
+      case "f":
+      case "/":
+        focusSearch?.(e3);
+        break;
+      case "?":
+        fns.showHelpOverlay("studentlist");
+        break;
+      case "c":
+        clearSearch?.();
+        break;
+      case "C":
+        document.querySelectorAll(".studentRow .checkbox.checked").forEach((c3) => c3.click());
+        break;
+      case "g":
+        document.querySelector(".studentList:not(.tabItem)")?.scrollTo(0, 0);
+        break;
+      case "G":
+        const sl1 = document.querySelector(".studentList:not(.tabItem)");
+        sl1?.scrollTo(0, sl1.scrollHeight - sl1.clientHeight);
+        break;
+      case "J":
+        scrollStudents?.(DOWN);
+        break;
+      case "K":
+        scrollStudents?.(UP);
+        break;
+      case "j":
+        doMarkingListJK?.(DOWN);
+        break;
+      case "k":
+        doMarkingListJK?.(UP);
+        break;
+      case "h":
+        doMarkingListHL?.(LEFT);
+        break;
+      case "l":
+        doMarkingListHL?.(RIGHT);
+        break;
+      case " ":
+        document.querySelector(".studentList .checkbox.kbfocus")?.click();
+        e3.preventDefault();
+        break;
+      case "S":
+        document.querySelector(".studentList.tabItem")?.click();
+        break;
+      case "r":
+        document.querySelector(".studentListUpdateButton")?.click();
+        break;
+      case "A":
+        document.querySelector("app-student-list-filter-capsule .all")?.click();
+        break;
+      case "M":
+        document.querySelector("app-student-list-filter-capsule .math")?.click();
+        break;
+      case "R":
+        document.querySelector("app-student-list-filter-capsule .KNA")?.click();
+        break;
+      case "Enter":
+        doEnter?.();
+        break;
+      case "Escape":
+        doEscape?.(e3, fns);
+        break;
+    }
+  };
+  var handleStudentListKey = (e3, fns) => {
+    if (e3.repeat)
+      return;
+    switch (e3.key) {
+      case "f":
+      case "/":
+        focusSearch?.(e3);
+        break;
+      case "?":
+        fns.showHelpOverlay("studentlist");
+        break;
+      case "c":
+        clearSearch?.();
+        break;
+      case "M":
+        document.querySelector(".markingList.tabItem")?.click();
+        break;
+      case "J":
+        scrollStudents?.(DOWN);
+        break;
+      case "K":
+        scrollStudents?.(UP);
+        break;
+      case "r":
+        document.querySelector(".studentListUpdateButton")?.click();
+        break;
+    }
+  };
+  var handleGradingKey = (e3, fns) => {
+    if (e3.repeat && !(e3.key in ["u", "r"]))
+      return;
+    switch (e3.key) {
+      case "j":
+        doDown?.();
+        break;
+      case "k":
+        doUp?.();
+        break;
+      case "g":
+        document.querySelectorAll(".worksheet-navigator-page span:not(.disabled)")[0]?.click();
+        break;
+      case "G":
+        goLastPage?.();
+        break;
+      case "?":
+        fns.showHelpOverlay("grading");
+        break;
+      case "X":
+        xAll();
+        break;
+      case "x":
+        matchPreviousMarkings?.();
+        break;
+      case "c":
+        clearMarkboxs?.();
+        break;
+      case "Backspace":
+        doBackspace?.();
+        break;
+      case "n":
+        goNextCorrectionPage?.();
+        break;
+      case "N":
+        goPrevCorrectionPage?.();
+        break;
+      case "p": {
+        const breakScoringButton = document.querySelector("#BreakScoringButton");
+        if (breakScoringButton) {
+          breakScoringButton.click();
+          break;
+        }
+        const playbackControl = getPlaybackControl?.();
+        if (playbackControl) {
+          playbackControl.querySelector(".play,.pause")?.click();
+          break;
+        }
+        fns.setEraserEnabled(false);
+        fns.setPenMode("pen");
+        fns.setPenWidth(PEN_PRESETS["pen"].width);
+        fns.setPenAlpha(PEN_PRESETS["pen"].alpha);
+        const currentColor = getSingleColor?.() || fns.penColor;
+        setStampLibPenSettings(currentColor, PEN_PRESETS["pen"].width, PEN_PRESETS["pen"].alpha);
+        break;
+      }
+      case "P": {
+        const playbackControl = getPlaybackControl?.();
+        if (playbackControl) {
+          playbackControl.querySelector(".play,.pause")?.click();
+          return;
+        } else {
+          StampLib.expandToolbar();
+          document.querySelector(".grading-toolbar-box .grading-toolbar .play")?.click();
+          StampLib.collapseToolbar();
+        }
+        break;
+      }
+      case "s":
+        doS?.();
+        break;
+      case "u": {
+        const atd = StampLib.getAtd();
+        if (atd) {
+          atd.undoInk();
+          atd.penUpFunc(atd);
+        }
+        break;
+      }
+      case "U":
+        StampLib.undoLastWriteAll?.();
+        break;
+      case "r": {
+        const atd = StampLib.getAtd();
+        if (atd) {
+          atd.redoInk();
+          atd.penUpFunc(atd);
+        }
+        break;
+      }
+      case "2":
+      case "@":
+        do2?.(e3.key);
+        break;
+      case "8":
+      case "*":
+        do8?.(e3.key);
+        break;
+      case "A":
+        document.querySelector("#AnswerDisplayButton")?.click();
+        break;
+      case "Enter":
+        doEnter?.();
+        break;
+      case "Escape":
+        doEscape(e3, fns);
+        break;
+      case "d":
+        e3.preventDefault();
+        fns.setActiveTab("image");
+        fns.showDrawTool();
+        break;
+      case "S":
+        document.querySelector(".other-worksheet-button")?.click();
+        break;
+      case "m":
+      case "D":
+        fns.showDiffViewOverlay();
+        break;
+      case "b":
+        fns.showBeforeViewOverlay();
+        break;
+      case "t":
+        fns.setActiveTab("image");
+        fns.showDrawTool();
+        activateTextStampMode();
+        e3.preventDefault();
+        break;
+      case "h": {
+        const currentPresetId = getActivePresetId(fns.eraserEnabled, fns.penWidth, fns.penAlpha);
+        let targetPresetId;
+        if (currentPresetId === "highlighter") {
+          targetPresetId = "thin-highlighter";
+        } else if (currentPresetId === "thin-highlighter") {
+          targetPresetId = "highlighter";
+        } else {
+          targetPresetId = "highlighter";
+        }
+        fns.setEraserEnabled(false);
+        fns.setPenMode("pen");
+        fns.setPenWidth(PEN_PRESETS[targetPresetId].width);
+        fns.setPenAlpha(PEN_PRESETS[targetPresetId].alpha);
+        const hColor = getSingleColor?.() || fns.penColor;
+        setStampLibPenSettings(hColor, PEN_PRESETS[targetPresetId].width, PEN_PRESETS[targetPresetId].alpha);
+        break;
+      }
+      case "e": {
+        selectEraser?.();
+        fns.setEraserEnabled(true);
+        fns.setPenMode("eraser");
+        fns.setPenWidth(PEN_PRESETS["eraser"].width);
+        fns.setPenAlpha(PEN_PRESETS["eraser"].alpha);
+        break;
+      }
+      case "R":
+        clickReading?.();
+        break;
+      case "M":
+        clickMath?.();
+        break;
+      case "H": {
+        const wasPulldownOpen = isPulldownOpen?.();
+        const pulldownExists = !!document.querySelector("#studentInfoPullDown.student-info-btn");
+        document.querySelector("#studentInfoPullDown")?.click();
+        document.querySelector("#studentInfoPullDown")?.blur();
+        document.querySelectorAll("#customPulldown > .kbfocus").forEach((p3) => p3.classList.remove("kbfocus"));
+        if (pulldownExists) {
+          if (!wasPulldownOpen) {
+            document.querySelector("#customPulldown > .option-select")?.classList.add("kbfocus");
+            showHeader(true);
+          } else {
+            showHeader(false);
+          }
+        } else {
+          toggleHeader();
+        }
+        break;
+      }
+      case "J":
+        scrollAnswer?.(DOWN);
+        break;
+      case "K":
+        scrollAnswer?.(UP);
+        break;
+      case "-":
+      case "+":
+      case "=": {
+        doKeyboardDefault?.(e3.key);
+        break;
+      }
+      default:
+        doKeyboardDefault?.(e3.key);
+        break;
+    }
+  };
+  var handleStudentProfileKey = (e3, fns) => {
+    if (e3.repeat)
+      return;
+    switch (e3.key) {
+      case "R":
+        if (!document.querySelector("loading-spinner div")) {
+          document.querySelector(".btn-close")?.click();
+          clickReading?.();
+        }
+        break;
+      case "M":
+        if (!document.querySelector("loading-spinner div")) {
+          document.querySelector(".btn-close")?.click();
+          clickMath?.();
+        }
+        break;
+      case "S":
+        document.querySelector(".dashboard-set-left .btn-primary")?.click();
+        break;
+      case "J":
+        if (isProgressChartFloating()) {
+          scrollProgressChart?.(DOWN);
+        } else {
+          scrollDashboard?.(DOWN);
+        }
+        break;
+      case "K":
+        if (isProgressChartFloating()) {
+          scrollProgressChart?.(UP);
+        } else {
+          scrollDashboard?.(UP);
+        }
+        break;
+      case "H":
+        sideScrollProgressChart?.(LEFT);
+        break;
+      case "L":
+        sideScrollProgressChart?.(RIGHT);
+        break;
+      case "p":
+        document.querySelector(".dashboard-progress-chart .finally > .icon")?.click();
+        break;
+      case "e":
+        Array.from(document.querySelectorAll(".dashboard-menu-right .options-btn")).find((b) => b.innerHTML?.trim() === "Edit")?.click();
+        break;
+      case "Backspace":
+        doBackspace?.();
+        break;
+      case "Escape":
+        doEscape?.(e3, fns);
+        break;
+      case "Enter":
+        doEnter?.();
+        break;
+      case "?":
+        fns.showHelpOverlay("profile");
+        break;
+    }
+  };
+  var handleStudyRecordsKey = (e3, fns) => {
+    if (e3.repeat)
+      return;
+    switch (e3.key) {
+      case "R":
+        clickReading?.();
+        break;
+      case "M":
+        clickMath?.();
+        break;
+      case "Backspace":
+        doBackspace?.();
+        break;
+      case "J":
+        scrollScore?.(DOWN);
+        break;
+      case "K":
+        scrollScore?.(UP);
+        break;
+      case "G":
+        const scoreGrid = document.querySelector(".score-grid-all");
+        scoreGrid?.scrollIntoView();
+        scoreGrid?.scroll(0, scoreGrid?.scrollHeight);
+        break;
+      case "?":
+        fns.showHelpOverlay("studyrecords");
+        break;
+    }
+  };
+  var useKeyboardMode2 = (enabled) => {
+    const { setTimestampEnabled } = useTimestamp();
+    const { drawToolVisible, callKeyDownHandler, showDrawTool, hideDrawTool, setActiveTab } = useDrawTool();
+    const { penWidth, setPenWidth, penAlpha, setPenAlpha, penMode, setPenMode, eraserEnabled, setEraserEnabled, penColor, setPenColor } = usePenSettings();
+    const { hidePreview, state: printOverlayState } = usePrintOverlay();
+    const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
+    const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
+    const fns = {
+      setTimestampEnabled,
+      diffViewOverlayVisible,
+      showDiffViewOverlay,
+      hideDiffViewOverlay,
+      showBeforeViewOverlay,
+      hideBeforeViewOverlay,
+      helpOverlayVisible,
+      helpOverlayActiveTab,
+      hideHelpOverlay,
+      showHelpOverlay,
+      helpTabs,
+      showDrawTool,
+      setActiveTab,
+      hidePreview,
+      penWidth,
+      setPenWidth,
+      penAlpha,
+      setPenAlpha,
+      penMode,
+      setPenMode,
+      eraserEnabled,
+      setEraserEnabled,
+      penColor,
+      setPenColor
+    };
+    y2(() => {
+      if (!enabled)
+        return;
+      const handleKeyDown = (e3) => {
+        if (e3.altKey && !e3.ctrlKey && !e3.metaKey) {
+          if (e3.key === "d") {
+            if (drawToolVisible) {
+              hideDrawTool();
+            } else {
+              setActiveTab("image");
+              showDrawTool();
+            }
+          } else if (e3.key === "t") {
+            setTimestampEnabled((prev) => !prev);
+          }
+          return;
+        }
+        if (drawToolVisible) {
+          callKeyDownHandler(e3);
+          return;
+        }
+        if (printOverlayState.visible) {
+          switch (e3.key) {
+            case "-":
+              adjustStampSize(-1);
+              e3.preventDefault();
+              break;
+            case "+":
+            case "=":
+              adjustStampSize(1);
+              e3.preventDefault();
+              break;
+            case "Escape":
+              hidePreview();
+              e3.preventDefault();
+              break;
+          }
+          return;
+        }
+        if (e3.target.nodeName === "INPUT" && e3.target.type !== "checkbox" || e3.target.nodeName === "TEXTAREA") {
+          if (e3.key === "Escape") {
+            doEscape(e3, fns);
+          } else if (e3.key === "Enter" && e3.target.classList.contains("search-input")) {
+            const searchBtn = e3.target.parentElement?.querySelector(".search-btn");
+            if (searchBtn) {
+              e3.preventDefault();
+              searchBtn.click();
+              e3.target.blur();
+              if (document.querySelector(".markingList.tabActive")) {
+                if (!document.querySelector(".studentList .kbfocus")) {
+                  doMarkingListJK?.(DOWN);
+                }
+              }
+            }
+          }
+          return;
+        }
+        if (e3.repeat)
+          return;
+        if (e3.altKey || e3.ctrlKey || e3.metaKey)
+          return;
+        const markingList = document.querySelector(".markingList.tabActive");
+        const studentList = document.querySelector(".studentList.tabActive");
+        const worksheet = document.querySelector(".ATD0020P-worksheet-container.selected");
+        const studentProfile = document.querySelector(".student-profile");
+        const studyRecords = document.querySelector(".ATD0010P-root");
+        if (markingList) {
+          handleMarkingListKey(e3, fns);
+        } else if (studentList) {
+          handleStudentListKey(e3, fns);
+        } else if (worksheet) {
+          handleGradingKey(e3, fns);
+        } else if (studentProfile) {
+          handleStudentProfileKey(e3, fns);
+        } else if (studyRecords) {
+          handleStudyRecordsKey(e3, fns);
+        }
+      };
+      const handleKeyUp = (e3) => {
+        const { pageSideScrolling: pageSideScrolling2, pageScrollingDirection: pageScrollingDirection2 } = window.__scrollingState || {};
+        switch (e3.key) {
+          case "J":
+          case "j":
+            if (!pageSideScrolling2 && pageScrollingDirection2 == DOWN) {
+              stopScrolling?.();
+            }
+            break;
+          case "K":
+          case "k":
+            if (!pageSideScrolling2 && pageScrollingDirection2 == UP) {
+              stopScrolling?.();
+            }
+            break;
+          case "H":
+          case "h":
+            if (pageSideScrolling2 && pageScrollingDirection2 == LEFT) {
+              stopScrolling?.();
+            }
+            break;
+          case "L":
+          case "l":
+            if (pageSideScrolling2 && pageScrollingDirection2 == RIGHT) {
+              stopScrolling?.();
+            }
+            break;
+          case "b":
+            hideBeforeViewOverlay();
+            break;
+        }
+      };
+      document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener("keyup", handleKeyUp);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+        document.removeEventListener("keyup", handleKeyUp);
+      };
+    }, [enabled, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview, penWidth, penAlpha, eraserEnabled, penColor]);
+  };
+
   // src/kclass.jsx
   var PageChangeManager = () => {
     const { hdModeEnabled } = useHDMode();
     const { keyboardModeEnabled } = useKeyboardMode();
     useHDMode2(hdModeEnabled);
+    useKeyboardMode2(keyboardModeEnabled);
     useAutoPen();
     useMarkboxKeys(keyboardModeEnabled);
     return null;
@@ -6714,7 +6263,6 @@
       /* @__PURE__ */ u3(PageChangeManager, {}),
       /* @__PURE__ */ u3(LoginAssistantsList, {}),
       /* @__PURE__ */ u3(RefreshButton, {}),
-      /* @__PURE__ */ u3(DrawTab, {}),
       /* @__PURE__ */ u3(PrintOverlay, {}),
       /* @__PURE__ */ u3(DiffViewOverlay, {}),
       /* @__PURE__ */ u3(HelpOverlay, {}),
@@ -6735,9 +6283,9 @@
       return;
     }
     for (const category in stamps2) {
-      for (const stamp2 of stamps2[category]) {
-        if (!stamp2._cachedDimensions) {
-          stamp2._cachedDimensions = StampLib.getWriteStampDimensions(stamp2, 1);
+      for (const stamp of stamps2[category]) {
+        if (!stamp._cachedDimensions) {
+          stamp._cachedDimensions = StampLib.getWriteStampDimensions(stamp, 1);
         }
       }
     }
@@ -6845,13 +6393,6 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 }
 .customToolbar .headerZindexBtn {
   top: 0px;
-}
-.customToolbar .shiftbtn {
-  top: 5px;
-}
-.customToolbar .drawbtn {
-  top: 10px;
-  padding-top: 4px !important;
 }
 .customToolbar {
   /* Don't show these except on mobile */

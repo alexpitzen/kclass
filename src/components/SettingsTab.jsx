@@ -40,7 +40,7 @@ export const SettingsTab = ({ close }) => {
     }, [setKeyboardModeEnabled]);
 
     const handleHelp = useCallback(() => {
-        showHelpOverlay('drawtab');
+        showHelpOverlay('grading');
     }, [showHelpOverlay]);
 
     return (
@@ -57,24 +57,30 @@ export const SettingsTab = ({ close }) => {
 
             <div class={styles.settingsSection}>
                 <div class={styles.controlGroup}>
-                    <label>HD Mode</label>
-                    <div class={styles.controlRow}>
+                    <div class="toggle">
                         <input
                             type="checkbox"
+                            id="hdbtn"
+                            class="hdbtn"
                             checked={hdModeEnabled}
                             onChange={handleHdToggle}
+                            accessKey="h"
                         />
+                        <label for="hdbtn">HD Mode</label>
                     </div>
                 </div>
 
                 <div class={styles.controlGroup}>
-                    <label>Keyboard Mode</label>
-                    <div class={styles.controlRow}>
+                    <div class="toggle">
                         <input
                             type="checkbox"
+                            id="kbbtn"
+                            class="kbbtn"
                             checked={keyboardModeEnabled}
                             onChange={handleKeyboardToggle}
+                            accessKey="k"
                         />
+                        <label for="kbbtn">Keyboard Mode</label>
                     </div>
                 </div>
 

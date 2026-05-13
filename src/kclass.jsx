@@ -1,7 +1,6 @@
 import { render } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { CustomToolbar } from './components/CustomToolbar.jsx';
-import { DrawTab } from './components/DrawTab.jsx';
 import { PrintOverlayProvider, PrintOverlay } from './components/PrintOverlay.jsx';
 import { DiffViewOverlay } from './components/DiffViewOverlay.jsx';
 import { HelpOverlay } from './components/HelpOverlay.jsx';
@@ -10,12 +9,14 @@ import { LoginAssistantsList, RefreshButton } from './components/Misc.jsx';
 import { useAutoPen } from './hooks/useAutoPen.js';
 import { useMarkboxKeys } from './hooks/useMarkboxKeys.js';
 import { useHDMode } from './hooks/useHDMode.js';
+import { useKeyboardMode as useKeyboardModeHandler } from './hooks/useKeyboardMode.js';
 import { AppProvider, useHDMode as useHDModeContext, useKeyboardMode as useKeyboardModeContext } from './context/AppContext.jsx';
 
 const PageChangeManager = () => {
     const { hdModeEnabled } = useHDModeContext();
     const { keyboardModeEnabled } = useKeyboardModeContext();
     useHDMode(hdModeEnabled);
+    useKeyboardModeHandler(keyboardModeEnabled);
     useAutoPen();
     useMarkboxKeys(keyboardModeEnabled);
     return null;
@@ -30,7 +31,6 @@ const App = () => {
                 <PageChangeManager />
                 <LoginAssistantsList />
                 <RefreshButton />
-                <DrawTab />
                 <PrintOverlay />
                 <DiffViewOverlay />
                 <HelpOverlay />

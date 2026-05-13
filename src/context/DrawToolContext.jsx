@@ -1,5 +1,6 @@
 import { createContext } from 'preact';
 import { useContext, useState, useMemo, useRef, useCallback } from 'preact/hooks';
+import { updateStampLibFromPenSettings } from '../context/PenSettingsContext.jsx';
 
 const DrawToolContext = createContext(null);
 
@@ -21,7 +22,10 @@ export const DrawToolProvider = ({ children }) => {
     const [drawToolVisible, setDrawToolVisible] = useState(false);
     const keyDownHandlersRef = useRef({});
 
-    const showDrawTool = useCallback(() => setDrawToolVisible(true), []);
+    const showDrawTool = useCallback(() => {
+        setDrawToolVisible(true);
+        updateStampLibFromPenSettings();
+    }, []);
     const hideDrawTool = useCallback(() => setDrawToolVisible(false), []);
 
     const registerKeyDownHandler = useCallback((tabType, handler) => {

@@ -389,7 +389,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
             }
             return;
         }
-        if (e.repeat) return;
+        if (e.repeat && !(e.key in ["+", "-", "="])) return;
         switch (e.key) {
             case "d":
             case "Escape":

@@ -22,7 +22,7 @@ export const updateStampLibFromPenSettings = () => {
     const width = penWidthRef.current;
     const alpha = penAlphaRef.current;
     const eraserEnabled = eraserEnabledRef.current;
-    
+
     if (!eraserEnabled) {
         setStampLibPenSettings(color, width, alpha);
     }

@@ -17,7 +17,7 @@ const TABS = [
     { id: 'general', label: 'General' },
     { id: 'studentlist', label: 'Student List / Marking List' },
     { id: 'grading', label: 'Grading' },
-    { id: 'drawtab', label: 'Draw Tab' },
+    { id: 'stamps', label: 'Stamps' },
     { id: 'profile', label: 'Profile' },
     { id: 'studyrecords', label: 'Study Records' },
 ];
@@ -47,7 +47,8 @@ const TAB_CONTENT = {
             title: 'Always active',
             keys: [
                 { key: ['Alt', 'k'], separator: " + ", desc: 'Toggle keyboard mode' },
-                { key: ['Alt', 'c'], separator: " + ", desc: 'Color picker' },
+                { key: ['Alt', 'c'], separator: " + ", desc: 'Access color picker' },
+                { key: ['Alt', 'h'], separator: " + ", desc: ['Toggle HD mode', "Note: This is buggy"] },
             ],
         }
     ],
@@ -124,8 +125,8 @@ const TAB_CONTENT = {
         {
             title: 'Drawing',
             keys: [
-                { key: 'd', desc: 'Open draw tab' },
-                { key: 't', desc: ['Open draw tab & focus text area', '(tip: press Tab Enter after typing)'] },
+                { key: 'd', desc: 'Open stamps' },
+                { key: 't', desc: ['Open stamps & focus text area', '(tip: press Tab Enter after typing)'] },
                 { key: 'p', desc: 'Select pen' },
                 { key: 'h', desc: 'Select highlighter / cycle highlighter type' },
                 { key: 'e', desc: 'Select eraser' },
@@ -156,9 +157,9 @@ const TAB_CONTENT = {
             ],
         },
     ],
-    drawtab: [
+    stamps: [
         {
-            title: 'Draw Tab',
+            title: 'Stamps',
             keys: [
                 { key: 't', desc: 'Focus the text area' },
                 { key: 'u', desc: 'Set Stamp Color to "Unchanged"' },
@@ -170,7 +171,7 @@ const TAB_CONTENT = {
                 { key: ['+', '='], desc: 'Increase stamp size' },
                 { key: 'J', desc: '(hold) Scroll stamps down' },
                 { key: 'K', desc: '(hold) Scroll stamps up' },
-                { key: ['d', 'Escape'], desc: 'Close draw tab' },
+                { key: ['d', 'Escape'], desc: 'Close stamps' },
                 { key: ['Alt', 'c'], separator: " + ", desc: 'Color picker' },
                 { key: '?', desc: 'Show keyboard shortcuts' },
             ],

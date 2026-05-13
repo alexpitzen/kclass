@@ -67,13 +67,13 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     }
 
     .shiftbtn {
-        top: 5px;
+        // top: 5px;
     }
 
-    .drawbtn {
-        top: 10px;
-        padding-top: 4px !important;
-    }
+    // .drawbtn {
+    //     top: 10px;
+    //     padding-top: 4px !important;
+    // }
 
     /* Don't show these except on mobile */
     .mobileUpBtn, .mobileDownBtn {
