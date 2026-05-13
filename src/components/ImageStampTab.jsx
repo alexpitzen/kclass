@@ -4,52 +4,19 @@ import { usePrintOverlay } from './PrintOverlay.jsx';
 import { useHelpOverlay } from './HelpOverlay.jsx';
 import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { selectEraser } from '../helpers/actions.js';
+import { PEN_PRESETS, PRESET_ICONS, getActivePresetId, setStampLibPenSettings } from '../helpers/penPresets.js';
 import { startScrolling } from '../helpers/scrolling.js';
 import { DOWN, UP, LEFT, RIGHT } from '../helpers/constants.js';
 import styles from './ImageStampTab.module.css';
 import undoIcon from '../icons/undo.svg';
 import trashIcon from '../icons/trash.svg';
 import stampTextIcon from '../icons/stamp-text.svg';
-import penIcon from '../icons/pen.svg';
-import highlighterIcon from '../icons/highlighter.svg';
-import thinHighlighterIcon from '../icons/thin-highlighter.svg';
-import eraserIcon from '../icons/eraser.svg';
 import xIcon from '../icons/x.svg';
 
 const stamps = window.StampLib?.stamps || {};
 const stampCategories = Object.keys(stamps);
 
 const stopPropagation = (e) => e.stopPropagation();
-
-const PEN_PRESETS = [
-    { id: 'pen', label: 'Pen', width: 2, alpha: 1 },
-    { id: 'highlighter', label: 'Highlighter', width: 25, alpha: 0.2 },
-    { id: 'thin-highlighter', label: 'Thin Highlighter', width: 5, alpha: 0.2 },
-    { id: 'eraser', label: 'Eraser', width: 24, alpha: 1 },
-];
-
-const PRESET_ICONS = {
-    pen: penIcon,
-    highlighter: highlighterIcon,
-    'thin-highlighter': thinHighlighterIcon,
-    eraser: eraserIcon,
-};
-
-const getActivePresetId = (eraserEnabled, penWidth, penAlpha) => {
-    if (eraserEnabled) return 'eraser';
-    if (penWidth === 2 && penAlpha === 1) return 'pen';
-    if (penWidth === 25 && Math.abs(penAlpha - 0.2) < 0.01) return 'highlighter';
-    if (penWidth === 5 && Math.abs(penAlpha - 0.2) < 0.01) return 'thin-highlighter';
-    return null;
-};
-
-const setStampLibPenSettings = (color, width, alpha) => {
-    StampLib.setPenSettings({
-        color: color,
-        width: width,
-        alpha: Math.round(alpha * 255),
-    });
-};
 
 const imageStampSizeRef = { current: 25 };
 const singleColorRef = { current: '#ff2200' };
@@ -199,11 +166,17 @@ export const ImageStampTab = ({ onStampClick, close }) => {
          }
      }, [setTextStampModeActive, textStampModeActive]);
 
-     useEffect(() => {
-         setImageStampSizeFnRef.current = setImageStampSize;
-     }, [setImageStampSize]);
+      useEffect(() => {
+          setImageStampSizeFnRef.current = setImageStampSize;
+      }, [setImageStampSize]);
 
-    useEffect(() => {
+      useEffect(() => {
+          if (!eraserEnabled) {
+              setStampLibPenSettings(singleColorRef.current, penWidth, penAlpha);
+          }
+      }, [eraserEnabled, singleColor, penWidth, penAlpha]);
+
+     useEffect(() => {
         if (stampCategories.length > 0 && !stampCategories.includes(activeStampTab)) {
             setActiveStampTab(stampCategories[0]);
         }
@@ -323,6 +296,10 @@ export const ImageStampTab = ({ onStampClick, close }) => {
         setPenWidth(newWidth);
         if (!eraserEnabled) {
             setStampLibPenSettings(singleColorRef.current, newWidth, penAlpha);
+        } else {
+            StampLib.setPenSettings({
+                width: newWidth,
+            });
         }
     }, [setPenWidth, eraserEnabled, penAlpha]);
 
@@ -337,11 +314,13 @@ export const ImageStampTab = ({ onStampClick, close }) => {
     const handlePresetClick = useCallback((e) => {
         const btn = e.currentTarget;
         const presetId = btn.getAttribute('data-preset-id');
-        const preset = PEN_PRESETS.find(p => p.id === presetId);
+        const preset = PEN_PRESETS[presetId];
         if (preset) {
             if (preset.id === 'eraser') {
                 setEraserEnabled(true);
                 setPenMode('eraser');
+                setPenWidth(preset.width);
+                setPenAlpha(preset.alpha);
                 selectEraser();
             } else {
                 setEraserEnabled(false);
@@ -404,7 +383,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
 
     const handleKeys = useCallback((e) => {
         if (e.altKey || e.ctrlKey || e.metaKey) return;
-        if ((e.target.nodeName === "INPUT" && e.target.type !== "checkbox") || e.target.nodeName === "TEXTAREA") {
+        if ((e.target.nodeName === "INPUT" && e.target.type !== "checkbox" && e.target.type !== "color" && e.target.type != "range") || e.target.nodeName === "TEXTAREA") {
             if (e.key === "Escape") {
                 close();
             }
@@ -564,7 +543,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                     onClick={handlePenSettingsToggle}
                     onMouseOver={stopPropagation}
                 >
-                    <span dangerouslySetInnerHTML={{ __html: penIcon }} />
+                    <span dangerouslySetInnerHTML={{ __html: PRESET_ICONS.pen }} />
                     Pen
                 </button>
 
@@ -624,20 +603,20 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                         </div>
                     </div>
 
-                    <div class={styles.presetsContainer} ref={presetsContainerRef}>
-                        {PEN_PRESETS.map((preset) => (
-                            <button
-                                key={preset.id}
-                                data-preset-id={preset.id}
-                                onClick={handlePresetClick}
-                                onMouseOver={stopPropagation}
-                                class={`${styles.presetBtn} ${preset.id === activePresetId ? styles.presetBtnActive : ''}`}
-                            >
-                                <span dangerouslySetInnerHTML={{ __html: PRESET_ICONS[preset.id] }} />
-                                {preset.label}
-                            </button>
-                        ))}
-                    </div>
+                     <div class={styles.presetsContainer} ref={presetsContainerRef}>
+                         {Object.values(PEN_PRESETS).map((preset) => (
+                             <button
+                                 key={preset.id}
+                                 data-preset-id={preset.id}
+                                 onClick={handlePresetClick}
+                                 onMouseOver={stopPropagation}
+                                 class={`${styles.presetBtn} ${preset.id === activePresetId ? styles.presetBtnActive : ''}`}
+                             >
+                                 <span dangerouslySetInnerHTML={{ __html: PRESET_ICONS[preset.id] }} />
+                                 {preset.label}
+                             </button>
+                         ))}
+                     </div>
                 </div>
             </div>
 

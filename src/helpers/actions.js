@@ -1,20 +1,37 @@
 import { DOWN, UP, LEFT, RIGHT } from './constants.js';
 import { penIcons, penSettings } from '../components/constants.js';
+import { 
+    getEraserEnabled, 
+    getPenWidth, 
+    getPenAlpha, 
+    updateStampLibFromPenSettings 
+} from '../context/PenSettingsContext.jsx';
+import { getSingleColor } from '../components/ImageStampTab.jsx';
+import { mapNewPresetToOld } from '../helpers/penPresets.js';
+
+function getOldPenTypeFromNewSettings() {
+    const eraserEnabled = getEraserEnabled();
+    const penWidth = getPenWidth();
+    const penAlpha = getPenAlpha();
+
+    if (eraserEnabled) return 'eraser';
+    if (penWidth === 2 && Math.abs(penAlpha - 1) < 0.01) return 'pen';
+    if (penWidth === 25 && Math.abs(penAlpha - 0.2) < 0.01) return 'thick-highlighter';
+    if (penWidth === 5 && Math.abs(penAlpha - 0.2) < 0.01) return 'thin-highlighter';
+    
+    return 'pen';
+}
 
 function updatePenSettings() {
-    const penType = document.querySelector("input[name=penType]:checked")?.value || "pen";
-    const pencolorbtn = document.querySelector(".pencolorbtn");
-    if (penType !== "eraser") {
-        StampLib.setPenSettings({
-            color: pencolorbtn?.value,
-            ...penSettings[penType]
-        });
-    }
+    updateStampLibFromPenSettings();
+
+    const penType = getOldPenTypeFromNewSettings();
+    const color = getSingleColor();
     const drawbtn = document.querySelector(".drawbtn");
     if (drawbtn) {
         drawbtn.innerHTML = penIcons[penType];
-        if (pencolorbtn) {
-            drawbtn.style.fill = pencolorbtn.value;
+        if (color) {
+            drawbtn.style.fill = color;
         }
     }
 }
@@ -157,7 +174,6 @@ function selectEraser() {
     StampLib.expandToolbar();
     document.querySelector(".grading-toolbar-box .grading-toolbar .eraser")?.click();
     StampLib.collapseToolbar();
-    document.querySelector("input[name=penType][value=eraser]")?.click();
 }
 
 function getPlaybackControl() {

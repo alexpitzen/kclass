@@ -1167,8 +1167,8 @@
     function setPenSettings(settings) {
         let atd = getAtd();
         if (!atd) return;
-        selectPen();
         if (settings.color) {
+            selectPen();
             _setPenColorHex(atd, settings.color);
         }
         if (settings.width) {

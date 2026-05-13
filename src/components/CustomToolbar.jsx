@@ -5,7 +5,9 @@ import { goPrevCorrectionPage, goNextCorrectionPage } from '../helpers/navigatio
 import { updatePenSettings, toggleHeader } from '../helpers/actions.js';
 import { useTimestampDisplay } from '../hooks/useTimestamp.js';
 import { useTimestamp, useDrawTab } from '../context/AppContext.jsx';
+import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
+import { PRESET_ICONS, getActivePresetId, getColoredPenIcon } from '../helpers/penPresets.js';
 import stampIcon from '../icons/stamp.svg';
 import settingsIcon from '../icons/settings.svg';
 
@@ -15,6 +17,16 @@ export const CustomToolbar = () => {
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
     const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
     const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible } = useDrawTool();
+    const { eraserEnabled, penWidth, penAlpha, penColor } = usePenSettings();
+    const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
+    const currentPenIcon = activePresetId
+        ? getColoredPenIcon(activePresetId, penColor)
+        : getColoredPenIcon('pen', penColor);
+
+    const withBlur = (handler) => (e) => {
+        e.currentTarget.blur();
+        if (handler) handler(e);
+    };
 
     useEffect(() => {
         updatePenSettings();
@@ -73,13 +85,13 @@ export const CustomToolbar = () => {
         <div class="customToolbar" style={{ display: 'none' }}>
             <button
                 class="headerZindexBtn"
-                onClick={toggleHeader}
+                onClick={withBlur(toggleHeader)}
                 title="Toggle header bar visibility"
             >H</button>
 
             <button
                 class="shiftbtn"
-                onClick={toggleShift}
+                onClick={withBlur(toggleShift)}
                 onMouseOver={(e) => e.stopPropagation()}
                 title="Toggle shifting the page up/down"
                 dangerouslySetInnerHTML={{ __html: toolbarIcons.shift }}
@@ -87,41 +99,47 @@ export const CustomToolbar = () => {
 
             <button
                 class="xallbtn"
-                onClick={handleXAll}
+                onClick={withBlur(handleXAll)}
                 title="Click every grading box on the page"
             >x all</button>
 
             <button
                 class="drawbtn"
-                onClick={handleDrawTab}
+                onClick={withBlur(handleDrawTab)}
                 onMouseOver={(e) => e.stopPropagation()}
                 title="Show the draw tab"
                 accessKey="d"
                 dangerouslySetInnerHTML={{ __html: penIcons.pen }}
             />
 
-            {drawToolTabs?.map((tab) => {
-                const icon = tab.id === 'image' ? stampIcon : tab.id === 'settings' ? settingsIcon : null;
-                return (
-                    <button
-                        key={tab.id}
-                        class="drawtool-tab-btn"
-                        onMouseOver={(e) => e.stopPropagation()}
-                        onClick={() => handleToolTab(tab.id)}
-                        title={tab.label}
-                    >
-                        {icon ? (
-                            <span dangerouslySetInnerHTML={{ __html: icon }} />
-                        ) : (
-                            tab.label
-                        )}
-                    </button>
-                );
-            })}
+              {drawToolTabs?.map((tab) => {
+                 const icon = tab.id === 'image' ? currentPenIcon : tab.id === 'settings' ? settingsIcon : null;
+                 return (
+                      <button
+                          key={tab.id}
+                          class="drawtool-tab-btn"
+                          onMouseOver={(e) => e.stopPropagation()}
+                         onClick={(e) => {
+                               e.currentTarget.blur();
+                               handleToolTab(tab.id);
+                           }}
+                          title={tab.label}
+                      >
+                         {icon ? (
+                             <span dangerouslySetInnerHTML={{ __html: icon }} />
+                         ) : (
+                             tab.label
+                         )}
+                     </button>
+                 );
+             })}
 
             <button
                 class="mobileUpBtn"
-                onClick={() => goPrevCorrectionPage?.()}
+                 onClick={(e) => {
+                     e.currentTarget.blur();
+                     goPrevCorrectionPage?.();
+                 }}
                 onMouseOver={(e) => e.stopPropagation()}
                 title="Previous marking page"
                 dangerouslySetInnerHTML={{ __html: toolbarIcons.prevPage }}
@@ -129,7 +147,10 @@ export const CustomToolbar = () => {
 
             <button
                 class="mobileDownBtn"
-                onClick={() => goNextCorrectionPage?.()}
+                 onClick={(e) => {
+                     e.currentTarget.blur();
+                     goNextCorrectionPage?.();
+                 }}
                 onMouseOver={(e) => e.stopPropagation()}
                 title="Next marking page"
                 dangerouslySetInnerHTML={{ __html: toolbarIcons.nextPage }}

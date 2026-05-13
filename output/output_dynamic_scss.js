@@ -1181,8 +1181,8 @@
     function setPenSettings(settings) {
         let atd = getAtd();
         if (!atd) return;
-        selectPen();
         if (settings.color) {
+            selectPen();
             _setPenColorHex(atd, settings.color);
         }
         if (settings.width) {
@@ -3034,11 +3034,6 @@
     "thin-highlighter": `<svg viewBox="0 0 496 496" width="20" height="20" xmlns="http://www.w3.org/2000/svg" ><g id="g4"><path d="M179.832,444.412l266.024-272.904c16.816-17.216,30.656-36.96,41.376-59.184l2.424-5.104L385.544,3.116l-5.176,2.632     c-21.624,11.016-41.192,25.408-58.16,42.784L56.456,321.164l-0.376,2.584c-5.208,36.48-15.208,72.136-29.712,105.968     l-3.848,8.992l2.168,2.176L0,465.572v27.312h43.312L60,476.196l2.168,2.168l8.984-3.848     c33.84-14.504,69.504-24.504,105.976-29.712L179.832,444.412z M36.688,476.884H16v-4.688l20-20l12.688,12.688L36.688,476.884z      M65.832,459.396l-24.344-24.344c12.792-30.048,21.952-61.512,27.728-93.648l90.264,90.264     C127.336,437.444,95.88,446.604,65.832,459.396z M99.312,348.884l93.088-93.088c7.04-7.04,16.392-10.912,26.344-10.912     c20.544,0,37.256,16.712,37.256,37.256c0,9.952-3.872,19.304-10.912,26.344L152,401.572L99.312,348.884z M163.312,412.884     l93.088-93.088c10.064-10.064,15.6-23.432,15.6-37.656c0-29.368-23.888-53.256-53.256-53.256c-14.224,0-27.592,5.536-37.656,15.6     L88,337.572l-12.76-12.76L333.664,59.708c14.384-14.736,30.8-27.168,48.84-36.992l87.776,87.768     c-9.416,18.344-21.472,35.096-35.88,49.856L175.928,425.5L163.312,412.884z" id="path1" /><rect x="327.996" y="153.003" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 417.3918 614.6613)" width="16" height="135.767" id="rect1" /><rect x="72" y="476.884" width="392" height="16" id="rect3" /></g></svg>`,
     eraser: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="m 5.505,11.41 0.53,0.53 z M 3,14.95 H 2.25 Z m 9.59,3.54 -0.53,-0.53 z M 9.048,21 v 0.75 z M 11.41,5.505 10.88,4.975 Z m 1.83,12.335 c 0.58,0.59 1.6,-0.52 1.06,-1.06 z M 7.216,9.698 C 6.519,9.001 5.463,10.07 6.156,10.76 Z M 6.035,11.94 11.94,6.035 10.88,4.975 4.975,10.88 Z m 0,6.02 C 5.185,17.11 4.602,16.53 4.223,16.03 3.856,15.55 3.75,15.24 3.75,14.95 h -1.5 c 0,0.75 0.312,1.38 0.78,1.99 0.455,0.6 1.125,1.27 1.945,2.09 z M 4.975,10.88 C 4.155,11.7 3.485,12.37 3.03,12.96 2.562,13.58 2.25,14.2 2.25,14.95 h 1.5 c 0,-0.29 0.106,-0.6 0.473,-1.08 0.379,-0.49 0.962,-1.08 1.812,-1.93 z m 7.085,7.08 c -0.85,0.85 -1.44,1.44 -1.93,1.82 -0.483,0.36 -0.793,0.47 -1.082,0.47 v 1.5 c 0.748,0 1.372,-0.31 1.992,-0.78 0.59,-0.46 1.26,-1.12 2.08,-1.94 z m -7.085,1.07 c 0.82,0.82 1.487,1.48 2.084,1.94 0.614,0.47 1.24,0.78 1.989,0.78 v -1.5 C 8.759,20.25 8.449,20.14 7.968,19.78 7.471,19.4 6.885,18.81 6.035,17.96 Z M 17.96,6.035 c 0.85,0.85 1.44,1.436 1.82,1.933 0.36,0.481 0.47,0.791 0.47,1.08 h 1.5 C 21.75,8.299 21.44,7.673 20.97,7.059 20.51,6.462 19.85,5.795 19.03,4.975 Z m 1.07,-1.06 C 18.21,4.155 17.54,3.485 16.94,3.03 16.33,2.562 15.7,2.25 14.95,2.25 v 1.5 c 0.29,0 0.6,0.106 1.08,0.473 0.5,0.379 1.08,0.962 1.93,1.812 z m -7.09,1.06 C 12.79,5.185 13.38,4.602 13.87,4.223 14.35,3.856 14.66,3.75 14.95,3.75 v -1.5 c -0.75,0 -1.37,0.312 -1.99,0.78 -0.59,0.455 -1.26,1.125 -2.08,1.945 z M 14.3,16.78 7.216,9.698 6.156,10.76 13.24,17.84 Z m 5.23,-4.17 c 0.66,-0.66 1.21,-1.23 1.58,-1.77 0.39,-0.55 0.64,-1.125 0.64,-1.792 h -1.5 c 0,0.26 -0.1,0.534 -0.36,0.931 -0.3,0.411 -0.75,0.901 -1.42,1.581 l -2.5,2.52 -3.91,3.88 1.06,1.07 2.95,-2.96 z" fill="#1c274c" id="path1" /></g></svg>`
   };
-  var penSettings = {
-    pen: { width: 2, alpha: 255 },
-    "thick-highlighter": { width: 25, alpha: 50 },
-    "thin-highlighter": { width: 5, alpha: 50 }
-  };
   var toolbarIcons = {
     togglePen: `<svg width="15px" height="15px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M21 12L3 12L8 7M3 12L8 17" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
     shift: `<svg width="15px" height="15px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12 21L12 3L17 8M12 3L7 8M12 21L7 16M12 21L17 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
@@ -3102,453 +3097,55 @@
     "+": "\u21E7="
   };
 
-  // src/helpers/actions.js
-  function updatePenSettings() {
-    const penType = document.querySelector("input[name=penType]:checked")?.value || "pen";
-    const pencolorbtn = document.querySelector(".pencolorbtn");
-    if (penType !== "eraser") {
-      StampLib.setPenSettings({
-        color: pencolorbtn?.value,
-        ...penSettings[penType]
-      });
-    }
-    const drawbtn = document.querySelector(".drawbtn");
-    if (drawbtn) {
-      drawbtn.innerHTML = penIcons[penType];
-      if (pencolorbtn) {
-        drawbtn.style.fill = pencolorbtn.value;
-      }
-    }
-  }
-  function clickReading() {
-    document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
-  }
-  function clickMath() {
-    document.querySelector(".btn-subject.border-radius-left:not(.btn-subject-disabled)")?.click();
-  }
-  function doBackspace() {
-    (document.querySelector(".btn-dialog-cancel") || document.querySelector(".close-btn") || document.querySelector(".btn-close") || document.querySelector("app-page-back-button"))?.click();
-  }
-  function doEnter() {
-    const mainBtn = document.querySelector("#EndScoringButton") || document.querySelector(".btn-dialog-navy") || document.querySelector(".bottomSheet.open .scoreBtn");
-    if (mainBtn) {
-      mainBtn.click();
-      return;
-    }
-    const studentPulldownKbfocus = document.querySelector("#customPulldown:not([hidden]) > .kbfocus");
-    if (studentPulldownKbfocus) {
-      studentPulldownKbfocus.dispatchEvent(
-        new MouseEvent("mousedown"),
-        {
-          button: 0,
-          bubbles: true
-        }
-      );
-      showHeader(false);
-      return;
-    }
-    const focusedSet = document.querySelector(".studyBarWrap.kbfocus");
-    if (focusedSet) {
-      focusedSet.querySelector(".barWrap")?.click();
-      return;
-    }
-  }
-  function isPulldownOpen() {
-    return document.querySelector("#customPulldown")?.checkVisibility() ?? false;
-  }
-  function showHeader(show) {
-    const header = document.querySelector(".grading-header");
-    if (!header)
-      return;
-    if (!show && header.classList.contains("z300")) {
-      header.classList.remove("z300");
-    } else if (show && !header.classList.contains("z300")) {
-      header.classList.add("z300");
-    }
-  }
-  function toggleHeader() {
-    const header = document.querySelector(".grading-header");
-    if (!header)
-      return;
-    header?.classList.toggle("z300");
-  }
-  function doEscape(e3, { drawTabOpen, hideDrawTab }) {
-    const printoverlay = document.querySelector(".printoverlay");
-    if (printoverlay?.checkVisibility()) {
-      window.__hidePrintPreview?.();
-      return;
-    }
-    let escapable = document.querySelector(".btn-dialog-cancel") || document.querySelector(".end-scoring-area") || document.querySelector(".playback-control .close") || document.querySelector(".btn-close") || document.querySelector(".close-btn");
-    if (escapable) {
-      escapable.click();
-      return;
-    }
-    if (isPulldownOpen()) {
-      document.querySelector("#studentInfoPullDown")?.click();
-      document.querySelector("#studentInfoPullDown")?.blur();
-      document.querySelectorAll("#customPulldown > .kbfocus").forEach((p3) => {
-        p3.classList.remove("kbfocus");
-      });
-      showHeader(false);
-      return;
-    }
-    if (drawTabOpen) {
-      hideDrawTab();
-      return;
-    }
-    if (e3.target.classList.contains("search-input")) {
-      clearSearch();
-      e3.target.parentElement.querySelector(".search-btn")?.focus();
-    }
-    document.querySelector(".studentList .kbfocus")?.classList.remove("kbfocus");
-  }
-  function clearSearch() {
-    const searchInput = document.querySelector("input.search-input");
-    if (!searchInput)
-      return;
-    searchInput.value = "";
-    searchInput.setAttribute("value", "");
-    searchInput.dispatchEvent(new Event("input"), {});
-    document.querySelector(".search-bar .search-btn")?.click();
-    document.querySelector(".studentList .kbfocus")?.classList.remove("kbfocus");
-  }
-  function focusSearch(e3) {
-    const searchInput1 = document.querySelector("input.search-input");
-    if (searchInput1) {
-      searchInput1.focus();
-      searchInput1.value = "";
-      searchInput1.setAttribute("value", "");
-      searchInput1.dispatchEvent(new Event("input"), {});
-    }
-    e3.preventDefault();
-  }
-  function cycleHighlighter() {
-    if (document.querySelector("input[name=penType]:checked")?.value === "thick-highlighter") {
-      document.querySelector("input[name=penType][value=thin-highlighter]")?.click();
-    } else {
-      document.querySelector("input[name=penType][value=thick-highlighter]")?.click();
-    }
-  }
-  function selectEraser() {
-    StampLib.expandToolbar();
-    document.querySelector(".grading-toolbar-box .grading-toolbar .eraser")?.click();
-    StampLib.collapseToolbar();
-    document.querySelector("input[name=penType][value=eraser]")?.click();
-  }
-  function getPlaybackControl() {
-    return document.querySelector(".playback-control");
-  }
-  function doP() {
-    const breakScoringButton = document.querySelector("#BreakScoringButton");
-    if (breakScoringButton) {
-      breakScoringButton.click();
-      return;
-    }
-    const playbackControl = getPlaybackControl();
-    if (playbackControl) {
-      playbackControl.querySelector(".play,.pause")?.click();
-      return;
-    }
-    document.querySelector("input[name=penType][value=pen]")?.click();
-    updatePenSettings();
-  }
-  function doDown() {
-    if (isPulldownOpen()) {
-      const kbfocus = document.querySelector("#customPulldown .option.kbfocus") || document.querySelector("#customPulldown > .option-select");
-      const options = Array.from(document.querySelectorAll("#customPulldown > .option"));
-      const i4 = options.indexOf(kbfocus);
-      if (options[i4 + 1]) {
-        kbfocus.classList.remove("kbfocus");
-        options[i4 + 1].classList.add("kbfocus");
-        options[i4 + 1].scrollIntoViewIfNeeded();
-      }
-      return;
-    }
-    document.querySelector("button.pager-button.down")?.click();
-  }
-  function doUp() {
-    if (isPulldownOpen()) {
-      const kbfocus = document.querySelector("#customPulldown .option.kbfocus") || document.querySelector("#customPulldown > .option-select");
-      const options = Array.from(document.querySelectorAll("#customPulldown > .option"));
-      const i4 = options.indexOf(kbfocus);
-      if (options[i4 - 1]) {
-        kbfocus.classList.remove("kbfocus");
-        options[i4 - 1].classList.add("kbfocus");
-        options[i4 - 1].scrollIntoViewIfNeeded();
-      }
-      return;
-    }
-    document.querySelector("button.pager-button.up")?.click();
-  }
-  function doS() {
-    const playbackControl = getPlaybackControl();
-    if (playbackControl) {
-      playbackControl.querySelector(".stop")?.click();
-      return;
-    }
-    document.querySelector("button#OneSideDisplayButton")?.click();
-  }
-  function do2(key) {
-    const playbackControl = getPlaybackControl();
-    if (playbackControl) {
-      playbackControl.querySelector(".speed-2")?.click();
-      return;
-    }
-    doKeyboardDefault(key);
-  }
-  function do8(key) {
-    const playbackControl = getPlaybackControl();
-    if (playbackControl) {
-      playbackControl.querySelector(".speed-8")?.click();
-      return;
-    }
-    doKeyboardDefault(key);
-  }
-  function doKeyboardDefault(key) {
-    const worksheet = document.querySelector(".ATD0020P-worksheet-container.selected");
-    if (!worksheet)
-      return;
-    const markboxMap = window.__markboxMap || {};
-    worksheet.querySelectorAll(".mark-box")[markboxMap[key]]?.click();
-  }
-  function matchPreviousMarkings() {
-    const resultMapping = {
-      "check": "check",
-      "check-double": "check",
-      "check-triangle": "check",
-      "triangle": "triangle",
-      "triangle-double": "triangle",
-      "triangle-check": "triangle"
-    };
-    const resultBoxes = document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-result-boxs .result-box:not(.right) .result-box-type");
-    if (!resultBoxes.length) {
-      xAll();
-      return;
-    }
-    for (let i4 = 0; i4 < 2; i4++) {
-      const markboxes = document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-boxs .mark-box");
-      resultBoxes.forEach((resultBox, index) => {
-        const required = resultMapping[resultBox.classList[1]];
-        const markbox = markboxes[index];
-        if (markbox && !markbox.querySelector(`.${required}`)) {
-          markbox.click();
-        }
-      });
-    }
-  }
-  function xAll() {
-    document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
-  }
-  function clearMarkboxs() {
-    for (let i4 = 0; i4 < 2; i4++) {
-      document.querySelectorAll(
-        ".worksheet-container .worksheet-container.selected .mark-boxs .mark-box"
-      ).forEach((markbox) => {
-        if (!markbox.querySelector(`.default`)) {
-          markbox.click();
-        }
-      });
-    }
-  }
+  // src/icons/pen.svg
+  var pen_default = '<svg width="20" height="20" viewBox="0 0 18.24 18.24" fill="#000000" xmlns="http://www.w3.org/2000/svg" ><g id="g1" transform="translate(-3.173,-2.84)"><path id="path3" style="fill-rule:evenodd" d="m 3.486,16.01 -0.327,3.57 c 0.08,0.89 1.231,1.58 1.737,1.53 L 8.418,20.73 C 9.147,20.53 9.644,19.95 9.964,19.61 13.42,16.11 17.12,12.25 20.9,8.609 21.76,7.588 21.38,5.886 20.79,5.28 L 18.85,3.379 C 17.75,2.318 16.09,2.838 15.36,3.523 L 4.084,14.88 C 3.652,15.31 3.501,15.75 3.486,16.01 Z M 15.42,5.627 18.67,8.915 19.79,7.628 C 20.05,7.242 20.03,6.654 19.73,6.339 L 17.9,4.552 C 17.42,4.173 16.97,4.165 16.65,4.452 Z M 5.547,15.5 c -0.371,0.41 2.855,3.58 3.137,3.28 L 17.56,9.902 14.34,6.715 Z m -0.636,0.83 c -0.07,0.65 -0.502,3.03 -0.181,3.23 0.216,0.2 2.03,0 3.119,-0.19 C 5.543,17.58 4.926,16.2 4.911,16.33 Z" /></g></svg>\n';
 
-  // src/hooks/usePageChange.js
-  var usePageChange = (options = {}) => {
-    const {
-      enabled = true,
-      onEnable = () => {
-      },
-      onPageEnter = () => {
-      },
-      onPageLeave = () => {
-      },
-      onDisable = () => {
-      },
-      onStartLoading = () => {
-      }
-    } = options;
-    const loadObserverRef = A2(null);
-    const pageChangeObserverRef = A2(null);
-    const callbacksRef = A2({ onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading });
-    const enabledRef = A2(enabled);
-    callbacksRef.current = { onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading };
-    enabledRef.current = enabled;
-    const setupPageObserver = q2(() => {
-      if (!pageChangeObserverRef.current) {
-        pageChangeObserverRef.current = new MutationObserver((ml) => {
-          if (!enabledRef.current)
-            return;
-          for (const m3 of ml) {
-            if (m3.target.classList.contains("selected")) {
-              callbacksRef.current.onPageEnter(m3.target);
-            } else {
-              callbacksRef.current.onPageLeave(m3.target);
-            }
-          }
-        });
-      }
-      pageChangeObserverRef.current.disconnect();
-      document.querySelectorAll(".ATD0020P-worksheet-container").forEach((page) => {
-        pageChangeObserverRef.current.observe(page, { attributeFilter: ["class"] });
-      });
-      if (enabledRef.current) {
-        callbacksRef.current.onPageEnter(document.querySelector(".ATD0020P-worksheet-container.selected"));
-      }
-    }, []);
-    y2(() => {
-      if (!enabled) {
-        loadObserverRef.current?.disconnect();
-        pageChangeObserverRef.current?.disconnect();
-        const activePage = document.querySelector(".ATD0020P-worksheet-container.selected");
-        callbacksRef.current.onDisable(activePage);
-        return;
-      }
-      const appRoot = document.querySelector("app-root");
-      if (!appRoot)
-        return;
-      loadObserverRef.current = new MutationObserver((mutationList) => {
-        if (!enabledRef.current)
-          return;
-        for (const mutation of mutationList) {
-          if (mutation.target.nodeName === "LOADING-SPINNER") {
-            if (mutation.removedNodes.length) {
-              if (!document.querySelector("app-atd0020p"))
-                return;
-              callbacksRef.current.onEnable();
-              setupPageObserver();
-            } else {
-              callbacksRef.current.onStartLoading();
-            }
-            break;
-          }
-        }
-      });
-      loadObserverRef.current.observe(appRoot, { childList: true, subtree: true });
-      if (document.querySelector("app-atd0020p")) {
-        callbacksRef.current.onEnable();
-        setupPageObserver();
-      }
-      return () => {
-        loadObserverRef.current?.disconnect();
-        pageChangeObserverRef.current?.disconnect();
-        const activePage = document.querySelector(".ATD0020P-worksheet-container.selected");
-        callbacksRef.current.onDisable(activePage);
-      };
-    }, [enabled, setupPageObserver]);
-    const disable = q2(() => {
-      loadObserverRef.current?.disconnect();
-      pageChangeObserverRef.current?.disconnect();
-    }, []);
-    return { disable };
+  // src/icons/highlighter.svg
+  var highlighter_default = '<svg viewBox="0 0 497.4 542" width="20" height="20" fill="#000000" xmlns="http://www.w3.org/2000/svg"><g id="g6" transform="translate(0,18.69)"><path d="M 186.6,453.4 447.1,183.6 C 463.8,166.3 484,143 494.9,120.9 l 2.5,-5.1 -135,-134.49 -5.1,2.63 C 335.7,-4.899 316.1,9.353 299.1,26.72 L 39.36,293.8 l -0.38,2.5 c -5.54,36.5 -0.96,78.4 -9.62,114.2 l -6.84,28.2 2.17,2.2 L 0,465.6 v 39.3 h 43.31 l 22.46,-20.4 2.17,2.2 8.98,-3.9 C 110.7,468.2 142.5,446 178.8,452.1 Z M 36.69,484.9 H 16 v -12.7 l 20,-20 18.46,18.3 z M 69.68,466.7 41.49,435.1 C 51.71,405 51.47,353.8 52.12,319.2 L 159.5,431.7 c -32.2,5.7 -59.77,22.2 -89.82,35 z M 94.47,337.4 185.7,246.7 c 7.1,-6.9 16.4,-10.9 26.3,-10.9 20.6,0 44,25.8 44,46.3 0,10 -3.9,19.3 -10.9,26.4 L 152,401.6 Z m 68.83,75.5 93.1,-93.1 c 10.1,-10.1 15.6,-23.4 15.6,-37.7 0,-29.3 -30.6,-62.3 -60,-62.3 -14.2,0 -27.4,5.6 -37.6,15.6 L 83.16,326.1 58.14,297.4 310.6,37.9 C 324.9,23.16 341.4,10.73 359.4,0.9131 L 478,119.1 c -9.4,18.3 -22.8,34.6 -37.2,49.3 L 182.2,434 Z" id="path1" /><rect x="-406" y="37.07" transform="rotate(-135)" width="16" height="135.8" id="rect1" style="stroke-width:0.99999" /><rect x="72" y="476.9" width="392" height="46.36" id="rect3" /></g></svg>\n';
+
+  // src/icons/thin-highlighter.svg
+  var thin_highlighter_default = '<svg viewBox="0 0 496 496" width="20" height="20" fill="#000000" xmlns="http://www.w3.org/2000/svg" ><g id="g4"><path d="M179.832,444.412l266.024-272.904c16.816-17.216,30.656-36.96,41.376-59.184l2.424-5.104L385.544,3.116l-5.176,2.632     c-21.624,11.016-41.192,25.408-58.16,42.784L56.456,321.164l-0.376,2.584c-5.208,36.48-15.208,72.136-29.712,105.968     l-3.848,8.992l2.168,2.176L0,465.572v27.312h43.312L60,476.196l2.168,2.168l8.984-3.848     c33.84-14.504,69.504-24.504,105.976-29.712L179.832,444.412z M36.688,476.884H16v-4.688l20-20l12.688,12.688L36.688,476.884z      M65.832,459.396l-24.344-24.344c12.792-30.048,21.952-61.512,27.728-93.648l90.264,90.264     C127.336,437.444,95.88,446.604,65.832,459.396z M99.312,348.884l93.088-93.088c7.04-7.04,16.392-10.912,26.344-10.912     c20.544,0,37.256,16.712,37.256,37.256c0,9.952-3.872,19.304-10.912,26.344L152,401.572L99.312,348.884z M163.312,412.884     l93.088-93.088c10.064-10.064,15.6-23.432,15.6-37.656c0-29.368-23.888-53.256-53.256-53.256c-14.224,0-27.592,5.536-37.656,15.6     L88,337.572l-12.76-12.76L333.664,59.708c14.384-14.736,30.8-27.168,48.84-36.992l87.776,87.768     c-9.416,18.344-21.472,35.096-35.88,49.856L175.928,425.5L163.312,412.884z" id="path1" /><rect x="327.996" y="153.003" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 417.3918 614.6613)" width="16" height="135.767" id="rect1" /><rect x="72" y="476.884" width="392" height="16" id="rect3" /></g></svg>\n';
+
+  // src/icons/eraser.svg
+  var eraser_default = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="m 5.505,11.41 0.53,0.53 z M 3,14.95 H 2.25 Z m 9.59,3.54 -0.53,-0.53 z M 9.048,21 v 0.75 z M 11.41,5.505 10.88,4.975 Z m 1.83,12.335 c 0.58,0.59 1.6,-0.52 1.06,-1.06 z M 7.216,9.698 C 6.519,9.001 5.463,10.07 6.156,10.76 Z M 6.035,11.94 11.94,6.035 10.88,4.975 4.975,10.88 Z m 0,6.02 C 5.185,17.11 4.602,16.53 4.223,16.03 3.856,15.55 3.75,15.24 3.75,14.95 h -1.5 c 0,0.75 0.312,1.38 0.78,1.99 0.455,0.6 1.125,1.27 1.945,2.09 z M 4.975,10.88 C 4.155,11.7 3.485,12.37 3.03,12.96 2.562,13.58 2.25,14.2 2.25,14.95 h 1.5 c 0,-0.29 0.106,-0.6 0.473,-1.08 0.379,-0.49 0.962,-1.08 1.812,-1.93 z m 7.085,7.08 c -0.85,0.85 -1.44,1.44 -1.93,1.82 -0.483,0.36 -0.793,0.47 -1.082,0.47 v 1.5 c 0.748,0 1.372,-0.31 1.992,-0.78 0.59,-0.46 1.26,-1.12 2.08,-1.94 z m -7.085,1.07 c 0.82,0.82 1.487,1.48 2.084,1.94 0.614,0.47 1.24,0.78 1.989,0.78 v -1.5 C 8.759,20.25 8.449,20.14 7.968,19.78 7.471,19.4 6.885,18.81 6.035,17.96 Z M 17.96,6.035 c 0.85,0.85 1.44,1.436 1.82,1.933 0.36,0.481 0.47,0.791 0.47,1.08 h 1.5 C 21.75,8.299 21.44,7.673 20.97,7.059 20.51,6.462 19.85,5.795 19.03,4.975 Z m 1.07,-1.06 C 18.21,4.155 17.54,3.485 16.94,3.03 16.33,2.562 15.7,2.25 14.95,2.25 v 1.5 c 0.29,0 0.6,0.106 1.08,0.473 0.5,0.379 1.08,0.962 1.93,1.812 z m -7.09,1.06 C 12.79,5.185 13.38,4.602 13.87,4.223 14.35,3.856 14.66,3.75 14.95,3.75 v -1.5 c -0.75,0 -1.37,0.312 -1.99,0.78 -0.59,0.455 -1.26,1.125 -2.08,1.945 z M 14.3,16.78 7.216,9.698 6.156,10.76 13.24,17.84 Z m 5.23,-4.17 c 0.66,-0.66 1.21,-1.23 1.58,-1.77 0.39,-0.55 0.64,-1.125 0.64,-1.792 h -1.5 c 0,0.26 -0.1,0.534 -0.36,0.931 -0.3,0.411 -0.75,0.901 -1.42,1.581 l -2.5,2.52 -3.91,3.88 1.06,1.07 2.95,-2.96 z" fill="#1c274c" id="path1" /></g></svg>';
+
+  // src/helpers/penPresets.js
+  var PEN_PRESETS = {
+    "pen": { id: "pen", label: "Pen", width: 2, alpha: 1 },
+    "highlighter": { id: "highlighter", label: "Highlighter", width: 25, alpha: 0.2 },
+    "thin-highlighter": { id: "thin-highlighter", label: "Thin Highlighter", width: 5, alpha: 0.2 },
+    "eraser": { id: "eraser", label: "Eraser", width: 24, alpha: 1 }
   };
-
-  // src/helpers/ng.js
-  function getGradingPage() {
-    return window.kclass?.ng?.context?._contentsManagerService?.paging?._currentPage?.gradingWaitingSet;
-  }
-  function getGradingStartTime() {
-    let gradingPage = getGradingPage();
-    if (gradingPage?.GradingStartTime) {
-      return /* @__PURE__ */ new Date(gradingPage.GradingStartTime + "Z");
+  var PRESET_ICONS = {
+    "pen": pen_default,
+    "highlighter": highlighter_default,
+    "thin-highlighter": thin_highlighter_default,
+    "eraser": eraser_default
+  };
+  var getColoredPenIcon = (presetId, color) => {
+    let iconHtml = PRESET_ICONS[presetId] || PRESET_ICONS["pen"];
+    if (color && presetId !== "eraser") {
+      iconHtml = iconHtml.replace(/fill="[^"]*"/g, `fill="${color}"`);
     }
+    return iconHtml;
+  };
+  var getActivePresetId = (eraserEnabled, penWidth, penAlpha) => {
+    if (eraserEnabled)
+      return "eraser";
+    if (penWidth === 2 && penAlpha === 1)
+      return "pen";
+    if (penWidth === 25 && Math.abs(penAlpha - 0.2) < 0.01)
+      return "highlighter";
+    if (penWidth === 5 && Math.abs(penAlpha - 0.2) < 0.01)
+      return "thin-highlighter";
     return null;
-  }
-  function getStudyFinishTime() {
-    let gradingPage = getGradingPage();
-    if (gradingPage?.StudyFinishTime) {
-      return /* @__PURE__ */ new Date(gradingPage.StudyFinishTime + "Z");
-    }
-    return null;
-  }
-
-  // src/hooks/useTimestamp.js
-  var useTimestampDisplay = (enabled) => {
-    const [timestamp, setTimestamp] = d2("");
-    const [colorClass, setColorClass] = d2("");
-    const clearPageTimestamp = q2((page) => {
-      if (page)
-        page.style.outlineColor = "";
-    }, []);
-    const updateTimestamp = q2((page) => {
-      const is = StampLib?.getStudentDrawing();
-      if (is) {
-        if (is.length === 0) {
-          setTimestamp("None");
-          setColorClass("red");
-          if (page)
-            page.style.outlineColor = "red";
-          return;
-        }
-        try {
-          const lastStroke = new Date(is[is.length - 1].cs[0].t);
-          setTimestamp(`Last change:<br>${lastStroke.toLocaleString()}`);
-          const activePageEl = document.querySelector(".worksheet-navigator-page.active .text.disabled");
-          if (activePageEl) {
-            setColorClass("");
-            if (page)
-              page.style.outlineColor = "";
-            return;
-          }
-          const lastGraded = getGradingStartTime();
-          const submitted = getStudyFinishTime();
-          if (lastGraded && submitted) {
-            if (lastGraded > submitted) {
-              setColorClass("");
-              if (page)
-                page.style.outlineColor = "";
-            } else if (lastStroke > lastGraded) {
-              setColorClass("green");
-              if (page)
-                page.style.outlineColor = "lightgreen";
-            } else {
-              setColorClass("red");
-              if (page)
-                page.style.outlineColor = "red";
-            }
-          } else {
-            setColorClass("");
-            if (page)
-              page.style.outlineColor = "";
-          }
-        } catch {
-          setTimestamp("");
-          setColorClass("");
-          if (page)
-            page.style.outlineColor = "";
-        }
-      } else {
-        setTimestamp("");
-        setColorClass("");
-        if (page)
-          page.style.outlineColor = "";
-      }
-    }, []);
-    const onEnable = q2(() => {
-      if (!enabled)
-        return;
-      const activePage = document.querySelector(".ATD0020P-worksheet-container.selected");
-      setTimeout(() => updateTimestamp(activePage), 100);
-    }, [enabled, updateTimestamp]);
-    const onPageEnter = q2((page) => {
-      if (!enabled)
-        return;
-      setTimeout(() => updateTimestamp(page), 100);
-    }, [enabled, updateTimestamp]);
-    const onPageLeave = q2((page) => {
-      clearPageTimestamp(page);
-    }, [clearPageTimestamp]);
-    const onDisable = q2((page) => {
-      clearPageTimestamp(page);
-      setTimestamp("");
-      setColorClass("");
-    }, [clearPageTimestamp]);
-    usePageChange({
-      enabled,
-      onEnable,
-      onPageEnter,
-      onPageLeave,
-      onDisable
+  };
+  var setStampLibPenSettings = (color, width, alpha) => {
+    StampLib.setPenSettings({
+      color,
+      width,
+      alpha: Math.round(alpha * 255)
     });
-    return { timestamp, colorClass };
   };
 
   // node_modules/preact/jsx-runtime/dist/jsxRuntime.module.js
@@ -3624,6 +3221,203 @@
       callKeyDownHandler
     ]);
     return /* @__PURE__ */ u3(DrawToolContext.Provider, { value: contextValue, children });
+  };
+
+  // src/components/PrintOverlay.jsx
+  var PrintOverlayContext = R(null);
+  var usePrintOverlay = () => {
+    const context = x2(PrintOverlayContext);
+    if (!context) {
+      throw new Error("usePrintOverlay must be used within PrintOverlayProvider");
+    }
+    return context;
+  };
+  var PrintOverlayProvider = ({ children }) => {
+    const [state, setState] = d2({
+      visible: false,
+      mode: null,
+      previewStyle: {},
+      previewContent: null,
+      stampData: null,
+      textValue: "",
+      color: "#ff2200",
+      scale: 0.25,
+      stampColorType: "Unchanged",
+      rainbowSpeed: 1
+    });
+    const showStampPreview = q2((stamp2, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos, stampColorType, rainbowSpeed) => {
+      setState({
+        visible: true,
+        mode: "stamp",
+        stampData: { stamp: stamp2, maxScaleFactor },
+        previewStyle: {
+          height: `${stampDimensions.height * scale}px`,
+          width: `${stampDimensions.width * scale}px`,
+          "border-color": borderColor,
+          left: initialPos ? `${initialPos.x}px` : "0px",
+          top: initialPos ? `${initialPos.y}px` : "0px"
+        },
+        previewContent: svg,
+        textValue: "",
+        color: borderColor,
+        scale,
+        stampColorType,
+        rainbowSpeed
+      });
+    }, []);
+    const showTextPreview = q2((text, writeDimensions, scale, borderColor, initialPos) => {
+      setState({
+        visible: true,
+        mode: "text",
+        stampData: null,
+        previewStyle: {
+          height: `${writeDimensions.height}px`,
+          width: `${writeDimensions.width}px`,
+          "border-color": borderColor,
+          left: initialPos ? `${initialPos.x}px` : "0px",
+          top: initialPos ? `${initialPos.y}px` : "0px"
+        },
+        previewContent: text,
+        textValue: text,
+        color: borderColor,
+        scale,
+        stampColorType: "Unchanged",
+        rainbowSpeed: 1
+      });
+    }, []);
+    const hidePreview = q2(() => {
+      setState((prev) => ({ ...prev, visible: false }));
+    }, []);
+    const updatePreview = q2(() => {
+      setState((prev) => {
+        if (!prev.visible)
+          return prev;
+        const currentSize = getStampSize();
+        const currentColor = getSingleColor();
+        const currentStampColorType = getStampColorType();
+        const currentRainbowSpeed = getRainbowSpeed();
+        const newPreviewStyle = { ...prev.previewStyle };
+        newPreviewStyle["border-color"] = currentColor;
+        if (prev.mode === "stamp" && prev.stampData) {
+          const stampDimensions = prev.stampData.stamp._cachedDimensions || StampLib.getWriteStampDimensions(prev.stampData.stamp, 1);
+          const currentScale = currentSize / 100 * prev.stampData.maxScaleFactor;
+          newPreviewStyle.height = `${stampDimensions.height * currentScale}px`;
+          newPreviewStyle.width = `${stampDimensions.width * currentScale}px`;
+        }
+        return {
+          ...prev,
+          previewStyle: newPreviewStyle,
+          color: currentColor,
+          scale: prev.mode === "stamp" && prev.stampData ? currentSize / 100 * prev.stampData.maxScaleFactor : currentSize / 100,
+          stampColorType: currentStampColorType,
+          rainbowSpeed: currentRainbowSpeed
+        };
+      });
+    }, []);
+    const contextValue = T2(() => ({
+      state,
+      showStampPreview,
+      showTextPreview,
+      hidePreview,
+      updatePreview
+    }), [state, showStampPreview, showTextPreview, hidePreview, updatePreview]);
+    return /* @__PURE__ */ u3(PrintOverlayContext.Provider, { value: contextValue, children });
+  };
+  var PrintOverlay = () => {
+    const { state, hidePreview } = usePrintOverlay();
+    const { visible, mode, previewStyle, previewContent, stampData, textValue, color, scale, stampColorType, rainbowSpeed } = state;
+    const overlayRef = A2(null);
+    const previewRef = A2(null);
+    y2(() => {
+      if (!visible || !previewRef.current)
+        return;
+      if (mode === "stamp" && stampData) {
+        const stampDimensions = stampData.stamp._cachedDimensions || StampLib.getWriteStampDimensions(stampData.stamp, 1);
+        previewRef.current.stampDimensions = stampDimensions;
+        previewRef.current.maxScaleFactor = stampData.maxScaleFactor;
+      } else if (mode === "text") {
+        previewRef.current.textValue = textValue;
+      }
+    }, [visible, mode, stampData, textValue]);
+    y2(() => {
+      if (!visible)
+        return;
+      const overlay = overlayRef.current;
+      const preview = previewRef.current;
+      if (!overlay || !preview)
+        return;
+      const handlePMove = (e3) => {
+        preview.animate({
+          left: `${e3.clientX}px`,
+          top: `${e3.clientY}px`
+        }, { duration: 100, fill: "forwards" });
+      };
+      const handleClick = (e3) => {
+        const atd = StampLib.getAtd();
+        if (!atd?.bcanvas) {
+          hidePreview();
+          return;
+        }
+        const canvasRect = atd.bcanvas.getBoundingClientRect();
+        const zoomRatio = atd.bcanvas.clientHeight / atd.inkHeight;
+        let x3 = e3.clientX, y3 = e3.clientY;
+        if (e3.clientX < canvasRect.left && e3.clientX > canvasRect.left - 10)
+          x3 = canvasRect.left;
+        if (e3.clientY < canvasRect.top && e3.clientY > canvasRect.top - 10)
+          y3 = canvasRect.top;
+        if (x3 < canvasRect.left || y3 < canvasRect.top || x3 > canvasRect.right || y3 > canvasRect.bottom) {
+          hidePreview();
+          return;
+        }
+        const position = { x: (x3 - canvasRect.left) / zoomRatio, y: (y3 - canvasRect.top) / zoomRatio };
+        const currentColor = getSingleColor();
+        const currentStampColorType = getStampColorType();
+        const currentRainbowSpeed = getRainbowSpeed();
+        if (mode === "stamp" && stampData) {
+          const currentSize = getStampSize();
+          const currentScale = currentSize / 100 * stampData.maxScaleFactor;
+          const options = {
+            color: currentColor,
+            rainbow: currentStampColorType === "Rainbow" || currentStampColorType === "Rainbow Fill",
+            rainbowSpeed: currentRainbowSpeed || 1,
+            usePredefinedColor: currentStampColorType === "Unchanged",
+            rainbowFill: currentStampColorType === "Rainbow Fill"
+          };
+          StampLib.writeStampAt(stampData.stamp, position, currentScale, options);
+        } else if (mode === "text") {
+          const currentSize = getStampSize();
+          const currentScale = currentSize / 100;
+          StampLib.writeAllAt(textValue, position, currentScale, { color: currentColor });
+        }
+        hidePreview();
+      };
+      overlay.addEventListener("pointermove", handlePMove);
+      overlay.addEventListener("click", handleClick);
+      return () => {
+        overlay.removeEventListener("pointermove", handlePMove);
+        overlay.removeEventListener("click", handleClick);
+      };
+    }, [visible, mode, stampData, textValue, color, hidePreview, scale, stampColorType, rainbowSpeed]);
+    if (!visible)
+      return null;
+    return /* @__PURE__ */ u3(
+      "div",
+      {
+        ref: overlayRef,
+        class: "printoverlay",
+        style: { display: "unset" },
+        onMouseOver: (e3) => e3.stopPropagation(),
+        children: /* @__PURE__ */ u3(
+          "div",
+          {
+            ref: previewRef,
+            class: mode === "stamp" ? "stampPrintPreviewDiv" : "printPreviewDiv",
+            style: previewStyle,
+            dangerouslySetInnerHTML: mode === "stamp" ? { __html: previewContent } : void 0
+          }
+        )
+      }
+    );
   };
 
   // src/components/HelpOverlay.module.css
@@ -3935,40 +3729,6 @@
     ] }) });
   };
 
-  // src/context/PenSettingsContext.jsx
-  var PenSettingsContext = R(null);
-  var usePenSettings = () => {
-    const context = x2(PenSettingsContext);
-    if (!context) {
-      throw new Error("usePenSettings must be used within PenSettingsProvider");
-    }
-    return context;
-  };
-  var PenSettingsProvider = ({ children }) => {
-    const [penColor, setPenColor] = d2("#ff2200");
-    const [penWidth, setPenWidth] = d2(2);
-    const [penAlpha, setPenAlpha] = d2(1);
-    const [penMode, setPenMode] = d2("pen");
-    const [eraserEnabled, setEraserEnabled] = d2(false);
-    const handleUnlock = q2(() => {
-      StampLib.unlockPage();
-    }, []);
-    const contextValue = T2(() => ({
-      penColor,
-      setPenColor,
-      penWidth,
-      setPenWidth,
-      penAlpha,
-      setPenAlpha,
-      penMode,
-      setPenMode,
-      eraserEnabled,
-      setEraserEnabled,
-      handleUnlock
-    }), [penColor, penWidth, penAlpha, penMode, eraserEnabled, handleUnlock]);
-    return /* @__PURE__ */ u3(PenSettingsContext.Provider, { value: contextValue, children });
-  };
-
   // src/helpers/scrolling.js
   var pageScrolling = false;
   var pageSideScrolling = false;
@@ -4081,52 +3841,10 @@
   // src/icons/stamp-text.svg
   var stamp_text_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <polyline points="4 7 4 4 20 4 20 7"/>\n  <line x1="9" y1="20" x2="15" y2="20"/>\n  <line x1="12" y1="4" x2="12" y2="20"/>\n</svg>';
 
-  // src/icons/pen.svg
-  var pen_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>\n</svg>';
-
-  // src/icons/highlighter.svg
-  var highlighter_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="m9 11-6 6v3h9l3-3"/>\n  <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>\n</svg>';
-
-  // src/icons/thin-highlighter.svg
-  var thin_highlighter_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="m9 11-6 6v3h9l3-3"/>\n  <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>\n  <line x1="19" y1="9" x2="15" y2="5"/>\n</svg>';
-
-  // src/icons/eraser.svg
-  var eraser_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/>\n  <path d="M22 21H7"/>\n  <path d="m5 11 9 9"/>\n</svg>';
-
   // src/components/ImageStampTab.jsx
   var stamps = window.StampLib?.stamps || {};
   var stampCategories = Object.keys(stamps);
   var stopPropagation = (e3) => e3.stopPropagation();
-  var PEN_PRESETS = [
-    { id: "pen", label: "Pen", width: 2, alpha: 1 },
-    { id: "highlighter", label: "Highlighter", width: 25, alpha: 0.2 },
-    { id: "thin-highlighter", label: "Thin Highlighter", width: 5, alpha: 0.2 },
-    { id: "eraser", label: "Eraser", width: 24, alpha: 1 }
-  ];
-  var PRESET_ICONS = {
-    pen: pen_default,
-    highlighter: highlighter_default,
-    "thin-highlighter": thin_highlighter_default,
-    eraser: eraser_default
-  };
-  var getActivePresetId = (eraserEnabled, penWidth, penAlpha) => {
-    if (eraserEnabled)
-      return "eraser";
-    if (penWidth === 2 && penAlpha === 1)
-      return "pen";
-    if (penWidth === 25 && Math.abs(penAlpha - 0.2) < 0.01)
-      return "highlighter";
-    if (penWidth === 5 && Math.abs(penAlpha - 0.2) < 0.01)
-      return "thin-highlighter";
-    return null;
-  };
-  var setStampLibPenSettings = (color, width, alpha) => {
-    StampLib.setPenSettings({
-      color,
-      width,
-      alpha: Math.round(alpha * 255)
-    });
-  };
   var imageStampSizeRef = { current: 25 };
   var singleColorRef = { current: "#ff2200" };
   var stampColorTypeRef = { current: "Unchanged" };
@@ -4262,6 +3980,11 @@
       setImageStampSizeFnRef.current = setImageStampSize;
     }, [setImageStampSize]);
     y2(() => {
+      if (!eraserEnabled) {
+        setStampLibPenSettings(singleColorRef.current, penWidth, penAlpha);
+      }
+    }, [eraserEnabled, singleColor, penWidth, penAlpha]);
+    y2(() => {
       if (stampCategories.length > 0 && !stampCategories.includes(activeStampTab)) {
         setActiveStampTab(stampCategories[0]);
       }
@@ -4363,6 +4086,10 @@
       setPenWidth(newWidth);
       if (!eraserEnabled) {
         setStampLibPenSettings(singleColorRef.current, newWidth, penAlpha);
+      } else {
+        StampLib.setPenSettings({
+          width: newWidth
+        });
       }
     }, [setPenWidth, eraserEnabled, penAlpha]);
     const handleAlphaChange = q2((e3) => {
@@ -4375,11 +4102,13 @@
     const handlePresetClick = q2((e3) => {
       const btn = e3.currentTarget;
       const presetId = btn.getAttribute("data-preset-id");
-      const preset = PEN_PRESETS.find((p3) => p3.id === presetId);
+      const preset = PEN_PRESETS[presetId];
       if (preset) {
         if (preset.id === "eraser") {
           setEraserEnabled(true);
           setPenMode("eraser");
+          setPenWidth(preset.width);
+          setPenAlpha(preset.alpha);
           selectEraser();
         } else {
           setEraserEnabled(false);
@@ -4438,7 +4167,7 @@
     const handleKeys2 = q2((e3) => {
       if (e3.altKey || e3.ctrlKey || e3.metaKey)
         return;
-      if (e3.target.nodeName === "INPUT" && e3.target.type !== "checkbox" || e3.target.nodeName === "TEXTAREA") {
+      if (e3.target.nodeName === "INPUT" && e3.target.type !== "checkbox" && e3.target.type !== "color" && e3.target.type != "range" || e3.target.nodeName === "TEXTAREA") {
         if (e3.key === "Escape") {
           close();
         }
@@ -4618,7 +4347,7 @@
             onClick: handlePenSettingsToggle,
             onMouseOver: stopPropagation,
             children: [
-              /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: pen_default } }),
+              /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: PRESET_ICONS.pen } }),
               "Pen"
             ]
           }
@@ -4689,7 +4418,7 @@
               }
             ) })
           ] }),
-          /* @__PURE__ */ u3("div", { class: ImageStampTab_default.presetsContainer, ref: presetsContainerRef, children: PEN_PRESETS.map((preset) => /* @__PURE__ */ u3(
+          /* @__PURE__ */ u3("div", { class: ImageStampTab_default.presetsContainer, ref: presetsContainerRef, children: Object.values(PEN_PRESETS).map((preset) => /* @__PURE__ */ u3(
             "button",
             {
               "data-preset-id": preset.id,
@@ -4709,201 +4438,513 @@
     ] });
   };
 
-  // src/components/PrintOverlay.jsx
-  var PrintOverlayContext = R(null);
-  var usePrintOverlay = () => {
-    const context = x2(PrintOverlayContext);
+  // src/context/PenSettingsContext.jsx
+  var PenSettingsContext = R(null);
+  var penColorRef = { current: "#ff2200" };
+  var penWidthRef = { current: 2 };
+  var penAlphaRef = { current: 1 };
+  var penModeRef = { current: "pen" };
+  var eraserEnabledRef = { current: false };
+  var getPenWidth = () => penWidthRef.current;
+  var getPenAlpha = () => penAlphaRef.current;
+  var getEraserEnabled = () => eraserEnabledRef.current;
+  var updateStampLibFromPenSettings = () => {
+    const color = getSingleColor() || penColorRef.current;
+    const width = penWidthRef.current;
+    const alpha = penAlphaRef.current;
+    const eraserEnabled = eraserEnabledRef.current;
+    if (!eraserEnabled) {
+      setStampLibPenSettings(color, width, alpha);
+    }
+  };
+  var usePenSettings = () => {
+    const context = x2(PenSettingsContext);
     if (!context) {
-      throw new Error("usePrintOverlay must be used within PrintOverlayProvider");
+      throw new Error("usePenSettings must be used within PenSettingsProvider");
     }
     return context;
   };
-  var PrintOverlayProvider = ({ children }) => {
-    const [state, setState] = d2({
-      visible: false,
-      mode: null,
-      previewStyle: {},
-      previewContent: null,
-      stampData: null,
-      textValue: "",
-      color: "#ff2200",
-      scale: 0.25,
-      stampColorType: "Unchanged",
-      rainbowSpeed: 1
-    });
-    const showStampPreview = q2((stamp2, stampDimensions, maxScaleFactor, scale, borderColor, svg, initialPos, stampColorType, rainbowSpeed) => {
-      setState({
-        visible: true,
-        mode: "stamp",
-        stampData: { stamp: stamp2, maxScaleFactor },
-        previewStyle: {
-          height: `${stampDimensions.height * scale}px`,
-          width: `${stampDimensions.width * scale}px`,
-          "border-color": borderColor,
-          left: initialPos ? `${initialPos.x}px` : "0px",
-          top: initialPos ? `${initialPos.y}px` : "0px"
-        },
-        previewContent: svg,
-        textValue: "",
-        color: borderColor,
-        scale,
-        stampColorType,
-        rainbowSpeed
-      });
-    }, []);
-    const showTextPreview = q2((text, writeDimensions, scale, borderColor, initialPos) => {
-      setState({
-        visible: true,
-        mode: "text",
-        stampData: null,
-        previewStyle: {
-          height: `${writeDimensions.height}px`,
-          width: `${writeDimensions.width}px`,
-          "border-color": borderColor,
-          left: initialPos ? `${initialPos.x}px` : "0px",
-          top: initialPos ? `${initialPos.y}px` : "0px"
-        },
-        previewContent: text,
-        textValue: text,
-        color: borderColor,
-        scale,
-        stampColorType: "Unchanged",
-        rainbowSpeed: 1
-      });
-    }, []);
-    const hidePreview = q2(() => {
-      setState((prev) => ({ ...prev, visible: false }));
-    }, []);
-    const updatePreview = q2(() => {
-      setState((prev) => {
-        if (!prev.visible)
-          return prev;
-        const currentSize = getStampSize();
-        const currentColor = getSingleColor();
-        const currentStampColorType = getStampColorType();
-        const currentRainbowSpeed = getRainbowSpeed();
-        const newPreviewStyle = { ...prev.previewStyle };
-        newPreviewStyle["border-color"] = currentColor;
-        if (prev.mode === "stamp" && prev.stampData) {
-          const stampDimensions = prev.stampData.stamp._cachedDimensions || StampLib.getWriteStampDimensions(prev.stampData.stamp, 1);
-          const currentScale = currentSize / 100 * prev.stampData.maxScaleFactor;
-          newPreviewStyle.height = `${stampDimensions.height * currentScale}px`;
-          newPreviewStyle.width = `${stampDimensions.width * currentScale}px`;
-        }
-        return {
-          ...prev,
-          previewStyle: newPreviewStyle,
-          color: currentColor,
-          scale: prev.mode === "stamp" && prev.stampData ? currentSize / 100 * prev.stampData.maxScaleFactor : currentSize / 100,
-          stampColorType: currentStampColorType,
-          rainbowSpeed: currentRainbowSpeed
-        };
-      });
+  var PenSettingsProvider = ({ children }) => {
+    const [penColor, setPenColor] = d2("#ff2200");
+    const [penWidth, setPenWidth] = d2(2);
+    const [penAlpha, setPenAlpha] = d2(1);
+    const [penMode, setPenMode] = d2("pen");
+    const [eraserEnabled, setEraserEnabled] = d2(false);
+    y2(() => {
+      penColorRef.current = penColor;
+    }, [penColor]);
+    y2(() => {
+      penWidthRef.current = penWidth;
+    }, [penWidth]);
+    y2(() => {
+      penAlphaRef.current = penAlpha;
+    }, [penAlpha]);
+    y2(() => {
+      penModeRef.current = penMode;
+    }, [penMode]);
+    y2(() => {
+      eraserEnabledRef.current = eraserEnabled;
+    }, [eraserEnabled]);
+    const handleUnlock = q2(() => {
+      StampLib.unlockPage();
     }, []);
     const contextValue = T2(() => ({
-      state,
-      showStampPreview,
-      showTextPreview,
-      hidePreview,
-      updatePreview
-    }), [state, showStampPreview, showTextPreview, hidePreview, updatePreview]);
-    return /* @__PURE__ */ u3(PrintOverlayContext.Provider, { value: contextValue, children });
+      penColor,
+      setPenColor,
+      penWidth,
+      setPenWidth,
+      penAlpha,
+      setPenAlpha,
+      penMode,
+      setPenMode,
+      eraserEnabled,
+      setEraserEnabled,
+      handleUnlock
+    }), [penColor, penWidth, penAlpha, penMode, eraserEnabled, handleUnlock]);
+    return /* @__PURE__ */ u3(PenSettingsContext.Provider, { value: contextValue, children });
   };
-  var PrintOverlay = () => {
-    const { state, hidePreview } = usePrintOverlay();
-    const { visible, mode, previewStyle, previewContent, stampData, textValue, color, scale, stampColorType, rainbowSpeed } = state;
-    const overlayRef = A2(null);
-    const previewRef = A2(null);
-    y2(() => {
-      if (!visible || !previewRef.current)
-        return;
-      if (mode === "stamp" && stampData) {
-        const stampDimensions = stampData.stamp._cachedDimensions || StampLib.getWriteStampDimensions(stampData.stamp, 1);
-        previewRef.current.stampDimensions = stampDimensions;
-        previewRef.current.maxScaleFactor = stampData.maxScaleFactor;
-      } else if (mode === "text") {
-        previewRef.current.textValue = textValue;
+
+  // src/helpers/actions.js
+  function getOldPenTypeFromNewSettings() {
+    const eraserEnabled = getEraserEnabled();
+    const penWidth = getPenWidth();
+    const penAlpha = getPenAlpha();
+    if (eraserEnabled)
+      return "eraser";
+    if (penWidth === 2 && Math.abs(penAlpha - 1) < 0.01)
+      return "pen";
+    if (penWidth === 25 && Math.abs(penAlpha - 0.2) < 0.01)
+      return "thick-highlighter";
+    if (penWidth === 5 && Math.abs(penAlpha - 0.2) < 0.01)
+      return "thin-highlighter";
+    return "pen";
+  }
+  function updatePenSettings() {
+    updateStampLibFromPenSettings();
+    const penType = getOldPenTypeFromNewSettings();
+    const color = getSingleColor();
+    const drawbtn = document.querySelector(".drawbtn");
+    if (drawbtn) {
+      drawbtn.innerHTML = penIcons[penType];
+      if (color) {
+        drawbtn.style.fill = color;
       }
-    }, [visible, mode, stampData, textValue]);
-    y2(() => {
-      if (!visible)
-        return;
-      const overlay = overlayRef.current;
-      const preview = previewRef.current;
-      if (!overlay || !preview)
-        return;
-      const handlePMove = (e3) => {
-        preview.animate({
-          left: `${e3.clientX}px`,
-          top: `${e3.clientY}px`
-        }, { duration: 100, fill: "forwards" });
-      };
-      const handleClick = (e3) => {
-        const atd = StampLib.getAtd();
-        if (!atd?.bcanvas) {
-          hidePreview();
-          return;
+    }
+  }
+  function clickReading() {
+    document.querySelector(".btn-subject.border-radius-right:not(.btn-subject-disabled)")?.click();
+  }
+  function clickMath() {
+    document.querySelector(".btn-subject.border-radius-left:not(.btn-subject-disabled)")?.click();
+  }
+  function doBackspace() {
+    (document.querySelector(".btn-dialog-cancel") || document.querySelector(".close-btn") || document.querySelector(".btn-close") || document.querySelector("app-page-back-button"))?.click();
+  }
+  function doEnter() {
+    const mainBtn = document.querySelector("#EndScoringButton") || document.querySelector(".btn-dialog-navy") || document.querySelector(".bottomSheet.open .scoreBtn");
+    if (mainBtn) {
+      mainBtn.click();
+      return;
+    }
+    const studentPulldownKbfocus = document.querySelector("#customPulldown:not([hidden]) > .kbfocus");
+    if (studentPulldownKbfocus) {
+      studentPulldownKbfocus.dispatchEvent(
+        new MouseEvent("mousedown"),
+        {
+          button: 0,
+          bubbles: true
         }
-        const canvasRect = atd.bcanvas.getBoundingClientRect();
-        const zoomRatio = atd.bcanvas.clientHeight / atd.inkHeight;
-        let x3 = e3.clientX, y3 = e3.clientY;
-        if (e3.clientX < canvasRect.left && e3.clientX > canvasRect.left - 10)
-          x3 = canvasRect.left;
-        if (e3.clientY < canvasRect.top && e3.clientY > canvasRect.top - 10)
-          y3 = canvasRect.top;
-        if (x3 < canvasRect.left || y3 < canvasRect.top || x3 > canvasRect.right || y3 > canvasRect.bottom) {
-          hidePreview();
-          return;
+      );
+      showHeader(false);
+      return;
+    }
+    const focusedSet = document.querySelector(".studyBarWrap.kbfocus");
+    if (focusedSet) {
+      focusedSet.querySelector(".barWrap")?.click();
+      return;
+    }
+  }
+  function isPulldownOpen() {
+    return document.querySelector("#customPulldown")?.checkVisibility() ?? false;
+  }
+  function showHeader(show) {
+    const header = document.querySelector(".grading-header");
+    if (!header)
+      return;
+    if (!show && header.classList.contains("z300")) {
+      header.classList.remove("z300");
+    } else if (show && !header.classList.contains("z300")) {
+      header.classList.add("z300");
+    }
+  }
+  function toggleHeader() {
+    const header = document.querySelector(".grading-header");
+    if (!header)
+      return;
+    header?.classList.toggle("z300");
+  }
+  function doEscape(e3, { drawTabOpen, hideDrawTab }) {
+    const printoverlay = document.querySelector(".printoverlay");
+    if (printoverlay?.checkVisibility()) {
+      window.__hidePrintPreview?.();
+      return;
+    }
+    let escapable = document.querySelector(".btn-dialog-cancel") || document.querySelector(".end-scoring-area") || document.querySelector(".playback-control .close") || document.querySelector(".btn-close") || document.querySelector(".close-btn");
+    if (escapable) {
+      escapable.click();
+      return;
+    }
+    if (isPulldownOpen()) {
+      document.querySelector("#studentInfoPullDown")?.click();
+      document.querySelector("#studentInfoPullDown")?.blur();
+      document.querySelectorAll("#customPulldown > .kbfocus").forEach((p3) => {
+        p3.classList.remove("kbfocus");
+      });
+      showHeader(false);
+      return;
+    }
+    if (drawTabOpen) {
+      hideDrawTab();
+      return;
+    }
+    if (e3.target.classList.contains("search-input")) {
+      clearSearch();
+      e3.target.parentElement.querySelector(".search-btn")?.focus();
+    }
+    document.querySelector(".studentList .kbfocus")?.classList.remove("kbfocus");
+  }
+  function clearSearch() {
+    const searchInput = document.querySelector("input.search-input");
+    if (!searchInput)
+      return;
+    searchInput.value = "";
+    searchInput.setAttribute("value", "");
+    searchInput.dispatchEvent(new Event("input"), {});
+    document.querySelector(".search-bar .search-btn")?.click();
+    document.querySelector(".studentList .kbfocus")?.classList.remove("kbfocus");
+  }
+  function focusSearch(e3) {
+    const searchInput1 = document.querySelector("input.search-input");
+    if (searchInput1) {
+      searchInput1.focus();
+      searchInput1.value = "";
+      searchInput1.setAttribute("value", "");
+      searchInput1.dispatchEvent(new Event("input"), {});
+    }
+    e3.preventDefault();
+  }
+  function cycleHighlighter() {
+    if (document.querySelector("input[name=penType]:checked")?.value === "thick-highlighter") {
+      document.querySelector("input[name=penType][value=thin-highlighter]")?.click();
+    } else {
+      document.querySelector("input[name=penType][value=thick-highlighter]")?.click();
+    }
+  }
+  function selectEraser() {
+    StampLib.expandToolbar();
+    document.querySelector(".grading-toolbar-box .grading-toolbar .eraser")?.click();
+    StampLib.collapseToolbar();
+  }
+  function getPlaybackControl() {
+    return document.querySelector(".playback-control");
+  }
+  function doDown() {
+    if (isPulldownOpen()) {
+      const kbfocus = document.querySelector("#customPulldown .option.kbfocus") || document.querySelector("#customPulldown > .option-select");
+      const options = Array.from(document.querySelectorAll("#customPulldown > .option"));
+      const i4 = options.indexOf(kbfocus);
+      if (options[i4 + 1]) {
+        kbfocus.classList.remove("kbfocus");
+        options[i4 + 1].classList.add("kbfocus");
+        options[i4 + 1].scrollIntoViewIfNeeded();
+      }
+      return;
+    }
+    document.querySelector("button.pager-button.down")?.click();
+  }
+  function doUp() {
+    if (isPulldownOpen()) {
+      const kbfocus = document.querySelector("#customPulldown .option.kbfocus") || document.querySelector("#customPulldown > .option-select");
+      const options = Array.from(document.querySelectorAll("#customPulldown > .option"));
+      const i4 = options.indexOf(kbfocus);
+      if (options[i4 - 1]) {
+        kbfocus.classList.remove("kbfocus");
+        options[i4 - 1].classList.add("kbfocus");
+        options[i4 - 1].scrollIntoViewIfNeeded();
+      }
+      return;
+    }
+    document.querySelector("button.pager-button.up")?.click();
+  }
+  function doS() {
+    const playbackControl = getPlaybackControl();
+    if (playbackControl) {
+      playbackControl.querySelector(".stop")?.click();
+      return;
+    }
+    document.querySelector("button#OneSideDisplayButton")?.click();
+  }
+  function do2(key) {
+    const playbackControl = getPlaybackControl();
+    if (playbackControl) {
+      playbackControl.querySelector(".speed-2")?.click();
+      return;
+    }
+    doKeyboardDefault(key);
+  }
+  function do8(key) {
+    const playbackControl = getPlaybackControl();
+    if (playbackControl) {
+      playbackControl.querySelector(".speed-8")?.click();
+      return;
+    }
+    doKeyboardDefault(key);
+  }
+  function doKeyboardDefault(key) {
+    const worksheet = document.querySelector(".ATD0020P-worksheet-container.selected");
+    if (!worksheet)
+      return;
+    const markboxMap = window.__markboxMap || {};
+    worksheet.querySelectorAll(".mark-box")[markboxMap[key]]?.click();
+  }
+  function matchPreviousMarkings() {
+    const resultMapping = {
+      "check": "check",
+      "check-double": "check",
+      "check-triangle": "check",
+      "triangle": "triangle",
+      "triangle-double": "triangle",
+      "triangle-check": "triangle"
+    };
+    const resultBoxes = document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-result-boxs .result-box:not(.right) .result-box-type");
+    if (!resultBoxes.length) {
+      xAll();
+      return;
+    }
+    for (let i4 = 0; i4 < 2; i4++) {
+      const markboxes = document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-boxs .mark-box");
+      resultBoxes.forEach((resultBox, index) => {
+        const required = resultMapping[resultBox.classList[1]];
+        const markbox = markboxes[index];
+        if (markbox && !markbox.querySelector(`.${required}`)) {
+          markbox.click();
         }
-        const position = { x: (x3 - canvasRect.left) / zoomRatio, y: (y3 - canvasRect.top) / zoomRatio };
-        const currentColor = getSingleColor();
-        const currentStampColorType = getStampColorType();
-        const currentRainbowSpeed = getRainbowSpeed();
-        if (mode === "stamp" && stampData) {
-          const currentSize = getStampSize();
-          const currentScale = currentSize / 100 * stampData.maxScaleFactor;
-          const options = {
-            color: currentColor,
-            rainbow: currentStampColorType === "Rainbow" || currentStampColorType === "Rainbow Fill",
-            rainbowSpeed: currentRainbowSpeed || 1,
-            usePredefinedColor: currentStampColorType === "Unchanged",
-            rainbowFill: currentStampColorType === "Rainbow Fill"
-          };
-          StampLib.writeStampAt(stampData.stamp, position, currentScale, options);
-        } else if (mode === "text") {
-          const currentSize = getStampSize();
-          const currentScale = currentSize / 100;
-          StampLib.writeAllAt(textValue, position, currentScale, { color: currentColor });
+      });
+    }
+  }
+  function xAll() {
+    document.querySelectorAll(".worksheet-container .worksheet-container.selected .mark-box-target").forEach((box) => box.click());
+  }
+  function clearMarkboxs() {
+    for (let i4 = 0; i4 < 2; i4++) {
+      document.querySelectorAll(
+        ".worksheet-container .worksheet-container.selected .mark-boxs .mark-box"
+      ).forEach((markbox) => {
+        if (!markbox.querySelector(`.default`)) {
+          markbox.click();
         }
-        hidePreview();
-      };
-      overlay.addEventListener("pointermove", handlePMove);
-      overlay.addEventListener("click", handleClick);
-      return () => {
-        overlay.removeEventListener("pointermove", handlePMove);
-        overlay.removeEventListener("click", handleClick);
-      };
-    }, [visible, mode, stampData, textValue, color, hidePreview, scale, stampColorType, rainbowSpeed]);
-    if (!visible)
-      return null;
-    return /* @__PURE__ */ u3(
-      "div",
-      {
-        ref: overlayRef,
-        class: "printoverlay",
-        style: { display: "unset" },
-        onMouseOver: (e3) => e3.stopPropagation(),
-        children: /* @__PURE__ */ u3(
-          "div",
-          {
-            ref: previewRef,
-            class: mode === "stamp" ? "stampPrintPreviewDiv" : "printPreviewDiv",
-            style: previewStyle,
-            dangerouslySetInnerHTML: mode === "stamp" ? { __html: previewContent } : void 0
+      });
+    }
+  }
+
+  // src/hooks/usePageChange.js
+  var usePageChange = (options = {}) => {
+    const {
+      enabled = true,
+      onEnable = () => {
+      },
+      onPageEnter = () => {
+      },
+      onPageLeave = () => {
+      },
+      onDisable = () => {
+      },
+      onStartLoading = () => {
+      }
+    } = options;
+    const loadObserverRef = A2(null);
+    const pageChangeObserverRef = A2(null);
+    const callbacksRef = A2({ onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading });
+    const enabledRef = A2(enabled);
+    callbacksRef.current = { onEnable, onPageEnter, onPageLeave, onDisable, onStartLoading };
+    enabledRef.current = enabled;
+    const setupPageObserver = q2(() => {
+      if (!pageChangeObserverRef.current) {
+        pageChangeObserverRef.current = new MutationObserver((ml) => {
+          if (!enabledRef.current)
+            return;
+          for (const m3 of ml) {
+            if (m3.target.classList.contains("selected")) {
+              callbacksRef.current.onPageEnter(m3.target);
+            } else {
+              callbacksRef.current.onPageLeave(m3.target);
+            }
           }
-        )
+        });
       }
-    );
+      pageChangeObserverRef.current.disconnect();
+      document.querySelectorAll(".ATD0020P-worksheet-container").forEach((page) => {
+        pageChangeObserverRef.current.observe(page, { attributeFilter: ["class"] });
+      });
+      if (enabledRef.current) {
+        callbacksRef.current.onPageEnter(document.querySelector(".ATD0020P-worksheet-container.selected"));
+      }
+    }, []);
+    y2(() => {
+      if (!enabled) {
+        loadObserverRef.current?.disconnect();
+        pageChangeObserverRef.current?.disconnect();
+        const activePage = document.querySelector(".ATD0020P-worksheet-container.selected");
+        callbacksRef.current.onDisable(activePage);
+        return;
+      }
+      const appRoot = document.querySelector("app-root");
+      if (!appRoot)
+        return;
+      loadObserverRef.current = new MutationObserver((mutationList) => {
+        if (!enabledRef.current)
+          return;
+        for (const mutation of mutationList) {
+          if (mutation.target.nodeName === "LOADING-SPINNER") {
+            if (mutation.removedNodes.length) {
+              if (!document.querySelector("app-atd0020p"))
+                return;
+              callbacksRef.current.onEnable();
+              setupPageObserver();
+            } else {
+              callbacksRef.current.onStartLoading();
+            }
+            break;
+          }
+        }
+      });
+      loadObserverRef.current.observe(appRoot, { childList: true, subtree: true });
+      if (document.querySelector("app-atd0020p")) {
+        callbacksRef.current.onEnable();
+        setupPageObserver();
+      }
+      return () => {
+        loadObserverRef.current?.disconnect();
+        pageChangeObserverRef.current?.disconnect();
+        const activePage = document.querySelector(".ATD0020P-worksheet-container.selected");
+        callbacksRef.current.onDisable(activePage);
+      };
+    }, [enabled, setupPageObserver]);
+    const disable = q2(() => {
+      loadObserverRef.current?.disconnect();
+      pageChangeObserverRef.current?.disconnect();
+    }, []);
+    return { disable };
+  };
+
+  // src/helpers/ng.js
+  function getGradingPage() {
+    return window.kclass?.ng?.context?._contentsManagerService?.paging?._currentPage?.gradingWaitingSet;
+  }
+  function getGradingStartTime() {
+    let gradingPage = getGradingPage();
+    if (gradingPage?.GradingStartTime) {
+      return /* @__PURE__ */ new Date(gradingPage.GradingStartTime + "Z");
+    }
+    return null;
+  }
+  function getStudyFinishTime() {
+    let gradingPage = getGradingPage();
+    if (gradingPage?.StudyFinishTime) {
+      return /* @__PURE__ */ new Date(gradingPage.StudyFinishTime + "Z");
+    }
+    return null;
+  }
+
+  // src/hooks/useTimestamp.js
+  var useTimestampDisplay = (enabled) => {
+    const [timestamp, setTimestamp] = d2("");
+    const [colorClass, setColorClass] = d2("");
+    const clearPageTimestamp = q2((page) => {
+      if (page)
+        page.style.outlineColor = "";
+    }, []);
+    const updateTimestamp = q2((page) => {
+      const is = StampLib?.getStudentDrawing();
+      if (is) {
+        if (is.length === 0) {
+          setTimestamp("None");
+          setColorClass("red");
+          if (page)
+            page.style.outlineColor = "red";
+          return;
+        }
+        try {
+          const lastStroke = new Date(is[is.length - 1].cs[0].t);
+          setTimestamp(`Last change:<br>${lastStroke.toLocaleString()}`);
+          const activePageEl = document.querySelector(".worksheet-navigator-page.active .text.disabled");
+          if (activePageEl) {
+            setColorClass("");
+            if (page)
+              page.style.outlineColor = "";
+            return;
+          }
+          const lastGraded = getGradingStartTime();
+          const submitted = getStudyFinishTime();
+          if (lastGraded && submitted) {
+            if (lastGraded > submitted) {
+              setColorClass("");
+              if (page)
+                page.style.outlineColor = "";
+            } else if (lastStroke > lastGraded) {
+              setColorClass("green");
+              if (page)
+                page.style.outlineColor = "lightgreen";
+            } else {
+              setColorClass("red");
+              if (page)
+                page.style.outlineColor = "red";
+            }
+          } else {
+            setColorClass("");
+            if (page)
+              page.style.outlineColor = "";
+          }
+        } catch {
+          setTimestamp("");
+          setColorClass("");
+          if (page)
+            page.style.outlineColor = "";
+        }
+      } else {
+        setTimestamp("");
+        setColorClass("");
+        if (page)
+          page.style.outlineColor = "";
+      }
+    }, []);
+    const onEnable = q2(() => {
+      if (!enabled)
+        return;
+      const activePage = document.querySelector(".ATD0020P-worksheet-container.selected");
+      setTimeout(() => updateTimestamp(activePage), 100);
+    }, [enabled, updateTimestamp]);
+    const onPageEnter = q2((page) => {
+      if (!enabled)
+        return;
+      setTimeout(() => updateTimestamp(page), 100);
+    }, [enabled, updateTimestamp]);
+    const onPageLeave = q2((page) => {
+      clearPageTimestamp(page);
+    }, [clearPageTimestamp]);
+    const onDisable = q2((page) => {
+      clearPageTimestamp(page);
+      setTimestamp("");
+      setColorClass("");
+    }, [clearPageTimestamp]);
+    usePageChange({
+      enabled,
+      onEnable,
+      onPageEnter,
+      onPageLeave,
+      onDisable
+    });
+    return { timestamp, colorClass };
   };
 
   // src/components/DiffViewOverlay.jsx
@@ -5137,9 +5178,6 @@
     return /* @__PURE__ */ u3(DrawTabProvider, { children: /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(DiffViewOverlayProvider, { children: /* @__PURE__ */ u3(HelpOverlayProvider, { children: /* @__PURE__ */ u3(DrawToolProvider, { children: /* @__PURE__ */ u3(PenSettingsProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) }) }) }) }) });
   };
 
-  // src/icons/stamp.svg
-  var stamp_default = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<svg\n   width="13.534658"\n   height="19.125"\n   viewBox="0 0 13.534659 19.125"\n   fill="none"\n   stroke="currentColor"\n   stroke-width="1.5"\n   stroke-linecap="round"\n   stroke-linejoin="round"\n   version="1.1"\n   id="svg7"\n   sodipodi:docname="stamp.svg"\n   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"\n   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"\n   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"\n   xmlns="http://www.w3.org/2000/svg"\n   xmlns:svg="http://www.w3.org/2000/svg">\n  <defs\n     id="defs7" />\n  <sodipodi:namedview\n     id="namedview7"\n     pagecolor="#ffffff"\n     bordercolor="#000000"\n     borderopacity="0.25"\n     inkscape:showpageshadow="2"\n     inkscape:pageopacity="0.0"\n     inkscape:pagecheckerboard="0"\n     inkscape:deskcolor="#d1d1d1"\n     inkscape:zoom="22.627417"\n     inkscape:cx="13.722291"\n     inkscape:cy="10.584505"\n     inkscape:window-width="2560"\n     inkscape:window-height="1394"\n     inkscape:window-x="0"\n     inkscape:window-y="0"\n     inkscape:window-maximized="1"\n     inkscape:current-layer="svg7" />\n  <path\n     d="M 10.251455,12.65625 C 8.2792667,8.841232 10.901944,7.003471 10.940908,4.84375 10.979408,2.7097225 9.7280927,0.7500496 6.7846577,0.75 c -2.4502715,-4.13e-5 -4.045787,2.0371608 -4.03125,4.09375 0.018371,2.598968 2.686451,4.505516 0.9798087,7.89811"\n     id="path8"\n     sodipodi:nodetypes="csssc" />\n  <path\n     id="path5"\n     d="M 0.75,12.729713 0.7846577,16.75 H 12.784658 l -0.02621,-4.060862 M 0.75,12.72971 c 3.8291677,-0.02647 8.9563707,-0.06953 12.008448,-0.04057"\n     sodipodi:nodetypes="cccccc" />\n  <path\n     d="M 0.7846577,16.75 H 12.784658"\n     id="path6" />\n  <path\n     d="m 1.7846577,16.75 0.046875,1.625 H 11.831533 l -0.04687,-1.625"\n     id="path7"\n     sodipodi:nodetypes="cccc"\n     style="fill:#000000;fill-opacity:1" />\n</svg>\n';
-
   // src/icons/settings.svg
   var settings_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>\n  <circle cx="12" cy="12" r="3"/>\n</svg>\n';
 
@@ -5150,6 +5188,14 @@
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
     const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
     const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible } = useDrawTool();
+    const { eraserEnabled, penWidth, penAlpha, penColor } = usePenSettings();
+    const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
+    const currentPenIcon = activePresetId ? getColoredPenIcon(activePresetId, penColor) : getColoredPenIcon("pen", penColor);
+    const withBlur = (handler) => (e3) => {
+      e3.currentTarget.blur();
+      if (handler)
+        handler(e3);
+    };
     y2(() => {
       updatePenSettings();
     }, []);
@@ -5202,7 +5248,7 @@
         "button",
         {
           class: "headerZindexBtn",
-          onClick: toggleHeader,
+          onClick: withBlur(toggleHeader),
           title: "Toggle header bar visibility",
           children: "H"
         }
@@ -5211,7 +5257,7 @@
         "button",
         {
           class: "shiftbtn",
-          onClick: toggleShift,
+          onClick: withBlur(toggleShift),
           onMouseOver: (e3) => e3.stopPropagation(),
           title: "Toggle shifting the page up/down",
           dangerouslySetInnerHTML: { __html: toolbarIcons.shift }
@@ -5221,7 +5267,7 @@
         "button",
         {
           class: "xallbtn",
-          onClick: handleXAll,
+          onClick: withBlur(handleXAll),
           title: "Click every grading box on the page",
           children: "x all"
         }
@@ -5230,7 +5276,7 @@
         "button",
         {
           class: "drawbtn",
-          onClick: handleDrawTab,
+          onClick: withBlur(handleDrawTab),
           onMouseOver: (e3) => e3.stopPropagation(),
           title: "Show the draw tab",
           accessKey: "d",
@@ -5238,13 +5284,16 @@
         }
       ),
       drawToolTabs?.map((tab) => {
-        const icon = tab.id === "image" ? stamp_default : tab.id === "settings" ? settings_default : null;
+        const icon = tab.id === "image" ? currentPenIcon : tab.id === "settings" ? settings_default : null;
         return /* @__PURE__ */ u3(
           "button",
           {
             class: "drawtool-tab-btn",
             onMouseOver: (e3) => e3.stopPropagation(),
-            onClick: () => handleToolTab(tab.id),
+            onClick: (e3) => {
+              e3.currentTarget.blur();
+              handleToolTab(tab.id);
+            },
             title: tab.label,
             children: icon ? /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: icon } }) : tab.label
           },
@@ -5255,7 +5304,10 @@
         "button",
         {
           class: "mobileUpBtn",
-          onClick: () => goPrevCorrectionPage?.(),
+          onClick: (e3) => {
+            e3.currentTarget.blur();
+            goPrevCorrectionPage?.();
+          },
           onMouseOver: (e3) => e3.stopPropagation(),
           title: "Previous marking page",
           dangerouslySetInnerHTML: { __html: toolbarIcons.prevPage }
@@ -5265,7 +5317,10 @@
         "button",
         {
           class: "mobileDownBtn",
-          onClick: () => goNextCorrectionPage?.(),
+          onClick: (e3) => {
+            e3.currentTarget.blur();
+            goNextCorrectionPage?.();
+          },
           onMouseOver: (e3) => e3.stopPropagation(),
           title: "Next marking page",
           dangerouslySetInnerHTML: { __html: toolbarIcons.nextPage }
@@ -5613,13 +5668,29 @@
       case "N":
         goPrevCorrectionPage?.();
         break;
-      case "p":
-        doP?.();
+      case "p": {
+        const breakScoringButton = document.querySelector("#BreakScoringButton");
+        if (breakScoringButton) {
+          breakScoringButton.click();
+          break;
+        }
+        const playbackControl = getPlaybackControl?.();
+        if (playbackControl) {
+          playbackControl.querySelector(".play,.pause")?.click();
+          break;
+        }
+        fns.setEraserEnabled(false);
+        fns.setPenMode("pen");
+        fns.setPenWidth(PEN_PRESETS["pen"].width);
+        fns.setPenAlpha(PEN_PRESETS["pen"].alpha);
+        const currentColor = getSingleColor?.() || fns.penColor;
+        setStampLibPenSettings(currentColor, PEN_PRESETS["pen"].width, PEN_PRESETS["pen"].alpha);
         break;
-      case "P":
-        const playback = getPlaybackControl?.();
-        if (playback) {
-          playback.querySelector(".play,.pause")?.click();
+      }
+      case "P": {
+        const playbackControl = getPlaybackControl?.();
+        if (playbackControl) {
+          playbackControl.querySelector(".play,.pause")?.click();
           return;
         } else {
           StampLib.expandToolbar();
@@ -5627,6 +5698,7 @@
           StampLib.collapseToolbar();
         }
         break;
+      }
       case "s":
         doS?.();
         break;
@@ -5687,19 +5759,39 @@
         activateTextStampMode();
         e3.preventDefault();
         break;
-      case "h":
-        cycleHighlighter?.();
+      case "h": {
+        const currentPresetId = getActivePresetId(fns.eraserEnabled, fns.penWidth, fns.penAlpha);
+        let targetPresetId;
+        if (currentPresetId === "highlighter") {
+          targetPresetId = "thin-highlighter";
+        } else if (currentPresetId === "thin-highlighter") {
+          targetPresetId = "highlighter";
+        } else {
+          targetPresetId = "highlighter";
+        }
+        fns.setEraserEnabled(false);
+        fns.setPenMode("pen");
+        fns.setPenWidth(PEN_PRESETS[targetPresetId].width);
+        fns.setPenAlpha(PEN_PRESETS[targetPresetId].alpha);
+        const hColor = getSingleColor?.() || fns.penColor;
+        setStampLibPenSettings(hColor, PEN_PRESETS[targetPresetId].width, PEN_PRESETS[targetPresetId].alpha);
         break;
-      case "e":
+      }
+      case "e": {
         selectEraser?.();
+        fns.setEraserEnabled(true);
+        fns.setPenMode("eraser");
+        fns.setPenWidth(PEN_PRESETS["eraser"].width);
+        fns.setPenAlpha(PEN_PRESETS["eraser"].alpha);
         break;
+      }
       case "R":
         clickReading?.();
         break;
       case "M":
         clickMath?.();
         break;
-      case "H":
+      case "H": {
         const wasPulldownOpen = isPulldownOpen?.();
         const pulldownExists = !!document.querySelector("#studentInfoPullDown.student-info-btn");
         document.querySelector("#studentInfoPullDown")?.click();
@@ -5716,6 +5808,7 @@
           toggleHeader();
         }
         break;
+      }
       case "J":
         scrollAnswer?.(DOWN);
         break;
@@ -5724,7 +5817,7 @@
         break;
       case "-":
       case "+":
-      case "=":
+      case "=": {
         const drawtab2 = document.querySelector(".drawtab");
         const printoverlay = document.querySelector(".printoverlay");
         const slider2 = drawtab2?.checkVisibility() || printoverlay?.checkVisibility() ? drawtab2?.querySelector(".sizeslider") : null;
@@ -5735,6 +5828,7 @@
           doKeyboardDefault?.(e3.key);
         }
         break;
+      }
       default:
         doKeyboardDefault?.(e3.key);
         break;
@@ -5828,6 +5922,7 @@
     const { setTimestampEnabled } = useTimestamp();
     const { drawTabOpen, showDrawTab, hideDrawTab, toggleDrawTab } = useDrawTab();
     const { drawToolVisible, callKeyDownHandler, showDrawTool, hideDrawTool, setActiveTab } = useDrawTool();
+    const { penWidth, setPenWidth, penAlpha, setPenAlpha, penMode, setPenMode, eraserEnabled, setEraserEnabled, penColor, setPenColor } = usePenSettings();
     const { hidePreview, state: printOverlayState } = usePrintOverlay();
     const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
     const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
@@ -5849,7 +5944,17 @@
       helpTabs,
       showDrawTool,
       setActiveTab,
-      hidePreview
+      hidePreview,
+      penWidth,
+      setPenWidth,
+      penAlpha,
+      setPenAlpha,
+      penMode,
+      setPenMode,
+      eraserEnabled,
+      setEraserEnabled,
+      penColor,
+      setPenColor
     };
     y2(() => {
       if (!enabled)
@@ -5969,7 +6074,7 @@
         document.removeEventListener("keydown", handleKeyDown);
         document.removeEventListener("keyup", handleKeyUp);
       };
-    }, [enabled, drawTabOpen, toggleDrawTab, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview]);
+    }, [enabled, drawTabOpen, toggleDrawTab, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview, penWidth, penAlpha, eraserEnabled, penColor]);
   };
 
   // src/components/DrawTab.jsx
@@ -5977,7 +6082,7 @@
     const { drawTabOpen, setDrawTabOpen, hideDrawTab, showDrawTab, toggleDrawTab } = useDrawTab();
     const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardMode();
     const { hdModeEnabled, setHdModeEnabled } = useHDMode();
-    const penColorRef = A2("#ff2200");
+    const penColorRef2 = A2("#ff2200");
     const penTypeRef = A2("pen");
     const stampColorTypeRef2 = A2("Unchanged");
     const rainbowSpeedRef2 = A2(1);
@@ -6029,7 +6134,7 @@
       }
     };
     const handleColorChange = (e3) => {
-      penColorRef.current = e3.target.value;
+      penColorRef2.current = e3.target.value;
       const textarea = rootRef.current?.querySelector("textarea");
       if (textarea) {
         textarea.style.color = e3.target.value;
@@ -6296,55 +6401,13 @@
   var help_circle_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <circle cx="12" cy="12" r="10"/>\n  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>\n  <path d="M12 17h.01"/>\n</svg>';
 
   // src/components/SettingsTab.jsx
-  var PRESET_ICONS2 = {
-    pen: pen_default,
-    highlighter: highlighter_default,
-    "thin-highlighter": thin_highlighter_default,
-    eraser: eraser_default
-  };
-  var PEN_PRESETS2 = [
-    { id: "pen", label: "Pen", width: 2, alpha: 1 },
-    { id: "highlighter", label: "Highlighter", width: 20, alpha: 0.3 },
-    { id: "thin-highlighter", label: "Thin Highlighter", width: 10, alpha: 0.5 },
-    { id: "eraser", label: "Eraser", width: 20, alpha: 1 }
-  ];
-  var getActivePresetId2 = (eraserEnabled, penWidth, penAlpha) => {
-    if (eraserEnabled)
-      return "eraser";
-    if (penWidth === 2 && penAlpha === 1)
-      return "pen";
-    if (penWidth === 20 && Math.abs(penAlpha - 0.3) < 0.01)
-      return "highlighter";
-    if (penWidth === 10 && Math.abs(penAlpha - 0.5) < 0.01)
-      return "thin-highlighter";
-    return null;
-  };
-  var setStampLibPenSettings2 = (color, width, alpha) => {
-    StampLib.setPenSettings({
-      color,
-      width,
-      alpha: Math.round(alpha * 255)
-    });
-  };
   var stopPropagation2 = (e3) => e3.stopPropagation();
   var SettingsTab = ({ close }) => {
-    const {
-      penColor,
-      setPenColor,
-      penWidth,
-      setPenWidth,
-      penAlpha,
-      setPenAlpha,
-      penMode,
-      setPenMode,
-      eraserEnabled,
-      setEraserEnabled,
-      handleUnlock
-    } = usePenSettings();
     const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardMode();
     const { hdModeEnabled, setHdModeEnabled } = useHDMode();
     const { showHelpOverlay } = useHelpOverlay();
     const { registerKeyDownHandler } = useDrawTool();
+    const { handleUnlock } = usePenSettings();
     const handleKeys2 = q2((e3) => {
       if (e3.altKey || e3.ctrlKey || e3.metaKey)
         return;
@@ -6358,56 +6421,6 @@
     y2(() => {
       return registerKeyDownHandler("settings", handleKeys2);
     }, [registerKeyDownHandler, handleKeys2]);
-    const penColorRef = A2(penColor);
-    const penWidthRef = A2(penWidth);
-    const penAlphaRef = A2(penAlpha);
-    const eraserEnabledRef = A2(eraserEnabled);
-    y2(() => {
-      penColorRef.current = penColor;
-    }, [penColor]);
-    y2(() => {
-      penWidthRef.current = penWidth;
-    }, [penWidth]);
-    y2(() => {
-      penAlphaRef.current = penAlpha;
-    }, [penAlpha]);
-    y2(() => {
-      eraserEnabledRef.current = eraserEnabled;
-    }, [eraserEnabled]);
-    const activePresetId = getActivePresetId2(eraserEnabled, penWidth, penAlpha);
-    const handleColorChange = q2((e3) => {
-      const newColor = e3.target.value;
-      setPenColor(newColor);
-      if (!eraserEnabledRef.current) {
-        setStampLibPenSettings2(newColor, penWidthRef.current, penAlphaRef.current);
-      }
-      updatePenSettings();
-    }, [setPenColor]);
-    const handleWidthChange = q2((e3) => {
-      const newWidth = parseInt(e3.target.value);
-      setPenWidth(newWidth);
-      if (!eraserEnabledRef.current) {
-        setStampLibPenSettings2(penColorRef.current, newWidth, penAlphaRef.current);
-      }
-    }, [setPenWidth]);
-    const handleAlphaChange = q2((e3) => {
-      const newAlpha = parseFloat(e3.target.value);
-      setPenAlpha(newAlpha);
-      if (!eraserEnabledRef.current) {
-        setStampLibPenSettings2(penColorRef.current, penWidthRef.current, newAlpha);
-      }
-    }, [setPenAlpha]);
-    const handleEraserToggle = q2((e3) => {
-      const isEnabled = e3.target.checked;
-      setEraserEnabled(isEnabled);
-      if (isEnabled) {
-        setPenMode("eraser");
-      } else {
-        setPenMode("pen");
-        setStampLibPenSettings2(penColorRef.current, penWidthRef.current, penAlphaRef.current);
-      }
-      updatePenSettings();
-    }, [setEraserEnabled, setPenMode]);
     const handleHdToggle = q2((e3) => {
       setHdModeEnabled(e3.target.checked);
     }, [setHdModeEnabled]);
@@ -6417,110 +6430,16 @@
     const handleHelp = q2(() => {
       showHelpOverlay("drawtab");
     }, [showHelpOverlay]);
-    const handlePresetClick = q2((e3) => {
-      const btn = e3.currentTarget;
-      const presetId = btn.getAttribute("data-preset-id");
-      const preset = PEN_PRESETS2.find((p3) => p3.id === presetId);
-      if (preset) {
-        if (preset.id === "eraser") {
-          setEraserEnabled(true);
-          setPenMode("eraser");
-        } else {
-          setEraserEnabled(false);
-          setPenMode("pen");
-          setPenWidth(preset.width);
-          setPenAlpha(preset.alpha);
-          setStampLibPenSettings2(penColorRef.current, preset.width, preset.alpha);
-        }
-        updatePenSettings();
-      }
-    }, [setEraserEnabled, setPenMode, setPenWidth, setPenAlpha]);
     return /* @__PURE__ */ u3("div", { class: SettingsTab_default.tab, children: [
-      /* @__PURE__ */ u3("div", { class: SettingsTab_default.controls, children: [
-        /* @__PURE__ */ u3(
-          "button",
-          {
-            class: SettingsTab_default.closeBtn,
-            onClick: close,
-            onMouseOver: stopPropagation2,
-            children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: x_default } })
-          }
-        ),
-        /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlsSubgroup, children: [
-          /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
-            /* @__PURE__ */ u3("label", { children: "Color" }),
-            /* @__PURE__ */ u3(
-              "input",
-              {
-                type: "color",
-                value: penColor,
-                onChange: handleColorChange
-              }
-            )
-          ] }),
-          /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
-            /* @__PURE__ */ u3("label", { children: [
-              "Width: ",
-              penWidth
-            ] }),
-            /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlRow, children: /* @__PURE__ */ u3(
-              "input",
-              {
-                type: "range",
-                min: "1",
-                max: "50",
-                value: penWidth,
-                onInput: handleWidthChange
-              }
-            ) })
-          ] }),
-          /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
-            /* @__PURE__ */ u3("label", { children: [
-              "Alpha: ",
-              penAlpha
-            ] }),
-            /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlRow, children: /* @__PURE__ */ u3(
-              "input",
-              {
-                type: "range",
-                min: "0",
-                max: "1",
-                step: "0.1",
-                value: penAlpha,
-                onInput: handleAlphaChange
-              }
-            ) })
-          ] }),
-          /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
-            /* @__PURE__ */ u3("label", { children: "Tool" }),
-            /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlRow, children: [
-              /* @__PURE__ */ u3(
-                "input",
-                {
-                  type: "checkbox",
-                  checked: eraserEnabled,
-                  onChange: handleEraserToggle
-                }
-              ),
-              /* @__PURE__ */ u3("span", { children: "Eraser" })
-            ] })
-          ] })
-        ] }),
-        /* @__PURE__ */ u3("div", { class: SettingsTab_default.presetsSubgroup, children: PEN_PRESETS2.map((preset) => /* @__PURE__ */ u3(
-          "button",
-          {
-            "data-preset-id": preset.id,
-            onClick: handlePresetClick,
-            onMouseOver: stopPropagation2,
-            class: `${SettingsTab_default.presetBtn} ${preset.id === activePresetId ? SettingsTab_default.presetBtnActive : ""}`,
-            children: [
-              /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: PRESET_ICONS2[preset.id] } }),
-              preset.label
-            ]
-          },
-          preset.id
-        )) })
-      ] }),
+      /* @__PURE__ */ u3("div", { class: SettingsTab_default.controls, children: /* @__PURE__ */ u3(
+        "button",
+        {
+          class: SettingsTab_default.closeBtn,
+          onClick: close,
+          onMouseOver: stopPropagation2,
+          children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: x_default } })
+        }
+      ) }),
       /* @__PURE__ */ u3("div", { class: SettingsTab_default.settingsSection, children: [
         /* @__PURE__ */ u3("div", { class: SettingsTab_default.controlGroup, children: [
           /* @__PURE__ */ u3("label", { children: "HD Mode" }),
@@ -6654,19 +6573,7 @@
         setTimeout(() => {
           const atd = StampLib.getAtd();
           if (atd?.drawingMode) {
-            const penType = document.querySelector('input[name="penType"]:checked')?.value || "pen";
-            const pencolorbtn = document.querySelector(".pencolorbtn");
-            if (penType !== "eraser" && pencolorbtn) {
-              const penSettings2 = {
-                pen: { width: 2, alpha: 255 },
-                "thick-highlighter": { width: 25, alpha: 50 },
-                "thin-highlighter": { width: 5, alpha: 50 }
-              };
-              StampLib.setPenSettings({
-                color: pencolorbtn.value,
-                ...penSettings2[penType]
-              });
-            }
+            updateStampLibFromPenSettings();
           }
         }, 300);
       }
@@ -6749,19 +6656,6 @@
     const internalEnabledRef = A2(enabled);
     internalEnabledRef.current = enabled;
     const initHD = q2(() => {
-      const penType = document.querySelector('input[name="penType"]:checked')?.value || "pen";
-      const pencolorbtn = document.querySelector(".pencolorbtn");
-      if (penType !== "eraser" && pencolorbtn) {
-        const penSettings2 = {
-          pen: { width: 2, alpha: 255 },
-          "thick-highlighter": { width: 25, alpha: 50 },
-          "thin-highlighter": { width: 5, alpha: 50 }
-        };
-        StampLib.setPenSettings({
-          color: pencolorbtn.value,
-          ...penSettings2[penType]
-        });
-      }
       document.querySelectorAll(".content-scroll-container .content-bg .content-detail").forEach((detail) => {
         detail.style.minWidth = "372px";
         detail.style.width = "372px";

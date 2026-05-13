@@ -6,20 +6,20 @@ export const useHDMode = (enabled = false) => {
     internalEnabledRef.current = enabled;
 
     const initHD = useCallback(() => {
-        const penType = document.querySelector('input[name="penType"]:checked')?.value || 'pen';
-        const pencolorbtn = document.querySelector('.pencolorbtn');
-
-        if (penType !== 'eraser' && pencolorbtn) {
-            const penSettings = {
-                pen: { width: 2, alpha: 255 },
-                'thick-highlighter': { width: 25, alpha: 50 },
-                'thin-highlighter': { width: 5, alpha: 50 },
-            };
-            StampLib.setPenSettings({
-                color: pencolorbtn.value,
-                ...penSettings[penType],
-            });
-        }
+        // const penType = document.querySelector('input[name="penType"]:checked')?.value || 'pen';
+        // const pencolorbtn = document.querySelector('.pencolorbtn');
+        //
+        // if (penType !== 'eraser' && pencolorbtn) {
+        //     const penSettings = {
+        //         pen: { width: 2, alpha: 255 },
+        //         'thick-highlighter': { width: 25, alpha: 50 },
+        //         'thin-highlighter': { width: 5, alpha: 50 },
+        //     };
+        //     StampLib.setPenSettings({
+        //         color: pencolorbtn.value,
+        //         ...penSettings[penType],
+        //     });
+        // }
 
         document.querySelectorAll('.content-scroll-container .content-bg .content-detail').forEach(detail => {
             detail.style.minWidth = '372px';
