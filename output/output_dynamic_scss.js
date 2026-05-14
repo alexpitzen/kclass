@@ -3294,6 +3294,10 @@
           const currentScale = currentSize / 100 * prev.stampData.maxScaleFactor;
           newPreviewStyle.height = `${stampDimensions.height * currentScale}px`;
           newPreviewStyle.width = `${stampDimensions.width * currentScale}px`;
+        } else if (prev.mode === "text" && prev.textValue) {
+          const writeDimensions = StampLib.getWriteAllDimensions(prev.textValue, currentSize / 100);
+          newPreviewStyle.height = `${writeDimensions.height}px`;
+          newPreviewStyle.width = `${writeDimensions.width}px`;
         }
         return {
           ...prev,
@@ -6099,7 +6103,7 @@
     const { setTimestampEnabled } = useTimestamp();
     const { drawToolVisible, callKeyDownHandler, showDrawTool, hideDrawTool, setActiveTab } = useDrawTool();
     const { penWidth, setPenWidth, penAlpha, setPenAlpha, penMode, setPenMode, eraserEnabled, setEraserEnabled, penColor, setPenColor } = usePenSettings();
-    const { hidePreview, state: printOverlayState } = usePrintOverlay();
+    const { hidePreview, updatePreview, state: printOverlayState } = usePrintOverlay();
     const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
     const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
     const fns = {
@@ -6153,11 +6157,13 @@
           switch (e3.key) {
             case "-":
               adjustStampSize(-1);
+              updatePreview();
               e3.preventDefault();
               break;
             case "+":
             case "=":
               adjustStampSize(1);
+              updatePreview();
               e3.preventDefault();
               break;
             case "Escape":

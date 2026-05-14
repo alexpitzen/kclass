@@ -84,13 +84,17 @@ export const PrintOverlayProvider = ({ children }) => {
              const newPreviewStyle = { ...prev.previewStyle };
              newPreviewStyle['border-color'] = currentColor;
 
-             if (prev.mode === 'stamp' && prev.stampData) {
-                 const stampDimensions = prev.stampData.stamp._cachedDimensions || 
-                     StampLib.getWriteStampDimensions(prev.stampData.stamp, 1);
-                 const currentScale = (currentSize / 100) * prev.stampData.maxScaleFactor;
-                 newPreviewStyle.height = `${stampDimensions.height * currentScale}px`;
-                 newPreviewStyle.width = `${stampDimensions.width * currentScale}px`;
-             }
+              if (prev.mode === 'stamp' && prev.stampData) {
+                  const stampDimensions = prev.stampData.stamp._cachedDimensions || 
+                      StampLib.getWriteStampDimensions(prev.stampData.stamp, 1);
+                  const currentScale = (currentSize / 100) * prev.stampData.maxScaleFactor;
+                  newPreviewStyle.height = `${stampDimensions.height * currentScale}px`;
+                  newPreviewStyle.width = `${stampDimensions.width * currentScale}px`;
+              } else if (prev.mode === 'text' && prev.textValue) {
+                  const writeDimensions = StampLib.getWriteAllDimensions(prev.textValue, currentSize / 100);
+                  newPreviewStyle.height = `${writeDimensions.height}px`;
+                  newPreviewStyle.width = `${writeDimensions.width}px`;
+              }
 
              return {
                  ...prev,

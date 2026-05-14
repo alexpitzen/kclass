@@ -299,7 +299,7 @@ export const useKeyboardMode = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
     const { drawToolVisible, callKeyDownHandler, showDrawTool, hideDrawTool, setActiveTab } = useDrawTool();
     const { penWidth, setPenWidth, penAlpha, setPenAlpha, penMode, setPenMode, eraserEnabled, setEraserEnabled, penColor, setPenColor } = usePenSettings();
-    const { hidePreview, state: printOverlayState } = usePrintOverlay();
+    const { hidePreview, updatePreview, state: printOverlayState } = usePrintOverlay();
     const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
     const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
     const fns = {
@@ -355,11 +355,13 @@ export const useKeyboardMode = (enabled) => {
                 switch (e.key) {
                     case "-":
                         adjustStampSize(-1);
+                        updatePreview();
                         e.preventDefault();
                         break;
                     case "+":
                     case "=":
                         adjustStampSize(1);
+                        updatePreview();
                         e.preventDefault();
                         break;
                     case "Escape":
