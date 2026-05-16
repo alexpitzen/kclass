@@ -2246,6 +2246,8 @@
                 kelseyBird,
                 aarnaGirl,
                 aarnaBoy,
+                aarnaPrincess,
+                sofiaBunny,
                 faboolousWork,
                 bootifulWork,
                 zombie,
@@ -2363,6 +2365,8 @@
                 kelseyBird,
                 aarnaGirl,
                 aarnaBoy,
+                aarnaPrincess,
+                sofiaBunny,
             ],
             "Christmas": [
                 christmasCat,
