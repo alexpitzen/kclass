@@ -5022,7 +5022,7 @@
         }
         return;
       }
-      if (e3.repeat && !(e3.key in ["+", "-", "="]))
+      if (e3.repeat && !["+", "-", "="].includes(e3.key))
         return;
       switch (e3.key) {
         case "d":
@@ -5868,7 +5868,7 @@
     }
   };
   var handleGradingKey = (e3, fns) => {
-    if (e3.repeat && !(e3.key in ["u", "r"]))
+    if (e3.repeat && !["u", "r"].includes(e3.key))
       return;
     switch (e3.key) {
       case "j":
@@ -6240,8 +6240,6 @@
           }
           return;
         }
-        if (e3.repeat)
-          return;
         if (e3.altKey || e3.ctrlKey || e3.metaKey)
           return;
         const markingList = document.querySelector(".markingList.tabActive");

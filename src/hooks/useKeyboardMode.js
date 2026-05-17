@@ -77,7 +77,7 @@ const handleStudentListKey = (e, fns) => {
 };
 
 const handleGradingKey = (e, fns) => {
-    if (e.repeat && !(e.key in ["u", "r"])) return;
+    if (e.repeat && !["u", "r"].includes(e.key)) return;
     switch (e.key) {
         case "j": doDown?.(); break;
         case "k": doUp?.(); break;
@@ -388,7 +388,6 @@ export const useKeyboardMode = (enabled) => {
                 }
                 return;
             }
-            if (e.repeat) return;
 
             if (e.altKey || e.ctrlKey || e.metaKey) return;
 
