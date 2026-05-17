@@ -7,7 +7,7 @@ import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sid
 import { useTimestamp } from '../context/AppContext.jsx';
 import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
-import { activateTextStampMode, adjustStampSize, getSingleColor } from '../components/ImageStampTab.jsx';
+import { activateTextStampMode, adjustStampSize, getSingleColor } from '../context/StampSettingsContext.jsx';
 import { PEN_PRESETS, getActivePresetId, setStampLibPenSettings } from '../helpers/penPresets.js';
 import { usePrintOverlay } from '../components/PrintOverlay.jsx';
 import { useDiffViewOverlay } from '../components/DiffViewOverlay.jsx';
@@ -109,7 +109,7 @@ const handleGradingKey = (e, fns) => {
             fns.setPenMode('pen');
             fns.setPenWidth(PEN_PRESETS['pen'].width);
             fns.setPenAlpha(PEN_PRESETS['pen'].alpha);
-            const currentColor = getSingleColor?.() || fns.penColor;
+            const currentColor = getSingleColor();
             setStampLibPenSettings(currentColor, PEN_PRESETS['pen'].width, PEN_PRESETS['pen'].alpha);
             break;
         }
@@ -189,7 +189,7 @@ const handleGradingKey = (e, fns) => {
             fns.setPenMode('pen');
             fns.setPenWidth(PEN_PRESETS[targetPresetId].width);
             fns.setPenAlpha(PEN_PRESETS[targetPresetId].alpha);
-            const hColor = getSingleColor?.() || fns.penColor;
+            const hColor = getSingleColor();
             setStampLibPenSettings(hColor, PEN_PRESETS[targetPresetId].width, PEN_PRESETS[targetPresetId].alpha);
             break;
         }
@@ -298,7 +298,7 @@ const handleStudyRecordsKey = (e, fns) => {
 export const useKeyboardMode = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
     const { drawToolVisible, callKeyDownHandler, showDrawTool, hideDrawTool, setActiveTab } = useDrawTool();
-    const { penWidth, setPenWidth, penAlpha, setPenAlpha, penMode, setPenMode, eraserEnabled, setEraserEnabled, penColor, setPenColor } = usePenSettings();
+    const { penWidth, setPenWidth, penAlpha, setPenAlpha, penMode, setPenMode, eraserEnabled, setEraserEnabled } = usePenSettings();
     const { hidePreview, updatePreview, state: printOverlayState } = usePrintOverlay();
     const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
     const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
@@ -325,8 +325,6 @@ export const useKeyboardMode = (enabled) => {
         setPenMode,
         eraserEnabled,
         setEraserEnabled,
-        penColor,
-        setPenColor,
     };
     useEffect(() => {
         if (!enabled) return;
@@ -454,5 +452,5 @@ export const useKeyboardMode = (enabled) => {
             document.removeEventListener("keydown", handleKeyDown);
             document.removeEventListener("keyup", handleKeyUp);
         };
-    }, [enabled, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview, penWidth, penAlpha, eraserEnabled, penColor]);
+    }, [enabled, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview, penWidth, penAlpha, eraserEnabled]);
 };

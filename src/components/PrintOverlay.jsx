@@ -1,6 +1,6 @@
 import { createContext } from 'preact';
 import { useContext, useState, useEffect, useRef, useMemo, useCallback } from 'preact/hooks';
-import { getStampSize, getSingleColor, getStampColorType, getRainbowSpeed } from './ImageStampTab.jsx';
+import { getStampSize, getSingleColor, getStampColorType, getRainbowSpeed } from '../context/StampSettingsContext.jsx';
 
 const PrintOverlayContext = createContext(null);
 

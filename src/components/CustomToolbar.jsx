@@ -6,6 +6,7 @@ import { useTimestampDisplay } from '../hooks/useTimestamp.js';
 import { useTimestamp } from '../context/AppContext.jsx';
 import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
+import { useStampSettings } from '../context/StampSettingsContext.jsx';
 import { getActivePresetId, getColoredPenIcon } from '../helpers/penPresets.js';
 import settingsIcon from '../icons/settings.svg';
 
@@ -14,11 +15,12 @@ export const CustomToolbar = () => {
     const { timestampEnabled } = useTimestamp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
     const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible } = useDrawTool();
-    const { eraserEnabled, penWidth, penAlpha, penColor } = usePenSettings();
+    const { eraserEnabled, penWidth, penAlpha } = usePenSettings();
+    const { singleColor } = useStampSettings();
     const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
     const currentPenIcon = activePresetId
-        ? getColoredPenIcon(activePresetId, penColor)
-        : getColoredPenIcon('pen', penColor);
+        ? getColoredPenIcon(activePresetId, singleColor)
+        : getColoredPenIcon('pen', singleColor);
 
     const withBlur = (handler) => (e) => {
         e.currentTarget.blur();

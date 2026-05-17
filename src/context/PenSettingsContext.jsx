@@ -1,24 +1,22 @@
 import { createContext } from 'preact';
 import { useContext, useState, useMemo, useCallback, useEffect } from 'preact/hooks';
 import { setStampLibPenSettings } from '../helpers/penPresets.js';
-import { getSingleColor } from '../components/ImageStampTab.jsx';
+import { getSingleColor } from '../context/StampSettingsContext.jsx';
 
 const PenSettingsContext = createContext(null);
 
-const penColorRef = { current: '#ff2200' };
 const penWidthRef = { current: 2 };
 const penAlphaRef = { current: 1 };
 const penModeRef = { current: 'pen' };
 const eraserEnabledRef = { current: false };
 
-export const getPenColor = () => penColorRef.current;
 export const getPenWidth = () => penWidthRef.current;
 export const getPenAlpha = () => penAlphaRef.current;
 export const getPenMode = () => penModeRef.current;
 export const getEraserEnabled = () => eraserEnabledRef.current;
 
 export const updateStampLibFromPenSettings = () => {
-    const color = getSingleColor() || penColorRef.current;
+    const color = getSingleColor();
     const width = penWidthRef.current;
     const alpha = penAlphaRef.current;
     const eraserEnabled = eraserEnabledRef.current;
@@ -37,39 +35,23 @@ export const usePenSettings = () => {
 };
 
 export const PenSettingsProvider = ({ children }) => {
-    const [penColor, setPenColor] = useState('#ff2200');
-    const [penWidth, setPenWidth] = useState(2);
-    const [penAlpha, setPenAlpha] = useState(1);
-    const [penMode, setPenMode] = useState('pen');
-    const [eraserEnabled, setEraserEnabled] = useState(false);
-
-    useEffect(() => {
-        penColorRef.current = penColor;
-    }, [penColor]);
+    const [penWidth, setPenWidth] = useState(penWidthRef.current);
+    const [penAlpha, setPenAlpha] = useState(penAlphaRef.current);
+    const [penMode, setPenMode] = useState(penModeRef.current);
+    const [eraserEnabled, setEraserEnabled] = useState(eraserEnabledRef.current);
 
     useEffect(() => {
         penWidthRef.current = penWidth;
-    }, [penWidth]);
-
-    useEffect(() => {
         penAlphaRef.current = penAlpha;
-    }, [penAlpha]);
-
-    useEffect(() => {
         penModeRef.current = penMode;
-    }, [penMode]);
-
-    useEffect(() => {
         eraserEnabledRef.current = eraserEnabled;
-    }, [eraserEnabled]);
+    }, [penWidth, penAlpha, penMode, eraserEnabled]);
 
     const handleUnlock = useCallback(() => {
         StampLib.unlockPage();
     }, []);
 
     const contextValue = useMemo(() => ({
-        penColor,
-        setPenColor,
         penWidth,
         setPenWidth,
         penAlpha,
@@ -79,7 +61,7 @@ export const PenSettingsProvider = ({ children }) => {
         eraserEnabled,
         setEraserEnabled,
         handleUnlock,
-    }), [penColor, penWidth, penAlpha, penMode, eraserEnabled, handleUnlock]);
+    }), [penWidth, penAlpha, penMode, eraserEnabled, handleUnlock]);
 
     return (
         <PenSettingsContext.Provider value={contextValue}>

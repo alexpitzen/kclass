@@ -3,10 +3,11 @@ import { useDrawTool } from '../context/DrawToolContext.jsx';
 import { usePrintOverlay } from './PrintOverlay.jsx';
 import { useHelpOverlay } from './HelpOverlay.jsx';
 import { usePenSettings } from '../context/PenSettingsContext.jsx';
+import { useStampSettings, getStampSize, getSingleColor, getStampColorType, getRainbowSpeed, focusTextStampTextareaFnRef } from '../context/StampSettingsContext.jsx';
 import { selectEraser } from '../helpers/actions.js';
 import { PEN_PRESETS, PRESET_ICONS, getActivePresetId, setStampLibPenSettings } from '../helpers/penPresets.js';
 import { startScrolling } from '../helpers/scrolling.js';
-import { DOWN, UP, LEFT, RIGHT } from '../helpers/constants.js';
+import { DOWN, UP } from '../helpers/constants.js';
 import styles from './ImageStampTab.module.css';
 import undoIcon from '../icons/undo.svg';
 import trashIcon from '../icons/trash.svg';
@@ -17,48 +18,6 @@ const stamps = window.StampLib?.stamps || {};
 const stampCategories = Object.keys(stamps);
 
 const stopPropagation = (e) => e.stopPropagation();
-
-const imageStampSizeRef = { current: 25 };
-const singleColorRef = { current: '#ff2200' };
-const stampColorTypeRef = { current: 'Unchanged' };
-const rainbowSpeedRef = { current: 100 };
-const rainbowFillSpeedRef = { current: 20 };
-const activeStampTabRef = { current: '' };
-const textStampModeActiveRef = { current: false };
-const penSettingsModeActiveRef = { current: false };
-const textareaValueRef = { current: '' };
-const setTextStampModeActiveFnRef = { current: null };
-const setImageStampSizeFnRef = { current: null };
-
-export const activateTextStampMode = () => {
-    if (setTextStampModeActiveFnRef.current) {
-        setTextStampModeActiveFnRef.current(true);
-    } else {
-        textStampModeActiveRef.current = true;
-    }
-};
-
-export const adjustStampSize = (delta) => {
-    const currentSize = imageStampSizeRef.current;
-    let newSize = currentSize + delta;
-    if (newSize < 10) newSize = 10;
-    if (newSize > 100) newSize = 100;
-    if (newSize === currentSize) return;
-
-    imageStampSizeRef.current = newSize;
-    if (setImageStampSizeFnRef.current) {
-        setImageStampSizeFnRef.current(newSize);
-    }
-};
-
-export const getStampSize = () => imageStampSizeRef.current;
-export const getSingleColor = () => singleColorRef.current;
-export const getStampColorType = () => stampColorTypeRef.current;
-export const getRainbowSpeed = () => {
-    return stampColorTypeRef.current === 'Rainbow' 
-        ? rainbowSpeedRef.current 
-        : rainbowFillSpeedRef.current;
-};
 
 export const ImageStampTab = ({ onStampClick, close }) => {
     const { handleUndo, handleClear, registerKeyDownHandler } = useDrawTool();
@@ -73,70 +32,19 @@ export const ImageStampTab = ({ onStampClick, close }) => {
         setPenMode,
         eraserEnabled,
         setEraserEnabled,
-        setPenColor,
     } = usePenSettings();
 
-    const [imageStampSize, setImageStampSize] = useState(imageStampSizeRef.current);
-    const [stampColorType, setStampColorTypeState] = useState(stampColorTypeRef.current);
-    const [rainbowSpeed, setRainbowSpeedState] = useState(rainbowSpeedRef.current);
-    const [rainbowFillSpeed, setRainbowFillSpeedState] = useState(rainbowFillSpeedRef.current);
-    const [singleColor, setSingleColorState] = useState(singleColorRef.current);
-    const [activeStampTab, setActiveStampTabState] = useState(activeStampTabRef.current);
-    const [textStampModeActive, setTextStampModeActiveState] = useState(textStampModeActiveRef.current);
-    const [penSettingsModeActive, setPenSettingsModeActiveState] = useState(penSettingsModeActiveRef.current);
+    const {
+        stampSize, setStampSize,
+        stampColorType, setStampColorType,
+        rainbowSpeed, setRainbowSpeed,
+        rainbowFillSpeed, setRainbowFillSpeed,
+        singleColor, setSingleColor,
+        textStampModeActive, setTextStampModeActive,
+    } = useStampSettings();
 
-    const setStampColorType = useCallback((val) => {
-        stampColorTypeRef.current = val;
-        setStampColorTypeState(val);
-    }, []);
-
-    const setRainbowSpeed = useCallback((val) => {
-        rainbowSpeedRef.current = val;
-        setRainbowSpeedState(val);
-    }, []);
-
-    const setRainbowFillSpeed = useCallback((val) => {
-        rainbowFillSpeedRef.current = val;
-        setRainbowFillSpeedState(val);
-    }, []);
-
-    const setActiveStampTab = useCallback((val) => {
-        activeStampTabRef.current = val;
-        setActiveStampTabState(val);
-    }, []);
-
-    const setSingleColor = useCallback((val) => {
-        singleColorRef.current = val;
-        setSingleColorState(val);
-        setPenColor(val);
-        if (!eraserEnabled) {
-            setStampLibPenSettings(val, penWidth, penAlpha);
-        }
-    }, [setPenColor, eraserEnabled, penWidth, penAlpha]);
-
-    const setTextStampModeActive = useCallback((valOrFn) => {
-        const newVal = typeof valOrFn === 'function' ? valOrFn(textStampModeActiveRef.current) : valOrFn;
-        textStampModeActiveRef.current = newVal;
-        setTextStampModeActiveState(newVal);
-        if (newVal) {
-            penSettingsModeActiveRef.current = false;
-            setPenSettingsModeActiveState(false);
-            requestAnimationFrame(() => {
-                textareaRef.current.focus();
-                textareaRef.current.select();
-            });
-        }
-    }, []);
-
-    const setPenSettingsModeActive = useCallback((valOrFn) => {
-        const newVal = typeof valOrFn === 'function' ? valOrFn(penSettingsModeActiveRef.current) : valOrFn;
-        penSettingsModeActiveRef.current = newVal;
-        setPenSettingsModeActiveState(newVal);
-        if (newVal) {
-            textStampModeActiveRef.current = false;
-            setTextStampModeActiveState(false);
-        }
-    }, []);
+    const [activeStampTab, setActiveStampTab] = useState('');
+    const [penSettingsModeActive, setPenSettingsModeActive] = useState(false);
 
     const sizeSliderRef = useRef(null);
     const presetsContainerRef = useRef(null);
@@ -147,11 +55,10 @@ export const ImageStampTab = ({ onStampClick, close }) => {
     const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
 
      useEffect(() => {
-         imageStampSizeRef.current = imageStampSize;
          if (printOverlayState.visible) {
              updatePreview();
          }
-     }, [imageStampSize, printOverlayState.visible, updatePreview]);
+     }, [stampSize, printOverlayState.visible, updatePreview]);
 
      useEffect(() => {
          if (printOverlayState.visible) {
@@ -160,19 +67,8 @@ export const ImageStampTab = ({ onStampClick, close }) => {
      }, [singleColor, printOverlayState.visible, updatePreview]);
 
       useEffect(() => {
-          setTextStampModeActiveFnRef.current = setTextStampModeActive;
-         if (textStampModeActiveRef.current && !textStampModeActive) {
-             setTextStampModeActive(true);
-         }
-     }, [setTextStampModeActive, textStampModeActive]);
-
-      useEffect(() => {
-          setImageStampSizeFnRef.current = setImageStampSize;
-      }, [setImageStampSize]);
-
-      useEffect(() => {
           if (!eraserEnabled) {
-              setStampLibPenSettings(singleColorRef.current, penWidth, penAlpha);
+              setStampLibPenSettings(getSingleColor(), penWidth, penAlpha);
           }
       }, [eraserEnabled, singleColor, penWidth, penAlpha]);
 
@@ -182,14 +78,23 @@ export const ImageStampTab = ({ onStampClick, close }) => {
         }
     }, [activeStampTab, setActiveStampTab]);
 
-    const handleTextareaInput = useCallback((e) => {
-        textareaValueRef.current = e.target.value;
-    }, []);
+    useEffect(() => {
+        if (textStampModeActive) {
+            requestAnimationFrame(() => {
+                textareaRef.current?.focus();
+                textareaRef.current?.select();
+            });
+        }
+    }, [textStampModeActive]);
 
     useEffect(() => {
-        if (textareaRef.current && textareaValueRef.current) {
-            textareaRef.current.value = textareaValueRef.current;
-        }
+        focusTextStampTextareaFnRef.current = () => {
+            textareaRef.current?.focus();
+            textareaRef.current?.select();
+        };
+        return () => {
+            focusTextStampTextareaFnRef.current = null;
+        };
     }, []);
 
     useEffect(() => {
@@ -246,44 +151,60 @@ export const ImageStampTab = ({ onStampClick, close }) => {
     const handleStampClick = useCallback((stamp, e) => {
         const stampDimensions = stamp._cachedDimensions || StampLib.getWriteStampDimensions(stamp, 1);
         const maxScaleFactor = 370 / Math.max(stampDimensions.width, stampDimensions.height);
-        const scale = (imageStampSizeRef.current / 100) * maxScaleFactor;
+        const scale = (getStampSize() / 100) * maxScaleFactor;
         const svg = typeof stamp.svg === 'string' ? stamp.svg : stamp.svg.outerHTML;
-        const currentStampColorType = stampColorTypeRef.current;
-        const currentSpeed = currentStampColorType === 'Rainbow' ? rainbowSpeedRef.current : rainbowFillSpeedRef.current;
-        showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, singleColorRef.current, svg, { x: e.clientX, y: e.clientY }, currentStampColorType, currentSpeed);
+        const currentStampColorType = getStampColorType();
+        const currentSpeed = getRainbowSpeed();
+        showStampPreview(stamp, stampDimensions, maxScaleFactor, scale, getSingleColor(), svg, { x: e.clientX, y: e.clientY }, currentStampColorType, currentSpeed);
         close();
     }, [showStampPreview, close]);
 
     const handleTextStampToggle = useCallback(() => {
-        setTextStampModeActive(prev => !prev);
+        setTextStampModeActive(prev => {
+            const next = !prev;
+            if (next) {
+                setPenSettingsModeActive(false);
+            }
+            return next;
+        });
     }, [setTextStampModeActive]);
 
     const handlePenSettingsToggle = useCallback(() => {
-        setPenSettingsModeActive(prev => !prev);
-    }, [setPenSettingsModeActive]);
+        setPenSettingsModeActive(prev => {
+            const next = !prev;
+            if (next) {
+                setTextStampModeActive(false);
+            }
+            return next;
+        });
+    }, []);
 
     const handleTextStamp = useCallback((e) => {
-        const scale = imageStampSizeRef.current / 100;
+        const scale = getStampSize() / 100;
         const textareaVal = textareaRef.current?.value || '';
         const writeDimensions = StampLib.getWriteAllDimensions(textareaVal, scale);
-        showTextPreview(textareaVal, writeDimensions, scale, singleColorRef.current, { x: e.clientX, y: e.clientY });
+        showTextPreview(textareaVal, writeDimensions, scale, getSingleColor(), { x: e.clientX, y: e.clientY });
         close();
     }, [showTextPreview, close]);
 
     const handleSizeChange = useCallback((e) => {
-        setImageStampSize(parseInt(e.target.value));
-    }, []);
+        setStampSize(parseInt(e.target.value));
+    }, [setStampSize]);
 
     const handleSingleColorChange = useCallback((e) => {
-        setSingleColor(e.target.value);
-    }, [setSingleColor]);
+        const val = e.target.value;
+        setSingleColor(val);
+        if (!eraserEnabled) {
+            setStampLibPenSettings(val, penWidth, penAlpha);
+        }
+    }, [setSingleColor, eraserEnabled, penWidth, penAlpha]);
 
     const handleColorTypeChange = useCallback((e) => {
         setStampColorType(e.target.value);
     }, [setStampColorType]);
 
     const handleSpeedChange = useCallback((e) => {
-        const currentType = stampColorTypeRef.current;
+        const currentType = getStampColorType();
         if (currentType === 'Rainbow') {
             setRainbowSpeed(parseInt(e.target.value));
         } else if (currentType === 'Rainbow Fill') {
@@ -295,7 +216,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
         const newWidth = parseInt(e.target.value);
         setPenWidth(newWidth);
         if (!eraserEnabled) {
-            setStampLibPenSettings(singleColorRef.current, newWidth, penAlpha);
+            setStampLibPenSettings(getSingleColor(), newWidth, penAlpha);
         } else {
             StampLib.setPenSettings({
                 width: newWidth,
@@ -307,7 +228,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
         const newAlpha = parseFloat(e.target.value);
         setPenAlpha(newAlpha);
         if (!eraserEnabled) {
-            setStampLibPenSettings(singleColorRef.current, penWidth, newAlpha);
+            setStampLibPenSettings(getSingleColor(), penWidth, newAlpha);
         }
     }, [setPenAlpha, eraserEnabled, penWidth]);
 
@@ -327,7 +248,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                 setPenMode('pen');
                 setPenWidth(preset.width);
                 setPenAlpha(preset.alpha);
-                setStampLibPenSettings(singleColorRef.current, preset.width, preset.alpha);
+                setStampLibPenSettings(getSingleColor(), preset.width, preset.alpha);
             }
         }
     }, [setEraserEnabled, setPenMode, setPenWidth, setPenAlpha]);
@@ -410,10 +331,12 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                 break;
             case "h":
                 setPenSettingsModeActive(true);
+                setTextStampModeActive(false);
                 cycleHighlighter();
                 break;
             case "p":
                 setPenSettingsModeActive(true);
+                setTextStampModeActive(false);
                 presetsContainerRef.current.querySelector(`button[data-preset-id="pen"]`).click();
                 break;
             case "P":
@@ -423,6 +346,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                 break;
             case "e":
                 setPenSettingsModeActive(true);
+                setTextStampModeActive(false);
                 presetsContainerRef.current.querySelector(`button[data-preset-id="eraser"]`).click();
                 break;
             case "r":
@@ -435,6 +359,11 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                 break;
             case "t":
                 setTextStampModeActive(true);
+                setPenSettingsModeActive(false);
+                requestAnimationFrame(() => {
+                    textareaRef.current?.focus();
+                    textareaRef.current?.select();
+                });
                 break;
             case "T":
                 setTextStampModeActive(false);
@@ -461,14 +390,14 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                 </button>
                 <div class={styles.mainControlRow}>
                     <div class={styles.controlGroup}>
-                        <label>Size: {imageStampSize}%</label>
+                        <label>Size: {stampSize}%</label>
                         <div class={styles.controlRow}>
                             <input
                                 ref={sizeSliderRef}
                                 type="range"
                                 min="10"
                                 max="100"
-                                value={imageStampSize}
+                                value={stampSize}
                                 onInput={handleSizeChange}
                             />
                         </div>
@@ -557,12 +486,11 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                     <textarea
                         ref={textareaRef}
                         name="stampTextArea"
-                        onInput={handleTextareaInput}
                         placeholder="Enter text..."
                         rows="1"
                         style={{
                             color: singleColor,
-                            fontSize: `calc((${imageStampSize} / 100) * 57px)`
+                            fontSize: `calc((${stampSize} / 100) * 57px)`
                         }}
                     />
                     <button

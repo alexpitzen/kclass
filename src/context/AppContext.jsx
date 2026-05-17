@@ -4,6 +4,7 @@ import { PrintOverlayProvider } from '../components/PrintOverlay.jsx';
 import { DiffViewOverlayProvider } from '../components/DiffViewOverlay.jsx';
 import { HelpOverlayProvider } from '../components/HelpOverlay.jsx';
 import { DrawToolProvider } from './DrawToolContext.jsx';
+import { StampSettingsProvider } from './StampSettingsContext.jsx';
 import { PenSettingsProvider } from './PenSettingsContext.jsx';
 
 const TimestampContext = createContext(null);
@@ -59,15 +60,17 @@ export const AppProvider = ({ children }) => {
             <DiffViewOverlayProvider>
                 <HelpOverlayProvider>
                     <DrawToolProvider>
-                        <PenSettingsProvider>
-                            <TimestampProvider>
-                                <HDModeProvider>
-                                    <KeyboardModeProvider>
-                                        {children}
-                                    </KeyboardModeProvider>
-                                </HDModeProvider>
-                            </TimestampProvider>
-                        </PenSettingsProvider>
+                        <StampSettingsProvider>
+                            <PenSettingsProvider>
+                                <TimestampProvider>
+                                    <HDModeProvider>
+                                        <KeyboardModeProvider>
+                                            {children}
+                                        </KeyboardModeProvider>
+                                    </HDModeProvider>
+                                </TimestampProvider>
+                            </PenSettingsProvider>
+                        </StampSettingsProvider>
                     </DrawToolProvider>
                 </HelpOverlayProvider>
             </DiffViewOverlayProvider>

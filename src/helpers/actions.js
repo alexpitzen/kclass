@@ -6,7 +6,7 @@ import {
     getPenAlpha, 
     updateStampLibFromPenSettings 
 } from '../context/PenSettingsContext.jsx';
-import { getSingleColor } from '../components/ImageStampTab.jsx';
+import { getSingleColor } from '../context/StampSettingsContext.jsx';
 import { mapNewPresetToOld } from '../helpers/penPresets.js';
 
 function getOldPenTypeFromNewSettings() {
