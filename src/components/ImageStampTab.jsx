@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo, useCallback } from 'preact/hooks';
+import { useState, useRef, useEffect, useMemo, useCallback, useLayoutEffect } from 'preact/hooks';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
 import { usePrintOverlay } from './PrintOverlay.jsx';
 import { useHelpOverlay } from './HelpOverlay.jsx';
@@ -78,8 +78,9 @@ export const ImageStampTab = ({ onStampClick, close }) => {
         }
     }, [activeStampTab, setActiveStampTab]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (textStampModeActive) {
+            setPenSettingsModeActive(false);
             requestAnimationFrame(() => {
                 textareaRef.current?.focus();
                 textareaRef.current?.select();
@@ -359,7 +360,6 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                 break;
             case "t":
                 setTextStampModeActive(true);
-                setPenSettingsModeActive(false);
                 requestAnimationFrame(() => {
                     textareaRef.current?.focus();
                     textareaRef.current?.select();
