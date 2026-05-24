@@ -349,7 +349,9 @@ export const useKeyboardMode = (enabled) => {
                 return;
             }
 
-            if (printOverlayState.visible) {
+            // Fall back to normal grading handling for page navigation & opening ImageStampTab
+            if (printOverlayState.visible && !["g", "G", "n", "N", "j", "k", "J", "K", "d"].includes(e.key)) {
+                // Special cases for print overlay
                 switch (e.key) {
                     case "-":
                         adjustStampSize(-1);
@@ -362,6 +364,7 @@ export const useKeyboardMode = (enabled) => {
                         updatePreview();
                         e.preventDefault();
                         break;
+                    case "Backspace":
                     case "Escape":
                         hidePreview();
                         e.preventDefault();

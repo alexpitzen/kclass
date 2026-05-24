@@ -4179,7 +4179,7 @@
         keys: [
           { key: ["Alt", "k"], separator: " + ", desc: "Toggle keyboard mode" },
           { key: ["Alt", "c"], separator: " + ", desc: "Access color picker" },
-          { key: ["Alt", "h"], separator: " + ", desc: ["Toggle HD mode", "Note: This is buggy"] }
+          { key: ["Alt", "h"], separator: " + ", desc: ["Toggle HD mode", "Note: This is buggy. Only use this if the", "text is too small or blurry to read."] }
         ]
       }
     ],
@@ -6206,7 +6206,7 @@
           callKeyDownHandler(e3);
           return;
         }
-        if (printOverlayState.visible) {
+        if (printOverlayState.visible && !["g", "G", "n", "N", "j", "k", "J", "K", "d"].includes(e3.key)) {
           switch (e3.key) {
             case "-":
               adjustStampSize(-1);
@@ -6219,6 +6219,7 @@
               updatePreview();
               e3.preventDefault();
               break;
+            case "Backspace":
             case "Escape":
               hidePreview();
               e3.preventDefault();

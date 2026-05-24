@@ -48,7 +48,7 @@ const TAB_CONTENT = {
             keys: [
                 { key: ['Alt', 'k'], separator: " + ", desc: 'Toggle keyboard mode' },
                 { key: ['Alt', 'c'], separator: " + ", desc: 'Access color picker' },
-                { key: ['Alt', 'h'], separator: " + ", desc: ['Toggle HD mode', "Note: This is buggy"] },
+                { key: ['Alt', 'h'], separator: " + ", desc: ['Toggle HD mode', "Note: This is buggy. Only use this if the", "text is too small or blurry to read."] },
             ],
         }
     ],
