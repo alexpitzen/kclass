@@ -14,7 +14,6 @@ export const useDrawTool = () => {
 
 const TAB_IDS = [
     { id: 'image', label: 'Image Stamps' },
-    { id: 'settings', label: 'Settings' },
 ];
 
 export const DrawToolProvider = ({ children }) => {

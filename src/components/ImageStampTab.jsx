@@ -4,6 +4,7 @@ import { usePrintOverlay } from './PrintOverlay.jsx';
 import { useHelpOverlay } from './HelpOverlay.jsx';
 import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useStampSettings, getStampSize, getSingleColor, getStampColorType, getRainbowSpeed, focusTextStampTextareaFnRef } from '../context/StampSettingsContext.jsx';
+import { useKeyboardMode as useKeyboardModeContext, useHDMode as useHDModeContext } from '../context/AppContext.jsx';
 import { selectEraser } from '../helpers/actions.js';
 import { PEN_PRESETS, PRESET_ICONS, getActivePresetId, setStampLibPenSettings } from '../helpers/penPresets.js';
 import { startScrolling } from '../helpers/scrolling.js';
@@ -12,6 +13,9 @@ import styles from './ImageStampTab.module.css';
 import undoIcon from '../icons/undo.svg';
 import trashIcon from '../icons/trash.svg';
 import stampTextIcon from '../icons/stamp-text.svg';
+import settingsIcon from '../icons/settings.svg';
+import unlockIcon from '../icons/unlock.svg';
+import helpCircleIcon from '../icons/help-circle.svg';
 import xIcon from '../icons/x.svg';
 
 const stamps = window.StampLib?.stamps || {};
@@ -23,6 +27,8 @@ export const ImageStampTab = ({ onStampClick, close }) => {
     const { handleUndo, handleClear, registerKeyDownHandler } = useDrawTool();
      const { showStampPreview, showTextPreview, updatePreview, state: printOverlayState } = usePrintOverlay();
     const { showHelpOverlay } = useHelpOverlay();
+    const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardModeContext();
+    const { hdModeEnabled, setHdModeEnabled } = useHDModeContext();
     const {
         penWidth,
         setPenWidth,
@@ -45,6 +51,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
 
     const [activeStampTab, setActiveStampTab] = useState('');
     const [penSettingsModeActive, setPenSettingsModeActive] = useState(false);
+    const [settingsModeActive, setSettingsModeActive] = useState(false);
 
     const sizeSliderRef = useRef(null);
     const presetsContainerRef = useRef(null);
@@ -165,6 +172,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
             const next = !prev;
             if (next) {
                 setPenSettingsModeActive(false);
+                setSettingsModeActive(false);
             }
             return next;
         });
@@ -175,6 +183,18 @@ export const ImageStampTab = ({ onStampClick, close }) => {
             const next = !prev;
             if (next) {
                 setTextStampModeActive(false);
+                setSettingsModeActive(false);
+            }
+            return next;
+        });
+    }, []);
+
+    const handleSettingsToggle = useCallback(() => {
+        setSettingsModeActive(prev => {
+            const next = !prev;
+            if (next) {
+                setTextStampModeActive(false);
+                setPenSettingsModeActive(false);
             }
             return next;
         });
@@ -333,11 +353,13 @@ export const ImageStampTab = ({ onStampClick, close }) => {
             case "h":
                 setPenSettingsModeActive(true);
                 setTextStampModeActive(false);
+                setSettingsModeActive(false);
                 cycleHighlighter();
                 break;
             case "p":
                 setPenSettingsModeActive(true);
                 setTextStampModeActive(false);
+                setSettingsModeActive(false);
                 presetsContainerRef.current.querySelector(`button[data-preset-id="pen"]`).click();
                 break;
             case "P":
@@ -348,6 +370,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
             case "e":
                 setPenSettingsModeActive(true);
                 setTextStampModeActive(false);
+                setSettingsModeActive(false);
                 presetsContainerRef.current.querySelector(`button[data-preset-id="eraser"]`).click();
                 break;
             case "r":
@@ -360,6 +383,8 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                 break;
             case "t":
                 setTextStampModeActive(true);
+                setPenSettingsModeActive(false);
+                setSettingsModeActive(false);
                 requestAnimationFrame(() => {
                     textareaRef.current?.focus();
                     textareaRef.current?.select();
@@ -368,11 +393,19 @@ export const ImageStampTab = ({ onStampClick, close }) => {
             case "T":
                 setTextStampModeActive(false);
                 break;
+            case "s":
+                setSettingsModeActive(true);
+                setTextStampModeActive(false);
+                setPenSettingsModeActive(false);
+                break;
+            case "S":
+                setSettingsModeActive(false);
+                break;
             case "?":
                 showHelpOverlay("drawtab");
                 break;
         }
-    }, [close, showHelpOverlay, cycleHighlighter, setPenSettingsModeActive, setTextStampModeActive]);
+    }, [close, showHelpOverlay, cycleHighlighter, setPenSettingsModeActive, setTextStampModeActive, setSettingsModeActive]);
 
     useEffect(() => {
         return registerKeyDownHandler('image', handleKeys);
@@ -476,12 +509,21 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                     Pen
                 </button>
 
+                <button
+                    class={`${styles.stampTabBtn} ${settingsModeActive ? styles.stampTabBtnActive : ''}`}
+                    onClick={handleSettingsToggle}
+                    onMouseOver={stopPropagation}
+                >
+                    <span dangerouslySetInnerHTML={{ __html: settingsIcon }} />
+                    Settings
+                </button>
+
                 <div class={styles.stampTabDivider} />
 
                 {renderedStampTabs}
             </div>
 
-            <div class={`${styles.auxPanelWrapper} ${textStampModeActive || penSettingsModeActive ? '' : styles.auxPanelWrapperCollapsed}`}>
+            <div class={`${styles.auxPanelWrapper} ${textStampModeActive || penSettingsModeActive || settingsModeActive ? '' : styles.auxPanelWrapperCollapsed}`}>
                 <div class={`${styles.textInput} ${textStampModeActive ? styles.auxPanelActive : ''}`}>
                     <textarea
                         ref={textareaRef}
@@ -545,6 +587,53 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                              </button>
                          ))}
                      </div>
+                </div>
+
+                <div class={`${styles.settingsInput} ${settingsModeActive ? styles.auxPanelActive : ''}`}>
+                    <div class={styles.settingsGroup}>
+                        <div class={styles.controlGroup}>
+                            <label>HD Mode</label>
+                            <label class={styles.toggleSwitch}>
+                                <input
+                                    type="checkbox"
+                                    checked={hdModeEnabled}
+                                    onChange={(e) => setHdModeEnabled(e.target.checked)}
+                                    accessKey="h"
+                                />
+                                <span class={styles.toggleSlider}></span>
+                            </label>
+                        </div>
+                        <div class={styles.controlGroup}>
+                            <label>Keyboard Mode</label>
+                            <label class={styles.toggleSwitch}>
+                                <input
+                                    type="checkbox"
+                                    checked={keyboardModeEnabled}
+                                    onChange={(e) => setKeyboardModeEnabled(e.target.checked)}
+                                    accessKey="k"
+                                />
+                                <span class={styles.toggleSlider}></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class={styles.settingsActions}>
+                        <button
+                            class={styles.presetBtn}
+                            onClick={() => showHelpOverlay('grading')}
+                            onMouseOver={stopPropagation}
+                        >
+                            <span dangerouslySetInnerHTML={{ __html: helpCircleIcon }} />
+                            Help
+                        </button>
+                        <button
+                            class={styles.presetBtn}
+                            onClick={StampLib.unlockPage}
+                            onMouseOver={stopPropagation}
+                        >
+                            <span dangerouslySetInnerHTML={{ __html: unlockIcon }} />
+                            Unlock Page
+                        </button>
+                    </div>
                 </div>
             </div>
 

@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'preact/hooks';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
 import { ImageStampTab } from './ImageStampTab.jsx';
-import { SettingsTab } from './SettingsTab.jsx';
 import styles from './DrawToolOverlay.module.css';
 
 export const DrawToolOverlay = () => {
-    const { activeTab, drawToolVisible, hideDrawTool } = useDrawTool();
+    const { drawToolVisible, hideDrawTool } = useDrawTool();
     const bodyRef = useRef(null);
 
     useEffect(() => {
@@ -15,7 +14,7 @@ export const DrawToolOverlay = () => {
                 focusableElement.focus();
             }
         }
-    }, [drawToolVisible, activeTab]);
+    }, [drawToolVisible]);
 
     return (
         <div
@@ -25,12 +24,7 @@ export const DrawToolOverlay = () => {
         >
             <div class={styles.content} onClick={(e) => e.stopPropagation()}>
                 <div ref={bodyRef} class={styles.body}>
-                    <div style={{ display: activeTab === 'image' ? 'contents' : 'none' }}>
-                        <ImageStampTab close={hideDrawTool} />
-                    </div>
-                    <div style={{ display: activeTab === 'settings' ? 'contents' : 'none' }}>
-                        <SettingsTab close={hideDrawTool} />
-                    </div>
+                    <ImageStampTab close={hideDrawTool} />
                 </div>
             </div>
         </div>

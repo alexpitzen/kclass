@@ -446,6 +446,83 @@
     pointer-events: auto;
 }
 
+.settingsInput {
+    align-items: flex-start;
+    display: none;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+    border: none;
+    padding: 0;
+    background: transparent;
+    max-height: none;
+}
+
+.settingsInput.auxPanelActive {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    pointer-events: auto;
+}
+
+.settingsGroup {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.settingsActions {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    align-self: flex-start;
+}
+
+.toggleSwitch {
+    position: relative;
+    display: inline-block;
+    width: 28px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.toggleSwitch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggleSlider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 16px;
+    transition: background-color 0.25s;
+}
+
+.toggleSlider::before {
+    content: "";
+    position: absolute;
+    height: 12px;
+    width: 12px;
+    left: 2px;
+    bottom: 2px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform 0.25s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.toggleSwitch input:checked + .toggleSlider {
+    background-color: #007bff;
+}
+
+.toggleSwitch input:checked + .toggleSlider::before {
+    transform: translateX(12px);
+}
+
 .presetsContainer {
     display: flex;
     align-items: center;
