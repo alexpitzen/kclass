@@ -2248,6 +2248,7 @@
                 aarnaBoy,
                 aarnaPrincess,
                 sofiaBunny,
+                sofiaCat,
                 faboolousWork,
                 bootifulWork,
                 zombie,
@@ -2367,6 +2368,7 @@
                 aarnaBoy,
                 aarnaPrincess,
                 sofiaBunny,
+                sofiaCat,
             ],
             "Christmas": [
                 christmasCat,
