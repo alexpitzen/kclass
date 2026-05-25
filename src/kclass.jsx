@@ -105,3 +105,7 @@ function getngc() {
     }
 }
 getngc();
+
+window.whograded = () => {
+    return window.kclass.ng.context._paging?._currentPage?.gradingStudyUnitInfo?.BeforeGraderID;
+};

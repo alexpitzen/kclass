@@ -6369,6 +6369,9 @@
     }
   }
   getngc();
+  window.whograded = () => {
+    return window.kclass.ng.context._paging?._currentPage?.gradingStudyUnitInfo?.BeforeGraderID;
+  };
 })();
     //*/
 
@@ -7589,8 +7592,6 @@ body:has(app-atx0010p) .loginAssistantsList {
   gap: 12px;
   padding: 14px 16px;
   background-color: #f5f5fa;
-  border-radius: 8px 8px 0 0;
-  border: 1px solid #e0e0e8;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   flex-shrink: 0;
 }
@@ -7933,13 +7934,12 @@ body:has(app-atx0010p) .loginAssistantsList {
 }
 .ImageStampTab_closeBtn {
   position: absolute;
-  top: 14px;
-  right: 16px;
+  top: 0px;
+  right: 0px;
   width: 28px;
   height: 28px;
   cursor: pointer;
   border: 1px solid #d0d0da;
-  border-radius: 6px;
   background: #fff;
   color: #666;
   display: flex;
@@ -8108,7 +8108,6 @@ body:has(app-atx0010p) .loginAssistantsList {
 }
 .DrawToolOverlay_content {
   background-color: #ffffff;
-  border-radius: 12px 12px 0 0;
   width: calc(100vw - 2px);
   max-height: calc(100vh - 40px);
   display: flex;
