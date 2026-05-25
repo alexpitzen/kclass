@@ -2621,9 +2621,9 @@
     I.__r = 0;
   }
   function P(n2, l3, u4, t3, i4, r3, o3, e3, f4, c3, s3) {
-    var a3, h3, y3, d3, w3, g2, _3, m3 = t3 && t3.__k || v, b = l3.length;
-    for (f4 = A(u4, l3, m3, f4, b), a3 = 0; a3 < b; a3++)
-      null != (y3 = u4.__k[a3]) && (h3 = -1 != y3.__i && m3[y3.__i] || p, y3.__i = a3, g2 = z(n2, y3, h3, i4, r3, o3, e3, f4, c3, s3), d3 = y3.__e, y3.ref && h3.ref != y3.ref && (h3.ref && D(h3.ref, null, y3), s3.push(y3.ref, y3.__c || d3, y3)), null == w3 && null != d3 && (w3 = d3), (_3 = !!(4 & y3.__u)) || h3.__k === y3.__k ? f4 = H(y3, f4, n2, _3) : "function" == typeof y3.type && void 0 !== g2 ? f4 = g2 : d3 && (f4 = d3.nextSibling), y3.__u &= -7);
+    var a3, h3, y3, d3, w3, g4, _3, m3 = t3 && t3.__k || v, b2 = l3.length;
+    for (f4 = A(u4, l3, m3, f4, b2), a3 = 0; a3 < b2; a3++)
+      null != (y3 = u4.__k[a3]) && (h3 = -1 != y3.__i && m3[y3.__i] || p, y3.__i = a3, g4 = z(n2, y3, h3, i4, r3, o3, e3, f4, c3, s3), d3 = y3.__e, y3.ref && h3.ref != y3.ref && (h3.ref && D(h3.ref, null, y3), s3.push(y3.ref, y3.__c || d3, y3)), null == w3 && null != d3 && (w3 = d3), (_3 = !!(4 & y3.__u)) || h3.__k === y3.__k ? f4 = H(y3, f4, n2, _3) : "function" == typeof y3.type && void 0 !== g4 ? f4 = g4 : d3 && (f4 = d3.nextSibling), y3.__u &= -7);
     return u4.__e = w3, f4;
   }
   function A(n2, l3, u4, t3, i4) {
@@ -2647,6 +2647,11 @@
       l3 = l3 && l3.nextSibling;
     } while (null != l3 && 8 == l3.nodeType);
     return l3;
+  }
+  function L(n2, l3) {
+    return l3 = l3 || [], null == n2 || "boolean" == typeof n2 || (d(n2) ? n2.some(function(n3) {
+      L(n3, l3);
+    }) : l3.push(n2)), l3;
   }
   function T(n2, l3, u4, t3) {
     var i4, r3, o3, e3 = n2.key, f4 = n2.type, c3 = l3[u4], s3 = null != c3 && 0 == (2 & c3.__u);
@@ -2703,17 +2708,17 @@
     };
   }
   function z(n2, u4, t3, i4, r3, o3, e3, f4, c3, s3) {
-    var a3, h3, p3, y3, _3, m3, b, S2, C3, M2, $2, I2, A3, H2, L, T3 = u4.type;
+    var a3, h3, p3, y3, _3, m3, b2, S2, C3, M2, $2, I2, A4, H3, L2, T4 = u4.type;
     if (void 0 !== u4.constructor)
       return null;
     128 & t3.__u && (c3 = !!(32 & t3.__u), o3 = [f4 = u4.__e = t3.__e]), (a3 = l.__b) && a3(u4);
     n:
-      if ("function" == typeof T3)
+      if ("function" == typeof T4)
         try {
-          if (S2 = u4.props, C3 = "prototype" in T3 && T3.prototype.render, M2 = (a3 = T3.contextType) && i4[a3.__c], $2 = a3 ? M2 ? M2.props.value : a3.__ : i4, t3.__c ? b = (h3 = u4.__c = t3.__c).__ = h3.__E : (C3 ? u4.__c = h3 = new T3(S2, $2) : (u4.__c = h3 = new x(S2, $2), h3.constructor = T3, h3.render = G), M2 && M2.sub(h3), h3.state || (h3.state = {}), h3.__n = i4, p3 = h3.__d = true, h3.__h = [], h3._sb = []), C3 && null == h3.__s && (h3.__s = h3.state), C3 && null != T3.getDerivedStateFromProps && (h3.__s == h3.state && (h3.__s = w({}, h3.__s)), w(h3.__s, T3.getDerivedStateFromProps(S2, h3.__s))), y3 = h3.props, _3 = h3.state, h3.__v = u4, p3)
-            C3 && null == T3.getDerivedStateFromProps && null != h3.componentWillMount && h3.componentWillMount(), C3 && null != h3.componentDidMount && h3.__h.push(h3.componentDidMount);
+          if (S2 = u4.props, C3 = "prototype" in T4 && T4.prototype.render, M2 = (a3 = T4.contextType) && i4[a3.__c], $2 = a3 ? M2 ? M2.props.value : a3.__ : i4, t3.__c ? b2 = (h3 = u4.__c = t3.__c).__ = h3.__E : (C3 ? u4.__c = h3 = new T4(S2, $2) : (u4.__c = h3 = new x(S2, $2), h3.constructor = T4, h3.render = G), M2 && M2.sub(h3), h3.state || (h3.state = {}), h3.__n = i4, p3 = h3.__d = true, h3.__h = [], h3._sb = []), C3 && null == h3.__s && (h3.__s = h3.state), C3 && null != T4.getDerivedStateFromProps && (h3.__s == h3.state && (h3.__s = w({}, h3.__s)), w(h3.__s, T4.getDerivedStateFromProps(S2, h3.__s))), y3 = h3.props, _3 = h3.state, h3.__v = u4, p3)
+            C3 && null == T4.getDerivedStateFromProps && null != h3.componentWillMount && h3.componentWillMount(), C3 && null != h3.componentDidMount && h3.__h.push(h3.componentDidMount);
           else {
-            if (C3 && null == T3.getDerivedStateFromProps && S2 !== y3 && null != h3.componentWillReceiveProps && h3.componentWillReceiveProps(S2, $2), u4.__v == t3.__v || !h3.__e && null != h3.shouldComponentUpdate && false === h3.shouldComponentUpdate(S2, h3.__s, $2)) {
+            if (C3 && null == T4.getDerivedStateFromProps && S2 !== y3 && null != h3.componentWillReceiveProps && h3.componentWillReceiveProps(S2, $2), u4.__v == t3.__v || !h3.__e && null != h3.shouldComponentUpdate && false === h3.shouldComponentUpdate(S2, h3.__s, $2)) {
               u4.__v != t3.__v && (h3.props = S2, h3.state = h3.__s, h3.__d = false), u4.__e = t3.__e, u4.__k = t3.__k, u4.__k.some(function(n3) {
                 n3 && (n3.__ = u4);
               }), v.push.apply(h3.__h, h3._sb), h3._sb = [], h3.__h.length && e3.push(h3);
@@ -2723,13 +2728,13 @@
               h3.componentDidUpdate(y3, _3, m3);
             });
           }
-          if (h3.context = $2, h3.props = S2, h3.__P = n2, h3.__e = false, I2 = l.__r, A3 = 0, C3)
+          if (h3.context = $2, h3.props = S2, h3.__P = n2, h3.__e = false, I2 = l.__r, A4 = 0, C3)
             h3.state = h3.__s, h3.__d = false, I2 && I2(u4), a3 = h3.render(h3.props, h3.state, h3.context), v.push.apply(h3.__h, h3._sb), h3._sb = [];
           else
             do {
               h3.__d = false, I2 && I2(u4), a3 = h3.render(h3.props, h3.state, h3.context), h3.state = h3.__s;
-            } while (h3.__d && ++A3 < 25);
-          h3.state = h3.__s, null != h3.getChildContext && (i4 = w(w({}, i4), h3.getChildContext())), C3 && !p3 && null != h3.getSnapshotBeforeUpdate && (m3 = h3.getSnapshotBeforeUpdate(y3, _3)), H2 = null != a3 && a3.type === k && null == a3.key ? q(a3.props.children) : a3, f4 = P(n2, d(H2) ? H2 : [H2], u4, t3, i4, r3, o3, e3, f4, c3, s3), h3.base = u4.__e, u4.__u &= -161, h3.__h.length && e3.push(h3), b && (h3.__E = h3.__ = null);
+            } while (h3.__d && ++A4 < 25);
+          h3.state = h3.__s, null != h3.getChildContext && (i4 = w(w({}, i4), h3.getChildContext())), C3 && !p3 && null != h3.getSnapshotBeforeUpdate && (m3 = h3.getSnapshotBeforeUpdate(y3, _3)), H3 = null != a3 && a3.type === k && null == a3.key ? q(a3.props.children) : a3, f4 = P(n2, d(H3) ? H3 : [H3], u4, t3, i4, r3, o3, e3, f4, c3, s3), h3.base = u4.__e, u4.__u &= -161, h3.__h.length && e3.push(h3), b2 && (h3.__E = h3.__ = null);
         } catch (n3) {
           if (u4.__v = null, c3 || null != o3)
             if (n3.then) {
@@ -2737,8 +2742,8 @@
                 f4 = f4.nextSibling;
               o3[o3.indexOf(f4)] = null, u4.__e = f4;
             } else {
-              for (L = o3.length; L--; )
-                g(o3[L]);
+              for (L2 = o3.length; L2--; )
+                g(o3[L2]);
               N(u4);
             }
           else
@@ -2769,7 +2774,7 @@
     return "object" != typeof n2 || null == n2 || n2.__b > 0 ? n2 : d(n2) ? n2.map(q) : w({}, n2);
   }
   function B(u4, t3, i4, r3, o3, e3, f4, c3, s3) {
-    var a3, h3, v3, y3, w3, _3, m3, b = i4.props || p, k3 = t3.props, x3 = t3.type;
+    var a3, h3, v3, y3, w3, _3, m3, b2 = i4.props || p, k3 = t3.props, x3 = t3.type;
     if ("svg" == x3 ? o3 = "http://www.w3.org/2000/svg" : "math" == x3 ? o3 = "http://www.w3.org/1998/Math/MathML" : o3 || (o3 = "http://www.w3.org/1999/xhtml"), null != e3) {
       for (a3 = 0; a3 < e3.length; a3++)
         if ((w3 = e3[a3]) && "setAttribute" in w3 == !!x3 && (x3 ? w3.localName == x3 : 3 == w3.nodeType)) {
@@ -2783,21 +2788,21 @@
       u4 = document.createElementNS(o3, x3, k3.is && k3), c3 && (l.__m && l.__m(t3, e3), c3 = false), e3 = null;
     }
     if (null == x3)
-      b === k3 || c3 && u4.data == k3 || (u4.data = k3);
+      b2 === k3 || c3 && u4.data == k3 || (u4.data = k3);
     else {
       if (e3 = e3 && n.call(u4.childNodes), !c3 && null != e3)
-        for (b = {}, a3 = 0; a3 < u4.attributes.length; a3++)
-          b[(w3 = u4.attributes[a3]).name] = w3.value;
-      for (a3 in b)
-        w3 = b[a3], "dangerouslySetInnerHTML" == a3 ? v3 = w3 : "children" == a3 || a3 in k3 || "value" == a3 && "defaultValue" in k3 || "checked" == a3 && "defaultChecked" in k3 || F(u4, a3, null, w3, o3);
+        for (b2 = {}, a3 = 0; a3 < u4.attributes.length; a3++)
+          b2[(w3 = u4.attributes[a3]).name] = w3.value;
+      for (a3 in b2)
+        w3 = b2[a3], "dangerouslySetInnerHTML" == a3 ? v3 = w3 : "children" == a3 || a3 in k3 || "value" == a3 && "defaultValue" in k3 || "checked" == a3 && "defaultChecked" in k3 || F(u4, a3, null, w3, o3);
       for (a3 in k3)
-        w3 = k3[a3], "children" == a3 ? y3 = w3 : "dangerouslySetInnerHTML" == a3 ? h3 = w3 : "value" == a3 ? _3 = w3 : "checked" == a3 ? m3 = w3 : c3 && "function" != typeof w3 || b[a3] === w3 || F(u4, a3, w3, b[a3], o3);
+        w3 = k3[a3], "children" == a3 ? y3 = w3 : "dangerouslySetInnerHTML" == a3 ? h3 = w3 : "value" == a3 ? _3 = w3 : "checked" == a3 ? m3 = w3 : c3 && "function" != typeof w3 || b2[a3] === w3 || F(u4, a3, w3, b2[a3], o3);
       if (h3)
         c3 || v3 && (h3.__html == v3.__html || h3.__html == u4.innerHTML) || (u4.innerHTML = h3.__html), t3.__k = [];
       else if (v3 && (u4.innerHTML = ""), P("template" == t3.type ? u4.content : u4, d(y3) ? y3 : [y3], t3, i4, r3, "foreignObject" == x3 ? "http://www.w3.org/1999/xhtml" : o3, e3, f4, e3 ? e3[0] : i4.__k && S(i4, 0), c3, s3), null != e3)
         for (a3 = e3.length; a3--; )
           g(e3[a3]);
-      c3 || (a3 = "value", "progress" == x3 && null == _3 ? u4.removeAttribute("value") : null != _3 && (_3 !== u4[a3] || "progress" == x3 && !_3 || "option" == x3 && _3 != b[a3]) && F(u4, a3, _3, b[a3], o3), a3 = "checked", null != m3 && m3 != u4[a3] && F(u4, a3, m3, b[a3], o3));
+      c3 || (a3 = "value", "progress" == x3 && null == _3 ? u4.removeAttribute("value") : null != _3 && (_3 !== u4[a3] || "progress" == x3 && !_3 || "option" == x3 && _3 != b2[a3]) && F(u4, a3, _3, b2[a3], o3), a3 = "checked", null != m3 && m3 != u4[a3] && F(u4, a3, m3, b2[a3], o3));
     }
     return u4;
   }
@@ -2950,6 +2955,20 @@
       return { current: n2 };
     }, []);
   }
+  function F2(n2, t3, r3) {
+    o2 = 6, _2(function() {
+      if ("function" == typeof n2) {
+        var r4 = n2(t3());
+        return function() {
+          n2(null), r4 && "function" == typeof r4 && r4();
+        };
+      }
+      if (n2)
+        return n2.current = t3(), function() {
+          return n2.current = null;
+        };
+    }, null == r3 ? r3 : r3.concat(n2));
+  }
   function T2(n2, r3) {
     var u4 = p2(t2++, 7);
     return C2(u4.__H, r3) && (u4.__ = n2(), u4.__H = r3, u4.__h = n2), u4.__;
@@ -3054,9 +3073,9 @@
     const cur = document.querySelector(".worksheet-navigator-page.active");
     const pages = Array.from(document.querySelectorAll(".worksheet-navigator-page"));
     const i4 = pages.indexOf(cur);
-    for (let j3 = i4 + 1; j3 < pages.length; j3++) {
-      if (pages[j3].querySelector("span:not(.disabled)")) {
-        pages[j3].click();
+    for (let j4 = i4 + 1; j4 < pages.length; j4++) {
+      if (pages[j4].querySelector("span:not(.disabled)")) {
+        pages[j4].click();
         return;
       }
     }
@@ -3066,9 +3085,9 @@
     const cur = document.querySelector(".worksheet-navigator-page.active");
     const pages = Array.from(document.querySelectorAll(".worksheet-navigator-page"));
     const i4 = pages.indexOf(cur);
-    for (let j3 = i4 - 1; j3 >= 0; j3--) {
-      if (pages[j3].querySelector("span:not(.disabled)")) {
-        pages[j3].click();
+    for (let j4 = i4 - 1; j4 >= 0; j4--) {
+      if (pages[j4].querySelector("span:not(.disabled)")) {
+        pages[j4].click();
         break;
       }
     }
@@ -3099,13 +3118,13 @@
   var pen_default = '<svg width="20" height="20" viewBox="0 0 18.24 18.24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" ><g id="g1" transform="translate(-3.173,-2.84)"><path id="path3" style="fill-rule:evenodd" d="m 3.486,16.01 -0.327,3.57 c 0.08,0.89 1.231,1.58 1.737,1.53 L 8.418,20.73 C 9.147,20.53 9.644,19.95 9.964,19.61 13.42,16.11 17.12,12.25 20.9,8.609 21.76,7.588 21.38,5.886 20.79,5.28 L 18.85,3.379 C 17.75,2.318 16.09,2.838 15.36,3.523 L 4.084,14.88 C 3.652,15.31 3.501,15.75 3.486,16.01 Z M 15.42,5.627 18.67,8.915 19.79,7.628 C 20.05,7.242 20.03,6.654 19.73,6.339 L 17.9,4.552 C 17.42,4.173 16.97,4.165 16.65,4.452 Z M 5.547,15.5 c -0.371,0.41 2.855,3.58 3.137,3.28 L 17.56,9.902 14.34,6.715 Z m -0.636,0.83 c -0.07,0.65 -0.502,3.03 -0.181,3.23 0.216,0.2 2.03,0 3.119,-0.19 C 5.543,17.58 4.926,16.2 4.911,16.33 Z" /></g></svg>\n';
 
   // src/icons/highlighter.svg
-  var highlighter_default = '<svg viewBox="0 0 497.4 542" width="20" height="20" fill="#000000" xmlns="http://www.w3.org/2000/svg"><g id="g6" transform="translate(0,18.69)"><path d="M 186.6,453.4 447.1,183.6 C 463.8,166.3 484,143 494.9,120.9 l 2.5,-5.1 -135,-134.49 -5.1,2.63 C 335.7,-4.899 316.1,9.353 299.1,26.72 L 39.36,293.8 l -0.38,2.5 c -5.54,36.5 -0.96,78.4 -9.62,114.2 l -6.84,28.2 2.17,2.2 L 0,465.6 v 39.3 h 43.31 l 22.46,-20.4 2.17,2.2 8.98,-3.9 C 110.7,468.2 142.5,446 178.8,452.1 Z M 36.69,484.9 H 16 v -12.7 l 20,-20 18.46,18.3 z M 69.68,466.7 41.49,435.1 C 51.71,405 51.47,353.8 52.12,319.2 L 159.5,431.7 c -32.2,5.7 -59.77,22.2 -89.82,35 z M 94.47,337.4 185.7,246.7 c 7.1,-6.9 16.4,-10.9 26.3,-10.9 20.6,0 44,25.8 44,46.3 0,10 -3.9,19.3 -10.9,26.4 L 152,401.6 Z m 68.83,75.5 93.1,-93.1 c 10.1,-10.1 15.6,-23.4 15.6,-37.7 0,-29.3 -30.6,-62.3 -60,-62.3 -14.2,0 -27.4,5.6 -37.6,15.6 L 83.16,326.1 58.14,297.4 310.6,37.9 C 324.9,23.16 341.4,10.73 359.4,0.9131 L 478,119.1 c -9.4,18.3 -22.8,34.6 -37.2,49.3 L 182.2,434 Z" id="path1" /><rect x="-406" y="37.07" transform="rotate(-135)" width="16" height="135.8" id="rect1" style="stroke-width:0.99999" /><rect x="72" y="476.9" width="392" height="46.36" id="rect3" /></g></svg>\n';
+  var highlighter_default = '<svg viewBox="0 0 497.4 542" width="20" height="20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><g id="g6" transform="translate(0,18.69)"><path d="M 186.6,453.4 447.1,183.6 C 463.8,166.3 484,143 494.9,120.9 l 2.5,-5.1 -135,-134.49 -5.1,2.63 C 335.7,-4.899 316.1,9.353 299.1,26.72 L 39.36,293.8 l -0.38,2.5 c -5.54,36.5 -0.96,78.4 -9.62,114.2 l -6.84,28.2 2.17,2.2 L 0,465.6 v 39.3 h 43.31 l 22.46,-20.4 2.17,2.2 8.98,-3.9 C 110.7,468.2 142.5,446 178.8,452.1 Z M 36.69,484.9 H 16 v -12.7 l 20,-20 18.46,18.3 z M 69.68,466.7 41.49,435.1 C 51.71,405 51.47,353.8 52.12,319.2 L 159.5,431.7 c -32.2,5.7 -59.77,22.2 -89.82,35 z M 94.47,337.4 185.7,246.7 c 7.1,-6.9 16.4,-10.9 26.3,-10.9 20.6,0 44,25.8 44,46.3 0,10 -3.9,19.3 -10.9,26.4 L 152,401.6 Z m 68.83,75.5 93.1,-93.1 c 10.1,-10.1 15.6,-23.4 15.6,-37.7 0,-29.3 -30.6,-62.3 -60,-62.3 -14.2,0 -27.4,5.6 -37.6,15.6 L 83.16,326.1 58.14,297.4 310.6,37.9 C 324.9,23.16 341.4,10.73 359.4,0.9131 L 478,119.1 c -9.4,18.3 -22.8,34.6 -37.2,49.3 L 182.2,434 Z" id="path1" /><rect x="-406" y="37.07" transform="rotate(-135)" width="16" height="135.8" id="rect1" style="stroke-width:0.99999" /><rect x="72" y="476.9" width="392" height="46.36" id="rect3" /></g></svg>\n';
 
   // src/icons/thin-highlighter.svg
-  var thin_highlighter_default = '<svg viewBox="0 0 496 496" width="20" height="20" fill="#000000" xmlns="http://www.w3.org/2000/svg" ><g id="g4"><path d="M179.832,444.412l266.024-272.904c16.816-17.216,30.656-36.96,41.376-59.184l2.424-5.104L385.544,3.116l-5.176,2.632     c-21.624,11.016-41.192,25.408-58.16,42.784L56.456,321.164l-0.376,2.584c-5.208,36.48-15.208,72.136-29.712,105.968     l-3.848,8.992l2.168,2.176L0,465.572v27.312h43.312L60,476.196l2.168,2.168l8.984-3.848     c33.84-14.504,69.504-24.504,105.976-29.712L179.832,444.412z M36.688,476.884H16v-4.688l20-20l12.688,12.688L36.688,476.884z      M65.832,459.396l-24.344-24.344c12.792-30.048,21.952-61.512,27.728-93.648l90.264,90.264     C127.336,437.444,95.88,446.604,65.832,459.396z M99.312,348.884l93.088-93.088c7.04-7.04,16.392-10.912,26.344-10.912     c20.544,0,37.256,16.712,37.256,37.256c0,9.952-3.872,19.304-10.912,26.344L152,401.572L99.312,348.884z M163.312,412.884     l93.088-93.088c10.064-10.064,15.6-23.432,15.6-37.656c0-29.368-23.888-53.256-53.256-53.256c-14.224,0-27.592,5.536-37.656,15.6     L88,337.572l-12.76-12.76L333.664,59.708c14.384-14.736,30.8-27.168,48.84-36.992l87.776,87.768     c-9.416,18.344-21.472,35.096-35.88,49.856L175.928,425.5L163.312,412.884z" id="path1" /><rect x="327.996" y="153.003" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 417.3918 614.6613)" width="16" height="135.767" id="rect1" /><rect x="72" y="476.884" width="392" height="16" id="rect3" /></g></svg>\n';
+  var thin_highlighter_default = '<svg viewBox="0 0 496 496" width="20" height="20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" ><g id="g4"><path d="M179.832,444.412l266.024-272.904c16.816-17.216,30.656-36.96,41.376-59.184l2.424-5.104L385.544,3.116l-5.176,2.632     c-21.624,11.016-41.192,25.408-58.16,42.784L56.456,321.164l-0.376,2.584c-5.208,36.48-15.208,72.136-29.712,105.968     l-3.848,8.992l2.168,2.176L0,465.572v27.312h43.312L60,476.196l2.168,2.168l8.984-3.848     c33.84-14.504,69.504-24.504,105.976-29.712L179.832,444.412z M36.688,476.884H16v-4.688l20-20l12.688,12.688L36.688,476.884z      M65.832,459.396l-24.344-24.344c12.792-30.048,21.952-61.512,27.728-93.648l90.264,90.264     C127.336,437.444,95.88,446.604,65.832,459.396z M99.312,348.884l93.088-93.088c7.04-7.04,16.392-10.912,26.344-10.912     c20.544,0,37.256,16.712,37.256,37.256c0,9.952-3.872,19.304-10.912,26.344L152,401.572L99.312,348.884z M163.312,412.884     l93.088-93.088c10.064-10.064,15.6-23.432,15.6-37.656c0-29.368-23.888-53.256-53.256-53.256c-14.224,0-27.592,5.536-37.656,15.6     L88,337.572l-12.76-12.76L333.664,59.708c14.384-14.736,30.8-27.168,48.84-36.992l87.776,87.768     c-9.416,18.344-21.472,35.096-35.88,49.856L175.928,425.5L163.312,412.884z" id="path1" /><rect x="327.996" y="153.003" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 417.3918 614.6613)" width="16" height="135.767" id="rect1" /><rect x="72" y="476.884" width="392" height="16" id="rect3" /></g></svg>\n';
 
   // src/icons/eraser.svg
-  var eraser_default = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="m 5.505,11.41 0.53,0.53 z M 3,14.95 H 2.25 Z m 9.59,3.54 -0.53,-0.53 z M 9.048,21 v 0.75 z M 11.41,5.505 10.88,4.975 Z m 1.83,12.335 c 0.58,0.59 1.6,-0.52 1.06,-1.06 z M 7.216,9.698 C 6.519,9.001 5.463,10.07 6.156,10.76 Z M 6.035,11.94 11.94,6.035 10.88,4.975 4.975,10.88 Z m 0,6.02 C 5.185,17.11 4.602,16.53 4.223,16.03 3.856,15.55 3.75,15.24 3.75,14.95 h -1.5 c 0,0.75 0.312,1.38 0.78,1.99 0.455,0.6 1.125,1.27 1.945,2.09 z M 4.975,10.88 C 4.155,11.7 3.485,12.37 3.03,12.96 2.562,13.58 2.25,14.2 2.25,14.95 h 1.5 c 0,-0.29 0.106,-0.6 0.473,-1.08 0.379,-0.49 0.962,-1.08 1.812,-1.93 z m 7.085,7.08 c -0.85,0.85 -1.44,1.44 -1.93,1.82 -0.483,0.36 -0.793,0.47 -1.082,0.47 v 1.5 c 0.748,0 1.372,-0.31 1.992,-0.78 0.59,-0.46 1.26,-1.12 2.08,-1.94 z m -7.085,1.07 c 0.82,0.82 1.487,1.48 2.084,1.94 0.614,0.47 1.24,0.78 1.989,0.78 v -1.5 C 8.759,20.25 8.449,20.14 7.968,19.78 7.471,19.4 6.885,18.81 6.035,17.96 Z M 17.96,6.035 c 0.85,0.85 1.44,1.436 1.82,1.933 0.36,0.481 0.47,0.791 0.47,1.08 h 1.5 C 21.75,8.299 21.44,7.673 20.97,7.059 20.51,6.462 19.85,5.795 19.03,4.975 Z m 1.07,-1.06 C 18.21,4.155 17.54,3.485 16.94,3.03 16.33,2.562 15.7,2.25 14.95,2.25 v 1.5 c 0.29,0 0.6,0.106 1.08,0.473 0.5,0.379 1.08,0.962 1.93,1.812 z m -7.09,1.06 C 12.79,5.185 13.38,4.602 13.87,4.223 14.35,3.856 14.66,3.75 14.95,3.75 v -1.5 c -0.75,0 -1.37,0.312 -1.99,0.78 -0.59,0.455 -1.26,1.125 -2.08,1.945 z M 14.3,16.78 7.216,9.698 6.156,10.76 13.24,17.84 Z m 5.23,-4.17 c 0.66,-0.66 1.21,-1.23 1.58,-1.77 0.39,-0.55 0.64,-1.125 0.64,-1.792 h -1.5 c 0,0.26 -0.1,0.534 -0.36,0.931 -0.3,0.411 -0.75,0.901 -1.42,1.581 l -2.5,2.52 -3.91,3.88 1.06,1.07 2.95,-2.96 z" fill="#1c274c" id="path1" /></g></svg>';
+  var eraser_default = '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><g><path d="m 5.505,11.41 0.53,0.53 z M 3,14.95 H 2.25 Z m 9.59,3.54 -0.53,-0.53 z M 9.048,21 v 0.75 z M 11.41,5.505 10.88,4.975 Z m 1.83,12.335 c 0.58,0.59 1.6,-0.52 1.06,-1.06 z M 7.216,9.698 C 6.519,9.001 5.463,10.07 6.156,10.76 Z M 6.035,11.94 11.94,6.035 10.88,4.975 4.975,10.88 Z m 0,6.02 C 5.185,17.11 4.602,16.53 4.223,16.03 3.856,15.55 3.75,15.24 3.75,14.95 h -1.5 c 0,0.75 0.312,1.38 0.78,1.99 0.455,0.6 1.125,1.27 1.945,2.09 z M 4.975,10.88 C 4.155,11.7 3.485,12.37 3.03,12.96 2.562,13.58 2.25,14.2 2.25,14.95 h 1.5 c 0,-0.29 0.106,-0.6 0.473,-1.08 0.379,-0.49 0.962,-1.08 1.812,-1.93 z m 7.085,7.08 c -0.85,0.85 -1.44,1.44 -1.93,1.82 -0.483,0.36 -0.793,0.47 -1.082,0.47 v 1.5 c 0.748,0 1.372,-0.31 1.992,-0.78 0.59,-0.46 1.26,-1.12 2.08,-1.94 z m -7.085,1.07 c 0.82,0.82 1.487,1.48 2.084,1.94 0.614,0.47 1.24,0.78 1.989,0.78 v -1.5 C 8.759,20.25 8.449,20.14 7.968,19.78 7.471,19.4 6.885,18.81 6.035,17.96 Z M 17.96,6.035 c 0.85,0.85 1.44,1.436 1.82,1.933 0.36,0.481 0.47,0.791 0.47,1.08 h 1.5 C 21.75,8.299 21.44,7.673 20.97,7.059 20.51,6.462 19.85,5.795 19.03,4.975 Z m 1.07,-1.06 C 18.21,4.155 17.54,3.485 16.94,3.03 16.33,2.562 15.7,2.25 14.95,2.25 v 1.5 c 0.29,0 0.6,0.106 1.08,0.473 0.5,0.379 1.08,0.962 1.93,1.812 z m -7.09,1.06 C 12.79,5.185 13.38,4.602 13.87,4.223 14.35,3.856 14.66,3.75 14.95,3.75 v -1.5 c -0.75,0 -1.37,0.312 -1.99,0.78 -0.59,0.455 -1.26,1.125 -2.08,1.945 z M 14.3,16.78 7.216,9.698 6.156,10.76 13.24,17.84 Z m 5.23,-4.17 c 0.66,-0.66 1.21,-1.23 1.58,-1.77 0.39,-0.55 0.64,-1.125 0.64,-1.792 h -1.5 c 0,0.26 -0.1,0.534 -0.36,0.931 -0.3,0.411 -0.75,0.901 -1.42,1.581 l -2.5,2.52 -3.91,3.88 1.06,1.07 2.95,-2.96 z" id="path1" /></g></svg>\n';
 
   // src/helpers/penPresets.js
   var PEN_PRESETS = {
@@ -4440,12 +4459,19 @@
   var DrawToolProvider = ({ children }) => {
     const [activeTab, setActiveTab] = d2("image");
     const [drawToolVisible, setDrawToolVisible] = d2(false);
+    const [penOverlayVisible, setPenOverlayVisible] = d2(false);
     const keyDownHandlersRef = A2({});
+    const penOverlayKeyDownRef = A2(null);
     const showDrawTool = q2(() => {
       setDrawToolVisible(true);
       updateStampLibFromPenSettings();
     }, []);
     const hideDrawTool = q2(() => setDrawToolVisible(false), []);
+    const showPenOverlay = q2(() => {
+      setPenOverlayVisible(true);
+      updateStampLibFromPenSettings();
+    }, []);
+    const hidePenOverlay = q2(() => setPenOverlayVisible(false), []);
     const registerKeyDownHandler = q2((tabType, handler) => {
       keyDownHandlersRef.current[tabType] = handler;
       return () => {
@@ -4456,6 +4482,15 @@
       const handler = keyDownHandlersRef.current[activeTab];
       handler?.(e3);
     }, [activeTab]);
+    const registerPenOverlayKeyDownHandler = q2((handler) => {
+      penOverlayKeyDownRef.current = handler;
+      return () => {
+        penOverlayKeyDownRef.current = null;
+      };
+    }, []);
+    const callPenOverlayKeyDownHandler = q2((e3) => {
+      penOverlayKeyDownRef.current?.(e3);
+    }, []);
     const handleUndo = q2(() => {
       StampLib.undoLastWriteAll();
     }, []);
@@ -4469,19 +4504,29 @@
       drawToolVisible,
       showDrawTool,
       hideDrawTool,
+      penOverlayVisible,
+      showPenOverlay,
+      hidePenOverlay,
       handleUndo,
       handleClear,
       registerKeyDownHandler,
-      callKeyDownHandler
+      callKeyDownHandler,
+      registerPenOverlayKeyDownHandler,
+      callPenOverlayKeyDownHandler
     }), [
       activeTab,
       drawToolVisible,
       showDrawTool,
       hideDrawTool,
+      penOverlayVisible,
+      showPenOverlay,
+      hidePenOverlay,
       handleUndo,
       handleClear,
       registerKeyDownHandler,
-      callKeyDownHandler
+      callKeyDownHandler,
+      registerPenOverlayKeyDownHandler,
+      callPenOverlayKeyDownHandler
     ]);
     return /* @__PURE__ */ u3(DrawToolContext.Provider, { value: contextValue, children });
   };
@@ -4521,8 +4566,8 @@
     return /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(DiffViewOverlayProvider, { children: /* @__PURE__ */ u3(HelpOverlayProvider, { children: /* @__PURE__ */ u3(DrawToolProvider, { children: /* @__PURE__ */ u3(StampSettingsProvider, { children: /* @__PURE__ */ u3(PenSettingsProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) }) }) }) }) });
   };
 
-  // src/icons/settings.svg
-  var settings_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>\n  <circle cx="12" cy="12" r="3"/>\n</svg>\n';
+  // src/icons/stamp.svg
+  var stamp_default = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<svg\n   width="13.534658"\n   height="19.125"\n   viewBox="0 0 13.534659 19.125"\n   fill="none"\n   stroke="currentColor"\n   stroke-width="1.5"\n   stroke-linecap="round"\n   stroke-linejoin="round"\n   version="1.1"\n   id="svg7"\n   sodipodi:docname="stamp.svg"\n   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"\n   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"\n   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"\n   xmlns="http://www.w3.org/2000/svg"\n   xmlns:svg="http://www.w3.org/2000/svg">\n  <defs\n     id="defs7" />\n  <sodipodi:namedview\n     id="namedview7"\n     pagecolor="#ffffff"\n     bordercolor="#000000"\n     borderopacity="0.25"\n     inkscape:showpageshadow="2"\n     inkscape:pageopacity="0.0"\n     inkscape:pagecheckerboard="0"\n     inkscape:deskcolor="#d1d1d1"\n     inkscape:zoom="22.627417"\n     inkscape:cx="13.722291"\n     inkscape:cy="10.584505"\n     inkscape:window-width="2560"\n     inkscape:window-height="1394"\n     inkscape:window-x="0"\n     inkscape:window-y="0"\n     inkscape:window-maximized="1"\n     inkscape:current-layer="svg7" />\n  <path\n     d="M 10.251455,12.65625 C 8.2792667,8.841232 10.901944,7.003471 10.940908,4.84375 10.979408,2.7097225 9.7280927,0.7500496 6.7846577,0.75 c -2.4502715,-4.13e-5 -4.045787,2.0371608 -4.03125,4.09375 0.018371,2.598968 2.686451,4.505516 0.9798087,7.89811"\n     id="path8"\n     sodipodi:nodetypes="csssc" />\n  <path\n     id="path5"\n     d="M 0.75,12.729713 0.7846577,16.75 H 12.784658 l -0.02621,-4.060862 M 0.75,12.72971 c 3.8291677,-0.02647 8.9563707,-0.06953 12.008448,-0.04057"\n     sodipodi:nodetypes="cccccc" />\n  <path\n     d="M 0.7846577,16.75 H 12.784658"\n     id="path6" />\n  <path\n     d="m 1.7846577,16.75 0.046875,1.625 H 11.831533 l -0.04687,-1.625"\n     id="path7"\n     sodipodi:nodetypes="cccc" />\n</svg>\n';
 
   // src/components/CustomToolbar.jsx
   var CustomToolbar = () => {
@@ -4530,10 +4575,12 @@
     const { timestampEnabled } = useTimestamp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
     const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible } = useDrawTool();
+    const { showPenOverlay } = useDrawTool();
     const { eraserEnabled, penWidth, penAlpha } = usePenSettings();
     const { singleColor } = useStampSettings();
     const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
     const currentPenIcon = activePresetId ? getColoredPenIcon(activePresetId, singleColor) : getColoredPenIcon("pen", singleColor);
+    const coloredStampIcon = singleColor ? stamp_default.replace(/currentColor/g, singleColor).replace(/fill="#000000"/g, `fill="${singleColor}"`) : stamp_default;
     const withBlur = (handler) => (e3) => {
       e3.currentTarget.blur();
       if (handler)
@@ -4591,7 +4638,6 @@
         }
       ),
       drawToolTabs?.map((tab) => {
-        const icon = tab.id === "image" ? currentPenIcon : tab.id === "settings" ? settings_default : null;
         return /* @__PURE__ */ u3(
           "button",
           {
@@ -4602,11 +4648,24 @@
               handleToolTab(tab.id);
             },
             title: tab.label,
-            children: icon ? /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: icon } }) : tab.label
+            children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: coloredStampIcon } })
           },
           tab.id
         );
       }),
+      /* @__PURE__ */ u3(
+        "button",
+        {
+          class: "drawtool-tab-btn",
+          onMouseOver: (e3) => e3.stopPropagation(),
+          onClick: (e3) => {
+            e3.currentTarget.blur();
+            showPenOverlay();
+          },
+          title: "Pen settings",
+          children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: currentPenIcon } })
+        }
+      ),
       /* @__PURE__ */ u3(
         "button",
         {
@@ -4642,6 +4701,353 @@
       )
     ] });
   };
+
+  // node_modules/preact/compat/dist/compat.module.js
+  function g3(n2, t3) {
+    for (var e3 in t3)
+      n2[e3] = t3[e3];
+    return n2;
+  }
+  function E2(n2, t3) {
+    for (var e3 in n2)
+      if ("__source" !== e3 && !(e3 in t3))
+        return true;
+    for (var r3 in t3)
+      if ("__source" !== r3 && n2[r3] !== t3[r3])
+        return true;
+    return false;
+  }
+  function N2(n2, t3) {
+    this.props = n2, this.context = t3;
+  }
+  (N2.prototype = new x()).isPureReactComponent = true, N2.prototype.shouldComponentUpdate = function(n2, t3) {
+    return E2(this.props, n2) || E2(this.state, t3);
+  };
+  var T3 = l.__b;
+  l.__b = function(n2) {
+    n2.type && n2.type.__f && n2.ref && (n2.props.ref = n2.ref, n2.ref = null), T3 && T3(n2);
+  };
+  var A3 = "undefined" != typeof Symbol && Symbol.for && Symbol.for("react.forward_ref") || 3911;
+  function D3(n2) {
+    function t3(t4) {
+      var e3 = g3({}, t4);
+      return delete e3.ref, n2(e3, t4.ref || null);
+    }
+    return t3.$$typeof = A3, t3.render = n2, t3.prototype.isReactComponent = t3.__f = true, t3.displayName = "ForwardRef(" + (n2.displayName || n2.name) + ")", t3;
+  }
+  var U = l.__e;
+  l.__e = function(n2, t3, e3, r3) {
+    if (n2.then) {
+      for (var u4, o3 = t3; o3 = o3.__; )
+        if ((u4 = o3.__c) && u4.__c)
+          return null == t3.__e && (t3.__e = e3.__e, t3.__k = e3.__k), u4.__c(n2, t3);
+    }
+    U(n2, t3, e3, r3);
+  };
+  var F3 = l.unmount;
+  function V2(n2, t3, e3) {
+    return n2 && (n2.__c && n2.__c.__H && (n2.__c.__H.__.forEach(function(n3) {
+      "function" == typeof n3.__c && n3.__c();
+    }), n2.__c.__H = null), null != (n2 = g3({}, n2)).__c && (n2.__c.__P === e3 && (n2.__c.__P = t3), n2.__c.__e = true, n2.__c = null), n2.__k = n2.__k && n2.__k.map(function(n3) {
+      return V2(n3, t3, e3);
+    })), n2;
+  }
+  function W(n2, t3, e3) {
+    return n2 && e3 && (n2.__v = null, n2.__k = n2.__k && n2.__k.map(function(n3) {
+      return W(n3, t3, e3);
+    }), n2.__c && n2.__c.__P === t3 && (n2.__e && e3.appendChild(n2.__e), n2.__c.__e = true, n2.__c.__P = e3)), n2;
+  }
+  function P3() {
+    this.__u = 0, this.o = null, this.__b = null;
+  }
+  function j3(n2) {
+    if (!n2.__)
+      return null;
+    var t3 = n2.__.__c;
+    return t3 && t3.__a && t3.__a(n2);
+  }
+  function B3() {
+    this.i = null, this.l = null;
+  }
+  l.unmount = function(n2) {
+    var t3 = n2.__c;
+    t3 && (t3.__z = true), t3 && t3.__R && t3.__R(), t3 && 32 & n2.__u && (n2.type = null), F3 && F3(n2);
+  }, (P3.prototype = new x()).__c = function(n2, t3) {
+    var e3 = t3.__c, r3 = this;
+    null == r3.o && (r3.o = []), r3.o.push(e3);
+    var u4 = j3(r3.__v), o3 = false, i4 = function() {
+      o3 || r3.__z || (o3 = true, e3.__R = null, u4 ? u4(c3) : c3());
+    };
+    e3.__R = i4;
+    var l3 = e3.__P;
+    e3.__P = null;
+    var c3 = function() {
+      if (!--r3.__u) {
+        if (r3.state.__a) {
+          var n3 = r3.state.__a;
+          r3.__v.__k[0] = W(n3, n3.__c.__P, n3.__c.__O);
+        }
+        var t4;
+        for (r3.setState({ __a: r3.__b = null }); t4 = r3.o.pop(); )
+          t4.__P = l3, t4.forceUpdate();
+      }
+    };
+    r3.__u++ || 32 & t3.__u || r3.setState({ __a: r3.__b = r3.__v.__k[0] }), n2.then(i4, i4);
+  }, P3.prototype.componentWillUnmount = function() {
+    this.o = [];
+  }, P3.prototype.render = function(n2, e3) {
+    if (this.__b) {
+      if (this.__v.__k) {
+        var r3 = document.createElement("div"), o3 = this.__v.__k[0].__c;
+        this.__v.__k[0] = V2(this.__b, r3, o3.__O = o3.__P);
+      }
+      this.__b = null;
+    }
+    var i4 = e3.__a && _(k, null, n2.fallback);
+    return i4 && (i4.__u &= -33), [_(k, null, e3.__a ? null : n2.children), i4];
+  };
+  var H2 = function(n2, t3, e3) {
+    if (++e3[1] === e3[0] && n2.l.delete(t3), n2.props.revealOrder && ("t" !== n2.props.revealOrder[0] || !n2.l.size))
+      for (e3 = n2.i; e3; ) {
+        for (; e3.length > 3; )
+          e3.pop()();
+        if (e3[1] < e3[0])
+          break;
+        n2.i = e3 = e3[2];
+      }
+  };
+  (B3.prototype = new x()).__a = function(n2) {
+    var t3 = this, e3 = j3(t3.__v), r3 = t3.l.get(n2);
+    return r3[0]++, function(u4) {
+      var o3 = function() {
+        t3.props.revealOrder ? (r3.push(u4), H2(t3, n2, r3)) : u4();
+      };
+      e3 ? e3(o3) : o3();
+    };
+  }, B3.prototype.render = function(n2) {
+    this.i = null, this.l = /* @__PURE__ */ new Map();
+    var t3 = L(n2.children);
+    n2.revealOrder && "b" === n2.revealOrder[0] && t3.reverse();
+    for (var e3 = t3.length; e3--; )
+      this.l.set(t3[e3], this.i = [1, 0, this.i]);
+    return n2.children;
+  }, B3.prototype.componentDidUpdate = B3.prototype.componentDidMount = function() {
+    var n2 = this;
+    this.l.forEach(function(t3, e3) {
+      H2(n2, e3, t3);
+    });
+  };
+  var q3 = "undefined" != typeof Symbol && Symbol.for && Symbol.for("react.element") || 60103;
+  var G2 = /^(?:accent|alignment|arabic|baseline|cap|clip(?!PathU)|color|dominant|fill|flood|font|glyph(?!R)|horiz|image(!S)|letter|lighting|marker(?!H|W|U)|overline|paint|pointer|shape|stop|strikethrough|stroke|text(?!L)|transform|underline|unicode|units|v|vector|vert|word|writing|x(?!C))[A-Z]/;
+  var J2 = /^on(Ani|Tra|Tou|BeforeInp|Compo)/;
+  var K2 = /[A-Z0-9]/g;
+  var Q2 = "undefined" != typeof document;
+  var X = function(n2) {
+    return ("undefined" != typeof Symbol && "symbol" == typeof Symbol() ? /fil|che|rad/ : /fil|che|ra/).test(n2);
+  };
+  x.prototype.isReactComponent = {}, ["componentWillMount", "componentWillReceiveProps", "componentWillUpdate"].forEach(function(t3) {
+    Object.defineProperty(x.prototype, t3, { configurable: true, get: function() {
+      return this["UNSAFE_" + t3];
+    }, set: function(n2) {
+      Object.defineProperty(this, t3, { configurable: true, writable: true, value: n2 });
+    } });
+  });
+  var en = l.event;
+  function rn() {
+  }
+  function un() {
+    return this.cancelBubble;
+  }
+  function on() {
+    return this.defaultPrevented;
+  }
+  l.event = function(n2) {
+    return en && (n2 = en(n2)), n2.persist = rn, n2.isPropagationStopped = un, n2.isDefaultPrevented = on, n2.nativeEvent = n2;
+  };
+  var ln;
+  var cn = { enumerable: false, configurable: true, get: function() {
+    return this.class;
+  } };
+  var fn = l.vnode;
+  l.vnode = function(n2) {
+    "string" == typeof n2.type && function(n3) {
+      var t3 = n3.props, e3 = n3.type, u4 = {}, o3 = -1 === e3.indexOf("-");
+      for (var i4 in t3) {
+        var l3 = t3[i4];
+        if (!("value" === i4 && "defaultValue" in t3 && null == l3 || Q2 && "children" === i4 && "noscript" === e3 || "class" === i4 || "className" === i4)) {
+          var c3 = i4.toLowerCase();
+          "defaultValue" === i4 && "value" in t3 && null == t3.value ? i4 = "value" : "download" === i4 && true === l3 ? l3 = "" : "translate" === c3 && "no" === l3 ? l3 = false : "o" === c3[0] && "n" === c3[1] ? "ondoubleclick" === c3 ? i4 = "ondblclick" : "onchange" !== c3 || "input" !== e3 && "textarea" !== e3 || X(t3.type) ? "onfocus" === c3 ? i4 = "onfocusin" : "onblur" === c3 ? i4 = "onfocusout" : J2.test(i4) && (i4 = c3) : c3 = i4 = "oninput" : o3 && G2.test(i4) ? i4 = i4.replace(K2, "-$&").toLowerCase() : null === l3 && (l3 = void 0), "oninput" === c3 && u4[i4 = c3] && (i4 = "oninputCapture"), u4[i4] = l3;
+        }
+      }
+      "select" == e3 && u4.multiple && Array.isArray(u4.value) && (u4.value = L(t3.children).forEach(function(n4) {
+        n4.props.selected = -1 != u4.value.indexOf(n4.props.value);
+      })), "select" == e3 && null != u4.defaultValue && (u4.value = L(t3.children).forEach(function(n4) {
+        n4.props.selected = u4.multiple ? -1 != u4.defaultValue.indexOf(n4.props.value) : u4.defaultValue == n4.props.value;
+      })), t3.class && !t3.className ? (u4.class = t3.class, Object.defineProperty(u4, "className", cn)) : t3.className && (u4.class = u4.className = t3.className), n3.props = u4;
+    }(n2), n2.$$typeof = q3, fn && fn(n2);
+  };
+  var an = l.__r;
+  l.__r = function(n2) {
+    an && an(n2), ln = n2.__c;
+  };
+  var sn = l.diffed;
+  l.diffed = function(n2) {
+    sn && sn(n2);
+    var t3 = n2.props, e3 = n2.__e;
+    null != e3 && "textarea" === n2.type && "value" in t3 && t3.value !== e3.value && (e3.value = null == t3.value ? "" : t3.value), ln = null;
+  };
+
+  // src/components/PenSettings.module.css
+  var PenSettings_default = {
+    penSettings: "PenSettings_penSettings",
+    inline: "PenSettings_inline",
+    stacked: "PenSettings_stacked",
+    firstRow: "PenSettings_firstRow",
+    controlGroup: "PenSettings_controlGroup",
+    controlRow: "PenSettings_controlRow",
+    presetsContainer: "PenSettings_presetsContainer",
+    presetBtn: "PenSettings_presetBtn",
+    presetBtnActive: "PenSettings_presetBtnActive"
+  };
+
+  // src/components/PenSettings.jsx
+  var stopPropagation = (e3) => e3.stopPropagation();
+  var PenSettings = D3(({ layout = "inline" }, ref) => {
+    const {
+      penWidth,
+      setPenWidth,
+      penAlpha,
+      setPenAlpha,
+      eraserEnabled,
+      setEraserEnabled
+    } = usePenSettings();
+    const { singleColor, setSingleColor } = useStampSettings();
+    const presetsContainerRef = A2(null);
+    const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
+    const handleColorChange = q2((e3) => {
+      const val = e3.target.value;
+      setSingleColor(val);
+      if (!eraserEnabled) {
+        setStampLibPenSettings(val, penWidth, penAlpha);
+      }
+    }, [setSingleColor, eraserEnabled, penWidth, penAlpha]);
+    const handleWidthChange = q2((e3) => {
+      const newWidth = parseInt(e3.target.value);
+      setPenWidth(newWidth);
+      if (!eraserEnabled) {
+        setStampLibPenSettings(singleColor, newWidth, penAlpha);
+      } else {
+        StampLib.setPenSettings({
+          width: newWidth
+        });
+      }
+    }, [setPenWidth, eraserEnabled, penAlpha, singleColor]);
+    const handleAlphaChange = q2((e3) => {
+      const newAlpha = parseFloat(e3.target.value);
+      setPenAlpha(newAlpha);
+      if (!eraserEnabled) {
+        setStampLibPenSettings(singleColor, penWidth, newAlpha);
+      }
+    }, [setPenAlpha, eraserEnabled, penWidth, singleColor]);
+    const handlePresetClick = q2((e3) => {
+      const btn = e3.currentTarget;
+      const presetId = btn.getAttribute("data-preset-id");
+      const preset = PEN_PRESETS[presetId];
+      if (preset) {
+        if (preset.id === "eraser") {
+          setEraserEnabled(true);
+          setPenWidth(preset.width);
+          setPenAlpha(preset.alpha);
+          selectEraser();
+        } else {
+          setEraserEnabled(false);
+          setPenWidth(preset.width);
+          setPenAlpha(preset.alpha);
+          setStampLibPenSettings(singleColor, preset.width, preset.alpha);
+        }
+      }
+    }, [setEraserEnabled, setPenWidth, setPenAlpha, singleColor]);
+    const cycleHighlighter = q2(() => {
+      const activeBtn = presetsContainerRef.current.querySelector(`.${PenSettings_default.presetBtnActive}`);
+      if (activeBtn?.dataset.presetId == "highlighter") {
+        presetsContainerRef.current.querySelector(`button[data-preset-id="thin-highlighter"]`).click();
+      } else {
+        presetsContainerRef.current.querySelector(`button[data-preset-id="highlighter"]`).click();
+      }
+    }, []);
+    const clickPreset = q2((presetId) => {
+      const btn = presetsContainerRef.current.querySelector(`button[data-preset-id="${presetId}"]`);
+      if (btn)
+        btn.click();
+    }, []);
+    F2(ref, () => ({
+      cycleHighlighter,
+      clickPreset
+    }), [cycleHighlighter, clickPreset]);
+    const containerClass = `${PenSettings_default.penSettings} ${PenSettings_default[layout] || PenSettings_default.inline}`;
+    return /* @__PURE__ */ u3("div", { class: containerClass, children: [
+      /* @__PURE__ */ u3("div", { class: PenSettings_default.firstRow, children: [
+        layout !== "inline" && /* @__PURE__ */ u3("div", { class: PenSettings_default.controlGroup, children: [
+          /* @__PURE__ */ u3("label", { children: "Color" }),
+          /* @__PURE__ */ u3(
+            "input",
+            {
+              type: "color",
+              value: singleColor,
+              onChange: handleColorChange
+            }
+          )
+        ] }),
+        /* @__PURE__ */ u3("div", { class: PenSettings_default.controlGroup, children: [
+          /* @__PURE__ */ u3("label", { children: [
+            "Width: ",
+            penWidth
+          ] }),
+          /* @__PURE__ */ u3("div", { class: PenSettings_default.controlRow, children: /* @__PURE__ */ u3(
+            "input",
+            {
+              type: "range",
+              min: "1",
+              max: "50",
+              value: penWidth,
+              onInput: handleWidthChange
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ u3("div", { class: PenSettings_default.controlGroup, children: [
+          /* @__PURE__ */ u3("label", { children: [
+            "Alpha: ",
+            penAlpha
+          ] }),
+          /* @__PURE__ */ u3("div", { class: PenSettings_default.controlRow, children: /* @__PURE__ */ u3(
+            "input",
+            {
+              type: "range",
+              min: "0",
+              max: "1",
+              step: "0.1",
+              value: penAlpha,
+              onInput: handleAlphaChange
+            }
+          ) })
+        ] })
+      ] }),
+      /* @__PURE__ */ u3("div", { class: PenSettings_default.presetsContainer, ref: presetsContainerRef, children: Object.values(PEN_PRESETS).map((preset) => /* @__PURE__ */ u3(
+        "button",
+        {
+          "data-preset-id": preset.id,
+          onClick: handlePresetClick,
+          onMouseOver: stopPropagation,
+          class: `${PenSettings_default.presetBtn} ${preset.id === activePresetId ? PenSettings_default.presetBtnActive : ""}`,
+          children: [
+            /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: PRESET_ICONS[preset.id] } }),
+            preset.label
+          ]
+        },
+        preset.id
+      )) })
+    ] });
+  });
 
   // src/helpers/scrolling.js
   var pageScrolling = false;
@@ -4760,6 +5166,9 @@
   // src/icons/stamp-text.svg
   var stamp_text_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <polyline points="4 7 4 4 20 4 20 7"/>\n  <line x1="9" y1="20" x2="15" y2="20"/>\n  <line x1="12" y1="4" x2="12" y2="20"/>\n</svg>';
 
+  // src/icons/settings.svg
+  var settings_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>\n  <circle cx="12" cy="12" r="3"/>\n</svg>\n';
+
   // src/icons/unlock.svg
   var unlock_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>\n  <path d="M7 11V7a5 5 0 0 1 9.9-1"/>\n</svg>';
 
@@ -4769,7 +5178,7 @@
   // src/components/ImageStampTab.jsx
   var stamps = window.StampLib?.stamps || {};
   var stampCategories = Object.keys(stamps);
-  var stopPropagation = (e3) => e3.stopPropagation();
+  var stopPropagation2 = (e3) => e3.stopPropagation();
   var ImageStampTab = ({ onStampClick, close }) => {
     const { handleUndo, handleClear, registerKeyDownHandler } = useDrawTool();
     const { showStampPreview, showTextPreview, updatePreview, state: printOverlayState } = usePrintOverlay();
@@ -4781,10 +5190,7 @@
       setPenWidth,
       penAlpha,
       setPenAlpha,
-      penMode,
-      setPenMode,
-      eraserEnabled,
-      setEraserEnabled
+      eraserEnabled
     } = usePenSettings();
     const {
       stampSize,
@@ -4804,12 +5210,11 @@
     const [penSettingsModeActive, setPenSettingsModeActive] = d2(false);
     const [settingsModeActive, setSettingsModeActive] = d2(false);
     const sizeSliderRef = A2(null);
-    const presetsContainerRef = A2(null);
+    const penSettingsRef = A2(null);
     const stampColorTypeElementRef = A2(null);
     const textareaRef = A2(null);
     const stampsRef = A2(null);
     const activeStamps = stamps[activeStampTab] || [];
-    const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
     y2(() => {
       if (printOverlayState.visible) {
         updatePreview();
@@ -4960,44 +5365,6 @@
         setRainbowFillSpeed(parseInt(e3.target.value));
       }
     }, [setRainbowSpeed, setRainbowFillSpeed]);
-    const handleWidthChange = q2((e3) => {
-      const newWidth = parseInt(e3.target.value);
-      setPenWidth(newWidth);
-      if (!eraserEnabled) {
-        setStampLibPenSettings(getSingleColor(), newWidth, penAlpha);
-      } else {
-        StampLib.setPenSettings({
-          width: newWidth
-        });
-      }
-    }, [setPenWidth, eraserEnabled, penAlpha]);
-    const handleAlphaChange = q2((e3) => {
-      const newAlpha = parseFloat(e3.target.value);
-      setPenAlpha(newAlpha);
-      if (!eraserEnabled) {
-        setStampLibPenSettings(getSingleColor(), penWidth, newAlpha);
-      }
-    }, [setPenAlpha, eraserEnabled, penWidth]);
-    const handlePresetClick = q2((e3) => {
-      const btn = e3.currentTarget;
-      const presetId = btn.getAttribute("data-preset-id");
-      const preset = PEN_PRESETS[presetId];
-      if (preset) {
-        if (preset.id === "eraser") {
-          setEraserEnabled(true);
-          setPenMode("eraser");
-          setPenWidth(preset.width);
-          setPenAlpha(preset.alpha);
-          selectEraser();
-        } else {
-          setEraserEnabled(false);
-          setPenMode("pen");
-          setPenWidth(preset.width);
-          setPenAlpha(preset.alpha);
-          setStampLibPenSettings(getSingleColor(), preset.width, preset.alpha);
-        }
-      }
-    }, [setEraserEnabled, setPenMode, setPenWidth, setPenAlpha]);
     const handleStampTabClick = q2((e3) => {
       const btn = e3.currentTarget;
       const category = btn.getAttribute("data-category");
@@ -5012,7 +5379,7 @@
           "data-category": category,
           class: `${ImageStampTab_default.stampTabBtn} ${activeStampTab === category ? ImageStampTab_default.stampTabBtnActive : ""}`,
           onClick: handleStampTabClick,
-          onMouseOver: stopPropagation,
+          onMouseOver: stopPropagation2,
           children: category
         },
         category
@@ -5026,7 +5393,7 @@
           "button",
           {
             class: ImageStampTab_default.stampBtn,
-            onMouseOver: stopPropagation,
+            onMouseOver: stopPropagation2,
             onClick: (e3) => handleStampClick(stamp, e3),
             style: { "--height-limiter": heightLimiter },
             children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp.svg.outerHTML } })
@@ -5035,14 +5402,6 @@
         );
       });
     }, [activeStamps, handleStampClick]);
-    const cycleHighlighter = q2(() => {
-      const activeBtn = presetsContainerRef.current.querySelector(`.${ImageStampTab_default.presetBtnActive}`);
-      if (activeBtn?.dataset.presetId == "highlighter") {
-        presetsContainerRef.current.querySelector(`button[data-preset-id="thin-highlighter"]`).click();
-      } else {
-        presetsContainerRef.current.querySelector(`button[data-preset-id="highlighter"]`).click();
-      }
-    }, []);
     const handleKeys2 = q2((e3) => {
       if (e3.altKey || e3.ctrlKey || e3.metaKey)
         return;
@@ -5076,13 +5435,13 @@
           setPenSettingsModeActive(true);
           setTextStampModeActive(false);
           setSettingsModeActive(false);
-          cycleHighlighter();
+          penSettingsRef.current?.cycleHighlighter();
           break;
         case "p":
           setPenSettingsModeActive(true);
           setTextStampModeActive(false);
           setSettingsModeActive(false);
-          presetsContainerRef.current.querySelector(`button[data-preset-id="pen"]`).click();
+          penSettingsRef.current?.clickPreset?.("pen");
           break;
         case "P":
         case "H":
@@ -5093,7 +5452,7 @@
           setPenSettingsModeActive(true);
           setTextStampModeActive(false);
           setSettingsModeActive(false);
-          presetsContainerRef.current.querySelector(`button[data-preset-id="eraser"]`).click();
+          penSettingsRef.current?.clickPreset?.("eraser");
           break;
         case "r":
         case "u":
@@ -5130,7 +5489,7 @@
           showHelpOverlay("drawtab");
           break;
       }
-    }, [close, showHelpOverlay, cycleHighlighter, setPenSettingsModeActive, setTextStampModeActive, setSettingsModeActive]);
+    }, [close, showHelpOverlay, setPenSettingsModeActive, setTextStampModeActive, setSettingsModeActive]);
     y2(() => {
       return registerKeyDownHandler("image", handleKeys2);
     }, [registerKeyDownHandler, handleKeys2]);
@@ -5141,7 +5500,7 @@
           {
             class: ImageStampTab_default.closeBtn,
             onClick: close,
-            onMouseOver: stopPropagation,
+            onMouseOver: stopPropagation2,
             children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: x_default } })
           }
         ),
@@ -5205,7 +5564,7 @@
               "button",
               {
                 onClick: handleUndo,
-                onMouseOver: stopPropagation,
+                onMouseOver: stopPropagation2,
                 children: [
                   /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: undo_default } }),
                   "Undo"
@@ -5216,7 +5575,7 @@
               "button",
               {
                 onClick: handleClear,
-                onMouseOver: stopPropagation,
+                onMouseOver: stopPropagation2,
                 children: [
                   /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: trash_default } }),
                   "Clear"
@@ -5232,7 +5591,7 @@
           {
             class: `${ImageStampTab_default.stampTabBtn} ${textStampModeActive ? ImageStampTab_default.stampTabBtnActive : ""}`,
             onClick: handleTextStampToggle,
-            onMouseOver: stopPropagation,
+            onMouseOver: stopPropagation2,
             children: [
               /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp_text_default } }),
               "Text"
@@ -5244,9 +5603,9 @@
           {
             class: `${ImageStampTab_default.stampTabBtn} ${penSettingsModeActive ? ImageStampTab_default.stampTabBtnActive : ""}`,
             onClick: handlePenSettingsToggle,
-            onMouseOver: stopPropagation,
+            onMouseOver: stopPropagation2,
             children: [
-              /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: PRESET_ICONS.pen } }),
+              /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: pen_default } }),
               "Pen"
             ]
           }
@@ -5256,7 +5615,7 @@
           {
             class: `${ImageStampTab_default.stampTabBtn} ${settingsModeActive ? ImageStampTab_default.stampTabBtnActive : ""}`,
             onClick: handleSettingsToggle,
-            onMouseOver: stopPropagation,
+            onMouseOver: stopPropagation2,
             children: [
               /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: settings_default } }),
               "Settings"
@@ -5278,7 +5637,8 @@
               style: {
                 color: singleColor,
                 fontSize: `calc((${stampSize} / 100) * 57px)`
-              }
+              },
+              onKeyUp: stopPropagation2
             }
           ),
           /* @__PURE__ */ u3(
@@ -5286,7 +5646,7 @@
             {
               class: ImageStampTab_default.textStampBtn,
               onClick: handleTextStamp,
-              onMouseOver: stopPropagation,
+              onMouseOver: stopPropagation2,
               children: [
                 /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: stamp_text_default } }),
                 "Stamp Text"
@@ -5294,55 +5654,7 @@
             }
           )
         ] }),
-        /* @__PURE__ */ u3("div", { class: `${ImageStampTab_default.penSettingsInput} ${penSettingsModeActive ? ImageStampTab_default.auxPanelActive : ""}`, children: [
-          /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroup, children: [
-            /* @__PURE__ */ u3("label", { children: [
-              "Width: ",
-              penWidth
-            ] }),
-            /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlRow, children: /* @__PURE__ */ u3(
-              "input",
-              {
-                type: "range",
-                min: "1",
-                max: "50",
-                value: penWidth,
-                onInput: handleWidthChange
-              }
-            ) })
-          ] }),
-          /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroup, children: [
-            /* @__PURE__ */ u3("label", { children: [
-              "Alpha: ",
-              penAlpha
-            ] }),
-            /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlRow, children: /* @__PURE__ */ u3(
-              "input",
-              {
-                type: "range",
-                min: "0",
-                max: "1",
-                step: "0.1",
-                value: penAlpha,
-                onInput: handleAlphaChange
-              }
-            ) })
-          ] }),
-          /* @__PURE__ */ u3("div", { class: ImageStampTab_default.presetsContainer, ref: presetsContainerRef, children: Object.values(PEN_PRESETS).map((preset) => /* @__PURE__ */ u3(
-            "button",
-            {
-              "data-preset-id": preset.id,
-              onClick: handlePresetClick,
-              onMouseOver: stopPropagation,
-              class: `${ImageStampTab_default.presetBtn} ${preset.id === activePresetId ? ImageStampTab_default.presetBtnActive : ""}`,
-              children: [
-                /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: PRESET_ICONS[preset.id] } }),
-                preset.label
-              ]
-            },
-            preset.id
-          )) })
-        ] }),
+        /* @__PURE__ */ u3("div", { class: `${ImageStampTab_default.penSettingsInput} ${penSettingsModeActive ? ImageStampTab_default.auxPanelActive : ""}`, children: /* @__PURE__ */ u3(PenSettings, { ref: penSettingsRef, layout: "inline" }) }),
         /* @__PURE__ */ u3("div", { class: `${ImageStampTab_default.settingsInput} ${settingsModeActive ? ImageStampTab_default.auxPanelActive : ""}`, children: [
           /* @__PURE__ */ u3("div", { class: ImageStampTab_default.settingsGroup, children: [
             /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroup, children: [
@@ -5382,7 +5694,7 @@
               {
                 class: ImageStampTab_default.presetBtn,
                 onClick: () => showHelpOverlay("grading"),
-                onMouseOver: stopPropagation,
+                onMouseOver: stopPropagation2,
                 children: [
                   /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: help_circle_default } }),
                   "Help"
@@ -5394,7 +5706,7 @@
               {
                 class: ImageStampTab_default.presetBtn,
                 onClick: StampLib.unlockPage,
-                onMouseOver: stopPropagation,
+                onMouseOver: stopPropagation2,
                 children: [
                   /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: unlock_default } }),
                   "Unlock Page"
@@ -5434,6 +5746,81 @@
         onClick: hideDrawTool,
         style: { display: drawToolVisible ? "flex" : "none" },
         children: /* @__PURE__ */ u3("div", { class: DrawToolOverlay_default.content, onClick: (e3) => e3.stopPropagation(), children: /* @__PURE__ */ u3("div", { ref: bodyRef, class: DrawToolOverlay_default.body, children: /* @__PURE__ */ u3(ImageStampTab, { close: hideDrawTool }) }) })
+      }
+    );
+  };
+
+  // src/components/PenOverlay.module.css
+  var PenOverlay_default = {
+    overlay: "PenOverlay_overlay",
+    content: "PenOverlay_content",
+    body: "PenOverlay_body",
+    closeBtn: "PenOverlay_closeBtn"
+  };
+
+  // src/components/PenOverlay.jsx
+  var stopPropagation3 = (e3) => e3.stopPropagation();
+  var PenOverlay = () => {
+    const { penOverlayVisible, hidePenOverlay, registerPenOverlayKeyDownHandler } = useDrawTool();
+    const bodyRef = A2(null);
+    const penSettingsRef = A2(null);
+    const handleKeyDown = q2((e3) => {
+      if (e3.altKey || e3.ctrlKey || e3.metaKey)
+        return;
+      if (e3.repeat)
+        return;
+      switch (e3.key) {
+        case "Escape":
+        case "Backspace":
+          hidePenOverlay();
+          e3.preventDefault();
+          break;
+        case "p":
+          penSettingsRef.current?.clickPreset?.("pen");
+          e3.preventDefault();
+          break;
+        case "h":
+          penSettingsRef.current?.cycleHighlighter();
+          e3.preventDefault();
+          break;
+        case "e":
+          penSettingsRef.current?.clickPreset?.("eraser");
+          e3.preventDefault();
+          break;
+      }
+    }, [hidePenOverlay]);
+    y2(() => {
+      return registerPenOverlayKeyDownHandler(handleKeyDown);
+    }, [registerPenOverlayKeyDownHandler, handleKeyDown]);
+    y2(() => {
+      if (penOverlayVisible && bodyRef.current) {
+        const focusableElement = bodyRef.current.querySelector("[tabindex]");
+        if (focusableElement) {
+          focusableElement.focus();
+        }
+      }
+    }, [penOverlayVisible]);
+    return /* @__PURE__ */ u3(
+      "div",
+      {
+        class: PenOverlay_default.overlay,
+        onClick: hidePenOverlay,
+        style: { display: penOverlayVisible ? "flex" : "none" },
+        children: /* @__PURE__ */ u3("div", { class: PenOverlay_default.content, onClick: stopPropagation3, children: [
+          /* @__PURE__ */ u3(
+            "button",
+            {
+              class: PenOverlay_default.closeBtn,
+              onClick: (e3) => {
+                e3.stopPropagation();
+                hidePenOverlay();
+              },
+              onMouseOver: stopPropagation3,
+              children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: x_default } })
+            }
+          ),
+          /* @__PURE__ */ u3("div", { ref: bodyRef, class: PenOverlay_default.body, children: /* @__PURE__ */ u3(PenSettings, { ref: penSettingsRef, layout: "stacked" }) })
+        ] })
       }
     );
   };
@@ -6095,7 +6482,7 @@
         document.querySelector(".dashboard-progress-chart .finally > .icon")?.click();
         break;
       case "e":
-        Array.from(document.querySelectorAll(".dashboard-menu-right .options-btn")).find((b) => b.innerHTML?.trim() === "Edit")?.click();
+        Array.from(document.querySelectorAll(".dashboard-menu-right .options-btn")).find((b2) => b2.innerHTML?.trim() === "Edit")?.click();
         break;
       case "Backspace":
         doBackspace?.();
@@ -6142,7 +6529,7 @@
   };
   var useKeyboardMode2 = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
-    const { drawToolVisible, callKeyDownHandler, showDrawTool, hideDrawTool, setActiveTab } = useDrawTool();
+    const { drawToolVisible, callKeyDownHandler, showDrawTool, hideDrawTool, setActiveTab, penOverlayVisible, callPenOverlayKeyDownHandler } = useDrawTool();
     const { penWidth, setPenWidth, penAlpha, setPenAlpha, penMode, setPenMode, eraserEnabled, setEraserEnabled } = usePenSettings();
     const { hidePreview, updatePreview, state: printOverlayState } = usePrintOverlay();
     const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
@@ -6186,6 +6573,10 @@
           } else if (e3.key === "t") {
             setTimestampEnabled((prev) => !prev);
           }
+          return;
+        }
+        if (penOverlayVisible) {
+          callPenOverlayKeyDownHandler(e3);
           return;
         }
         if (drawToolVisible) {
@@ -6288,7 +6679,7 @@
         document.removeEventListener("keydown", handleKeyDown);
         document.removeEventListener("keyup", handleKeyUp);
       };
-    }, [enabled, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview, penWidth, penAlpha, eraserEnabled]);
+    }, [enabled, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview, penWidth, penAlpha, eraserEnabled, penOverlayVisible]);
   };
 
   // src/kclass.jsx
@@ -6310,7 +6701,8 @@
       /* @__PURE__ */ u3(PrintOverlay, {}),
       /* @__PURE__ */ u3(DiffViewOverlay, {}),
       /* @__PURE__ */ u3(HelpOverlay, {}),
-      /* @__PURE__ */ u3(DrawToolOverlay, {})
+      /* @__PURE__ */ u3(DrawToolOverlay, {}),
+      /* @__PURE__ */ u3(PenOverlay, {})
     ] }) });
   };
   var appContainer = document.createElement("div");
@@ -6403,7 +6795,7 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 
 .customToolbar {
   position: fixed;
-  top: 65px;
+  top: 60px;
   width: 30px;
   height: 150px;
   z-index: 299;
@@ -6927,6 +7319,9 @@ body:has(app-atx0010p) .loginAssistantsList {
   div.worksheet-group.landscape) .worksheet-tool {
     margin-left: 0px !important;
   }
+  body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-toolbar-container {
+    top: 0px !important;
+  }
   /* student info page */
   app-ate0020p .student-profile {
     min-width: unset !important;
@@ -7078,7 +7473,6 @@ body:has(app-atx0010p) .loginAssistantsList {
     margin-right: 0px !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .grading-toolbar-container {
-    top: 0px !important;
     z-index: 252 !important;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .xallbtn, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .customToolbar, body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container):has(.worksheet-tool) .headerZindexBtn {
@@ -7578,6 +7972,143 @@ body:has(app-atx0010p) .loginAssistantsList {
   color: #333;
 }
 
+/* src/components/PenSettings.module.css */
+.PenSettings_penSettings {
+  align-items: flex-start;
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+.PenSettings_penSettings.PenSettings_inline {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.PenSettings_penSettings.PenSettings_stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.PenSettings_firstRow {
+  display: flex;
+  gap: 16px;
+}
+.PenSettings_controlGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.PenSettings_controlGroup label {
+  font-size: 10px;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 500;
+}
+.PenSettings_controlRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.PenSettings_controlRow span {
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+  min-width: 32px;
+  text-align: right;
+}
+.PenSettings_controlGroup input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 100px;
+  max-width: 120px;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  cursor: pointer;
+}
+.PenSettings_controlGroup input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #007bff;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.PenSettings_controlGroup input[type=range]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #007bff;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.PenSettings_controlGroup input[type=color] {
+  width: 34px;
+  height: 30px;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  border-radius: 4px;
+  padding: 2px;
+  transition: border-color 0.2s;
+}
+.PenSettings_controlGroup input[type=color]:hover {
+  border-color: #a0a0b0;
+}
+.PenSettings_controlGroup input[type=color]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.PenSettings_controlGroup input[type=color]::-webkit-color-swatch {
+  border-radius: 2px;
+  border: none;
+}
+.PenSettings_presetsContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.PenSettings_presetBtn {
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  background: #fff;
+  border-radius: 4px;
+  color: #444;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.PenSettings_presetBtn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.PenSettings_presetBtn:hover {
+  background-color: #f0f0f5;
+  border-color: #b0b0c0;
+}
+.PenSettings_presetBtnActive {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+.PenSettings_presetBtnActive:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+
 /* src/components/ImageStampTab.module.css */
 .ImageStampTab_tab {
   display: flex;
@@ -7592,6 +8123,7 @@ body:has(app-atx0010p) .loginAssistantsList {
   gap: 12px;
   padding: 14px 16px;
   background-color: #f5f5fa;
+  border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   flex-shrink: 0;
 }
@@ -7934,12 +8466,13 @@ body:has(app-atx0010p) .loginAssistantsList {
 }
 .ImageStampTab_closeBtn {
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: 5px;
+  right: 5px;
   width: 28px;
   height: 28px;
   cursor: pointer;
   border: 1px solid #d0d0da;
+  border-radius: 5px;
   background: #fff;
   color: #666;
   display: flex;
@@ -8113,6 +8646,7 @@ body:has(app-atx0010p) .loginAssistantsList {
   display: flex;
   flex-direction: column;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
 }
 .DrawToolOverlay_body {
   flex: 1;
@@ -8120,6 +8654,68 @@ body:has(app-atx0010p) .loginAssistantsList {
   flex-direction: column;
   overflow: hidden;
   min-height: 0;
+}
+
+/* src/components/PenOverlay.module.css */
+.PenOverlay_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9997;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+}
+.PenOverlay_content {
+  position: relative;
+  background-color: #f0f0f5;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+}
+.PenOverlay_body {
+  padding: 16px;
+}
+.PenOverlay_closeBtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  border: 1px solid #d0d0da;
+  border-radius: 6px;
+  background: #fff;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  padding: 4px;
+  z-index: 10;
+}
+.PenOverlay_closeBtn span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.PenOverlay_closeBtn svg {
+  width: 16px;
+  height: 16px;
+}
+.PenOverlay_closeBtn:hover {
+  background-color: #f0f0f5;
+  border-color: #b0b0c0;
+  color: #333;
 }`;
 
     document.body.appendChild(z);

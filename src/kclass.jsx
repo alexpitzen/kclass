@@ -5,6 +5,7 @@ import { PrintOverlayProvider, PrintOverlay } from './components/PrintOverlay.js
 import { DiffViewOverlay } from './components/DiffViewOverlay.jsx';
 import { HelpOverlay } from './components/HelpOverlay.jsx';
 import { DrawToolOverlay } from './components/DrawToolOverlay.jsx';
+import { PenOverlay } from './components/PenOverlay.jsx';
 import { LoginAssistantsList, RefreshButton } from './components/Misc.jsx';
 import { useAutoPen } from './hooks/useAutoPen.js';
 import { useMarkboxKeys } from './hooks/useMarkboxKeys.js';
@@ -35,6 +36,7 @@ const App = () => {
                 <DiffViewOverlay />
                 <HelpOverlay />
                 <DrawToolOverlay />
+                <PenOverlay />
             </AppProvider>
         </>
     );

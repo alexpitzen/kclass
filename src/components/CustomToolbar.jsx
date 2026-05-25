@@ -8,19 +8,23 @@ import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
 import { useStampSettings } from '../context/StampSettingsContext.jsx';
 import { getActivePresetId, getColoredPenIcon } from '../helpers/penPresets.js';
-import settingsIcon from '../icons/settings.svg';
+import stampIcon from '../icons/stamp.svg';
 
 export const CustomToolbar = () => {
     const [shifted, setShifted] = useState(false);
     const { timestampEnabled } = useTimestamp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
     const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible } = useDrawTool();
+    const { showPenOverlay } = useDrawTool();
     const { eraserEnabled, penWidth, penAlpha } = usePenSettings();
     const { singleColor } = useStampSettings();
     const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
     const currentPenIcon = activePresetId
         ? getColoredPenIcon(activePresetId, singleColor)
         : getColoredPenIcon('pen', singleColor);
+    const coloredStampIcon = singleColor
+        ? stampIcon.replace(/currentColor/g, singleColor).replace(/fill="#000000"/g, `fill="${singleColor}"`)
+        : stampIcon;
 
     const withBlur = (handler) => (e) => {
         e.currentTarget.blur();
@@ -75,7 +79,6 @@ export const CustomToolbar = () => {
             >x all</button>
 
             {drawToolTabs?.map((tab) => {
-                const icon = tab.id === 'image' ? currentPenIcon : tab.id === 'settings' ? settingsIcon : null;
                 return (
                     <button
                         key={tab.id}
@@ -87,14 +90,22 @@ export const CustomToolbar = () => {
                         }}
                         title={tab.label}
                     >
-                        {icon ? (
-                            <span dangerouslySetInnerHTML={{ __html: icon }} />
-                        ) : (
-                            tab.label
-                        )}
+                        <span dangerouslySetInnerHTML={{ __html: coloredStampIcon }} />
                     </button>
                 );
             })}
+
+            <button
+                class="drawtool-tab-btn"
+                onMouseOver={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                    e.currentTarget.blur();
+                    showPenOverlay();
+                }}
+                title="Pen settings"
+            >
+                <span dangerouslySetInnerHTML={{ __html: currentPenIcon }} />
+            </button>
 
             <button
                 class="mobileUpBtn"
@@ -124,6 +135,7 @@ export const CustomToolbar = () => {
                     dangerouslySetInnerHTML={{ __html: timestamp }}
                 />
             )}
+
         </div>
     );
 };

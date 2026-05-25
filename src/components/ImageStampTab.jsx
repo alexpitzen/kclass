@@ -5,8 +5,9 @@ import { useHelpOverlay } from './HelpOverlay.jsx';
 import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useStampSettings, getStampSize, getSingleColor, getStampColorType, getRainbowSpeed, focusTextStampTextareaFnRef } from '../context/StampSettingsContext.jsx';
 import { useKeyboardMode as useKeyboardModeContext, useHDMode as useHDModeContext } from '../context/AppContext.jsx';
-import { selectEraser } from '../helpers/actions.js';
-import { PEN_PRESETS, PRESET_ICONS, getActivePresetId, setStampLibPenSettings } from '../helpers/penPresets.js';
+import { setStampLibPenSettings } from '../helpers/penPresets.js';
+import { PenSettings } from './PenSettings.jsx';
+import penIcon from '../icons/pen.svg';
 import { startScrolling } from '../helpers/scrolling.js';
 import { DOWN, UP } from '../helpers/constants.js';
 import styles from './ImageStampTab.module.css';
@@ -34,10 +35,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
         setPenWidth,
         penAlpha,
         setPenAlpha,
-        penMode,
-        setPenMode,
         eraserEnabled,
-        setEraserEnabled,
     } = usePenSettings();
 
     const {
@@ -54,12 +52,11 @@ export const ImageStampTab = ({ onStampClick, close }) => {
     const [settingsModeActive, setSettingsModeActive] = useState(false);
 
     const sizeSliderRef = useRef(null);
-    const presetsContainerRef = useRef(null);
+    const penSettingsRef = useRef(null);
     const stampColorTypeElementRef = useRef(null);
     const textareaRef = useRef(null);
     const stampsRef = useRef(null);
     const activeStamps = stamps[activeStampTab] || [];
-    const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
 
      useEffect(() => {
          if (printOverlayState.visible) {
@@ -233,47 +230,6 @@ export const ImageStampTab = ({ onStampClick, close }) => {
         }
     }, [setRainbowSpeed, setRainbowFillSpeed]);
 
-    const handleWidthChange = useCallback((e) => {
-        const newWidth = parseInt(e.target.value);
-        setPenWidth(newWidth);
-        if (!eraserEnabled) {
-            setStampLibPenSettings(getSingleColor(), newWidth, penAlpha);
-        } else {
-            StampLib.setPenSettings({
-                width: newWidth,
-            });
-        }
-    }, [setPenWidth, eraserEnabled, penAlpha]);
-
-    const handleAlphaChange = useCallback((e) => {
-        const newAlpha = parseFloat(e.target.value);
-        setPenAlpha(newAlpha);
-        if (!eraserEnabled) {
-            setStampLibPenSettings(getSingleColor(), penWidth, newAlpha);
-        }
-    }, [setPenAlpha, eraserEnabled, penWidth]);
-
-    const handlePresetClick = useCallback((e) => {
-        const btn = e.currentTarget;
-        const presetId = btn.getAttribute('data-preset-id');
-        const preset = PEN_PRESETS[presetId];
-        if (preset) {
-            if (preset.id === 'eraser') {
-                setEraserEnabled(true);
-                setPenMode('eraser');
-                setPenWidth(preset.width);
-                setPenAlpha(preset.alpha);
-                selectEraser();
-            } else {
-                setEraserEnabled(false);
-                setPenMode('pen');
-                setPenWidth(preset.width);
-                setPenAlpha(preset.alpha);
-                setStampLibPenSettings(getSingleColor(), preset.width, preset.alpha);
-            }
-        }
-    }, [setEraserEnabled, setPenMode, setPenWidth, setPenAlpha]);
-
     const handleStampTabClick = useCallback((e) => {
         const btn = e.currentTarget;
         const category = btn.getAttribute('data-category');
@@ -314,15 +270,6 @@ export const ImageStampTab = ({ onStampClick, close }) => {
         });
     }, [activeStamps, handleStampClick]);
 
-    const cycleHighlighter = useCallback(() => {
-        const activeBtn = presetsContainerRef.current.querySelector(`.${styles.presetBtnActive}`);
-        if (activeBtn?.dataset.presetId == "highlighter") {
-            presetsContainerRef.current.querySelector(`button[data-preset-id="thin-highlighter"]`).click();
-        } else {
-            presetsContainerRef.current.querySelector(`button[data-preset-id="highlighter"]`).click();
-        }
-    }, []);
-
     const handleKeys = useCallback((e) => {
         if (e.altKey || e.ctrlKey || e.metaKey) return;
         if ((e.target.nodeName === "INPUT" && e.target.type !== "checkbox" && e.target.type !== "color" && e.target.type != "range") || e.target.nodeName === "TEXTAREA") {
@@ -354,13 +301,13 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                 setPenSettingsModeActive(true);
                 setTextStampModeActive(false);
                 setSettingsModeActive(false);
-                cycleHighlighter();
+                penSettingsRef.current?.cycleHighlighter();
                 break;
             case "p":
                 setPenSettingsModeActive(true);
                 setTextStampModeActive(false);
                 setSettingsModeActive(false);
-                presetsContainerRef.current.querySelector(`button[data-preset-id="pen"]`).click();
+                penSettingsRef.current?.clickPreset?.('pen');
                 break;
             case "P":
             case "H":
@@ -371,7 +318,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                 setPenSettingsModeActive(true);
                 setTextStampModeActive(false);
                 setSettingsModeActive(false);
-                presetsContainerRef.current.querySelector(`button[data-preset-id="eraser"]`).click();
+                penSettingsRef.current?.clickPreset?.('eraser');
                 break;
             case "r":
             case "u":
@@ -405,7 +352,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                 showHelpOverlay("drawtab");
                 break;
         }
-    }, [close, showHelpOverlay, cycleHighlighter, setPenSettingsModeActive, setTextStampModeActive, setSettingsModeActive]);
+    }, [close, showHelpOverlay, setPenSettingsModeActive, setTextStampModeActive, setSettingsModeActive]);
 
     useEffect(() => {
         return registerKeyDownHandler('image', handleKeys);
@@ -505,7 +452,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                     onClick={handlePenSettingsToggle}
                     onMouseOver={stopPropagation}
                 >
-                    <span dangerouslySetInnerHTML={{ __html: PRESET_ICONS.pen }} />
+                    <span dangerouslySetInnerHTML={{ __html: penIcon }} />
                     Pen
                 </button>
 
@@ -534,6 +481,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                             color: singleColor,
                             fontSize: `calc((${stampSize} / 100) * 57px)`
                         }}
+                        onKeyUp={stopPropagation}
                     />
                     <button
                         class={styles.textStampBtn}
@@ -546,47 +494,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                 </div>
 
                 <div class={`${styles.penSettingsInput} ${penSettingsModeActive ? styles.auxPanelActive : ''}`}>
-                    <div class={styles.controlGroup}>
-                        <label>Width: {penWidth}</label>
-                        <div class={styles.controlRow}>
-                            <input
-                                type="range"
-                                min="1"
-                                max="50"
-                                value={penWidth}
-                                onInput={handleWidthChange}
-                            />
-                        </div>
-                    </div>
-
-                    <div class={styles.controlGroup}>
-                        <label>Alpha: {penAlpha}</label>
-                        <div class={styles.controlRow}>
-                            <input
-                                type="range"
-                                min="0"
-                                max="1"
-                                step="0.1"
-                                value={penAlpha}
-                                onInput={handleAlphaChange}
-                            />
-                        </div>
-                    </div>
-
-                     <div class={styles.presetsContainer} ref={presetsContainerRef}>
-                         {Object.values(PEN_PRESETS).map((preset) => (
-                             <button
-                                 key={preset.id}
-                                 data-preset-id={preset.id}
-                                 onClick={handlePresetClick}
-                                 onMouseOver={stopPropagation}
-                                 class={`${styles.presetBtn} ${preset.id === activePresetId ? styles.presetBtnActive : ''}`}
-                             >
-                                 <span dangerouslySetInnerHTML={{ __html: PRESET_ICONS[preset.id] }} />
-                                 {preset.label}
-                             </button>
-                         ))}
-                     </div>
+                    <PenSettings ref={penSettingsRef} layout="inline" />
                 </div>
 
                 <div class={`${styles.settingsInput} ${settingsModeActive ? styles.auxPanelActive : ''}`}>

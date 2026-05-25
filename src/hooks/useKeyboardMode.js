@@ -297,7 +297,7 @@ const handleStudyRecordsKey = (e, fns) => {
 
 export const useKeyboardMode = (enabled) => {
     const { setTimestampEnabled } = useTimestamp();
-    const { drawToolVisible, callKeyDownHandler, showDrawTool, hideDrawTool, setActiveTab } = useDrawTool();
+    const { drawToolVisible, callKeyDownHandler, showDrawTool, hideDrawTool, setActiveTab, penOverlayVisible, callPenOverlayKeyDownHandler } = useDrawTool();
     const { penWidth, setPenWidth, penAlpha, setPenAlpha, penMode, setPenMode, eraserEnabled, setEraserEnabled } = usePenSettings();
     const { hidePreview, updatePreview, state: printOverlayState } = usePrintOverlay();
     const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
@@ -341,6 +341,11 @@ export const useKeyboardMode = (enabled) => {
                 } else if (e.key === "t") {
                     setTimestampEnabled((prev) => !prev);
                 }
+                return;
+            }
+
+            if (penOverlayVisible) {
+                callPenOverlayKeyDownHandler(e);
                 return;
             }
 
@@ -454,5 +459,5 @@ export const useKeyboardMode = (enabled) => {
             document.removeEventListener("keydown", handleKeyDown);
             document.removeEventListener("keyup", handleKeyUp);
         };
-    }, [enabled, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview, penWidth, penAlpha, eraserEnabled]);
+    }, [enabled, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview, penWidth, penAlpha, eraserEnabled, penOverlayVisible]);
 };

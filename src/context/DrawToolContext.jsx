@@ -19,13 +19,20 @@ const TAB_IDS = [
 export const DrawToolProvider = ({ children }) => {
     const [activeTab, setActiveTab] = useState('image');
     const [drawToolVisible, setDrawToolVisible] = useState(false);
+    const [penOverlayVisible, setPenOverlayVisible] = useState(false);
     const keyDownHandlersRef = useRef({});
+    const penOverlayKeyDownRef = useRef(null);
 
     const showDrawTool = useCallback(() => {
         setDrawToolVisible(true);
         updateStampLibFromPenSettings();
     }, []);
     const hideDrawTool = useCallback(() => setDrawToolVisible(false), []);
+    const showPenOverlay = useCallback(() => {
+        setPenOverlayVisible(true);
+        updateStampLibFromPenSettings();
+    }, []);
+    const hidePenOverlay = useCallback(() => setPenOverlayVisible(false), []);
 
     const registerKeyDownHandler = useCallback((tabType, handler) => {
         keyDownHandlersRef.current[tabType] = handler;
@@ -38,6 +45,17 @@ export const DrawToolProvider = ({ children }) => {
         const handler = keyDownHandlersRef.current[activeTab];
         handler?.(e);
     }, [activeTab]);
+
+    const registerPenOverlayKeyDownHandler = useCallback((handler) => {
+        penOverlayKeyDownRef.current = handler;
+        return () => {
+            penOverlayKeyDownRef.current = null;
+        };
+    }, []);
+
+    const callPenOverlayKeyDownHandler = useCallback((e) => {
+        penOverlayKeyDownRef.current?.(e);
+    }, []);
 
     const handleUndo = useCallback(() => {
         StampLib.undoLastWriteAll();
@@ -54,19 +72,29 @@ export const DrawToolProvider = ({ children }) => {
         drawToolVisible,
         showDrawTool,
         hideDrawTool,
+        penOverlayVisible,
+        showPenOverlay,
+        hidePenOverlay,
         handleUndo,
         handleClear,
         registerKeyDownHandler,
         callKeyDownHandler,
+        registerPenOverlayKeyDownHandler,
+        callPenOverlayKeyDownHandler,
     }), [
         activeTab,
         drawToolVisible,
         showDrawTool,
         hideDrawTool,
+        penOverlayVisible,
+        showPenOverlay,
+        hidePenOverlay,
         handleUndo,
         handleClear,
         registerKeyDownHandler,
         callKeyDownHandler,
+        registerPenOverlayKeyDownHandler,
+        callPenOverlayKeyDownHandler,
     ]);
 
     return (
