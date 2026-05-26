@@ -2229,6 +2229,7 @@
                 axolotlWizardPinkGreen,
                 axolotlWizardBlue,
                 axolotlWizardBlueSimplified,
+                capybaraBoba,
                 adelineCatGreatJob,
                 adelineStar,
                 karthikaBootifulWorkGhost,
@@ -2346,6 +2347,8 @@
                 axolotlWizardPink,
                 axolotlWizardPinkGreen,
                 axolotlWizardBlue,
+                axolotlWizardBlueSimplified,
+                capybaraBoba,
             ],
             "Student-drawn": [
                 adelineCatGreatJob,
