@@ -25,7 +25,7 @@ const stampCategories = Object.keys(stamps);
 const stopPropagation = (e) => e.stopPropagation();
 
 export const ImageStampTab = ({ onStampClick, close }) => {
-    const { handleUndo, handleClear, registerKeyDownHandler, textModeOnOpen, consumeTextMode } = useDrawTool();
+    const { handleUndo, handleClear, registerKeyDownHandler, textModeOnOpen, consumeTextMode, drawToolVisible } = useDrawTool();
      const { showStampPreview, showTextPreview, updatePreview, state: printOverlayState } = usePrintOverlay();
     const { showHelpOverlay } = useHelpOverlay();
     const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardModeContext();
@@ -54,6 +54,7 @@ export const ImageStampTab = ({ onStampClick, close }) => {
     const sizeSliderRef = useRef(null);
     const penSettingsRef = useRef(null);
     const stampColorTypeElementRef = useRef(null);
+    const prevDrawToolVisibleRef = useRef(drawToolVisible);
     const textareaRef = useRef(null);
     const stampsRef = useRef(null);
     const activeStamps = stamps[activeStampTab] || [];
@@ -101,6 +102,15 @@ export const ImageStampTab = ({ onStampClick, close }) => {
             focusTextStampTextareaFnRef.current = null;
         };
     }, []);
+
+    useEffect(() => {
+        if (prevDrawToolVisibleRef.current && !drawToolVisible) {
+            setTextStampModeActive(false);
+            setPenSettingsModeActive(false);
+            setSettingsModeActive(false);
+        }
+        prevDrawToolVisibleRef.current = drawToolVisible;
+    }, [drawToolVisible]);
 
     useEffect(() => {
         if (textModeOnOpen) {

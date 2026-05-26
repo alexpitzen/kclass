@@ -5207,7 +5207,7 @@
   var stampCategories = Object.keys(stamps);
   var stopPropagation2 = (e3) => e3.stopPropagation();
   var ImageStampTab = ({ onStampClick, close }) => {
-    const { handleUndo, handleClear, registerKeyDownHandler, textModeOnOpen, consumeTextMode } = useDrawTool();
+    const { handleUndo, handleClear, registerKeyDownHandler, textModeOnOpen, consumeTextMode, drawToolVisible } = useDrawTool();
     const { showStampPreview, showTextPreview, updatePreview, state: printOverlayState } = usePrintOverlay();
     const { showHelpOverlay } = useHelpOverlay();
     const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardMode();
@@ -5239,6 +5239,7 @@
     const sizeSliderRef = A2(null);
     const penSettingsRef = A2(null);
     const stampColorTypeElementRef = A2(null);
+    const prevDrawToolVisibleRef = A2(drawToolVisible);
     const textareaRef = A2(null);
     const stampsRef = A2(null);
     const activeStamps = stamps[activeStampTab] || [];
@@ -5280,6 +5281,14 @@
         focusTextStampTextareaFnRef.current = null;
       };
     }, []);
+    y2(() => {
+      if (prevDrawToolVisibleRef.current && !drawToolVisible) {
+        setTextStampModeActive(false);
+        setPenSettingsModeActive(false);
+        setSettingsModeActive(false);
+      }
+      prevDrawToolVisibleRef.current = drawToolVisible;
+    }, [drawToolVisible]);
     y2(() => {
       if (textModeOnOpen) {
         consumeTextMode();
@@ -6880,7 +6889,6 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
 }
 .customToolbar .mobileUpBtn, .customToolbar .mobileDownBtn {
   display: none;
-  top: 20px;
   width: 30px;
 }
 
@@ -7754,7 +7762,7 @@ body:has(app-atx0010p) .loginAssistantsList {
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) .customToolbar {
     left: 376px;
-    top: 107px;
+    top: 104px;
   }
   body:has(.scroll-content .container .content .content-scroll-container .content-bg .content-detail .worksheet-container) {
     /* Show H button, x all button, and toolbar */

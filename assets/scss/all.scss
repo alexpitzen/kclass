@@ -81,7 +81,6 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
     /* Don't show these except on mobile */
     .mobileUpBtn, .mobileDownBtn {
         display: none;
-        top: 20px;
         width: 30px;
     }
 }
