@@ -4569,8 +4569,8 @@
     return /* @__PURE__ */ u3(PrintOverlayProvider, { children: /* @__PURE__ */ u3(DiffViewOverlayProvider, { children: /* @__PURE__ */ u3(HelpOverlayProvider, { children: /* @__PURE__ */ u3(DrawToolProvider, { children: /* @__PURE__ */ u3(StampSettingsProvider, { children: /* @__PURE__ */ u3(PenSettingsProvider, { children: /* @__PURE__ */ u3(TimestampProvider, { children: /* @__PURE__ */ u3(HDModeProvider, { children: /* @__PURE__ */ u3(KeyboardModeProvider, { children }) }) }) }) }) }) }) }) });
   };
 
-  // src/icons/stamp.svg
-  var stamp_default = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<svg\n   width="13.534658"\n   height="19.125"\n   viewBox="0 0 13.534659 19.125"\n   fill="none"\n   stroke="currentColor"\n   stroke-width="1.5"\n   stroke-linecap="round"\n   stroke-linejoin="round"\n   version="1.1"\n   id="svg7"\n   sodipodi:docname="stamp.svg"\n   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"\n   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"\n   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"\n   xmlns="http://www.w3.org/2000/svg"\n   xmlns:svg="http://www.w3.org/2000/svg">\n  <defs\n     id="defs7" />\n  <sodipodi:namedview\n     id="namedview7"\n     pagecolor="#ffffff"\n     bordercolor="#000000"\n     borderopacity="0.25"\n     inkscape:showpageshadow="2"\n     inkscape:pageopacity="0.0"\n     inkscape:pagecheckerboard="0"\n     inkscape:deskcolor="#d1d1d1"\n     inkscape:zoom="22.627417"\n     inkscape:cx="13.722291"\n     inkscape:cy="10.584505"\n     inkscape:window-width="2560"\n     inkscape:window-height="1394"\n     inkscape:window-x="0"\n     inkscape:window-y="0"\n     inkscape:window-maximized="1"\n     inkscape:current-layer="svg7" />\n  <path\n     d="M 10.251455,12.65625 C 8.2792667,8.841232 10.901944,7.003471 10.940908,4.84375 10.979408,2.7097225 9.7280927,0.7500496 6.7846577,0.75 c -2.4502715,-4.13e-5 -4.045787,2.0371608 -4.03125,4.09375 0.018371,2.598968 2.686451,4.505516 0.9798087,7.89811"\n     id="path8"\n     sodipodi:nodetypes="csssc" />\n  <path\n     id="path5"\n     d="M 0.75,12.729713 0.7846577,16.75 H 12.784658 l -0.02621,-4.060862 M 0.75,12.72971 c 3.8291677,-0.02647 8.9563707,-0.06953 12.008448,-0.04057"\n     sodipodi:nodetypes="cccccc" />\n  <path\n     d="M 0.7846577,16.75 H 12.784658"\n     id="path6" />\n  <path\n     d="m 1.7846577,16.75 0.046875,1.625 H 11.831533 l -0.04687,-1.625"\n     id="path7"\n     sodipodi:nodetypes="cccc" />\n</svg>\n';
+  // src/icons/stamp3.svg
+  var stamp3_default = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<svg\n   width="24"\n   height="24"\n   viewBox="0 0 13.422667 14.72858"\n   fill="none"\n   stroke="currentColor"\n   stroke-width="1.5"\n   stroke-linecap="round"\n   stroke-linejoin="round"\n   version="1.1"\n   id="svg7"\n   sodipodi:docname="stamp3.svg"\n   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"\n   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"\n   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"\n   xmlns="http://www.w3.org/2000/svg"\n   xmlns:svg="http://www.w3.org/2000/svg">\n  <defs\n     id="defs7" />\n  <sodipodi:namedview\n     id="namedview7"\n     pagecolor="#ffffff"\n     bordercolor="#000000"\n     borderopacity="0.25"\n     inkscape:showpageshadow="2"\n     inkscape:pageopacity="0.0"\n     inkscape:pagecheckerboard="0"\n     inkscape:deskcolor="#d1d1d1"\n     inkscape:zoom="16"\n     inkscape:cx="8.8125"\n     inkscape:cy="11.15625"\n     inkscape:window-width="1256"\n     inkscape:window-height="1362"\n     inkscape:window-x="0"\n     inkscape:window-y="0"\n     inkscape:window-maximized="0"\n     inkscape:current-layer="svg7" />\n  <path\n     d="M 9.7258458,8.6050866 C 9.5031748,6.5279564 9.0391508,5.1473744 10.687467,3.7456 11.840954,2.7646431 11.311024,0.96762342 9.6483298,0.48636502 7.9785583,0.00305842 6.8878706,1.1602594 6.7330631,2.3395329 6.5270643,3.908766 8.4582573,4.8011624 5.7435133,7.1446364"\n     id="path8"\n     sodipodi:nodetypes="csssc"\n     style="stroke-width:0.753;stroke-dasharray:none;stroke:#000000;stroke-opacity:1" />\n  <path\n     style="stroke-width:0.753;stroke-dasharray:none;stroke:#000000;stroke-opacity:1"\n     d="M 0.37649577,9.8552256 6.2234488,14.35204 12.816068,12.996079 7.0784834,8.1532644 Z"\n     id="path5"\n     sodipodi:nodetypes="ccccc" />\n  <path\n     d="M 0.38811452,9.8439694 1.3859082,8.3438566 7.623914,6.7848776 13.046127,11.600309 c -0.201487,1.191073 -0.231813,1.38623 -0.231813,1.38623"\n     id="path7"\n     sodipodi:nodetypes="ccccc"\n     style="stroke-width:0.753;stroke-dasharray:none;stroke:#000000;stroke-opacity:1" />\n  <path\n     style="fill:none;stroke-width:0.753;stroke-dasharray:none"\n     d="M 4.5893752,9.7548301 C 3.7124235,10.049971 3.4300324,11.205422 4.3686326,11.429125 5.1312055,11.501755 5.4884021,10.194306 6.1679751,9.8914747 7.245522,9.482835 7.6280601,10.587187 6.4703915,11.491517 c -0.7100281,0.56607 -0.7210832,1.261019 0.2599861,1.321354 1.0984132,0.01092 1.1980397,-1.598381 1.9855816,-1.498033 0.9172818,0.265666 0.2889228,1.430183 0.1806304,1.652142"\n     id="path2"\n     sodipodi:nodetypes="ccccccc" />\n  <path\n     style="fill:none;stroke:#000000;stroke-width:0.753;stroke-dasharray:none;stroke-opacity:1"\n     d="M 7.6176082,6.8028661 7.0865,8.0980252"\n     id="path3"\n     sodipodi:nodetypes="cc" />\n</svg>\n';
 
   // src/components/CustomToolbar.jsx
   var CustomToolbar = () => {
@@ -4583,7 +4583,7 @@
     const { singleColor } = useStampSettings();
     const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
     const currentPenIcon = activePresetId ? getColoredPenIcon(activePresetId, singleColor) : getColoredPenIcon("pen", singleColor);
-    const coloredStampIcon = singleColor ? stamp_default.replace(/currentColor/g, singleColor).replace(/fill="#000000"/g, `fill="${singleColor}"`) : stamp_default;
+    const coloredStampIcon = singleColor ? stamp3_default.replace(/currentColor/g, singleColor).replace(/fill="#000000"/g, `fill="${singleColor}"`) : stamp3_default;
     const withBlur = (handler) => (e3) => {
       e3.currentTarget.blur();
       if (handler)
@@ -4651,7 +4651,7 @@
               handleToolTab(tab.id);
             },
             title: tab.label,
-            children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: coloredStampIcon } })
+            dangerouslySetInnerHTML: { __html: coloredStampIcon }
           },
           tab.id
         );
@@ -4666,7 +4666,7 @@
             showPenOverlay();
           },
           title: "Pen settings",
-          children: /* @__PURE__ */ u3("span", { dangerouslySetInnerHTML: { __html: currentPenIcon } })
+          dangerouslySetInnerHTML: { __html: currentPenIcon }
         }
       ),
       /* @__PURE__ */ u3(
@@ -6815,7 +6815,10 @@ body:has(.dashboard-progress-chart .container.plan.isFloating) {
   position: relative;
 }
 .customToolbar > button:has(svg) {
-  padding-top: 3px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 .customToolbar .timestampBox {
   left: 30px;

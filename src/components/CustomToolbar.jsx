@@ -8,7 +8,7 @@ import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
 import { useStampSettings } from '../context/StampSettingsContext.jsx';
 import { getActivePresetId, getColoredPenIcon } from '../helpers/penPresets.js';
-import stampIcon from '../icons/stamp.svg';
+import stampIcon from '../icons/stamp3.svg';
 
 export const CustomToolbar = () => {
     const [shifted, setShifted] = useState(false);
@@ -89,8 +89,8 @@ export const CustomToolbar = () => {
                             handleToolTab(tab.id);
                         }}
                         title={tab.label}
+                        dangerouslySetInnerHTML={{ __html: coloredStampIcon }}
                     >
-                        <span dangerouslySetInnerHTML={{ __html: coloredStampIcon }} />
                     </button>
                 );
             })}
@@ -103,8 +103,8 @@ export const CustomToolbar = () => {
                     showPenOverlay();
                 }}
                 title="Pen settings"
+                dangerouslySetInnerHTML={{ __html: currentPenIcon }}
             >
-                <span dangerouslySetInnerHTML={{ __html: currentPenIcon }} />
             </button>
 
             <button
