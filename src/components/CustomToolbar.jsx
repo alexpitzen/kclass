@@ -8,7 +8,7 @@ import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
 import { useStampSettings } from '../context/StampSettingsContext.jsx';
 import { getActivePresetId, getColoredPenIcon } from '../helpers/penPresets.js';
-import stampIcon from '../icons/stamp3.svg';
+import stampIcon from '../icons/stamp4.svg';
 
 export const CustomToolbar = () => {
     const [shifted, setShifted] = useState(false);
