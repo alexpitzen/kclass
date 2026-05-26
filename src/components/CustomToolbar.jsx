@@ -9,12 +9,13 @@ import { useDrawTool } from '../context/DrawToolContext.jsx';
 import { useStampSettings } from '../context/StampSettingsContext.jsx';
 import { getActivePresetId, getColoredPenIcon } from '../helpers/penPresets.js';
 import stampIcon from '../icons/stamp4.svg';
+import stampTextIcon from '../icons/stamp-text.svg';
 
 export const CustomToolbar = () => {
     const [shifted, setShifted] = useState(false);
     const { timestampEnabled } = useTimestamp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
-    const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible } = useDrawTool();
+    const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible, requestTextMode } = useDrawTool();
     const { showPenOverlay } = useDrawTool();
     const { eraserEnabled, penWidth, penAlpha } = usePenSettings();
     const { singleColor } = useStampSettings();
@@ -94,6 +95,20 @@ export const CustomToolbar = () => {
                     </button>
                 );
             })}
+
+            <button
+                class="drawtool-tab-btn"
+                onMouseOver={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                    e.currentTarget.blur();
+                    setActiveTab('image');
+                    showDrawTool();
+                    requestTextMode();
+                }}
+                title="Text stamp"
+                dangerouslySetInnerHTML={{ __html: stampTextIcon }}
+            >
+            </button>
 
             <button
                 class="drawtool-tab-btn"

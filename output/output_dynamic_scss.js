@@ -4463,6 +4463,7 @@
     const [activeTab, setActiveTab] = d2("image");
     const [drawToolVisible, setDrawToolVisible] = d2(false);
     const [penOverlayVisible, setPenOverlayVisible] = d2(false);
+    const [textModeOnOpen, setTextModeOnOpen] = d2(false);
     const keyDownHandlersRef = A2({});
     const penOverlayKeyDownRef = A2(null);
     const showDrawTool = q2(() => {
@@ -4475,6 +4476,8 @@
       updateStampLibFromPenSettings();
     }, []);
     const hidePenOverlay = q2(() => setPenOverlayVisible(false), []);
+    const requestTextMode = q2(() => setTextModeOnOpen(true), []);
+    const consumeTextMode = q2(() => setTextModeOnOpen(false), []);
     const registerKeyDownHandler = q2((tabType, handler) => {
       keyDownHandlersRef.current[tabType] = handler;
       return () => {
@@ -4510,6 +4513,9 @@
       penOverlayVisible,
       showPenOverlay,
       hidePenOverlay,
+      textModeOnOpen,
+      requestTextMode,
+      consumeTextMode,
       handleUndo,
       handleClear,
       registerKeyDownHandler,
@@ -4524,6 +4530,9 @@
       penOverlayVisible,
       showPenOverlay,
       hidePenOverlay,
+      textModeOnOpen,
+      requestTextMode,
+      consumeTextMode,
       handleUndo,
       handleClear,
       registerKeyDownHandler,
@@ -4572,12 +4581,15 @@
   // src/icons/stamp4.svg
   var stamp4_default = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<svg\n   width="25"\n   height="25"\n   viewBox="0 0 12.776233 14.696234"\n   fill="none"\n   stroke="currentColor"\n   stroke-width="1.5"\n   stroke-linecap="round"\n   stroke-linejoin="round"\n   version="1.1"\n   id="svg7"\n   sodipodi:docname="stamp4.svg"\n   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"\n   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"\n   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"\n   xmlns="http://www.w3.org/2000/svg"\n   xmlns:svg="http://www.w3.org/2000/svg">\n  <defs\n     id="defs7" />\n  <sodipodi:namedview\n     id="namedview7"\n     pagecolor="#ffffff"\n     bordercolor="#000000"\n     borderopacity="0.25"\n     inkscape:showpageshadow="2"\n     inkscape:pageopacity="0.0"\n     inkscape:pagecheckerboard="0"\n     inkscape:deskcolor="#d1d1d1"\n     inkscape:zoom="4"\n     inkscape:cx="26.5"\n     inkscape:cy="33.625"\n     inkscape:window-width="1256"\n     inkscape:window-height="1362"\n     inkscape:window-x="0"\n     inkscape:window-y="0"\n     inkscape:window-maximized="0"\n     inkscape:current-layer="svg7" />\n  <path\n     d="M 9.7141936,7.2980704 C 9.4915226,5.2209402 8.4017897,4.4177822 10.241869,3.2793522 11.476721,2.5153677 11.082399,0.96244195 9.4197051,0.48118355 7.7499336,-0.00212302 6.9304615,1.2364427 6.8570187,2.0360144 6.7122532,3.6120763 8.9619147,3.4399031 5.7318611,5.8376202"\n     id="path8"\n     sodipodi:nodetypes="csssc"\n     style="stroke:#000000;stroke-width:0.753;stroke-dasharray:none;stroke-opacity:1" />\n  <path\n     style="stroke:#000000;stroke-width:0.753;stroke-dasharray:none;stroke-opacity:1"\n     d="M -0.23183084,9.8229226 5.6151222,14.319737 12.207741,12.963776 6.4701568,8.1209614 Z"\n     id="path5"\n     sodipodi:nodetypes="ccccc" />\n  <path\n     d="M -0.22021209,9.8116664 1.374256,7.0368404 7.6122618,5.4778614 13.034474,10.293292 12.203862,12.957325"\n     id="path7"\n     sodipodi:nodetypes="ccccc"\n     style="stroke:#000000;stroke-width:0.753;stroke-dasharray:none;stroke-opacity:1" />\n  <path\n     style="fill:none;stroke:#000000;stroke-width:0.753;stroke-dasharray:none;stroke-opacity:1"\n     d="M 7.5517128,5.6585792 6.4781734,8.0657222"\n     id="path3"\n     sodipodi:nodetypes="cc" />\n  <path\n     style="fill:none;stroke-width:0.522107;stroke-dasharray:none"\n     d="m 4.5793475,10.201081 c -0.6080511,0.204641 -0.8038523,1.005795 -0.1530561,1.160904 0.5287444,0.05036 0.7764134,-0.856185 1.2476082,-1.066158 0.7471375,-0.283339 1.0123776,0.482385 0.2096861,1.109419 -0.4923114,0.392495 -0.4999766,0.874351 0.1802663,0.916186 0.7616055,0.0076 0.8306835,-1.108268 1.3767406,-1.03869 0.6360147,0.184204 0.1523854,0.838222 0.077299,0.992121"\n     id="path2"\n     sodipodi:nodetypes="ccccccc" />\n  <path\n     d="M 1.7306957,10.206477 5.8638804,13.385256 10.198715,12.480977 6.142842,9.0576121 Z"\n     id="path5-6"\n     sodipodi:nodetypes="ccccc"\n     style="stroke-width:0.655202;stroke-dasharray:none" />\n</svg>\n';
 
+  // src/icons/stamp-text.svg
+  var stamp_text_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <polyline points="4 7 4 4 20 4 20 7"/>\n  <line x1="9" y1="20" x2="15" y2="20"/>\n  <line x1="12" y1="4" x2="12" y2="20"/>\n</svg>';
+
   // src/components/CustomToolbar.jsx
   var CustomToolbar = () => {
     const [shifted, setShifted] = d2(false);
     const { timestampEnabled } = useTimestamp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
-    const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible } = useDrawTool();
+    const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible, requestTextMode } = useDrawTool();
     const { showPenOverlay } = useDrawTool();
     const { eraserEnabled, penWidth, penAlpha } = usePenSettings();
     const { singleColor } = useStampSettings();
@@ -4656,6 +4668,21 @@
           tab.id
         );
       }),
+      /* @__PURE__ */ u3(
+        "button",
+        {
+          class: "drawtool-tab-btn",
+          onMouseOver: (e3) => e3.stopPropagation(),
+          onClick: (e3) => {
+            e3.currentTarget.blur();
+            setActiveTab("image");
+            showDrawTool();
+            requestTextMode();
+          },
+          title: "Text stamp",
+          dangerouslySetInnerHTML: { __html: stamp_text_default }
+        }
+      ),
       /* @__PURE__ */ u3(
         "button",
         {
@@ -5166,9 +5193,6 @@
   // src/icons/trash.svg
   var trash_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M3 6h18"/>\n  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>\n  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>\n</svg>';
 
-  // src/icons/stamp-text.svg
-  var stamp_text_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <polyline points="4 7 4 4 20 4 20 7"/>\n  <line x1="9" y1="20" x2="15" y2="20"/>\n  <line x1="12" y1="4" x2="12" y2="20"/>\n</svg>';
-
   // src/icons/settings.svg
   var settings_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>\n  <circle cx="12" cy="12" r="3"/>\n</svg>\n';
 
@@ -5183,7 +5207,7 @@
   var stampCategories = Object.keys(stamps);
   var stopPropagation2 = (e3) => e3.stopPropagation();
   var ImageStampTab = ({ onStampClick, close }) => {
-    const { handleUndo, handleClear, registerKeyDownHandler } = useDrawTool();
+    const { handleUndo, handleClear, registerKeyDownHandler, textModeOnOpen, consumeTextMode } = useDrawTool();
     const { showStampPreview, showTextPreview, updatePreview, state: printOverlayState } = usePrintOverlay();
     const { showHelpOverlay } = useHelpOverlay();
     const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardMode();
@@ -5256,6 +5280,18 @@
         focusTextStampTextareaFnRef.current = null;
       };
     }, []);
+    y2(() => {
+      if (textModeOnOpen) {
+        consumeTextMode();
+        setTextStampModeActive(true);
+        setPenSettingsModeActive(false);
+        setSettingsModeActive(false);
+        requestAnimationFrame(() => {
+          textareaRef.current?.focus();
+          textareaRef.current?.select();
+        });
+      }
+    }, [textModeOnOpen, consumeTextMode]);
     y2(() => {
       const parent = stampsRef.current;
       const draggable = stampsRef.current;

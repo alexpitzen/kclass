@@ -20,6 +20,7 @@ export const DrawToolProvider = ({ children }) => {
     const [activeTab, setActiveTab] = useState('image');
     const [drawToolVisible, setDrawToolVisible] = useState(false);
     const [penOverlayVisible, setPenOverlayVisible] = useState(false);
+    const [textModeOnOpen, setTextModeOnOpen] = useState(false);
     const keyDownHandlersRef = useRef({});
     const penOverlayKeyDownRef = useRef(null);
 
@@ -33,6 +34,8 @@ export const DrawToolProvider = ({ children }) => {
         updateStampLibFromPenSettings();
     }, []);
     const hidePenOverlay = useCallback(() => setPenOverlayVisible(false), []);
+    const requestTextMode = useCallback(() => setTextModeOnOpen(true), []);
+    const consumeTextMode = useCallback(() => setTextModeOnOpen(false), []);
 
     const registerKeyDownHandler = useCallback((tabType, handler) => {
         keyDownHandlersRef.current[tabType] = handler;
@@ -75,6 +78,9 @@ export const DrawToolProvider = ({ children }) => {
         penOverlayVisible,
         showPenOverlay,
         hidePenOverlay,
+        textModeOnOpen,
+        requestTextMode,
+        consumeTextMode,
         handleUndo,
         handleClear,
         registerKeyDownHandler,
@@ -89,6 +95,9 @@ export const DrawToolProvider = ({ children }) => {
         penOverlayVisible,
         showPenOverlay,
         hidePenOverlay,
+        textModeOnOpen,
+        requestTextMode,
+        consumeTextMode,
         handleUndo,
         handleClear,
         registerKeyDownHandler,

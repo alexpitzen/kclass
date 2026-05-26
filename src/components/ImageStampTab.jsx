@@ -25,7 +25,7 @@ const stampCategories = Object.keys(stamps);
 const stopPropagation = (e) => e.stopPropagation();
 
 export const ImageStampTab = ({ onStampClick, close }) => {
-    const { handleUndo, handleClear, registerKeyDownHandler } = useDrawTool();
+    const { handleUndo, handleClear, registerKeyDownHandler, textModeOnOpen, consumeTextMode } = useDrawTool();
      const { showStampPreview, showTextPreview, updatePreview, state: printOverlayState } = usePrintOverlay();
     const { showHelpOverlay } = useHelpOverlay();
     const { keyboardModeEnabled, setKeyboardModeEnabled } = useKeyboardModeContext();
@@ -101,6 +101,19 @@ export const ImageStampTab = ({ onStampClick, close }) => {
             focusTextStampTextareaFnRef.current = null;
         };
     }, []);
+
+    useEffect(() => {
+        if (textModeOnOpen) {
+            consumeTextMode();
+            setTextStampModeActive(true);
+            setPenSettingsModeActive(false);
+            setSettingsModeActive(false);
+            requestAnimationFrame(() => {
+                textareaRef.current?.focus();
+                textareaRef.current?.select();
+            });
+        }
+    }, [textModeOnOpen, consumeTextMode]);
 
     useEffect(() => {
         const parent = stampsRef.current;
