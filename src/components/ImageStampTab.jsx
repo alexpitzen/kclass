@@ -430,13 +430,15 @@ export const ImageStampTab = ({ onStampClick, close }) => {
                         {(isRainbow || isRainbowFill) && (
                             <div class={styles.controlGroup}>
                                 <label>Rainbow Speed</label>
-                                <input
-                                    type="range"
-                                    min={speedMin}
-                                    max={speedMax}
-                                    value={speedValue}
-                                    onChange={handleSpeedChange}
-                                />
+                                <div class={styles.controlRow}>
+                                    <input
+                                        type="range"
+                                        min={speedMin}
+                                        max={speedMax}
+                                        value={speedValue}
+                                        onChange={handleSpeedChange}
+                                    />
+                                </div>
                             </div>
                         )}
                     </div>

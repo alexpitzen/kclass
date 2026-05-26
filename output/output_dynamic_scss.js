@@ -5595,7 +5595,7 @@
             ] }),
             (isRainbow || isRainbowFill) && /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlGroup, children: [
               /* @__PURE__ */ u3("label", { children: "Rainbow Speed" }),
-              /* @__PURE__ */ u3(
+              /* @__PURE__ */ u3("div", { class: ImageStampTab_default.controlRow, children: /* @__PURE__ */ u3(
                 "input",
                 {
                   type: "range",
@@ -5604,7 +5604,7 @@
                   value: speedValue,
                   onChange: handleSpeedChange
                 }
-              )
+              ) })
             ] })
           ] }),
           /* @__PURE__ */ u3("div", { class: ImageStampTab_default.buttons, children: [
@@ -8204,16 +8204,6 @@ body:has(app-atx0010p) .loginAssistantsList {
   font-weight: 500;
 }
 .ImageStampTab_controlRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.ImageStampTab_controlRow span {
-  font-size: 11px;
-  font-weight: 500;
-  color: #333;
-  min-width: 32px;
-  text-align: right;
 }
 .ImageStampTab_controlGroup input[type=range] {
   -webkit-appearance: none;
