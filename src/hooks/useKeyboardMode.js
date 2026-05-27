@@ -3,7 +3,7 @@ import { DOWN, UP, LEFT, RIGHT } from '../helpers/constants.js';
 import { goLastPage, goNextCorrectionPage, goPrevCorrectionPage } from '../helpers/navigation.js';
 import { doEnter, doEscape, doBackspace, clearSearch, focusSearch, selectEraser, getPlaybackControl, doP, doS, do2, do8, isPulldownOpen, matchPreviousMarkings, clearMarkboxs, clickReading, clickMath, doKeyboardDefault, showHeader, toggleHeader, doDown, doUp, xAll } from '../helpers/actions.js';
 import { doMarkingListJK, doMarkingListHL } from '../helpers/marking.js';
-import { scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sideScrollProgressChart, scrollScore, stopScrolling, startScrolling, isProgressChartFloating } from '../helpers/scrolling.js';
+import { scrollStudentList, scrollStudents, scrollAnswer, scrollDashboard, scrollProgressChart, sideScrollProgressChart, scrollScore, stopScrolling, startScrolling, isProgressChartFloating } from '../helpers/scrolling.js';
 import { useTimestamp } from '../context/AppContext.jsx';
 import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
@@ -70,8 +70,8 @@ const handleStudentListKey = (e, fns) => {
             break;
         case "c": clearSearch?.(); break;
         case "M": document.querySelector(".markingList.tabItem")?.click(); break;
-        case "J": scrollStudents?.(DOWN); break;
-        case "K": scrollStudents?.(UP); break;
+        case "J": scrollStudentList?.(DOWN); break;
+        case "K": scrollStudentList?.(UP); break;
         case "r": document.querySelector(".studentListUpdateButton")?.click(); break;
     }
 };

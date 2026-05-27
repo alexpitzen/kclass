@@ -7,6 +7,10 @@ let pageScrollingItem = null;
 let pageScrollingStartPos = 0;
 let pageScrollingStartTime = undefined;
 
+function scrollStudentList(direction) {
+    startScrolling(direction, "cdk-virtual-scroll-viewport");
+}
+
 function scrollStudents(direction) {
     startScrolling(direction, ".studentList:not(.tabItem)");
 }
@@ -118,6 +122,7 @@ function pointerScroll(parent, draggable) {
 }
 
 export {
+    scrollStudentList,
     scrollStudents,
     scrollAnswer,
     scrollDashboard,

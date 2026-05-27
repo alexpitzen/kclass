@@ -5090,6 +5090,9 @@
   var pageScrollingItem = null;
   var pageScrollingStartPos = 0;
   var pageScrollingStartTime = void 0;
+  function scrollStudentList(direction) {
+    startScrolling(direction, "cdk-virtual-scroll-viewport");
+  }
   function scrollStudents(direction) {
     startScrolling(direction, ".studentList:not(.tabItem)");
   }
@@ -6286,10 +6289,10 @@
         document.querySelector(".markingList.tabItem")?.click();
         break;
       case "J":
-        scrollStudents?.(DOWN);
+        scrollStudentList?.(DOWN);
         break;
       case "K":
-        scrollStudents?.(UP);
+        scrollStudentList?.(UP);
         break;
       case "r":
         document.querySelector(".studentListUpdateButton")?.click();
