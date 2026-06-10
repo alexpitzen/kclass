@@ -340,6 +340,21 @@ export const useKeyboardMode = (enabled) => {
                     }
                 } else if (e.key === "t") {
                     setTimestampEnabled((prev) => !prev);
+                } else if (e.key == "m") {
+                    // Secret memory leak fix
+                    let ctx = document.querySelector("app-grading-header").__ngContext__;
+                    for (let i = ctx.length - 1; i >= 0; i--) {
+                        if (ctx[i]?.keybordAnswerService !== undefined) {
+                            let observers = ctx[i].keybordAnswerService.subject.observers;
+                            while (observers.length > 0) {
+                                observers.pop();
+                            }
+                            break;
+                        }
+                    }
+                    while (InkTool.InkCanvasLib.InkData.Note.pageList.length > 0) {
+                        InkTool.InkCanvasLib.InkData.Note.pageList.pop();
+                    }
                 }
                 return;
             }

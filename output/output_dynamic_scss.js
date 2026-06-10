@@ -6627,6 +6627,20 @@
             }
           } else if (e3.key === "t") {
             setTimestampEnabled((prev) => !prev);
+          } else if (e3.key == "m") {
+            let ctx = document.querySelector("app-grading-header").__ngContext__;
+            for (let i4 = ctx.length - 1; i4 >= 0; i4--) {
+              if (ctx[i4]?.keybordAnswerService !== void 0) {
+                let observers = ctx[i4].keybordAnswerService.subject.observers;
+                while (observers.length > 0) {
+                  observers.pop();
+                }
+                break;
+              }
+            }
+            while (InkTool.InkCanvasLib.InkData.Note.pageList.length > 0) {
+              InkTool.InkCanvasLib.InkData.Note.pageList.pop();
+            }
           }
           return;
         }
