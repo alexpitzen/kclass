@@ -53,7 +53,7 @@ export const DiffViewOverlayProvider = ({ children }) => {
             const lastStroke = new Date(is[is.length - 1].cs[0].t);
             if (lastStroke < gradingStartTime) {
             } else {
-                firstMarkAfterGrading.current = is.findIndex(i => i.cs[0].t > gradingStartTimeMs);
+                firstMarkAfterGrading.current = is.findIndex(i => (i.cs.length && i.cs[0].t > gradingStartTimeMs));
                 // Make eraser marks visible
                 if (firstMarkAfterGrading.current > -1) {
                     is.slice(firstMarkAfterGrading.current).forEach(i => {
@@ -124,7 +124,7 @@ export const DiffViewOverlayProvider = ({ children }) => {
             const lastStroke = new Date(is[is.length - 1].cs[0].t);
             if (lastStroke < gradingStartTime) {
             } else {
-                firstMarkAfterGrading.current = is.findIndex(i => i.cs[0].t > gradingStartTimeMs);
+                firstMarkAfterGrading.current = is.findIndex(i => (i.cs.length && i.cs[0].t > gradingStartTimeMs));
                 drawing.is = is.slice(0, firstMarkAfterGrading.current);
                 atd.current.redrawCurrentLayerByInk();
             }

@@ -4006,7 +4006,7 @@
         const lastStroke = new Date(is[is.length - 1].cs[0].t);
         if (lastStroke < gradingStartTime) {
         } else {
-          firstMarkAfterGrading.current = is.findIndex((i4) => i4.cs[0].t > gradingStartTimeMs);
+          firstMarkAfterGrading.current = is.findIndex((i4) => i4.cs.length && i4.cs[0].t > gradingStartTimeMs);
           if (firstMarkAfterGrading.current > -1) {
             is.slice(firstMarkAfterGrading.current).forEach((i4) => {
               if (i4.st.tp == 203 && i4.st.oldType == 3) {
@@ -4065,7 +4065,7 @@
         const lastStroke = new Date(is[is.length - 1].cs[0].t);
         if (lastStroke < gradingStartTime) {
         } else {
-          firstMarkAfterGrading.current = is.findIndex((i4) => i4.cs[0].t > gradingStartTimeMs);
+          firstMarkAfterGrading.current = is.findIndex((i4) => i4.cs.length && i4.cs[0].t > gradingStartTimeMs);
           drawing.is = is.slice(0, firstMarkAfterGrading.current);
           atd.current.redrawCurrentLayerByInk();
         }
