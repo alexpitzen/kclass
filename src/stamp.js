@@ -2230,6 +2230,7 @@
                 axolotlWizardBlue,
                 axolotlWizardBlueSimplified,
                 capybaraBoba,
+                capybaraBobaHat,
                 adelineCatGreatJob,
                 adelineStar,
                 karthikaBootifulWorkGhost,
@@ -2349,6 +2350,7 @@
                 axolotlWizardBlue,
                 axolotlWizardBlueSimplified,
                 capybaraBoba,
+                capybaraBobaHat,
             ],
             "Student-drawn": [
                 adelineCatGreatJob,
@@ -2386,6 +2388,7 @@
                 halloweenCuteCatHat,
                 halloweenCuteCatHat3,
                 halloweenCuteCatHat2,
+                capybaraBobaHat,
                 faboolousWork,
                 bootifulWork,
                 zombie,

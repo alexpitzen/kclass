@@ -50,10 +50,11 @@ export const DiffViewOverlayProvider = ({ children }) => {
         atd.current = StampLib.getStudentAtd();
         const is = atd.current.currentDrawing.is;
         if (is.length > 0) {
-            const lastStroke = new Date(is[is.length - 1].cs[0].t);
+            const lastIs = is[is.length - 1];
+            const lastStroke = new Date((lastIs.cs[0] ?? lastIs).t);
             if (lastStroke < gradingStartTime) {
             } else {
-                firstMarkAfterGrading.current = is.findIndex(i => (i.cs.length && i.cs[0].t > gradingStartTimeMs));
+                firstMarkAfterGrading.current = is.findIndex(i => ((i.cs[0] ?? i).t > gradingStartTimeMs));
                 // Make eraser marks visible
                 if (firstMarkAfterGrading.current > -1) {
                     is.slice(firstMarkAfterGrading.current).forEach(i => {
@@ -121,10 +122,11 @@ export const DiffViewOverlayProvider = ({ children }) => {
         const is = drawing.is;
         savedStrokes.current = is;
         if (is.length > 0) {
-            const lastStroke = new Date(is[is.length - 1].cs[0].t);
+            const lastIs = is[is.length - 1];
+            const lastStroke = new Date((lastIs.cs[0] ?? lastIs).t);
             if (lastStroke < gradingStartTime) {
             } else {
-                firstMarkAfterGrading.current = is.findIndex(i => (i.cs.length && i.cs[0].t > gradingStartTimeMs));
+                firstMarkAfterGrading.current = is.findIndex(i => ((i.cs[0] ?? i).t > gradingStartTimeMs));
                 drawing.is = is.slice(0, firstMarkAfterGrading.current);
                 atd.current.redrawCurrentLayerByInk();
             }
