@@ -2251,6 +2251,7 @@
                 aarnaPrincess,
                 sofiaBunny,
                 sofiaCat,
+                penelopeRainbow,
                 faboolousWork,
                 bootifulWork,
                 zombie,
@@ -2374,6 +2375,7 @@
                 aarnaPrincess,
                 sofiaBunny,
                 sofiaCat,
+                penelopeRainbow,
             ],
             "Christmas": [
                 christmasCat,
