@@ -3,20 +3,16 @@ export const LoginAssistantsList = () => {
 
     const logins = [
         { id: 1, name: 'Dhanya' },
-        { id: 2, name: 'Gowri' },
-        { id: 3, name: 'Gautham' },
         { id: 4, name: 'Alex' },
         { id: 5, name: 'Ibrahim' },
-        { id: 6, name: 'Neethi' },
-        { id: 7, name: 'Ridhima' },
         { id: 8, name: 'Samarth' },
-        { id: 10, name: 'Vaishnavi' },
         { id: 12, name: 'Nainika' },
         { id: 13, name: 'Arsheen' },
-        { id: 14, name: 'Parthini' },
         { id: 15, name: 'Parvathy' },
         { id: 16, name: 'Yen' },
-        { id: 17, name: 'Priya' },
+        { id: 18, name: 'Saniya' },
+        { id: 19, name: 'Shivansh' },
+        { id: 20, name: 'Jerry' },
     ];
 
     return (
