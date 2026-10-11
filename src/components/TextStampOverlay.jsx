@@ -151,6 +151,9 @@ export const TextStampOverlayProvider = ({ children }) => {
 const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove, registerTextarea, autoDrag }) => {
     const boxRef = useRef(null);
     const textareaRef = useRef(null);
+    const titlebarRef = useRef(null);
+    const moveStripRef = useRef(null);
+    const bottomMoveStripRef = useRef(null);
 
     useLayoutEffect(() => {
         const boxEl = boxRef.current;
@@ -168,6 +171,23 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
             onUpdate(box.id, { height: target });
         }
     }, [box.text, box.fontSize, box.width, box.id, onUpdate]);
+
+    useEffect(() => {
+        let elements = [titlebarRef, moveStripRef, bottomMoveStripRef];
+        touchHandler = (e) => {
+            if (e.touches.length === 1) {
+                e.preventDefault();
+            }
+        };
+        elements.forEach((el) => {
+            el.current.addEventListener("touchstart", touchHandler, { passive: false });
+        });
+        return () => {
+            elements.forEach((el) => {
+                el.current.removeEventListener("touchstart", touchHandler);
+            })
+        };
+    }, []);
 
     useEffect(() => {
         if (!selected) {
@@ -273,6 +293,7 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
             <div
                 class={styles.titlebar}
                 style={{ backgroundColor: hexToRgba(singleColor, 0.2) }}
+                ref={titlebarRef}
                 onPointerDown={startDrag}
                 onMouseOver={stopPropagation}
             >
@@ -320,11 +341,13 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
             <div
                 class={styles.moveStrip}
                 style={{ backgroundColor: hexToRgba(singleColor, 0.2) }}
+                ref={moveStripRef}
                 onPointerDown={startDrag}
                 onMouseOver={stopPropagation}
             />
             <div
                 class={styles.bottomMoveStrip}
+                ref={bottomMoveStripRef}
                 onPointerDown={startDrag}
                 onMouseOver={stopPropagation}
             />
