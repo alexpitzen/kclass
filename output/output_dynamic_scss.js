@@ -1159,7 +1159,9 @@
 
         let pointer = InkTool.InkCanvasLib.PointerTraceList[0];
 
-        const charWidth = getPreciseMonospaceCharWidth(fontSize) / atd.drawingContext.zoomRatio;
+        // atd.drawingContext.zoomRatio is wrong when we have HD enabled
+        const zoomRatio = atd.bcanvas.clientHeight / atd.inkHeight;
+        const charWidth = getPreciseMonospaceCharWidth(fontSize) / zoomRatio;
 
         let skippedChars = new Set();
 
@@ -1267,7 +1269,9 @@
             atd.pen.col.A = previousAlpha;
             atd.pen.w = previousWidth;
         }
-        return {width: maxwidth * atd.drawingContext.zoomRatio, height: height * atd.drawingContext.zoomRatio};
+        // atd.drawingContext.zoomRatio is wrong when we have HD enabled
+        const zoomRatio = atd.bcanvas.clientHeight / atd.inkHeight;
+        return {width: maxwidth * zoomRatio, height: height * zoomRatio};
     }
 
     function getWriteAllDimensions(text, scale) {
