@@ -151,9 +151,7 @@ export const TextStampOverlayProvider = ({ children }) => {
 const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove, registerTextarea, autoDrag }) => {
     const boxRef = useRef(null);
     const textareaRef = useRef(null);
-    const titlebarRef = useRef(null);
-    const moveStripRef = useRef(null);
-    const bottomMoveStripRef = useRef(null);
+    const handleRefs = useRef([]);
 
     useLayoutEffect(() => {
         const boxEl = boxRef.current;
@@ -179,13 +177,12 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
     };
 
     useEffect(() => {
-        let elements = [titlebarRef, moveStripRef, bottomMoveStripRef];
-        elements.forEach((el) => {
-            el.current.addEventListener("touchstart", touchPreventDefaultHandler, { passive: false });
+        handleRefs.current.forEach((el) => {
+            el.addEventListener("touchstart", touchPreventDefaultHandler, { passive: false });
         });
         return () => {
-            elements.forEach((el) => {
-                el.current.removeEventListener("touchstart", touchPreventDefaultHandler);
+            handleRefs.current.forEach((el) => {
+                el.removeEventListener("touchstart", touchPreventDefaultHandler);
             })
         };
     }, []);
@@ -296,7 +293,9 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
             <div
                 class={styles.titlebar}
                 style={{ backgroundColor: hexToRgba(singleColor, 0.2) }}
-                ref={titlebarRef}
+                ref={(el) => {
+                    handleRefs.current.push(el);
+                }}
                 onPointerDown={startDrag}
                 onMouseOver={stopPropagation}
             >
@@ -327,6 +326,7 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
                     textareaRef.current = el;
                     registerTextarea?.(el);
                 }}
+                id={`textOverlayTextArea${box.id}`}
                 class={styles.textarea}
                 value={box.text}
                 style={{
@@ -344,19 +344,26 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
             <div
                 class={styles.moveStrip}
                 style={{ backgroundColor: hexToRgba(singleColor, 0.2) }}
-                ref={moveStripRef}
+                ref={(el) => {
+                    handleRefs.current.push(el);
+                }}
                 onPointerDown={startDrag}
                 onMouseOver={stopPropagation}
             />
             <div
                 class={styles.bottomMoveStrip}
-                ref={bottomMoveStripRef}
+                ref={(el) => {
+                    handleRefs.current.push(el);
+                }}
                 onPointerDown={startDrag}
                 onMouseOver={stopPropagation}
             />
             {HANDLE_DIRS.map((dir) => (
                 <div
                     key={dir}
+                    ref={(el) => {
+                        handleRefs.current.push(el);
+                    }}
                     class={`${styles.handle} ${styles[`handle${dir.toUpperCase()}`]}`}
                     onPointerDown={(e) => startResize(e, dir)}
                     onMouseOver={stopPropagation}

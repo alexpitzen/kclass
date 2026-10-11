@@ -4827,9 +4827,7 @@
   var TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove, registerTextarea, autoDrag }) => {
     const boxRef = A2(null);
     const textareaRef = A2(null);
-    const titlebarRef = A2(null);
-    const moveStripRef = A2(null);
-    const bottomMoveStripRef = A2(null);
+    const handleRefs = A2([]);
     _2(() => {
       const boxEl = boxRef.current;
       const el = textareaRef.current;
@@ -4853,13 +4851,12 @@
       }
     };
     y2(() => {
-      let elements = [titlebarRef, moveStripRef, bottomMoveStripRef];
-      elements.forEach((el) => {
-        el.current.addEventListener("touchstart", touchPreventDefaultHandler, { passive: false });
+      handleRefs.current.forEach((el) => {
+        el.addEventListener("touchstart", touchPreventDefaultHandler, { passive: false });
       });
       return () => {
-        elements.forEach((el) => {
-          el.current.removeEventListener("touchstart", touchPreventDefaultHandler);
+        handleRefs.current.forEach((el) => {
+          el.removeEventListener("touchstart", touchPreventDefaultHandler);
         });
       };
     }, []);
@@ -4969,7 +4966,9 @@
             {
               class: TextStampOverlay_default.titlebar,
               style: { backgroundColor: hexToRgba(singleColor, 0.2) },
-              ref: titlebarRef,
+              ref: (el) => {
+                handleRefs.current.push(el);
+              },
               onPointerDown: startDrag,
               onMouseOver: stopPropagation,
               children: [
@@ -5012,6 +5011,7 @@
                 textareaRef.current = el;
                 registerTextarea?.(el);
               },
+              id: `textOverlayTextArea${box.id}`,
               class: TextStampOverlay_default.textarea,
               value: box.text,
               style: {
@@ -5032,7 +5032,9 @@
             {
               class: TextStampOverlay_default.moveStrip,
               style: { backgroundColor: hexToRgba(singleColor, 0.2) },
-              ref: moveStripRef,
+              ref: (el) => {
+                handleRefs.current.push(el);
+              },
               onPointerDown: startDrag,
               onMouseOver: stopPropagation
             }
@@ -5041,7 +5043,9 @@
             "div",
             {
               class: TextStampOverlay_default.bottomMoveStrip,
-              ref: bottomMoveStripRef,
+              ref: (el) => {
+                handleRefs.current.push(el);
+              },
               onPointerDown: startDrag,
               onMouseOver: stopPropagation
             }
@@ -5049,6 +5053,9 @@
           HANDLE_DIRS.map((dir) => /* @__PURE__ */ u3(
             "div",
             {
+              ref: (el) => {
+                handleRefs.current.push(el);
+              },
               class: `${TextStampOverlay_default.handle} ${TextStampOverlay_default[`handle${dir.toUpperCase()}`]}`,
               onPointerDown: (e3) => startResize(e3, dir),
               onMouseOver: stopPropagation
@@ -8788,6 +8795,7 @@ body:has(app-atx0010p) .loginAssistantsList {
   color: #333;
   font-size: 14px;
   cursor: pointer;
+  touch-action: auto;
 }
 .TextStampOverlay_overlayBtn span {
   display: flex;
@@ -8866,6 +8874,7 @@ body:has(app-atx0010p) .loginAssistantsList {
   cursor: pointer;
   padding: 0;
   margin-left: auto;
+  touch-action: auto;
 }
 .TextStampOverlay_deleteBtn span {
   display: flex;
