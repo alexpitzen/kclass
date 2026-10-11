@@ -7,6 +7,7 @@ import { useTimestamp } from '../context/AppContext.jsx';
 import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
 import { useStampSettings } from '../context/StampSettingsContext.jsx';
+import { useTextStampOverlay } from './TextStampOverlay.jsx';
 import { getActivePresetId, getColoredPenIcon } from '../helpers/penPresets.js';
 import stampIcon from '../icons/stamp4.svg';
 import stampTextIcon from '../icons/stamp-text.svg';
@@ -15,10 +16,11 @@ export const CustomToolbar = () => {
     const [shifted, setShifted] = useState(false);
     const { timestampEnabled } = useTimestamp();
     const { timestamp, colorClass } = useTimestampDisplay(timestampEnabled);
-    const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible, requestTextMode } = useDrawTool();
+    const { activeTab, setActiveTab, drawToolTabs, showDrawTool, hideDrawTool, drawToolVisible } = useDrawTool();
     const { showPenOverlay } = useDrawTool();
     const { eraserEnabled, penWidth, penAlpha } = usePenSettings();
     const { singleColor } = useStampSettings();
+    const { showTextStampOverlay } = useTextStampOverlay();
     const activePresetId = getActivePresetId(eraserEnabled, penWidth, penAlpha);
     const currentPenIcon = activePresetId
         ? getColoredPenIcon(activePresetId, singleColor)
@@ -101,9 +103,7 @@ export const CustomToolbar = () => {
                 onMouseOver={(e) => e.stopPropagation()}
                 onClick={(e) => {
                     e.currentTarget.blur();
-                    setActiveTab('image');
-                    showDrawTool();
-                    requestTextMode();
+                    showTextStampOverlay();
                 }}
                 title="Text stamp"
                 dangerouslySetInnerHTML={{ __html: stampTextIcon }}

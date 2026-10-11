@@ -48,6 +48,24 @@
         }
     }
 
+    class FixedWidthLetter extends DrawThing {
+        constructor(character, strokes, lineheight, baselineheight, currentOffset) {
+            super();
+            this.character = character;
+            this.strokes = strokes;
+            this.lineheight = lineheight;
+            this.baselineheight = baselineheight;
+
+            for (let stroke of strokes) {
+                for (let lines of stroke.lines) {
+                    for (let line of lines) {
+                        line.translate(-currentOffset, -baselineheight);
+                    }
+                }
+            }
+        }
+    }
+
     class SpriteSheetLetter extends DrawThing {
         constructor(character, strokes, lineheight, baselineheight) {
             super();
@@ -1084,6 +1102,88 @@
         return penScale;
     }
 
+    function getPreciseMonospaceCharWidth(fontSize) {
+        const span = document.createElement('span');
+
+        span.style.position = 'absolute';
+        span.style.visibility = 'hidden';
+        span.style.whiteSpace = 'pre';
+
+        span.style.fontFamily = "Hack";
+        span.style.fontSize = `${fontSize}px`;
+
+        const testString = 'X'.repeat(100);
+        span.textContent = testString;
+
+        document.body.appendChild(span);
+
+        const totalWidth = span.getBoundingClientRect().width;
+
+        document.body.removeChild(span);
+
+        return totalWidth / testString.length;
+    }
+
+    function writeMonoText(text, pos, fontSize, lineHeight, maxWidth, options) {
+        let color = options.color || "#ff2200",
+            alpha = options.alpha || 255,
+            width = options.width || 2;
+
+        let original_pos = {x: pos.x, y: pos.y};
+        let current_pos = {x: pos.x, y: pos.y};
+        let atd = getAtd();
+        let currentDrawIndex = atd.countDrawItems();
+        let currentOperateBufferIndex = atd.operateBuffer.countDrawItems();
+        newDrawCounter = 0;
+
+        setPenColorHex(color);
+        let previousAlpha = atd.pen.col.A;
+        let previousWidth = atd.pen.w;
+
+        atd.pen.col.A = alpha;
+        atd.pen.w = width;
+
+        let pointer = InkTool.InkCanvasLib.PointerTraceList[0];
+
+        const charWidth = getPreciseMonospaceCharWidth(fontSize) / atd.drawingContext.zoomRatio;
+
+        let skippedChars = new Set();
+
+        let maxPos = original_pos.x + maxWidth;
+
+        for (let c of text) {
+            if (c == " ") {
+                current_pos.x += charWidth;
+                continue;
+            }
+            if (c == "\n" || current_pos.x + charWidth > maxPos) {
+                current_pos.x = original_pos.x;
+                current_pos.y += lineHeight;
+                if (c == "\n") continue;
+            }
+            let letter = HACK_FONT[c];
+            if (typeof letter !== "undefined") {
+                // TODO: character width ?
+                writeAt(letter, current_pos, lineHeight / letter.lineheight, atd, pointer, {});
+            } else {
+                skippedChars.add(c);
+            }
+            current_pos.x += charWidth;
+        }
+        saveDrawing(atd, pointer);
+        if (!(atd in writeStrokes)) {
+            writeStrokes[atd] = []
+        }
+        if (!(atd in operateBufferStrokes)) {
+            operateBufferStrokes[atd] = []
+        }
+        writeStrokes[atd].push({startIndex: currentDrawIndex, numLines: newDrawCounter});
+        operateBufferStrokes[atd].push({startIndex: currentOperateBufferIndex, numLines: newDrawCounter + 2});
+        atd.pen.col.A = previousAlpha;
+        atd.pen.w = previousWidth;
+        console.log(`**** Skipped characters: ${Array.from(skippedChars)}`);
+    }
+
     function writeAllAt(text, pos, scale, options, dryRun = false) {
         let color = options.color || "#ff2200",
             alpha = options.alpha || 255,
@@ -1825,6 +1925,21 @@
 
     //wip();
 
+    function parseFixedWidthFont(xmlstring, lineheight, fixedWidth) {
+        let doc = new DOMParser().parseFromString(xmlstring, "application/xml");
+        let svgElem = doc.querySelector("svg");
+        let width = parseInt(svgElem.getAttribute("width").replaceAll(/[^0-9.]/g, ""));
+        let height = parseInt(svgElem.getAttribute("height").replaceAll(/[^0-9.]/g, ""));
+        if (!svgElem.hasAttribute("viewBox")) {
+            svgElem.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        }
+        let characters = {};
+        for (let child of svgElem.children) {
+            parseFontChild(child, characters, lineheight, [], 0, fixedWidth);
+        }
+        return characters;
+    }
+
     //base1: 34 height
     //base2: 32.5 height
     //base3: 31 height
@@ -1845,7 +1960,7 @@
         return characters;
     }
 
-    function parseFontChild(element, characters, lineheight, transform = [], baselineheight = 0) {
+    function parseFontChild(element, characters, lineheight, transform = [], baselineheight = 0, fixedWidth = 0, currentOffset = 0) {
         switch (element.nodeName) {
             case "path":
                 let char = element.getAttribute("inkscape:label");
@@ -1853,7 +1968,11 @@
                     return;
                 }
                 let strokes = parsePath(element, transform);
-                characters[char] = new SpriteSheetLetter(char, strokes, lineheight, baselineheight);
+                if (fixedWidth == 0) {
+                    characters[char] = new SpriteSheetLetter(char, strokes, lineheight, baselineheight);
+                } else {
+                    characters[char] = new FixedWidthLetter(char, strokes, lineheight, baselineheight, currentOffset);
+                }
                 return;
             case "g":
                 let newTransforms = element.getAttribute("transform") || "";
@@ -1872,7 +1991,8 @@
                     break;
                 }
                 for (let child of element.children) {
-                    parseFontChild(child, characters, lineheight, transform, baselineheight);
+                    parseFontChild(child, characters, lineheight, transform, baselineheight, fixedWidth, currentOffset);
+                    currentOffset += fixedWidth;
                 }
                 return;
             default:
@@ -2140,8 +2260,10 @@
 
     // {#- comment combination to fool lsp into thinking the first block is uncommented, but the second block is actually the real code
     const HELVETICANT = parseFont("");
+    const HACK_FONT = parseFont("");
     /* #}
     const HELVETICANT = parseFont(`{{ helveticant }}`);
+    const HACK_FONT = parseFixedWidthFont(`{{ hack_font }}`, 41, 21.41);
     //*/
 
     // {#- comment combination to fool lsp into thinking the next block is commented
@@ -2156,6 +2278,7 @@
         getStudentAtd: getStudentAtd,
         getStudentDrawing: getStudentDrawing,
         writeAllAt: writeAllAt,
+        writeMonoText: writeMonoText,
         undoLastWriteAll: undoLastWriteAll,
         clearPage: clearPage,
         setPenColorHex: setPenColorHex,
@@ -2251,7 +2374,9 @@
                 aarnaPrincess,
                 sofiaBunny,
                 sofiaCat,
+                sofiaNewCat,
                 penelopeRainbow,
+                anikaGoodJob,
                 faboolousWork,
                 bootifulWork,
                 zombie,
@@ -2375,7 +2500,9 @@
                 aarnaPrincess,
                 sofiaBunny,
                 sofiaCat,
+                sofiaNewCat,
                 penelopeRainbow,
+                anikaGoodJob,
             ],
             "Christmas": [
                 christmasCat,
@@ -2428,6 +2555,7 @@
             DrawStamp: DrawStamp,
             LETTERS: LETTERS,
             HELVETICANT: HELVETICANT,
+            HACK_FONT: HACK_FONT,
             getWriteStrokes: function() {return writeStrokes;},
             getOperateBufferStrokes: function() {return operateBufferStrokes;},
             getNewDrawCounter: function() {return newDrawCounter;},

@@ -6,6 +6,7 @@ import { DiffViewOverlay } from './components/DiffViewOverlay.jsx';
 import { HelpOverlay } from './components/HelpOverlay.jsx';
 import { DrawToolOverlay } from './components/DrawToolOverlay.jsx';
 import { PenOverlay } from './components/PenOverlay.jsx';
+import { TextStampOverlay } from './components/TextStampOverlay.jsx';
 import { LoginAssistantsList, RefreshButton } from './components/Misc.jsx';
 import { useAutoPen } from './hooks/useAutoPen.js';
 import { useMarkboxKeys } from './hooks/useMarkboxKeys.js';
@@ -27,6 +28,7 @@ const PageChangeManager = () => {
 const App = () => {
     return (
         <>
+            <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack-subset.css' />
             <AppProvider>
                 <CustomToolbar />
                 <PageChangeManager />
@@ -37,6 +39,7 @@ const App = () => {
                 <HelpOverlay />
                 <DrawToolOverlay />
                 <PenOverlay />
+                <TextStampOverlay />
             </AppProvider>
         </>
     );

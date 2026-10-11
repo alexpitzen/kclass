@@ -1,0 +1,198 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+}
+
+.overlayBtns {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    gap: 8px;
+    z-index: 3;
+}
+
+.overlayBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.overlayBtn span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.overlayBtn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.overlayBtn:hover {
+    background: #ffffff;
+}
+
+.box {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    border: 2px solid rgba(0, 0, 0, 0.35);
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
+    min-width: 60px;
+    touch-action: none;
+    z-index: 1;
+}
+
+.box.selected {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4), 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.titlebar {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 1px 3px;
+    background: rgba(0, 0, 0, 0.85);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px 4px 0 0;
+    cursor: move;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 3;
+}
+
+.sizeSlider {
+    flex: none;
+    width: 100px;
+    min-width: 0;
+    height: 12px;
+    margin: 0;
+    margin-left: 30px;
+    cursor: pointer;
+    accent-color: #3b82f6;
+}
+
+.sizeReadout {
+    min-width: 20px;
+    text-align: center;
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.9);
+    font-variant-numeric: tabular-nums;
+}
+
+.deleteBtn {
+    width: 14px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 2px;
+    background: #fff;
+    color: #c0392b;
+    cursor: pointer;
+    padding: 0;
+    margin-left: auto;
+}
+
+.deleteBtn span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deleteBtn svg {
+    width: 8px;
+    height: 8px;
+}
+
+.deleteBtn:hover {
+    background: #fdecea;
+}
+
+.textarea {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    border: none;
+    outline: none;
+    resize: none;
+    padding: 6px;
+    box-sizing: border-box;
+    background: transparent;
+    font-family: inherit;
+    overflow: auto;
+    color: #000;
+    overflow: hidden;
+    font-family: 'Hack';
+}
+
+.textarea::placeholder {
+    color: var(--ts-placeholder-color, #999);
+}
+
+.moveStrip {
+    position: absolute;
+    top: 15px;
+    bottom: 2px;
+    right: 5px;
+    width: 9px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 2px;
+    cursor: move;
+    touch-action: none;
+    z-index: 2;
+}
+
+.bottomMoveStrip {
+    position: absolute;
+    bottom: -4px;
+    left: 8px;
+    right: 8px;
+    height: 8px;
+    cursor: move;
+    touch-action: none;
+    z-index: 2;
+}
+
+.handle {
+    position: absolute;
+    z-index: 2;
+    touch-action: none;
+}
+
+.handleW {
+    left: -4px;
+    top: 15px;
+    bottom: 2px;
+    width: 8px;
+    cursor: ew-resize;
+}
+
+.handleE {
+    right: -4px;
+    top: 15px;
+    bottom: 2px;
+    width: 8px;
+    cursor: ew-resize;
+}

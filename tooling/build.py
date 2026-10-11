@@ -50,6 +50,9 @@ if __name__ == "__main__":
     with open("assets/helveticant.svg", "r") as f:
         helveticant = "".join(f.readlines()).replace("\n", " ")
 
+    with open("assets/hack.svg", "r") as f:
+        hack_font = "".join(f.readlines()).replace("\n", " ").replace("`", "\\`")
+
     templates = jinja2.Environment(loader=jinja2.loaders.FileSystemLoader(["templates", "src"]))
     main_template = templates.get_template("tampermonkey_info.js")
 
@@ -58,6 +61,7 @@ if __name__ == "__main__":
             "stamps": all_stamps,
             "css": get_css(),
             "helveticant": helveticant,
+            "hack_font": hack_font,
         }
     )
 

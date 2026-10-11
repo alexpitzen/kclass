@@ -7,11 +7,12 @@ import { scrollStudentList, scrollStudents, scrollAnswer, scrollDashboard, scrol
 import { useTimestamp } from '../context/AppContext.jsx';
 import { usePenSettings } from '../context/PenSettingsContext.jsx';
 import { useDrawTool } from '../context/DrawToolContext.jsx';
-import { activateTextStampMode, adjustStampSize, getSingleColor } from '../context/StampSettingsContext.jsx';
+import { adjustStampSize, getSingleColor } from '../context/StampSettingsContext.jsx';
 import { PEN_PRESETS, getActivePresetId, setStampLibPenSettings } from '../helpers/penPresets.js';
 import { usePrintOverlay } from '../components/PrintOverlay.jsx';
 import { useDiffViewOverlay } from '../components/DiffViewOverlay.jsx';
 import { useHelpOverlay } from '../components/HelpOverlay.jsx';
+import { useTextStampOverlay } from '../components/TextStampOverlay.jsx';
 
 const handleMarkingListKey = (e, fns) => {
     if (e.repeat) return;
@@ -170,9 +171,7 @@ const handleGradingKey = (e, fns) => {
             fns.showBeforeViewOverlay();
             break;
         case "t":
-            fns.setActiveTab('image');
-            fns.showDrawTool();
-            activateTextStampMode();
+            fns.showTextStampOverlay();
             e.preventDefault();
             break;
         case "h": {
@@ -302,6 +301,7 @@ export const useKeyboardMode = (enabled) => {
     const { hidePreview, updatePreview, state: printOverlayState } = usePrintOverlay();
     const { diffViewOverlayVisible, showDiffViewOverlay, hideDiffViewOverlay, showBeforeViewOverlay, hideBeforeViewOverlay } = useDiffViewOverlay();
     const { helpOverlayVisible, helpOverlayActiveTab, hideHelpOverlay, showHelpOverlay, helpTabs } = useHelpOverlay();
+    const { textStampOverlayVisible, callTextStampKeyDownHandler, showTextStampOverlay } = useTextStampOverlay();
     const fns = {
         setTimestampEnabled,
         diffViewOverlayVisible,
@@ -316,6 +316,7 @@ export const useKeyboardMode = (enabled) => {
         helpTabs,
         showDrawTool,
         setActiveTab,
+        showTextStampOverlay,
         hidePreview,
         penWidth,
         setPenWidth,
@@ -356,6 +357,11 @@ export const useKeyboardMode = (enabled) => {
                         InkTool.InkCanvasLib.InkData.Note.pageList.pop();
                     }
                 }
+                return;
+            }
+
+            if (textStampOverlayVisible) {
+                callTextStampKeyDownHandler(e);
                 return;
             }
 
@@ -474,5 +480,5 @@ export const useKeyboardMode = (enabled) => {
             document.removeEventListener("keydown", handleKeyDown);
             document.removeEventListener("keyup", handleKeyUp);
         };
-    }, [enabled, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview, penWidth, penAlpha, eraserEnabled, penOverlayVisible]);
+    }, [enabled, helpOverlayVisible, helpOverlayActiveTab, drawToolVisible, showDrawTool, hideDrawTool, setActiveTab, printOverlayState.visible, hidePreview, penWidth, penAlpha, eraserEnabled, penOverlayVisible, textStampOverlayVisible, callTextStampKeyDownHandler, showTextStampOverlay]);
 };

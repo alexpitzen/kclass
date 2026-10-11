@@ -2,7 +2,7 @@ import { createContext } from 'preact';
 import { useContext, useState, useMemo, useCallback, useEffect } from 'preact/hooks';
 
 const stampSizeRef = { current: 25 };
-const singleColorRef = { current: '#ff2200' };
+const singleColorRef = { current: '#00a321' };
 const stampColorTypeRef = { current: 'Unchanged' };
 const rainbowSpeedRef = { current: 100 };
 const rainbowFillSpeedRef = { current: 20 };

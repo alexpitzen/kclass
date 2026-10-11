@@ -6,6 +6,7 @@ import { HelpOverlayProvider } from '../components/HelpOverlay.jsx';
 import { DrawToolProvider } from './DrawToolContext.jsx';
 import { StampSettingsProvider } from './StampSettingsContext.jsx';
 import { PenSettingsProvider } from './PenSettingsContext.jsx';
+import { TextStampOverlayProvider } from '../components/TextStampOverlay.jsx';
 
 const TimestampContext = createContext(null);
 const HDModeContext = createContext(null);
@@ -60,6 +61,7 @@ export const AppProvider = ({ children }) => {
             <DiffViewOverlayProvider>
                 <HelpOverlayProvider>
                     <DrawToolProvider>
+                        <TextStampOverlayProvider>
                         <StampSettingsProvider>
                             <PenSettingsProvider>
                                 <TimestampProvider>
@@ -71,6 +73,7 @@ export const AppProvider = ({ children }) => {
                                 </TimestampProvider>
                             </PenSettingsProvider>
                         </StampSettingsProvider>
+                        </TextStampOverlayProvider>
                     </DrawToolProvider>
                 </HelpOverlayProvider>
             </DiffViewOverlayProvider>
