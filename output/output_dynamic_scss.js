@@ -8795,7 +8795,7 @@ body:has(app-atx0010p) .loginAssistantsList {
   color: #333;
   font-size: 14px;
   cursor: pointer;
-  touch-action: auto;
+  touch-action: auto !important;
 }
 .TextStampOverlay_overlayBtn span {
   display: flex;
@@ -8874,7 +8874,7 @@ body:has(app-atx0010p) .loginAssistantsList {
   cursor: pointer;
   padding: 0;
   margin-left: auto;
-  touch-action: auto;
+  touch-action: auto !important;
 }
 .TextStampOverlay_deleteBtn span {
   display: flex;
