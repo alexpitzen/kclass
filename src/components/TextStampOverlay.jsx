@@ -172,19 +172,20 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
         }
     }, [box.text, box.fontSize, box.width, box.id, onUpdate]);
 
+    const touchPreventDefaultHandler = (e) => {
+        if (e.touches.length === 1) {
+            e.preventDefault();
+        }
+    };
+
     useEffect(() => {
         let elements = [titlebarRef, moveStripRef, bottomMoveStripRef];
-        touchHandler = (e) => {
-            if (e.touches.length === 1) {
-                e.preventDefault();
-            }
-        };
         elements.forEach((el) => {
-            el.current.addEventListener("touchstart", touchHandler, { passive: false });
+            el.current.addEventListener("touchstart", touchPreventDefaultHandler, { passive: false });
         });
         return () => {
             elements.forEach((el) => {
-                el.current.removeEventListener("touchstart", touchHandler);
+                el.current.removeEventListener("touchstart", touchPreventDefaultHandler);
             })
         };
     }, []);
@@ -218,6 +219,7 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
             });
         };
         const cleanup = (ev) => {
+            document.removeEventListener("touchmove", touchPreventDefaultHandler);
             if (hasAPointerCaptured) {
                 el.releasePointerCapture(ev.pointerId);
             }
@@ -228,6 +230,7 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
         el.addEventListener('pointermove', onMove);
         el.addEventListener('pointerup', cleanup);
         el.addEventListener('pointercancel', cleanup);
+        document.addEventListener("touchmove", touchPreventDefaultHandler, {passive: false});
     }, [box, onSelect, onUpdate]);
 
     useEffect(() => {

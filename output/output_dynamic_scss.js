@@ -4847,19 +4847,19 @@
         onUpdate(box.id, { height: target });
       }
     }, [box.text, box.fontSize, box.width, box.id, onUpdate]);
+    const touchPreventDefaultHandler = (e3) => {
+      if (e3.touches.length === 1) {
+        e3.preventDefault();
+      }
+    };
     y2(() => {
       let elements = [titlebarRef, moveStripRef, bottomMoveStripRef];
-      touchHandler = (e3) => {
-        if (e3.touches.length === 1) {
-          e3.preventDefault();
-        }
-      };
       elements.forEach((el) => {
-        el.current.addEventListener("touchstart", touchHandler, { passive: false });
+        el.current.addEventListener("touchstart", touchPreventDefaultHandler, { passive: false });
       });
       return () => {
         elements.forEach((el) => {
-          el.current.removeEventListener("touchstart", touchHandler);
+          el.current.removeEventListener("touchstart", touchPreventDefaultHandler);
         });
       };
     }, []);
@@ -4891,6 +4891,7 @@
         });
       };
       const cleanup = (ev) => {
+        document.removeEventListener("touchmove", touchPreventDefaultHandler);
         if (hasAPointerCaptured) {
           el.releasePointerCapture(ev.pointerId);
         }
@@ -4901,6 +4902,7 @@
       el.addEventListener("pointermove", onMove);
       el.addEventListener("pointerup", cleanup);
       el.addEventListener("pointercancel", cleanup);
+      document.addEventListener("touchmove", touchPreventDefaultHandler, { passive: false });
     }, [box, onSelect, onUpdate]);
     y2(() => {
       if (autoDrag) {
