@@ -5,6 +5,7 @@ import xIcon from '../icons/x.svg';
 import plusIcon from '../icons/plus.svg';
 import stampTextIcon from '../icons/stamp-text.svg';
 import { useStampSettings } from '../context/StampSettingsContext.jsx';
+import { isMobile } from '../helpers/constants.js';
 
 const stopPropagation = (e) => e.stopPropagation();
 
@@ -74,12 +75,16 @@ export const TextStampOverlayProvider = ({ children }) => {
         const box = createBox(nextIdRef.current++);
         commitTextareas([...textareasRef.current, box]);
         setSelectedId(box.id);
-        setAutoDrag(true);
+        if (!isMobile) {
+            setAutoDrag(true);
+        }
     }, [commitTextareas]);
 
     const showTextStampOverlay = useCallback(() => {
         setVisible(true);
-        setAutoDrag(true);
+        if (!isMobile) {
+            setAutoDrag(true);
+        }
         if (textareasRef.current.length === 0) {
             addTextarea();
         }

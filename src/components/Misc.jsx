@@ -1,6 +1,6 @@
-export const LoginAssistantsList = () => {
-    const isAndroid = /[Aa]ndroid/.test(navigator.userAgent);
+import { isMobile } from '../helpers/constants.js';
 
+export const LoginAssistantsList = () => {
     const logins = [
         { id: 1, name: 'Dhanya' },
         { id: 4, name: 'Alex' },
@@ -16,7 +16,7 @@ export const LoginAssistantsList = () => {
     ];
 
     return (
-        <details class="loginAssistantsList" open={!isAndroid}>
+        <details class="loginAssistantsList" open={!isMobile}>
             <summary>Logins</summary>
             <ul>
                 {logins.map(login => (

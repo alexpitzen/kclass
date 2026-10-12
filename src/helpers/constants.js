@@ -9,4 +9,16 @@ const keyindexdisplay = {
     "(": "⇧9", ")": "⇧0", "_": "⇧-", "+": "⇧=",
 };
 
-export { DOWN, UP, RIGHT, LEFT, keyindexmap, keyindexdisplay };
+const isAndroid = /[Aa]ndroid/.test(navigator.userAgent);
+
+const isMobile = isAndroid;
+
+export {
+    DOWN,
+    UP,
+    RIGHT,
+    LEFT,
+    keyindexmap,
+    keyindexdisplay,
+    isMobile,
+};
