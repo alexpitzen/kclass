@@ -182,7 +182,7 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
         });
         return () => {
             handleRefs.current.forEach((el) => {
-                el.removeEventListener("touchstart", touchPreventDefaultHandler);
+                el?.removeEventListener("touchstart", touchPreventDefaultHandler);
             })
         };
     }, []);

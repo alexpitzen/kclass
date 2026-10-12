@@ -4856,7 +4856,7 @@
       });
       return () => {
         handleRefs.current.forEach((el) => {
-          el.removeEventListener("touchstart", touchPreventDefaultHandler);
+          el?.removeEventListener("touchstart", touchPreventDefaultHandler);
         });
       };
     }, []);
