@@ -3822,9 +3822,16 @@
             page.style.outlineColor = "red";
           return;
         }
+        let playback = "";
+        try {
+          let time = Math.floor(StampLib.getStudentAtd().getReplayMaxTime() / 1e3);
+          let m3 = Math.floor(time / 60);
+          playback = `<br>${m3.toString().padStart(2, "0")}:${(time - m3 * 60).toString().padStart(2, "0")}`;
+        } catch {
+        }
         try {
           const lastStroke = new Date(is[is.length - 1].cs[0].t);
-          setTimestamp(`Last change:<br>${lastStroke.toLocaleString()}`);
+          setTimestamp(`Last change:<br>${lastStroke.toLocaleString()}${playback}`);
           const activePageEl = document.querySelector(".worksheet-navigator-page.active .text.disabled");
           if (activePageEl) {
             setColorClass("");
