@@ -4866,9 +4866,6 @@
       }
     }, [selected]);
     const startDrag = q2((e3) => {
-      if (e3?.target.closest("button")) {
-        return;
-      }
       e3?.preventDefault();
       e3?.stopPropagation();
       onSelect();
@@ -4997,6 +4994,7 @@
                     title: "Delete textarea",
                     onPointerDown: stopPropagation,
                     onMouseOver: stopPropagation,
+                    onTouchStart: stopPropagation,
                     onClick: (e3) => {
                       e3.stopPropagation();
                       onRemove();

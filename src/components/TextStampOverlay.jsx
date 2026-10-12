@@ -194,10 +194,6 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
     }, [selected]);
 
     const startDrag = useCallback((e) => {
-        if (e?.target.closest("button")) {
-            // allow close button to be clicked
-            return;
-        }
         e?.preventDefault();
         e?.stopPropagation();
         onSelect();
@@ -320,6 +316,7 @@ const TextStampBox = ({ box, selected, singleColor, onSelect, onUpdate, onRemove
                     title="Delete textarea"
                     onPointerDown={stopPropagation}
                     onMouseOver={stopPropagation}
+                    onTouchStart={stopPropagation}
                     onClick={(e) => { e.stopPropagation(); onRemove(); }}
                 >
                     <span dangerouslySetInnerHTML={{ __html: xIcon }} />
