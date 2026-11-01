@@ -8011,6 +8011,15 @@ body:has(app-atx0010p) .loginAssistantsList {
   div.studentList:not(.tabItem) app-score-list-header .studentRowHeader, div.studentList:not(.tabItem) app-score-list-header .headerBlank, div.studentList:not(.tabItem) app-student-list-header .studentRowHeader, div.studentList:not(.tabItem) app-student-list-header .headerBlank {
     height: 25px !important;
   }
+  div.studentList:not(.tabItem) app-score-list-header .studentRowHeader .subjectColumn:has(.EFL), div.studentList:not(.tabItem) app-student-list-header .studentRowHeader .subjectColumn:has(.EFL) {
+    width: 70px !important;
+  }
+  div.studentList:not(.tabItem) app-score-list-subject-cell:nth-of-type(2) {
+    width: 70px !important;
+  }
+  div.studentList:not(.tabItem) app-student-list-subject-cell:nth-of-type(2) {
+    width: 70px !important;
+  }
   div.studentList:not(.tabItem) app-score-list-filler-item {
     display: none !important;
   }

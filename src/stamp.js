@@ -2381,6 +2381,7 @@
                 sofiaNewCat,
                 penelopeRainbow,
                 anikaGoodJob,
+                emersynDog,
                 faboolousWork,
                 bootifulWork,
                 zombie,
@@ -2507,6 +2508,7 @@
                 sofiaNewCat,
                 penelopeRainbow,
                 anikaGoodJob,
+                emersynDog,
             ],
             "Christmas": [
                 christmasCat,
