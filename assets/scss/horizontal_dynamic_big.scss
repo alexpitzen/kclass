@@ -72,6 +72,15 @@
             .studentRowHeader, .headerBlank {
                 height: 25px !important;
             }
+            .studentRowHeader .subjectColumn:has(.EFL) {
+                width: 70px !important;
+            }
+        }
+        app-score-list-subject-cell:nth-of-type(2) {
+            width: 70px !important;
+        }
+        app-student-list-subject-cell:nth-of-type(2) {
+            width: 70px !important;
         }
 
         app-score-list-filler-item {
